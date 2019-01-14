@@ -1,0 +1,65 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!--账号选择下拉箭头-->
+    <style name="checkboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/down_up_arrow</item>
+    </style>
+
+    <!--    &lt;!&ndash;小圆圈消息数&ndash;&gt;
+        <style name="message_num">
+            <item name="android:layout_width">15dp</item>
+            <item name="android:layout_height">15dp</item>
+            <item name="android:background">@drawable/message_circle</item>
+            <item name="android:text">10</item>
+            <item name="android:layout_gravity">center</item>
+            <item name="android:gravity">center</item>
+            <item name="android:textColor">@color/white</item>
+            <item name="android:textSize">10sp</item>
+        </style>-->
+
+    <!--灰色细线条-->
+    <style name="line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/line</item>
+    </style>
+
+    <!--right箭头-->
+    <style name="right_arrow">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:background">@drawable/right_arrow</item>
+    </style>
+
+    <!--圆形图-->
+    <style name="cycleApplication">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+    <!--应用圆形图下文字-->
+    <style name="application_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/Light_black</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <!--补充-->
+    <style name="add">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+</resources>

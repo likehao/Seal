@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/rl_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="50dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/down_civ"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="37dp"
+            android:src="@drawable/photo_03"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/delete_iv"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/delete"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/item_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:text="15737623483"
+            android:paddingLeft="5dp"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line"/>
+</LinearLayout>

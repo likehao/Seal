@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include layout="@layout/head" />
+
+    <com.venusic.handwrite.view.HandWriteView
+        android:id="@+id/handWriteView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:paintColor="@color/black"
+        app:paintMaxWidth="10dp"
+        app:paintMinWidth="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/clear_tv"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:background="@drawable/login_circle_bg"
+                android:gravity="center"
+                android:layout_marginRight="20dp"
+                android:text="@string/clear" />
+
+            <TextView
+                android:id="@+id/complete_tv"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:background="@drawable/login_circle_bg"
+                android:gravity="center"
+                android:layout_marginLeft="20dp"
+                android:text="@string/complete" />
+        </LinearLayout>
+
+</LinearLayout>

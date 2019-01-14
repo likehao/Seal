@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="46dp"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/style">
+
+        <LinearLayout
+            android:id="@+id/scan_ll"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:layout_marginLeft="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scan"
+                android:layout_gravity="center"
+                android:background="@drawable/scan"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/home_page"
+            android:textColor="@color/white"
+            android:textSize="18dp"/>
+
+        <ImageView
+            android:id="@+id/add_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/add"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/record_more_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/more"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/message_more_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/more"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/edit_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:text="@string/edit"/>
+
+        <LinearLayout
+            android:id="@+id/set_back_ll"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"
+                android:background="@drawable/back"/>
+
+            <TextView
+                android:id="@+id/back_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mine"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>
