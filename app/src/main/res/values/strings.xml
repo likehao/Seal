@@ -78,6 +78,7 @@
     <string name="Seal_assignment">印章分配</string>
     <string name="Geographical_enclosure">地理围栏</string>
     <string name="Approval_flow">审批流</string>
+    <string name="approval_record">审批记录</string>
     <string name="Service_charge">服务费</string>
     <string name="start_password">启动密码</string>
     <string name="key_password">按键密码</string>
@@ -159,6 +160,7 @@
     <string name="seal_manage">印章管理</string>
     <string name="press_time">长按时间</string>
     <string name="cost_manage">费用管理</string>
+    <string name="resources_manage">资源管理</string>
     <string name="service_cost_reset">服务费充值</string>
     <string name="order">订单</string>
     <string name="connect_device_now">当前连接设备</string>
@@ -185,4 +187,17 @@
     <string name="alarm_message">告警消息</string>
     <string name="system_message">系统公告</string>
     <string name="go_approval">去审批</string>
+    <string name="add_person">添加人员</string>
+    <string name="add_seal">添加印章</string>
+    <string name="old_psd">旧密码:</string>
+    <string name="please_input_old_psd">请输入旧密码</string>
+    <string name="new_psd">新密码:</string>
+    <string name="please_input_new_psd">请输入新密码</string>
+    <string name="confirm_psd">确认密码:</string>
+    <string name="please_confirm_psd">请确认密码</string>
+    <string name="processing_result">处理结果</string>
+    <string name="suggestion">意见</string>
+    <string name="please_input_suggestion">请输入意见</string>
+    <string name="sure">确定</string>
+    <string name="cancel">取消</string>
 </resources>

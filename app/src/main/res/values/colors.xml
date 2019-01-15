@@ -16,5 +16,5 @@
     <color name="Light_black">#323232</color>
     <color name="mediumAquamarine">#00FA9A</color>
     <color name="lightCoral">#F08080</color>
-
+    <color name="gray_background">#f4f4f4</color>
 </resources>

@@ -135,5 +135,6 @@ dependencies {
     //SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-18'
+    //加载PDF
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }

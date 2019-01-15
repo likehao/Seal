@@ -47,6 +47,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 读取通讯录权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -195,7 +196,9 @@
         <activity android:name=".activity.UploadFileActivity" />
         <activity android:name=".activity.ApplyUseSealActivity" />
         <activity android:name=".activity.WaitMeAgreeActivity" />
-        <activity android:name=".activity.ApprovalConfirmActivity"></activity>
+        <activity android:name=".activity.ApprovalConfirmActivity" />
+        <activity android:name=".activity.StartPasswordActivity" />
+        <activity android:name=".activity.ApprovalRecordActivity"></activity>
     </application>
 
 </manifest>
