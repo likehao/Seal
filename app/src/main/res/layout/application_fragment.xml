@@ -51,6 +51,7 @@
                         android:orientation="horizontal">
 
                         <RelativeLayout
+                            android:id="@+id/press_time_rl"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -73,6 +74,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/start_psd_rl"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -95,6 +97,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/key_psd_rl"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -117,6 +120,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/reset_device_rl"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -193,12 +197,119 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:text="@string/resources_manage"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/organizational_structure_rl"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    style="@style/cycleApplication"
+                                    android:src="@drawable/ic_launcher" />
+
+                                <TextView
+                                    style="@style/application_text"
+                                    android:text="@string/organizational" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/add_person_rl"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    style="@style/cycleApplication"
+                                    android:src="@drawable/ic_launcher" />
+
+                                <TextView
+                                    style="@style/application_text"
+                                    android:text="@string/add_person" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:id="@+id/add_seal_rl"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    style="@style/cycleApplication"
+                                    android:src="@drawable/ic_launcher" />
+
+                                <TextView
+                                    style="@style/application_text"
+                                    android:text="@string/add_seal" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <RelativeLayout style="@style/add" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
             <!--第二个卡片开始！！！！！！！！！！！！！！！！！！！！！！！！！-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="15dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 

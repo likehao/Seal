@@ -47,8 +47,6 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     RelativeLayout my_sealList_rl;
     @BindView(R.id.my_apply_rl)
     RelativeLayout my_aply_rl;    //我的申请*/
-    @BindView(R.id.organizational_structure_rl)  //组织架构
-    RelativeLayout organizational_structure_rl;
     @BindView(R.id.suggestion_rl)
     RelativeLayout suggestion_rl;
     /*
@@ -73,7 +71,6 @@ public class MineFragment extends Fragment implements View.OnClickListener{
    /*     my_user_rl.setOnClickListener(this);
         my_sealList_rl.setOnClickListener(this);
         my_aply_rl.setOnClickListener(this);*/
-        organizational_structure_rl.setOnClickListener(this);
         suggestion_rl.setOnClickListener(this);
 
     //    nearby_device_rl.setOnClickListener(this);
@@ -109,12 +106,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
             case R.id.my_apply_rl:
                 intent = new Intent(getActivity(), MyApplyActivity.class);
                 startActivity(intent);
-                break;*/
-            case R.id.organizational_structure_rl:
-                intent = new Intent(getActivity(), OrganizationalStructureActivity.class);
-                startActivity(intent);
                 break;
-/*
             case R.id.nearby_device_rl:
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 startActivity(intent);

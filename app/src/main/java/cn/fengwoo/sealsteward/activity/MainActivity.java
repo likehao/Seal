@@ -16,10 +16,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -337,4 +339,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }*/
+
+    //按下物理返回键,popuwindow消失
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        ApplicationFragment applicationFragment = new ApplicationFragment();
+        applicationFragment.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
+    }
 }

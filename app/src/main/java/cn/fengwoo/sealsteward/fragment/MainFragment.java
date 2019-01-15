@@ -21,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
+import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.utils.GlideImageLoader;
@@ -41,6 +42,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     RelativeLayout needSeal_rl;
     @BindView(R.id.useSealApply_rl)
     RelativeLayout useSealApply_rl;
+    @BindView(R.id.approval_record_rl)
+    RelativeLayout approval_record_rl;
     private Intent intent;
 
     @Nullable
@@ -57,6 +60,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         sealDevice_rl.setOnClickListener(this);
         needSeal_rl.setOnClickListener(this);
         useSealApply_rl.setOnClickListener(this);
+        approval_record_rl.setOnClickListener(this);
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +96,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.useSealApply_rl:
                 intent = new Intent(getActivity(), MyApplyActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.approval_record_rl:
+                intent = new Intent(getActivity(), ApprovalRecordActivity.class);
                 startActivity(intent);
                 break;
         }

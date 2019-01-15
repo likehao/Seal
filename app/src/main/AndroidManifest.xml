@@ -198,7 +198,9 @@
         <activity android:name=".activity.WaitMeAgreeActivity" />
         <activity android:name=".activity.ApprovalConfirmActivity" />
         <activity android:name=".activity.StartPasswordActivity" />
-        <activity android:name=".activity.ApprovalRecordActivity"></activity>
+        <activity android:name=".activity.ApprovalRecordActivity" />
+        <activity android:name=".activity.ScanSearchAddSealActivity" />
+        <activity android:name=".activity.CompanyDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,7 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 
-public class AddUserActivity extends BaseActivity implements View.OnClickListener{
+/**
+ * 添加用户
+ */
+public class AddUserActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
@@ -27,6 +31,10 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     TextView title_tv;
     @BindView(R.id.mail_list_rl)
     RelativeLayout mail_list_rl;
+    @BindView(R.id.userName_et)
+    EditText userName_et;
+    @BindView(R.id.phone_number_et)
+    EditText phone_number_et;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,55 +53,51 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.set_back_ll:
                 finish();
                 break;
             case R.id.mail_list_rl:
-                Uri uri = ContactsContract.Contacts.CONTENT_URI;
-                Intent intent = new Intent(Intent.ACTION_PICK,uri);
-                startActivityForResult(intent,0);
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, 0);
                 break;
         }
     }
 
+    /**
+     * 获取通信录信息结果
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK){
-            if (requestCode == 0){
-                Uri uri = data.getData();
-                String[] contacts = getPhoneContacts(uri);
-                Log.d("TAG", "姓名:"+contacts[0]+" "+"手机号:"+contacts[1]);
-            }
-        }
-    }
+        if (resultCode == Activity.RESULT_OK) {
+            //获取手机通讯录联系人
+            ContentResolver cr = AddUserActivity.this.getContentResolver();
+            Uri contactData = data.getData();
+            //获取所有联系人
+            Cursor cursor = cr.query(contactData, null, null, null, null);
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                //获取用户名和电话
+                String userName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId,
+                        null,
+                        null);
+                while (phone.moveToNext()) {
+                    String phoneNumber = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    userName_et.setText(userName);
+                    phone_number_et.setText(phoneNumber);
+                }
+                phone.close();
 
-    private String[] getPhoneContacts(Uri uri){
-        String[] contact = new String[2];
-        //得到ContentResolver对象
-        ContentResolver cr = getContentResolver();
-        //取得电话本中开始一项的光标
-        Cursor cursor=cr.query(uri,null,null,null,null);
-        if(cursor!=null){
-            cursor.moveToFirst();
-            //取得联系人姓名
-            int nameFieldColumnIndex=cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            contact[0]=cursor.getString(nameFieldColumnIndex);
-            //取得电话号码
-            String ContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-            Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + ContactId, null, null);
-            if(phone != null){
-                phone.moveToFirst();
-                contact[1] = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             }
-            phone.close();
-            cursor.close();
         }
-        else{
-            return null;
-        }
-        return contact;
     }
 }

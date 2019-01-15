@@ -22,6 +22,7 @@
     <string name="job">研发中心</string>
     <string name="my_data">我的资料</string>
     <string name="my_company">我的公司</string>
+    <string name="companyName">公司名称</string>
     <string name="my_sign">我的签名</string>
     <string name="my_seal">我的印章</string>
     <string name="my_file">我的文件</string>
@@ -200,4 +201,12 @@
     <string name="please_input_suggestion">请输入意见</string>
     <string name="sure">确定</string>
     <string name="cancel">取消</string>
+    <string name="Search">搜一搜</string>
+    <string name="search_near_device">搜索附近的印章设备</string>
+    <string name="scan_seal_QRcode">扫描印章二维码</string>
+    <string name="Social_Credit_Code">社会信用代码</string>
+    <string name="legal_person">法人</string>
+    <string name="authenticating_state">认证状态</string>
+    <string name="business_license">营业执照</string>
+    <string name="authentication">认证</string>
 </resources>

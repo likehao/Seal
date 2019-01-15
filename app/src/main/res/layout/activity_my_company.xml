@@ -9,4 +9,29 @@
 
     <include layout="@layout/head"/>
 
+    <RelativeLayout
+        android:id="@+id/select_company_rl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_name"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:layout_marginStart="20dp"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/sure"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
 </LinearLayout>

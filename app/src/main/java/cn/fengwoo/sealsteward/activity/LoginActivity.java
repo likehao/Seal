@@ -206,4 +206,5 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
             check_down_up.setChecked(false);
         }
     }
+
 }

@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 
 /**
- * 关于1111
+ * 关于
  */
 public class AboutActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.title_tv)TextView title_tv;

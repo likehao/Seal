@@ -109,6 +109,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/approval_record_rl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
@@ -125,7 +126,7 @@
 
                         <TextView
                             style="@style/application_text"
-                            android:text="@string/Approval_flow" />
+                            android:text="@string/approval_record" />
 
                     </LinearLayout>
                 </RelativeLayout>
