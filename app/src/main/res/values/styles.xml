@@ -30,19 +30,16 @@
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/line</item>
     </style>
-    <style name="line_left">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0.5dp</item>
-        <item name="android:background">@color/line</item>
+    <style name="line_left" parent="line">
         <item name="android:layout_marginStart">15dp</item>
     </style>
     <!--right箭头-->
     <style name="right_arrow">
         <item name="android:layout_width">25dp</item>
         <item name="android:layout_height">25dp</item>
-        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
         <item name="android:background">@drawable/right_arrow</item>
     </style>
 
@@ -81,5 +78,20 @@
         <item name="android:windowExitAnimation">@anim/pophidden_anim</item>
         <!-- 指定消失的动画xml -->
     </style>
-
+    <!--我的fragment的布局按压效果-->
+    <style name="pressed_effect">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/click</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+    <!--消息fragment的布局按压效果-->
+    <style name="message_pressed_effect">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:background">@drawable/click</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
 </resources>

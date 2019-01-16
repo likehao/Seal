@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:text="@string/bluetooth"
             android:textColor="@color/black" />
 
@@ -28,9 +28,9 @@
             android:id="@+id/on_off_checkBox"
             android:layout_width="50dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
             android:background="@drawable/lock_seal_on_off"
             android:button="@null" />
 
@@ -38,7 +38,7 @@
             android:id="@+id/switch_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:visibility="gone"/>
 
     </RelativeLayout>
@@ -46,7 +46,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:text="@string/connect_device_now"
         android:textSize="12sp" />
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:text="@string/not_connect_seal"
             android:textColor="@color/black" />
 
@@ -70,7 +70,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:text="@string/search_seal"
         android:textSize="12sp" />

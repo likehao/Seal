@@ -23,7 +23,7 @@
         android:layout_height="45dp"
         android:layout_below="@+id/head_civ"
         android:layout_marginTop="50dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginEnd="10dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:id="@+id/check_down_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 style="@style/checkboxTheme"/>
 
@@ -92,7 +92,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginEnd="10dp">
                     <EditText
                         android:id="@+id/psd_et"
                         android:layout_width="match_parent"

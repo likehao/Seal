@@ -30,14 +30,14 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:background="@drawable/photo_03" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -56,7 +56,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:background="@drawable/right_arrow" />
 
             </LinearLayout>
@@ -76,14 +76,13 @@
 
                 <RelativeLayout
                     android:id="@+id/my_company_rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/my_company"
                         android:textColor="@color/black" />
 
@@ -93,18 +92,17 @@
 
                 <View
                     style="@style/line"
-                    android:layout_marginLeft="15dp"/>
+                    android:layout_marginStart="15dp"/>
 
                 <RelativeLayout
                     android:id="@+id/my_sign_rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/my_sign"
                         android:textColor="@color/black" />
 
@@ -123,23 +121,23 @@
                                        android:layout_width="wrap_content"
                                        android:layout_height="wrap_content"
                                        android:layout_centerVertical="true"
-                                       android:layout_marginLeft="15dp"
+                                       android:layout_marginStart="15dp"
                                        android:text="@string/my_user"
                                        android:textColor="@color/black" />
 
                                    <ImageView
                                        android:layout_width="25dp"
                                        android:layout_height="25dp"
-                                       android:layout_alignParentRight="true"
+                                       android:layout_alignParentEnd="true"
                                        android:layout_centerVertical="true"
-                                       android:layout_marginRight="5dp"
+                                       android:layout_marginEnd="5dp"
                                        android:background="@drawable/right_arrow" />
                                </RelativeLayout>
 
                                <View
                                    android:layout_width="match_parent"
                                    android:layout_height="0.5dp"
-                                   android:layout_marginLeft="15dp"
+                                   android:layout_marginStart="15dp"
                                    android:background="@color/line" />
 
                                <RelativeLayout
@@ -151,23 +149,23 @@
                                        android:layout_width="wrap_content"
                                        android:layout_height="wrap_content"
                                        android:layout_centerVertical="true"
-                                       android:layout_marginLeft="15dp"
+                                       android:layout_marginStart="15dp"
                                        android:text="@string/my_seal"
                                        android:textColor="@color/black" />
 
                                    <ImageView
                                        android:layout_width="25dp"
                                        android:layout_height="25dp"
-                                       android:layout_alignParentRight="true"
+                                       android:layout_alignParentEnd="true"
                                        android:layout_centerVertical="true"
-                                       android:layout_marginRight="5dp"
+                                       android:layout_marginEnd="5dp"
                                        android:background="@drawable/right_arrow" />
                                </RelativeLayout>
 
                                <View
                                    android:layout_width="match_parent"
                                    android:layout_height="0.5dp"
-                                   android:layout_marginLeft="15dp"
+                                   android:layout_marginStart="15dp"
                                    android:background="@color/line" />
 
                                <RelativeLayout
@@ -179,16 +177,16 @@
                                        android:layout_width="wrap_content"
                                        android:layout_height="wrap_content"
                                        android:layout_centerVertical="true"
-                                       android:layout_marginLeft="15dp"
+                                       android:layout_marginStart="15dp"
                                        android:text="@string/my_apply"
                                        android:textColor="@color/black" />
 
                                    <ImageView
                                        android:layout_width="25dp"
                                        android:layout_height="25dp"
-                                       android:layout_alignParentRight="true"
+                                       android:layout_alignParentEnd="true"
                                        android:layout_centerVertical="true"
-                                       android:layout_marginRight="5dp"
+                                       android:layout_marginEnd="5dp"
                                        android:background="@drawable/right_arrow" />
                                </RelativeLayout>
                                <View
@@ -218,7 +216,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/nearby_device"
                         android:textColor="@color/black" />
 
@@ -229,14 +227,13 @@
 
                 <RelativeLayout
                     android:id="@+id/set_rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/set"
                         android:textColor="@color/black" />
 
@@ -246,18 +243,17 @@
 
                 <View
                     style="@style/line"
-                    android:layout_marginLeft="15dp"/>
+                    android:layout_marginStart="15dp"/>
 
                 <RelativeLayout
                     android:id="@+id/suggestion_rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/Opinion"
                         android:textColor="@color/black" />
 
@@ -267,17 +263,16 @@
 
                 <View
                     style="@style/line"
-                    android:layout_marginLeft="15dp"/>
+                    android:layout_marginStart="15dp"/>
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/Instructions"
                         android:textColor="@color/black" />
 
@@ -294,7 +289,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/version"
                         android:textColor="@color/black" />
 
@@ -302,27 +297,27 @@
                         android:id="@+id/versionName_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginEnd="30dp"
                         android:textColor="@color/gray_text" />
                 </RelativeLayout>-->
 
             </LinearLayout>
             <View
                 style="@style/line"
-                android:layout_marginTop="40dp"/>
+                android:layout_marginTop="10dp"/>
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/white"
+                android:layout_height="50dp"
+                android:background="@drawable/click"
                 android:text="@string/exit_Login"
+                style="?android:attr/borderlessButtonStyle"
                 android:textColor="@color/red" />
 
             <View
-                style="@style/line"
-                android:layout_marginBottom="15dp"/>
+                style="@style/line"/>
 
         </LinearLayout>
 

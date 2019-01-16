@@ -16,6 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -35,6 +40,10 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     EditText userName_et;
     @BindView(R.id.phone_number_et)
     EditText phone_number_et;
+    @BindView(R.id.select_organizational_rl)
+    RelativeLayout select_organizational_rl;
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +58,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         title_tv.setText("添加用户");
         set_back_ll.setOnClickListener(this);
         mail_list_rl.setOnClickListener(this);
+        select_organizational_rl.setOnClickListener(this);
     }
 
     @Override
@@ -58,8 +68,12 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.mail_list_rl:
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(intent, 0);
+                break;
+            case R.id.select_organizational_rl:
+                intent = new Intent(this,OrganizationalStructureActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -81,22 +95,23 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             //获取所有联系人
             Cursor cursor = cr.query(contactData, null, null, null, null);
             if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                //获取用户名和电话
-                String userName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId,
-                        null,
-                        null);
-                while (phone.moveToNext()) {
-                    String phoneNumber = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    userName_et.setText(userName);
-                    phone_number_et.setText(phoneNumber);
+                while (cursor.moveToNext()) {
+                    //获取用户名和电话
+                    String userName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId,
+                            null,
+                            null);
+                    while (phone.moveToNext()) {
+                        String phoneNumber = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        userName_et.setText(userName);
+                        phone_number_et.setText(phoneNumber);
+                    }
+                    phone.close();
                 }
-                phone.close();
-
+                cursor.close();
             }
         }
     }

@@ -209,4 +209,6 @@
     <string name="authenticating_state">认证状态</string>
     <string name="business_license">营业执照</string>
     <string name="authentication">认证</string>
+    <string name="scan_add_organizational">扫一扫,添加到组织架构</string>
+    <string name="save_to_album">保存到相册</string>
 </resources>

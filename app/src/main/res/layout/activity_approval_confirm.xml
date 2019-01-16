@@ -26,24 +26,24 @@
                 android:layout_height="wrap_content"
                 android:text="@string/processing_result"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:textColor="@color/black"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="同意"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
+                android:layout_marginEnd="30dp"
                 android:textColor="@color/black"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/down"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="5dp"
                 android:layout_centerVertical="true"/>
 
         </RelativeLayout>
@@ -55,15 +55,15 @@
             android:layout_height="wrap_content"
             android:text="@string/suggestion"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:textColor="@color/black"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="15dp"
             android:background="@color/background">
 
             <EditText
@@ -80,16 +80,16 @@
             android:layout_height="wrap_content"
             android:text="@string/sign"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:textColor="@color/black"/>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/sign"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"/>
     </LinearLayout>
 

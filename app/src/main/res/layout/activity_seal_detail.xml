@@ -19,7 +19,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:background="@drawable/detail"
             android:orientation="vertical">
@@ -28,7 +28,7 @@
                 android:id="@+id/seal_num_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:textColor="@color/white"
@@ -74,7 +74,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:background="@drawable/detail"
             android:clickable="false"
@@ -116,8 +116,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="30dp"
                 android:background="@color/line" />
 
@@ -133,7 +133,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/use_people"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -142,8 +142,8 @@
                         android:id="@+id/userName_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>
@@ -151,8 +151,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -168,7 +168,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/seal_name"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -177,8 +177,8 @@
                         android:id="@+id/seal_name_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>
@@ -186,8 +186,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -203,7 +203,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/seal_number"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -212,8 +212,8 @@
                         android:id="@+id/sealNum_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>
@@ -221,8 +221,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -238,7 +238,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/apply_time"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -247,8 +247,8 @@
                         android:id="@+id/apply_time_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>
@@ -256,8 +256,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -273,7 +273,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/MAC_address"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -282,8 +282,8 @@
                         android:id="@+id/macAdd_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>
@@ -291,8 +291,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -308,7 +308,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/seal_overdue_time"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -317,8 +317,8 @@
                         android:id="@+id/failure_time_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>
@@ -326,8 +326,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -343,7 +343,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/Stamp_affair"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -364,8 +364,8 @@
                         android:id="@+id/stamp_cause_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -375,8 +375,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -393,7 +393,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/use_seal_position"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -415,8 +415,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 
@@ -432,7 +432,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/login_address"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -453,8 +453,8 @@
                         android:id="@+id/localAddress_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -464,8 +464,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/line" />
 

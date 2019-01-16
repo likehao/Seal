@@ -22,15 +22,13 @@
 
         <RelativeLayout
             android:id="@+id/about_rl"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:text="@string/about"
                 android:textColor="@color/black" />
 
@@ -41,19 +39,17 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:background="@color/line" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:text="@string/recommend_seal"
                 android:textColor="@color/black" />
 
@@ -64,28 +60,26 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:background="@color/line" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:text="@string/Scavenging_caching"
                 android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:text="0.01M"
                 android:textColor="@color/red" />
         </RelativeLayout>

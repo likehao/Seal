@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:textSize="16sp"
                         android:text="@string/operation_seal"
                         android:textColor="@color/black" />
@@ -191,7 +191,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:textSize="16sp"
                         android:text="@string/seal_information"
                         android:textColor="@color/black" />
@@ -206,7 +206,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:textColor="@color/Light_black"
                         android:text="@string/moulage" />
 
@@ -221,16 +221,16 @@
                         android:id="@+id/right_iv"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:background="@drawable/right_arrow" />
                 </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:background="@color/line" />
 
                 <RelativeLayout
@@ -242,16 +242,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/seal_name"
                         android:textColor="@color/Light_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginEnd="15dp"
                         android:background="@null"
                         android:text="公章"
                         android:textColor="@color/gray_text"
@@ -261,7 +261,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:background="@color/line" />
 
                 <RelativeLayout
@@ -273,16 +273,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/MAC_address"
                         android:textColor="@color/Light_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginEnd="15dp"
                         android:background="@null"
                         android:text="00:15:83:00:01:11"
                         android:textColor="@color/gray_text"
@@ -303,16 +303,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/seal_Personal"
                         android:textColor="@color/Light_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginEnd="15dp"
                         android:background="@null"
                         android:text="习大大"
                         android:textColor="@color/gray_text"
@@ -333,16 +333,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginStart="15dp"
                                     android:text="@string/state"
                                     android:textColor="@color/black" />
 
                                 <TextView
                                     android:layout_width="40dp"
                                     android:layout_height="16dp"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginEnd="15dp"
                                     android:background="@drawable/authentication_bg"
                                     android:gravity="center"
                                     android:text="@string/Already_locked"
@@ -365,16 +365,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginStart="15dp"
                                     android:text="@string/Remainder"
                                     android:textColor="@color/black" />
 
                                 <EditText
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginEnd="15dp"
                                     android:background="@null"
                                     android:text="10次"
                                     android:textColor="@color/gray_text"
@@ -396,16 +396,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginStart="15dp"
                                     android:text="@string/Failure_time"
                                     android:textColor="@color/black" />
 
                                 <EditText
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginEnd="15dp"
                                     android:background="@null"
                                     android:text="2018-11-05 12:00:00"
                                     android:textColor="@color/gray_text"
@@ -426,16 +426,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:text="@string/service_fee_time"
                         android:textColor="@color/Light_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginEnd="15dp"
                         android:background="@null"
                         android:text="2018-11-05 12:00:00"
                         android:textColor="@color/gray_text"
@@ -458,16 +458,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginStart="15dp"
                                     android:text="@string/seal_time"
                                     android:textColor="@color/black" />
 
                                 <EditText
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginEnd="15dp"
                                     android:background="@null"
                                     android:text="10次"
                                     android:textColor="@color/gray_text"
@@ -485,16 +485,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginStart="15dp"
                                     android:text="@string/lock_seal"
                                     android:textColor="@color/black" />
 
                                 <CheckBox
                                     android:layout_width="50dp"
                                     android:layout_height="30dp"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginEnd="15dp"
                                     android:background="@drawable/lock_seal_on_off"
                                     android:button="@null" />
                             </RelativeLayout>-->

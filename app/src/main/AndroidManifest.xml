@@ -200,7 +200,7 @@
         <activity android:name=".activity.StartPasswordActivity" />
         <activity android:name=".activity.ApprovalRecordActivity" />
         <activity android:name=".activity.ScanSearchAddSealActivity" />
-        <activity android:name=".activity.CompanyDetailActivity"></activity>
+        <activity android:name=".activity.CompanyDetailActivity"/>
     </application>
 
 </manifest>
