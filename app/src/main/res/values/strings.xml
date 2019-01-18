@@ -211,4 +211,7 @@
     <string name="authentication">认证</string>
     <string name="scan_add_organizational">扫一扫,添加到组织架构</string>
     <string name="save_to_album">保存到相册</string>
+    <string name="user">用户</string>
+    <string name="seal">印章</string>
+    <string name="delete">删除</string>
 </resources>
