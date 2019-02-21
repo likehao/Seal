@@ -252,7 +252,6 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
-                        android:background="@null"
                         android:text="公章"
                         android:textColor="@color/gray_text"
                         android:textSize="15sp" />

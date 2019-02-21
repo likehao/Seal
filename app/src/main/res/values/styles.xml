@@ -94,4 +94,46 @@
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
+    <!--详情布局-->
+    <style name="details">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="details_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.2</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="detail_view">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@color/LightGrey</item>
+    </style>
+
+    <!--设置权限布局-->
+    <style name="set_power_rl">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+    <style name="set_power">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+    <style name="set_power_bt" parent="set_power">
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginEnd">15dp</item>
+    </style>
+    <style name="set_power_tv" parent="set_power">
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

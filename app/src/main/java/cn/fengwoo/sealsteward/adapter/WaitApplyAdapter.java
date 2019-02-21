@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.ApprovalActivity;
+import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 
 /**
@@ -74,12 +75,11 @@ public class WaitApplyAdapter extends BaseAdapter {
                 viewHolder.item1_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent = new Intent(context, ApprovalActivity.class);
+                        intent = new Intent(context, SeeRecordActivity.class);
                         context.startActivity(intent);
                     }
                 });
             }else if (code == 4){  //已驳回
-                viewHolder.item1_tv.setVisibility(View.VISIBLE);
                 viewHolder.item2_tv.setText("重提");
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                     @Override

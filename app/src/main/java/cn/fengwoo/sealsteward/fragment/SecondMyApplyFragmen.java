@@ -21,6 +21,9 @@ import cn.fengwoo.sealsteward.activity.UseSealApplyActivity;
 import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 
+/**
+ * 审批中fragment
+ */
 public class SecondMyApplyFragmen extends Fragment implements AdapterView.OnItemClickListener{
     private View view;
     @BindView(R.id.applying_lv)

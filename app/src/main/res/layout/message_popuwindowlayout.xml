@@ -12,12 +12,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/query"
+            android:id="@+id/add_user_tv"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:text="@string/mark_read" />
+            android:text="@string/add_person" />
 
         <View
             android:layout_width="match_parent"
@@ -25,12 +25,13 @@
             android:background="@color/line" />
 
         <TextView
+            android:id="@+id/add_seal_tv"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:text="@string/Approval_for_printing" />
-
+            android:text="@string/add_seal" />
+<!--
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -65,7 +66,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:text="@string/other" />
+            android:text="@string/other" />-->
 
     </LinearLayout>
 </LinearLayout>

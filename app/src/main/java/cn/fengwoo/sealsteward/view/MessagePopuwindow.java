@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -11,12 +12,18 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.AddSealActivity;
+import cn.fengwoo.sealsteward.activity.AddUserActivity;
+import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 
-public class MessagePopuwindow extends PopupWindow{
+public class MessagePopuwindow extends PopupWindow implements View.OnClickListener{
     private ListView listView;
     public View mview;
+    private TextView add_user_tv,add_seal_tv;
+    private Intent intent;
 
     public MessagePopuwindow(Activity context){
         final Activity activity = context;
@@ -63,8 +70,16 @@ public class MessagePopuwindow extends PopupWindow{
                 },300);
             }
         });
+        //初始化视图点击事件
+        initView();
     }
 
+    private void initView(){
+        add_user_tv = mview.findViewById(R.id.add_user_tv);
+        add_user_tv.setOnClickListener(this);
+        add_seal_tv = mview.findViewById(R.id.add_seal_tv);
+        add_seal_tv.setOnClickListener(this);
+    }
     //显示
     public void showPopuwindow(View view){
         if (!this.isShowing()){
@@ -78,9 +93,31 @@ public class MessagePopuwindow extends PopupWindow{
         listView.setOnItemClickListener(listener);
     }
 
+    /**
+     * 设置透明背景度
+     * @param bgAlpha
+     * @param activity
+     */
     public void backgroundAlpha(float bgAlpha,Activity activity){
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         activity.getWindow().setAttributes(lp);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.add_user_tv:
+                intent = new Intent(mview.getContext(), AddUserActivity.class);
+                mview.getContext().startActivity(intent);
+                this.dismiss();
+                break;
+            case R.id.add_seal_tv:
+                intent = new Intent(mview.getContext(), NearbyDeviceActivity.class);
+                mview.getContext().startActivity(intent);
+                this.dismiss();
+                break;
+
+        }
     }
 }

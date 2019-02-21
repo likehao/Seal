@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 
 import java.util.List;
 
@@ -29,57 +32,79 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         this.mInflate = LayoutInflater.from(context);
     }
 
+    //获得组数
     @Override
     public int getGroupCount() {
         return mListData.size();
     }
 
+    //获得组的子项个数
     @Override
     public int getChildrenCount(int groupPosition) {
         return 1;
     }
 
+    //获得某组数据
     @Override
     public Object getGroup(int groupPosition) {
         return mListData.get(groupPosition);
     }
 
+    // 获得指定子项
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         return mListData.get(groupPosition).getListSecondModel().get(childPosition);
     }
 
+    // 获取组ID, 这个ID必须是唯一的
     @Override
     public long getGroupId(int groupPosition) {
         return groupPosition;
     }
 
+    // 获取子项ID, 这个ID必须是唯一的
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
 
+    // 分组和子选项是否持有稳定的ID, 就是说底层数据的改变会不会影响到它们。
     @Override
     public boolean hasStableIds() {
         return false;
     }
 
+    // 获取组视图
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        FirstHolder holder = null;
+        final FirstHolder holder;
         if (convertView == null) {
             holder = new FirstHolder();
             convertView = mInflate.inflate(R.layout.item_expand_lv_first, parent, false);
-            holder.tv = (convertView.findViewById(R.id.tv));
+            holder.tv = convertView.findViewById(R.id.tv);
+            holder.btnDelete = convertView.findViewById(R.id.btnDelete);
+            holder.swipeMenuLayout = convertView.findViewById(R.id.swipeMenuLayout);
             convertView.setTag(holder);
         } else {
             holder = (FirstHolder) convertView.getTag();
         }
         holder.tv.setText(mListData.get(groupPosition).getTitle());
-
+        //删除点击事件
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //删除list中对应的数据
+                mListData.remove(groupPosition);
+                //重新绑定数据
+                notifyDataSetChanged();
+                //关闭侧滑菜单
+                holder.swipeMenuLayout.quickClose();
+            }
+        });
         return convertView;
     }
 
+    // 获取指定组的指定子项视图
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         CustomExpandableListView lv = ((CustomExpandableListView) convertView);
@@ -91,9 +116,10 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         return lv;
     }
 
+    // 子项是否可选
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 
     /**
@@ -113,7 +139,7 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         @Override
         public int getGroupCount() {
             int size = listSecondModel.size();
-            Log.d("bigname", "getGroupCount: "+size);
+            Log.d("bigname", "getGroupCount: " + size);
             return size;
         }
 
@@ -153,7 +179,7 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
             if (convertView == null) {
                 holder = new SecondHolder();
                 convertView = mInflate.inflate(R.layout.item_expand_lv_second, parent, false);
-                holder.tv = (convertView.findViewById(R.id.tv));
+                holder.tv = convertView.findViewById(R.id.tv);
                 convertView.setTag(holder);
             } else {
                 holder = (SecondHolder) convertView.getTag();
@@ -168,13 +194,12 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
             if (convertView == null) {
                 holder = new ThirdHolder();
                 convertView = mInflate.inflate(R.layout.item_expand_lv_third, parent, false);
-                holder.tv = (convertView.findViewById(R.id.tv));
+                holder.tv = convertView.findViewById(R.id.tv);
                 convertView.setTag(holder);
             } else {
                 holder = (ThirdHolder) convertView.getTag();
             }
             holder.tv.setText(listSecondModel.get(groupPosition).getListThirdModel().get(childPosition).getTitle());
-
             return convertView;
         }
 
@@ -186,14 +211,16 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
 
 
     class FirstHolder {
+        SwipeMenuLayout swipeMenuLayout;
         TextView tv;
+        Button btnDelete;
     }
 
     class SecondHolder {
         TextView tv;
     }
 
-    class ThirdHolder{
+    class ThirdHolder {
         TextView tv;
     }
 }

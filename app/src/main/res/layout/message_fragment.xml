@@ -20,7 +20,8 @@
 
             <LinearLayout
                 android:id="@+id/wait_me_agree_ll"
-                style="@style/message_pressed_effect">
+                style="@style/message_pressed_effect"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="45dp"

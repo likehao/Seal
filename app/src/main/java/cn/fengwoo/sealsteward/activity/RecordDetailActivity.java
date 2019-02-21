@@ -1,20 +1,13 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
-import com.youth.banner.loader.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -42,7 +35,7 @@ public class RecordDetailActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.record_banner)
     Banner record_banner;
     private List<Integer> imageList;
-
+    boolean check = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +73,15 @@ public class RecordDetailActivity extends BaseActivity implements View.OnClickLi
             case R.id.set_back_ll:
                 finish();
                 break;
-
+            case R.id.seal_photo_rl:
+                if (!check){
+                    record_banner.setVisibility(View.VISIBLE);
+                    check = true;
+                }else {
+                    record_banner.setVisibility(View.GONE);
+                    check = false;
+                }
+                break;
         }
     }
     //判断checkBox是否被点击来展示banner

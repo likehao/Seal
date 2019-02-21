@@ -22,7 +22,7 @@ import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 
 /**
- * 已驳回
+ * 已驳回fragment
  */
 public class FourthMyApplyFragment extends Fragment implements AdapterView.OnItemClickListener{
     private View view;

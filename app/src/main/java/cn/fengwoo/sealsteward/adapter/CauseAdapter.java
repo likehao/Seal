@@ -51,7 +51,6 @@ public class CauseAdapter extends BaseAdapter {
         }
         viewHolder.cause.setText(list.get(position).getCause());
         viewHolder.count.setText(list.get(position).getCount()+"次");
-
         return view;
     }
 

@@ -76,7 +76,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         banner.setImageLoader(new GlideImageLoader());
         //设置图片集合
         imageViews.add(R.drawable.photo_03);
-        imageViews.add(R.drawable.ic_launcher);
+        imageViews.add(R.drawable.photo_03);
         imageViews.add(R.drawable.photo_03);
         banner.setImages(imageViews);
         //banner设置方法全部调用完毕时最后调用

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -21,6 +22,9 @@ import cn.fengwoo.sealsteward.activity.UseSealApplyActivity;
 import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 
+/**
+ * 已审批fragment
+ */
 public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItemClickListener{
     private View view;
     @BindView(R.id.finish_apply_lv)

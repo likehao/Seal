@@ -53,6 +53,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout home_page, record_page, application_page, message_page, mine;
     private TextView title_tv;  //头标题
     private LinearLayout scan_ll;  //扫一扫
+    @BindView(R.id.add_iv)
+    ImageView add_iv;  //添加
     private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
     private TextView[] textViews = new TextView[5];   //底部导航文字集合
     private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
@@ -71,6 +73,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         LinearLayout circle_useSeal_apply_ll;*/
     private int REQUEST_CODE = 1;
     private int REQUEST_IMAGE = 2;
+    /**
+     * 上次点击返回键的时间
+     */
+    private long lastBackPressed;
+    /**
+     * 两次点击的间隔时间
+     */
+    private static final int QUIT_INTERVAL = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +98,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initView() {
         title_tv = findViewById(R.id.title_tv);
         scan_ll = findViewById(R.id.scan_ll);
-        scan_ll.setVisibility(View.VISIBLE);
+//        scan_ll.setVisibility(View.VISIBLE);
+        add_iv.setVisibility(View.VISIBLE);
         home_page = findViewById(R.id.home_page);
         record_page = findViewById(R.id.record_page);
         application_page = findViewById(R.id.application_page);
@@ -120,6 +131,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         message_more_iv.setOnClickListener(this);
         scan_ll.setOnClickListener(this);
         //       circle_useSeal_apply_ll.setOnClickListener(this);
+        add_iv.setOnClickListener(this);
     }
 
     @Override
@@ -127,35 +139,41 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.home_page:
                 title_tv.setText("首页");
-                scan_ll.setVisibility(View.VISIBLE);
+                //           scan_ll.setVisibility(View.VISIBLE);
                 record_more_iv.setVisibility(View.GONE);
+                add_iv.setVisibility(View.VISIBLE);
                 changeView(0);
                 break;
             case R.id.record_page:
                 title_tv.setText("盖章记录");
                 scan_ll.setVisibility(View.GONE);
+                add_iv.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.VISIBLE);
                 changeView(1);
                 break;
             case R.id.message_page:
                 title_tv.setText("消息");
                 scan_ll.setVisibility(View.GONE);
+                add_iv.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 changeView(2);
                 break;
             case R.id.mine:
                 title_tv.setText("我的");
                 scan_ll.setVisibility(View.GONE);
+                add_iv.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 changeView(3);
                 break;
             case R.id.application_page:
                 title_tv.setText("应用");
                 scan_ll.setVisibility(View.GONE);
+                add_iv.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 changeView(4);
                 break;
             case R.id.record_more_iv:
+                //盖章记录更多popuwindow
                 popuwindow = new AddPopuwindow(MainActivity.this);
                 popuwindow.showPopuwindow(view);
                 //       popDialog();
@@ -174,11 +192,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Intent intent = new Intent(MainActivity.this, ScanActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.add_iv:
+                //添加popuwindow
+                messagePopuwindow = new MessagePopuwindow(MainActivity.this);
+                messagePopuwindow.showPopuwindow(view);
+                break;
         }
     }
 
     private void changeView(int index) {
-        ImageMethod(index);  //底部选择图片文字状态
+        imageMethod(index);  //底部选择图片文字状态
         //开启事物
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         hideFragment(transaction);// 先隐藏掉所有的Fragment，以防止有多个Fragment显示在界面上的情况
@@ -233,7 +256,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      *
      * @param index
      */
-    private void ImageMethod(int index) {
+    private void imageMethod(int index) {
         textViews[0].setTextColor(index == 0 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.gray_text));
         imageViews[0].setImageResource(index == 0 ? R.drawable.seal_select : R.drawable.seal);
         textViews[1].setTextColor(index == 1 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.gray_text));
@@ -317,24 +340,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+
     /*
     @Override
     protected void onPause() {
         super.onPause();
         CameraManager.get().closeDriver();
     }*/
-
-    /*    private void popDialog(){
+/*
+    private void popDialog() {
         dialogList = new ArrayList<String>();
-        dialogList.add("查询");
-        dialogList.add("分享");
-        dialogList.add("导出PDF");
+        dialogList.add("添加人员");
+        dialogList.add("添加印章");
         final AddPopuwindow addPopuwindow = new AddPopuwindow(MainActivity.this,dialogList);
         addPopuwindow.setItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                if (position == 0){
-                    Toast.makeText(MainActivity.this,"11111",Toast.LENGTH_LONG).show();
+                if (position == 0) {
+                    Toast.makeText(MainActivity.this, "11111", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -344,7 +368,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         ApplicationFragment applicationFragment = new ApplicationFragment();
-        applicationFragment.onKeyDown(keyCode,event);
+        applicationFragment.onKeyDown(keyCode, event);
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 连续两次点击物理返回键退出
+     */
+    @Override
+    public void onBackPressed() {
+        long backPressed = System.currentTimeMillis();
+        if (backPressed - lastBackPressed > QUIT_INTERVAL) {
+            lastBackPressed = backPressed;
+            showToast("再按一次退出");
+        } else {
+            finish();
+            System.exit(0);  //正常结束程序
+        }
     }
 }

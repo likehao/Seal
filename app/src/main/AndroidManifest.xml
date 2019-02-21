@@ -59,7 +59,7 @@
         <!-- 添加百度定位AK -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="开发者申请的AK" />
+            android:value="glAuMXX5Qm2zKVbsXYLVzEuQrsrNYqF2" />
         <!-- 申明百度service -->
         <service
             android:name="com.baidu.location.f"
@@ -200,7 +200,14 @@
         <activity android:name=".activity.StartPasswordActivity" />
         <activity android:name=".activity.ApprovalRecordActivity" />
         <activity android:name=".activity.ScanSearchAddSealActivity" />
-        <activity android:name=".activity.CompanyDetailActivity"/>
+        <activity android:name=".activity.CompanyDetailActivity" />
+        <activity android:name=".activity.GeographicalFenceActivity" />
+        <activity android:name=".activity.SeeRecordActivity" />
+        <activity android:name=".activity.SetPowerActivity" />
+        <activity android:name=".activity.SetApprovalActivity" />
+        <activity android:name=".activity.PersonInformationActivity" />
+        <activity android:name=".activity.RechargeRecordActivity" />
+        <activity android:name=".activity.WaitHandleActivity"></activity>
     </application>
 
 </manifest>

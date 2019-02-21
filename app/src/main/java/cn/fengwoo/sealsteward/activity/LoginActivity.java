@@ -170,6 +170,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     accountDao.insert(historyInfo);
                     intent = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
                 break;
         }

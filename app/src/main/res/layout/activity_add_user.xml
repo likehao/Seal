@@ -58,7 +58,7 @@
                             android:layout_toEndOf="@+id/password_tv"
                             android:background="@null"
                             android:hint="@string/input_user_name"
-                            android:textSize="15sp" />
+                            android:textSize="12sp" />
 
                     </RelativeLayout>
                 </LinearLayout>
@@ -96,7 +96,7 @@
                             android:layout_toEndOf="@+id/confirm_password_tv"
                             android:background="@null"
                             android:hint="@string/input_phone"
-                            android:textSize="15sp" />
+                            android:textSize="12sp" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -169,13 +169,46 @@
                 android:layout_marginEnd="30dp"
                 android:text="@string/please_select" />
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+            <View
+                style="@style/right_arrow" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/Position"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/right_arrow" />
+                android:background="@null"
+                android:hint="@string/please_input_position"
+                android:textSize="12sp"
+                android:layout_marginEnd="30dp" />
+
+            <View
+                style="@style/right_arrow" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -187,13 +220,13 @@
         android:background="@color/line" />
 
     <Button
-        android:id="@+id/register_bt"
+        android:id="@+id/add_user_next_Bt"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="80dp"
         android:background="@drawable/login_circle_bg"
-        android:text="@string/submit"
+        android:text="@string/Next_step"
         android:textColor="@color/white" />
 
 </LinearLayout>

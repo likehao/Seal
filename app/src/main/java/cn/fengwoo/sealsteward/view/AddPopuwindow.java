@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+
+import java.util.ArrayList;
 import java.util.List;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.TopRightPopuAdapter;
@@ -19,6 +21,7 @@ import cn.fengwoo.sealsteward.adapter.TopRightPopuAdapter;
 public class AddPopuwindow extends PopupWindow {
     private ListView listView;
     public View mview;
+    private List<String> listData;
 
     public AddPopuwindow(Activity context){
         final Activity activity = context;
@@ -35,11 +38,10 @@ public class AddPopuwindow extends PopupWindow {
         this.setWidth(width / 3);
         //设置弹出的popuwindow的高
         this.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-/*
-        listView = mview.findViewById(R.id.list);
+/*        listView = mview.findViewById(R.id.list);
+        listData = new ArrayList<>();
         final TopRightPopuAdapter topRightPopuAdapter = new TopRightPopuAdapter(listData,context);
-        listView.setAdapter(topRightPopuAdapter);
-*/
+        listView.setAdapter(topRightPopuAdapter);*/
         //设置弹窗是否可以点击
         this.setFocusable(true);
         this.setOutsideTouchable(true);

@@ -27,18 +27,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddUserActivity;
+import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
+import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.OrganizationalStructureActivity;
+import cn.fengwoo.sealsteward.activity.RechargeRecordActivity;
 import cn.fengwoo.sealsteward.activity.ScanSearchAddSealActivity;
 import cn.fengwoo.sealsteward.activity.StartPasswordActivity;
+import cn.fengwoo.sealsteward.activity.WaitHandleActivity;
+import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 
 /**
  * 应用
  */
-public class ApplicationFragment extends Fragment implements View.OnClickListener{
+public class ApplicationFragment extends Fragment implements View.OnClickListener {
     private View view;
     @BindView(R.id.organizational_structure_rl)  //组织架构
-            RelativeLayout organizational_structure_rl;
+    RelativeLayout organizational_structure_rl;
     @BindView(R.id.start_psd_rl)
     RelativeLayout start_psd_rl;
     @BindView(R.id.key_psd_rl)
@@ -56,6 +61,19 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     private SeekBar seekBar;
     @BindView(R.id.add_seal_rl)
     RelativeLayout add_seal_rl;
+    @BindView(R.id.service_charge_rl)
+    RelativeLayout service_charge_rl;  //服务费充值
+    @BindView(R.id.recharge_record_rl)  //充值记录
+    RelativeLayout recharge_record_rl;
+    @BindView(R.id.use_seal_apply_rl)   //用印申请
+    RelativeLayout use_seal_apply_rl;
+    @BindView(R.id.approvalRecord_rl)
+    RelativeLayout approvalRecord_rl;  //审批记录
+    @BindView(R.id.wait_me_agree_rl)
+    RelativeLayout wait_me_agree_rl;  //待我审批
+    @BindView(R.id.wait_handle_rl)
+    RelativeLayout wait_handle_rl;  //待处理
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,6 +91,12 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         press_time_rl.setOnClickListener(this);
         add_person_rl.setOnClickListener(this);
         add_seal_rl.setOnClickListener(this);
+        service_charge_rl.setOnClickListener(this);
+        recharge_record_rl.setOnClickListener(this);
+        use_seal_apply_rl.setOnClickListener(this);
+        approvalRecord_rl.setOnClickListener(this);
+        wait_me_agree_rl.setOnClickListener(this);
+        wait_handle_rl.setOnClickListener(this);
     }
 
     @Override
@@ -107,7 +131,32 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.add_seal_rl:
-                intent = new Intent(getActivity() , ScanSearchAddSealActivity.class);
+                intent = new Intent(getActivity(), ScanSearchAddSealActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.service_charge_rl:
+                intent = new Intent(getActivity(), OrganizationalStructureActivity.class);
+                intent.putExtra("electronic", 1);
+                startActivity(intent);
+                break;
+            case R.id.recharge_record_rl:
+                intent = new Intent(getActivity(), RechargeRecordActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.use_seal_apply_rl:
+                intent = new Intent(getActivity(), MyApplyActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.approvalRecord_rl:
+                intent = new Intent(getActivity(), ApprovalRecordActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.wait_me_agree_rl:
+                intent = new Intent(getActivity(), WaitMeAgreeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.wait_handle_rl:
+                intent = new Intent(getActivity(), WaitHandleActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -127,7 +176,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         popupWindow.setOutsideTouchable(true);  //点击外部消失
         popupWindow.setTouchable(true); //设置可以点击
         //设置背景透明度
-        backgroundAlpha(0.65f,getActivity());
+        backgroundAlpha(0.65f, getActivity());
         //popuwindow消失背景颜色恢复
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -135,9 +184,9 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        backgroundAlpha(1.0f,getActivity());
+                        backgroundAlpha(1.0f, getActivity());
                     }
-                },400);
+                }, 400);
             }
         });
         //动画弹出
@@ -166,8 +215,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
      * 按下android回退物理键 PopipWindow消失
      */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-            if(popupWindow!=null && popupWindow.isShowing()){
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
                 return true;
             }
@@ -178,7 +227,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     /**
      * 弹出popuwindow时让activity背景变色
      */
-    public void backgroundAlpha(float bgAlpha,Activity activity) {
+    public void backgroundAlpha(float bgAlpha, Activity activity) {
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         activity.getWindow().setAttributes(lp);
@@ -190,7 +239,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     private SeekBar.OnSeekBarChangeListener seekBarChange = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (seekBar.getId() == R.id.seekBar){
+            if (seekBar.getId() == R.id.seekBar) {
                 seekBar_tv.setText(progress + "S");
             }
         }

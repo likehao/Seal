@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.RecordDetailActivity;
+import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
 import cn.fengwoo.sealsteward.entity.RecordData;
 
@@ -92,7 +93,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        intent = new Intent(getActivity(), RecordDetailActivity.class);
+     //   intent = new Intent(getActivity(), RecordDetailActivity.class);
+        intent = new Intent(getActivity(), SeeRecordActivity.class);
         startActivity(intent);
     }
 }

@@ -12,7 +12,7 @@
         android:layout_height="40dp"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
-        android:text="请审批"
+        android:text="@string/please_apply"
         android:textColor="@color/black" />
 
     <View style="@style/line" />
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="印章名称"
+            android:text="@string/seal_name"
             android:textSize="12sp" />
 
         <View
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:text="公章"
             android:textSize="12sp" />
     </LinearLayout>
@@ -59,7 +59,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="失效时间 "
+            android:text="@string/Failure_time"
             android:textSize="12sp" />
 
         <View
@@ -89,7 +89,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="申请次数 "
+            android:text="@string/apply_time"
             android:textSize="12sp" />
 
         <View
@@ -102,7 +102,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:text="20"
             android:textSize="12sp" />
     </LinearLayout>
@@ -127,10 +127,10 @@
             android:background="@drawable/suggestion_gray"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:layout_toLeftOf="@+id/item2_tv"
+            android:layout_toStartOf="@+id/item2_tv"
             android:layout_marginEnd="10dp"
             android:visibility="gone"
-            android:text="审批进度"
+            android:text="@string/see_record"
             android:textSize="12sp" />
         <TextView
             android:id="@+id/item2_tv"
@@ -141,7 +141,7 @@
             android:background="@drawable/suggestion_gray"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="撤销"
+            android:text="@string/revoke"
             android:textSize="12sp" />
     </RelativeLayout>
 

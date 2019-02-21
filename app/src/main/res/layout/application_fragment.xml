@@ -150,7 +150,7 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:layout_weight="3">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -164,40 +164,143 @@
 
                                 <TextView
                                     style="@style/application_text"
-                                    android:text="@string/Electronic_fence" />
+                                    android:text="@string/password_user" />
 
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
+                        <RelativeLayout style="@style/add"
+                            android:layout_weight="1"/>
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:orientation="vertical">
-
-                                <de.hdodenhof.circleimageview.CircleImageView
-                                    style="@style/cycleApplication"
-                                    android:src="@drawable/ic_launcher" />
-
-                                <TextView
-                                    style="@style/application_text"
-                                    android:text="@string/Approval_flow" />
-
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                        <RelativeLayout style="@style/add" />
-
-                        <RelativeLayout style="@style/add" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+            <!--第二个卡片开始！！！！！！！！！！！！！！！！！！！！！！！！！-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="15dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/apply_manager"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/use_seal_apply_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                style="@style/cycleApplication"
+                                android:src="@drawable/ic_launcher" />
+
+                            <TextView
+                                style="@style/application_text"
+                                android:text="@string/use_seal_apply" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/approvalRecord_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                style="@style/cycleApplication"
+                                android:src="@drawable/ic_launcher" />
+
+                            <TextView
+                                style="@style/application_text"
+                                android:text="@string/approval_record" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/wait_me_agree_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                style="@style/cycleApplication"
+                                android:src="@drawable/ic_launcher" />
+
+                            <TextView
+                                style="@style/application_text"
+                                android:text="@string/wait_me_agree" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/wait_handle_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                style="@style/cycleApplication"
+                                android:src="@drawable/ic_launcher" />
+
+                            <TextView
+                                style="@style/application_text"
+                                android:text="@string/wait_solve" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--第二个卡片结束！！！！！！！！！！！！！！！！！！！！！！！！！-->
+
+           <!--第三个卡片开始！！！！！！！！！！！！！！！！！-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,7 +316,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="15dp"
+                        android:paddingStart="15dp"
                         android:paddingTop="5dp">
 
                         <TextView
@@ -307,7 +410,7 @@
 
                 </LinearLayout>
             </LinearLayout>
-            <!--第二个卡片开始！！！！！！！！！！！！！！！！！！！！！！！！！-->
+          <!--第三个卡片结束！！！！！！！！！！！！！！！！-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -342,6 +445,7 @@
                         android:orientation="horizontal">
 
                         <RelativeLayout
+                            android:id="@+id/service_charge_rl"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -364,6 +468,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/recharge_record_rl"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
@@ -398,7 +503,7 @@
 
                 </LinearLayout>
             </LinearLayout>
-            <!--第二个卡片结束！！！！！！！！！！！！！！！！！！！！！！！！！-->
+
 
         </LinearLayout>
 

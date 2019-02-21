@@ -48,6 +48,8 @@
     <string name="company">公司</string>
     <string name="department">部门</string>
     <string name="position">职位</string>
+    <string name="Position">职位:</string>
+    <string name="please_input_position">请输入职位</string>
     <string name="email">邮箱</string>
     <string name="address">地址</string>
     <string name="none_authentication">未认证</string>
@@ -63,7 +65,7 @@
     <string name="other">其他</string>
     <string name="moulage">印模</string>
     <string name="seal_name">印章名称</string>
-    <string name="MAC_address">MAC地址</string>
+    <string name="MAC_address">设备地址</string>
     <string name="seal_Personal">印章所属人</string>
     <string name="state">状态</string>
     <string name="Remainder">剩余次数</string>
@@ -163,7 +165,7 @@
     <string name="cost_manage">费用管理</string>
     <string name="resources_manage">资源管理</string>
     <string name="service_cost_reset">服务费充值</string>
-    <string name="order">订单</string>
+    <string name="order">充值记录</string>
     <string name="connect_device_now">当前连接设备</string>
     <string name="search_seal">搜索到的印章</string>
     <string name="not_connect_seal">暂未连接印章</string>
@@ -214,4 +216,28 @@
     <string name="user">用户</string>
     <string name="seal">印章</string>
     <string name="delete">删除</string>
+    <string name="apply_manager">审批管理</string>
+    <string name="wait_solve">待处理</string>
+    <string name="password_user">密码用户</string>
+    <string name="seal_sum">盖章总数:</string>
+    <string name="photographed">已拍照:</string>
+    <string name="revoke">撤销</string>
+    <string name="see_record">查看记录</string>
+    <string name="please_apply">请审批</string>
+    <string name="serial_number">流水号</string>
+    <string name="see_seal_information">查看印章信息</string>
+    <string name="edit_seal">编辑印章</string>
+    <string name="delete_seal">删除印章</string>
+    <string name="see_user_information">查看用户信息</string>
+    <string name="add_user">添加用户</string>
+    <string name="edit_user">编辑用户</string>
+    <string name="set_power">设置权限</string>
+    <string name="delete_user">删除用户</string>
+    <string name="select_same_person_seal">查询同部门人员盖章</string>
+    <string name="one_approval">一级审批</string>
+    <string name="two_approval">二级审批</string>
+    <string name="add_approval">添加审批</string>
+    <string name="set_meal">套餐</string>
+    <string name="pay_money">实付金额&#160;¥&#160;</string>
+
 </resources>

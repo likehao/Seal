@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,6 +25,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.view.MessagePopuwindow;
 
 /**
  * 添加用户
@@ -43,6 +45,10 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.select_organizational_rl)
     RelativeLayout select_organizational_rl;
     private Intent intent;
+    @BindView(R.id.edit_tv)
+    TextView edit_tv;
+    @BindView(R.id.add_user_next_Bt)
+    Button add_user_next_Bt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +62,13 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("添加用户");
+        edit_tv.setVisibility(View.VISIBLE);
+        edit_tv.setText("扫一扫");
+        edit_tv.setOnClickListener(this);
         set_back_ll.setOnClickListener(this);
         mail_list_rl.setOnClickListener(this);
         select_organizational_rl.setOnClickListener(this);
+        add_user_next_Bt.setOnClickListener(this);
     }
 
     @Override
@@ -73,6 +83,14 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.select_organizational_rl:
                 intent = new Intent(this,OrganizationalStructureActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.edit_tv:
+                intent = new Intent(this,ScanActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.add_user_next_Bt:
+                intent = new Intent(this,SetPowerActivity.class);
                 startActivity(intent);
                 break;
         }

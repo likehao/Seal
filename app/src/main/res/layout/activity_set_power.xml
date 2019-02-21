@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".activity.SetPowerActivity">
+
+    <include layout="@layout/head" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/see_seal_information" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/add_seal" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/edit_seal" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/press_time" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/start_password" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/key_password" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/Reset_the_seal" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/password_user" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/Electronic_fence" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/Approval_flow" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/delete_seal" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/see_user_information" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/add_user" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/edit_user" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/set_power" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/delete_user" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line_left" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="@string/select_same_person_seal" />
+
+                <com.suke.widget.SwitchButton style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View
+                style="@style/line"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
