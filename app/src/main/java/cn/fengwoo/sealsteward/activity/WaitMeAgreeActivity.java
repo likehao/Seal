@@ -1,11 +1,9 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +16,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.WaitMeAgreeAdapter;
 import cn.fengwoo.sealsteward.entity.WaitMeAgreeData;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 /**
  * 待我审批

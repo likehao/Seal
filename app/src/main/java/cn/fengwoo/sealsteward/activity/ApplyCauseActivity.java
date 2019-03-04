@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.CauseAdapter;
 import cn.fengwoo.sealsteward.entity.ApplyCauseData;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnItemClickListener{
 

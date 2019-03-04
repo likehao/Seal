@@ -207,7 +207,8 @@
         <activity android:name=".activity.SetApprovalActivity" />
         <activity android:name=".activity.PersonInformationActivity" />
         <activity android:name=".activity.RechargeRecordActivity" />
-        <activity android:name=".activity.WaitHandleActivity"></activity>
+        <activity android:name=".activity.WaitHandleActivity" />
+        <activity android:name=".activity.ChangeInformationActivity"></activity>
     </application>
 
 </manifest>

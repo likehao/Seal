@@ -16,6 +16,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 public class MySignActivity extends BaseActivity implements View.OnClickListener{
 

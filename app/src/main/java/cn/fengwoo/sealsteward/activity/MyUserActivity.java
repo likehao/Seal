@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.UserAdapter;
 import cn.fengwoo.sealsteward.entity.UserData;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 public class MyUserActivity extends BaseActivity implements View.OnClickListener{
 

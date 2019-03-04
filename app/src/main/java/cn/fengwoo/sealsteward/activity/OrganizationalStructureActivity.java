@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.fragment.SealOrganizationalFragment;
 import cn.fengwoo.sealsteward.fragment.UserOrganizationalFragment;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 /**
  * 组织架构

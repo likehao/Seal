@@ -118,7 +118,7 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
     //okhttp请求框架
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     //注解框架
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

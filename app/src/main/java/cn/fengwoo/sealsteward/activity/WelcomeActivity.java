@@ -1,10 +1,8 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +13,7 @@ import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.StartViewPagerAdapter;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.PrefUtils;
 
 public class WelcomeActivity extends BaseActivity implements View.OnClickListener,ViewPager.OnPageChangeListener{

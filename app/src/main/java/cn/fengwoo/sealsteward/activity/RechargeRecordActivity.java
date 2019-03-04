@@ -1,6 +1,5 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,6 +14,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RechargeRecordAdapter;
 import cn.fengwoo.sealsteward.entity.RechargeRecordData;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 /**
  * 充值记录

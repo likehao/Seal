@@ -1,49 +1,34 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.uuzuche.lib_zxing.activity.CaptureActivity;
-import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
-import com.uuzuche.lib_zxing.camera.CameraManager;
-import com.uuzuche.lib_zxing.decoding.CaptureActivityHandler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.adapter.TopRightPopuAdapter;
 import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.fragment.MainFragment;
 import cn.fengwoo.sealsteward.fragment.MessageFragment;
 import cn.fengwoo.sealsteward.fragment.MineFragment;
 import cn.fengwoo.sealsteward.fragment.RecordFragment;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
 import cn.fengwoo.sealsteward.view.AddPopuwindow;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
@@ -194,7 +179,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.add_iv:
                 //添加popuwindow
-                messagePopuwindow = new MessagePopuwindow(MainActivity.this);
+                messagePopuwindow = new MessagePopuwindow(MainActivity.this,1);
                 messagePopuwindow.showPopuwindow(view);
                 break;
         }

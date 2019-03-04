@@ -219,7 +219,7 @@
     <string name="apply_manager">审批管理</string>
     <string name="wait_solve">待处理</string>
     <string name="password_user">密码用户</string>
-    <string name="seal_sum">盖章总数:</string>
+    <string name="seal_sum">盖章总数:</string>see_seal_file
     <string name="photographed">已拍照:</string>
     <string name="revoke">撤销</string>
     <string name="see_record">查看记录</string>
@@ -239,5 +239,6 @@
     <string name="add_approval">添加审批</string>
     <string name="set_meal">套餐</string>
     <string name="pay_money">实付金额&#160;¥&#160;</string>
+    <string name="see_seal_file">查看盖章后附件</string>
 
 </resources>

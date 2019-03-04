@@ -45,18 +45,21 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:id="@+id/register_phone_et"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="@null"
-                android:layout_toRightOf="@+id/phone_tv"
+                android:layout_toEndOf="@+id/phone_tv"
                 android:hint="@string/please_input_phone"
+                android:layout_toStartOf="@+id/send_code_bt"
                 android:layout_marginStart="20dp"
                 android:inputType="phone"
                 android:maxLength="11"
                 android:textSize="15sp" />
 
             <Button
+                android:id="@+id/send_code_bt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -93,12 +96,13 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:id="@+id/verificationCode_et"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="@null"
                 android:hint="@string/please_input_Code"
-                android:layout_toRightOf="@+id/code_tv"
+                android:layout_toEndOf="@+id/code_tv"
                 android:layout_marginStart="20dp"
                 android:inputType="phone"
                 android:maxLength="6"

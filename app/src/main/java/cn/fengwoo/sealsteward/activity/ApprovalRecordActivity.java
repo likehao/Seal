@@ -4,7 +4,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,6 +18,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.TabFragmentAdapter;
 import cn.fengwoo.sealsteward.fragment.FourthMyApplyFragment;
 import cn.fengwoo.sealsteward.fragment.ThirdMyApplyFragment;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 /**
  * 审批记录历史

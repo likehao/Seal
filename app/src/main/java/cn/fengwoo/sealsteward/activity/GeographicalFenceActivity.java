@@ -33,6 +33,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 /**
  * 地理围栏

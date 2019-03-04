@@ -4,26 +4,28 @@ import java.io.Serializable;
 
 public class ResponseInfo<T> implements Serializable {
 
-    private Integer code;
-    private String msg;
+    private String message;
     private T data;
+    private Integer code;
+
     public ResponseInfo(){
 
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public Integer getCode() {
         return code;
     }
 
     public void setCode(Integer code) {
         this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
     }
 
     public T getData() {

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="46dp"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,15 +14,17 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:layout_marginStart="10dp">
+            android:layout_marginStart="10dp"
+            android:visibility="gone">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/scan"
                 android:layout_gravity="center"
-                android:background="@drawable/scan"/>
+                android:background="@drawable/scan"
+                android:text="@string/scan" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
@@ -29,37 +32,37 @@
             android:layout_centerInParent="true"
             android:text="@string/home_page"
             android:textColor="@color/white"
-            android:textSize="18dp"/>
+            android:textSize="18dp" />
 
         <ImageView
             android:id="@+id/add_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:background="@drawable/add"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:visibility="gone"
-            android:layout_centerVertical="true"/>
+            android:background="@drawable/add"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/record_more_iv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/more"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:visibility="gone"
-            android:layout_centerVertical="true"/>
+            android:background="@drawable/more"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/message_more_iv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/more"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:visibility="gone"
-            android:layout_centerVertical="true"/>
+            android:background="@drawable/more"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/edit_tv"
@@ -68,9 +71,9 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
+            android:text="@string/edit"
             android:textColor="@color/white"
-            android:visibility="gone"
-            android:text="@string/edit"/>
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/set_back_ll"
@@ -82,19 +85,34 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="5dp"
                 android:layout_gravity="center"
-                android:background="@drawable/back"/>
+                android:layout_marginStart="5dp"
+                android:background="@drawable/back" />
 
             <TextView
                 android:id="@+id/back_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/mine"
-                android:visibility="gone"
                 android:textColor="@color/white"
-                android:layout_gravity="center"/>
+                android:visibility="gone" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/cancel_ll"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_gravity="center"
+                android:text="@string/cancel"
+                android:textColor="@color/white"/>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

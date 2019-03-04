@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +22,7 @@ import cn.fengwoo.sealsteward.fragment.FirstMyApplyFragment;
 import cn.fengwoo.sealsteward.fragment.FourthMyApplyFragment;
 import cn.fengwoo.sealsteward.fragment.SecondMyApplyFragmen;
 import cn.fengwoo.sealsteward.fragment.ThirdMyApplyFragment;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 /**
  * 我的申请

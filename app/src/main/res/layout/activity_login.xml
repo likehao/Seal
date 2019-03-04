@@ -51,7 +51,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="phone"
                         android:digits="0123456789"
-                        android:text="1"
                         android:hint="@string/phone_et"/>
                 </LinearLayout>
         </LinearLayout>
@@ -98,7 +97,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textPassword"
-                        android:text="1"
                         android:hint="@string/password_et"/>
                 </LinearLayout>
             </LinearLayout>

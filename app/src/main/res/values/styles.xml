@@ -30,6 +30,7 @@
         <item name="android:layout_height">0.5dp</item>
         <item name="android:background">@color/line</item>
     </style>
+
     <style name="line_left" parent="line">
         <item name="android:layout_marginStart">15dp</item>
     </style>
@@ -123,17 +124,27 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
     </style>
+
     <style name="set_power">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
+
     <style name="set_power_bt" parent="set_power">
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_marginEnd">15dp</item>
     </style>
+
     <style name="set_power_tv" parent="set_power">
         <item name="android:layout_marginStart">15dp</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+    <!--加载圈-->
+    <style name="Theme_Transparent" parent="@android:style/Theme.DeviceDefault.Light.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 </resources>

@@ -9,11 +9,12 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 
 /**
  * 修改启动密码和修改按键密码
  */
-public class StartPasswordActivity extends BaseActivity{
+public class StartPasswordActivity extends BaseActivity {
 
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;

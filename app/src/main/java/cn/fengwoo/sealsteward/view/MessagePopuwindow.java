@@ -25,10 +25,16 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
     private TextView add_user_tv,add_seal_tv;
     private Intent intent;
 
-    public MessagePopuwindow(Activity context){
+    public MessagePopuwindow(Activity context,int code){
         final Activity activity = context;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mview = inflater.inflate(R.layout.message_popuwindowlayout,null);
+        //判断是首页还是记录详情进入
+        if (code == 1){
+            mview = inflater.inflate(R.layout.message_popuwindowlayout,null);
+            initView();
+        }else {
+            mview = inflater.inflate(R.layout.see_record_popuwindow,null);
+        }
         //设置选择的popuwindow的View
         this.setContentView(mview);
         //获取屏幕宽高度
@@ -71,7 +77,7 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
             }
         });
         //初始化视图点击事件
-        initView();
+
     }
 
     private void initView(){
