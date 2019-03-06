@@ -21,13 +21,32 @@ public class CommonUtil {
         String mobilePhone = sharedPreferences.getString("mobilePhone","");
         String token = sharedPreferences.getString("token","");
         String companyId = sharedPreferences.getString("companyId","");
-        //TODO
+        String userEmail = sharedPreferences.getString("userEmail","");
+        String headPortrait = sharedPreferences.getString("headPortrait","");
+        String autoGraph = sharedPreferences.getString("autoGraph","");
+        String address = sharedPreferences.getString("address","");
+        boolean authStatus = sharedPreferences.getBoolean("authStatus",false);
+        String companyName = sharedPreferences.getString("companyName","");
+        String orgStructureName = sharedPreferences.getString("orgStructureName","");
+        String job = sharedPreferences.getString("job","");
+        boolean needSync = sharedPreferences.getBoolean("needSync",false);
+
 
         LoginData user = new LoginData();
         user.setId(userId);
         user.setRealName(realName);
         user.setMobilePhone(mobilePhone);
         user.setCompanyId(companyId);
+        user.setToken(token);
+        user.setUserEmail(userEmail);
+        user.setHeadPortrait(headPortrait);
+        user.setAutoGraph(autoGraph);
+        user.setAddress(address);
+        user.setAuthStatus(authStatus);
+        user.setCompanyName(companyName);
+        user.setOrgStructureName(orgStructureName);
+        user.setJob(job);
+        user.setNeedSync(needSync);
 
         return user;
     }
@@ -44,7 +63,15 @@ public class CommonUtil {
         editor.putString("mobilePhone",user.getMobilePhone());
         editor.putString("token",user.getToken());
         editor.putString("companyId",user.getCompanyId());
-        //TODO
+        editor.putString("userEmail",user.getUserEmail());
+        editor.putString("headPortrait",user.getHeadPortrait());
+        editor.putString("autoGraph",user.getAutoGraph());
+        editor.putString("address",user.getAddress());
+        editor.putBoolean("authStatus",user.getAuthStatus());
+        editor.putString("companyName",user.getCompanyName());
+        editor.putString("orgStructureName",user.getOrgStructureName());
+        editor.putString("job",user.getJob());
+        editor.putBoolean("needSync",user.getNeedSync());
 
         //提交
         editor.commit();

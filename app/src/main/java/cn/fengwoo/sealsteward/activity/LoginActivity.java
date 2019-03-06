@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,7 +44,10 @@ import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.FromToJson;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.RequestHeaderUtil;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -229,7 +234,49 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
      * 发送登录请求
      */
     private void loginGet(final String phone, final String password) {
-        runOnUiThread(new Runnable() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("mobilePhone",phone);
+        hashMap.put("password",password);
+        HttpUtil.sendDataAsync(HttpUrl.LOGIN,1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Looper.prepare();
+                showToast("error:" + e);
+                Looper.loop();
+                Log.e("TAG", "登录失败。。。。。。。");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<LoginData> loginResponseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<LoginData>>() {
+                }.getType());
+                if (loginResponseInfo.getData() != null && loginResponseInfo.getCode() == 0) {
+                    Log.e("TAG", "登录请求成功。。。。。。。");
+                    loadingView.cancel();
+                    //登录存储信息
+                    user = loginResponseInfo.getData();
+                    CommonUtil.setUserData(LoginActivity.this,user);
+                    RequestHeaderUtil.USER_ID = CommonUtil.getUserData(LoginActivity.this).getId();
+                    RequestHeaderUtil.COMPANY_ID = CommonUtil.getUserData(LoginActivity.this).getCompanyId();
+                    RequestHeaderUtil.TOKEN = CommonUtil.getUserData(LoginActivity.this).getToken();
+                    RequestHeaderUtil.PHONE_TYPE = Build.MODEL;
+                    RequestHeaderUtil.APP_VERSION = "1.0.0";
+                    RequestHeaderUtil.SYSTEM_VERSION = Build.VERSION.RELEASE;
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    loadingView.cancel();
+                    Looper.prepare();
+                    showToast(loginResponseInfo.getMessage());
+                    Looper.loop();
+                }
+            }
+        });
+     /*   runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //创建okHttpClient对象
@@ -256,13 +303,20 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                         Gson gson = new Gson();
                         ResponseInfo<LoginData> loginResponseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<LoginData>>() {
                         }.getType());
+                       // FromToJson fromToJson = new FromToJson();
+                      //  ResponseInfo<LoginData> loginResponseInfo = fromToJson.fromToJson(result);
                         if (loginResponseInfo.getData() != null && loginResponseInfo.getCode() == 0) {
                             Log.e("TAG", "登录请求成功。。。。。。。");
                             loadingView.cancel();
                             //登录存储信息
                             user = loginResponseInfo.getData();
                             CommonUtil.setUserData(LoginActivity.this,user);
-
+                            RequestHeaderUtil.USER_ID = CommonUtil.getUserData(LoginActivity.this).getId();
+                            RequestHeaderUtil.COMPANY_ID = CommonUtil.getUserData(LoginActivity.this).getCompanyId();
+                            RequestHeaderUtil.TOKEN = CommonUtil.getUserData(LoginActivity.this).getToken();
+                            RequestHeaderUtil.PHONE_TYPE = Build.MODEL;
+                            RequestHeaderUtil.APP_VERSION = "1.0.0";
+                            RequestHeaderUtil.SYSTEM_VERSION = Build.VERSION.RELEASE;
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -275,7 +329,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     }
                 });
             }
-        });
+        });*/
     }
 
     /***

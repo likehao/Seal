@@ -50,6 +50,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
 
         ButterKnife.bind(this);
         initView();
+
     }
 
     private void initView() {

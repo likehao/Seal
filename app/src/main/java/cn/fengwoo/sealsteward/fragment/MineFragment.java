@@ -27,31 +27,11 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.activity.MyApplyActivity;
-import cn.fengwoo.sealsteward.activity.MyQRCodeActivity;
-import cn.fengwoo.sealsteward.activity.MySealListActivity;
 import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
-import cn.fengwoo.sealsteward.activity.MyUserActivity;
-import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
-import cn.fengwoo.sealsteward.activity.OrganizationalStructureActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
-import cn.fengwoo.sealsteward.entity.LoginData;
-import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
-import cn.fengwoo.sealsteward.utils.HttpUrl;
-import cn.fengwoo.sealsteward.view.LoadingView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * 主页我的

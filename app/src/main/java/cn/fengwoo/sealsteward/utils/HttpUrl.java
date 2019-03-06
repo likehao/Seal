@@ -6,7 +6,7 @@ public class HttpUrl {
     /**
      * 登录
      */
-    public static final String  LOGIN = "user/login";
+    public static final String LOGIN = "user/login";
     /**
      * 退出
      */
@@ -31,4 +31,20 @@ public class HttpUrl {
      * 用户信息
      */
     public static final String USERINFO = "/user/userinfo";
+    /**
+     * 更改姓名
+     */
+    public static final String UPDATEREALNAME = "/user/updaterealname";
+    /**
+     * 更改电话
+     */
+    public static final String UPDATEMOBILEPHONE = "/user/updatemobilephone";
+    /**
+     * 更改邮箱
+     */
+    public static final String UPDATEUSEREMAIL = "/user/updateuseremail";
+    /**
+     * 修改头像
+     */
+    public static final String UPDATEHEADPORTRAIT = "/user/updateheadportrait";
 }
