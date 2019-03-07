@@ -138,7 +138,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     private void changeNameInfomation() {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("realName", information_et.getText().toString());
-        HttpUtil.sendDataAsync(HttpUrl.UPDATEREALNAME,3, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this,HttpUrl.UPDATEREALNAME,3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -179,7 +179,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     private void changePhoneInfomation(){
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mobilePhone", information_et.getText().toString());
-        HttpUtil.sendDataAsync(HttpUrl.UPDATEMOBILEPHONE,3, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this,HttpUrl.UPDATEMOBILEPHONE,3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -217,7 +217,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     private void changeEmailInfomation() {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userEmail", information_et.getText().toString());
-        HttpUtil.sendDataAsync(HttpUrl.UPDATEUSEREMAIL,3, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this,HttpUrl.UPDATEUSEREMAIL,3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();

@@ -47,4 +47,8 @@ public class HttpUrl {
      * 修改头像
      */
     public static final String UPDATEHEADPORTRAIT = "/user/updateheadportrait";
+    /**
+     * 上传头像
+     */
+    public static final String UPLOADIMAGE = "/file/uploadimage";
 }

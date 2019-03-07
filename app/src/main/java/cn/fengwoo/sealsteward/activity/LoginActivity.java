@@ -237,7 +237,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mobilePhone",phone);
         hashMap.put("password",password);
-        HttpUtil.sendDataAsync(HttpUrl.LOGIN,1, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this,HttpUrl.LOGIN,1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -259,12 +259,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     //登录存储信息
                     user = loginResponseInfo.getData();
                     CommonUtil.setUserData(LoginActivity.this,user);
-                    RequestHeaderUtil.USER_ID = CommonUtil.getUserData(LoginActivity.this).getId();
-                    RequestHeaderUtil.COMPANY_ID = CommonUtil.getUserData(LoginActivity.this).getCompanyId();
-                    RequestHeaderUtil.TOKEN = CommonUtil.getUserData(LoginActivity.this).getToken();
-                    RequestHeaderUtil.PHONE_TYPE = Build.MODEL;
-                    RequestHeaderUtil.APP_VERSION = "1.0.0";
-                    RequestHeaderUtil.SYSTEM_VERSION = Build.VERSION.RELEASE;
+
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -276,60 +271,6 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                 }
             }
         });
-     /*   runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //创建okHttpClient对象
-                OkHttpClient okHttpClient = new OkHttpClient();
-                //创建请求
-                Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.LOGIN + "?mobilePhone=" + phone + "&password=" + password)
-                        .get()
-                        .build();
-                //设置回调
-                okHttpClient.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        loadingView.cancel();
-                        Looper.prepare();
-                        showToast("error:" + e);
-                        Looper.loop();
-                        Log.e("TAG", "登录失败。。。。。。。");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<LoginData> loginResponseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<LoginData>>() {
-                        }.getType());
-                       // FromToJson fromToJson = new FromToJson();
-                      //  ResponseInfo<LoginData> loginResponseInfo = fromToJson.fromToJson(result);
-                        if (loginResponseInfo.getData() != null && loginResponseInfo.getCode() == 0) {
-                            Log.e("TAG", "登录请求成功。。。。。。。");
-                            loadingView.cancel();
-                            //登录存储信息
-                            user = loginResponseInfo.getData();
-                            CommonUtil.setUserData(LoginActivity.this,user);
-                            RequestHeaderUtil.USER_ID = CommonUtil.getUserData(LoginActivity.this).getId();
-                            RequestHeaderUtil.COMPANY_ID = CommonUtil.getUserData(LoginActivity.this).getCompanyId();
-                            RequestHeaderUtil.TOKEN = CommonUtil.getUserData(LoginActivity.this).getToken();
-                            RequestHeaderUtil.PHONE_TYPE = Build.MODEL;
-                            RequestHeaderUtil.APP_VERSION = "1.0.0";
-                            RequestHeaderUtil.SYSTEM_VERSION = Build.VERSION.RELEASE;
-                            intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            loadingView.cancel();
-                            Looper.prepare();
-                            showToast(loginResponseInfo.getMessage());
-                            Looper.loop();
-                        }
-                    }
-                });
-            }
-        });*/
     }
 
     /***

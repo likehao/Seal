@@ -240,5 +240,6 @@
     <string name="set_meal">套餐</string>
     <string name="pay_money">实付金额&#160;¥&#160;</string>
     <string name="see_seal_file">查看盖章后附件</string>
+    <string name="error_gif">error_gif</string>
 
 </resources>
