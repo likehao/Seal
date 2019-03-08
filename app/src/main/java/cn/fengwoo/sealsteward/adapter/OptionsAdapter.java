@@ -55,13 +55,14 @@ public class OptionsAdapter extends BaseAdapter {
      //       holder.down_civ = view.findViewById(R.id.down_civ);
             holder.imageView = view.findViewById(R.id.delete_iv);
             holder.rl_item = view.findViewById(R.id.rl_item);
+            holder.nickName = view.findViewById(R.id.nickName);  //账户名
             view.setTag(holder);
         }else {
             holder = (ViewHolder) view.getTag();
         }
         final HistoryInfo historyInfo = list.get(position);
         holder.textView.setText(historyInfo.getPhone());
-   //     holder.nickName.setText(historyInfo.getName());
+        holder.nickName.setText(historyInfo.getName());
 
         //为下拉框选项删除图标部分设置事件，最终效果是点击将该选项删除
         holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -82,5 +83,6 @@ public class OptionsAdapter extends BaseAdapter {
    //     ImageView down_civ;
         ImageView imageView;
         RelativeLayout rl_item;
+        TextView nickName;
     }
 }

@@ -260,6 +260,9 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     user = loginResponseInfo.getData();
                     CommonUtil.setUserData(LoginActivity.this,user);
 
+                    HistoryInfo historyInfo = new HistoryInfo(phone,user.getRealName(),new Date().getTime());
+                    //添加
+                    accountDao.insert(historyInfo);
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

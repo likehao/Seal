@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.title_tv)TextView title_tv;
     @BindView(R.id.select_company_rl)
     RelativeLayout select_company_rl;
+    @BindView(R.id.add_iv)
+    ImageView add_iv;
     private List<String> strings;
     private Intent intent;
 
@@ -43,11 +46,13 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("公司");
+        add_iv.setVisibility(View.VISIBLE);
     }
 
     private void setListener() {
         set_back_ll.setOnClickListener(this);
         select_company_rl.setOnClickListener(this);
+        add_iv.setOnClickListener(this);
     }
 
     @Override
@@ -58,6 +63,10 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.select_company_rl:
                 selectDialoh();
+                break;
+            case R.id.add_iv:
+                intent = new Intent(MyCompanyActivity.this,AddCompanyActivity.class);
+                startActivity(intent);
                 break;
         }
     }

@@ -8,14 +8,17 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapsdkplatform.comapi.map.C;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -27,11 +30,20 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.LoginActivity;
 import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.UserInfoData;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.CommonDialog;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 主页我的
@@ -53,6 +65,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     RelativeLayout my_aply_rl;    //我的申请*/
     @BindView(R.id.suggestion_rl)
     RelativeLayout suggestion_rl;
+    @BindView(R.id.logout_bt)
+    Button logout_bt;
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
@@ -77,7 +91,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         my_sealList_rl.setOnClickListener(this);
         my_aply_rl.setOnClickListener(this);*/
         suggestion_rl.setOnClickListener(this);
-
+        logout_bt.setOnClickListener(this);
     //    nearby_device_rl.setOnClickListener(this);
     }
 
@@ -120,7 +134,47 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 intent = new Intent(getActivity(), SuggestionActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.logout_bt:
+                setDialog();
+                break;
+
         }
+    }
+
+    /**
+     * 退出
+     */
+    private void setDialog(){
+        final CommonDialog commonDialog = new CommonDialog(getActivity(),"提示","确认退出吗？","确定");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HttpUtil.sendDataAsync(getActivity(), HttpUrl.LOGOUT, 1, null, null, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Toast.makeText(getActivity(),e+"",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = response.body().string();
+                        Gson gson = new Gson();
+                        final ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                        }.getType());
+                        if (responseInfo.getData()){
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            commonDialog.dialog.dismiss();
+                            getActivity().finish();
+                            Log.e("TAG","退出成功.........");
+                        }else {
+                            Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
     }
 
 }

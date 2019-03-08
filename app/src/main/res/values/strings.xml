@@ -18,7 +18,7 @@
     <string name="seal_apply">盖章申请</string>
     <string name="person_Authentication">未个人认证</string>
     <string name="company_Authentication">未企业认证</string>
-    <string name="company_name">深圳白鹤印章科技股份有限公司</string>
+    <string name="company_name">深圳白鹤区块链科技有限公司</string>
     <string name="job">研发中心</string>
     <string name="my_data">我的资料</string>
     <string name="my_company">我的公司</string>
@@ -241,5 +241,9 @@
     <string name="pay_money">实付金额&#160;¥&#160;</string>
     <string name="see_seal_file">查看盖章后附件</string>
     <string name="error_gif">error_gif</string>
+    <string name="please_input_company_name">请输入公司名称</string>
+    <string name="please_input_Social_Credit_Code">请输入社会信用代码</string>
+    <string name="please_input_legal_person">请输入法人</string>
+    <string name="add">添加</string>
 
 </resources>

@@ -1,124 +1,77 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
+import android.provider.MediaStore;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.FileReader;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * 下载工具类
  */
 public class HttpDownloader {
-    private URL url = null;
-    private final String TAG = "TAG";
-    private static String path = "/sdcard/myHead/";// sd路径
+
+    public static String path = "/sdcard/headImage/";// sd路径
 
     /**
-     * 读取文本文件
-     *
-     * @param urlStr url路径
-     * @return 文本信息
-     * 根据url下载文件，前提是这个文件中的内容是文本，
-     * 1.创建一个URL对象
-     * 2.通过URL对象，创建一个Http连接
-     * 3.得到InputStream
-     * 4.从InputStream中得到数据
+     * 保存到SD卡
+     * @param bitmap
      */
-    public String download(String urlStr) {
-        StringBuffer sb = new StringBuffer();
-        String line = null;
-        BufferedReader bufferedReader = null;
-
-        try {
-            url = new URL(urlStr);
-            //创建http连接
-            HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
-            //使用IO流读取数据
-            bufferedReader = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                bufferedReader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.e("TAG", "下载txt文件");
-        Log.e("TAG", sb.toString());
-        return sb.toString();
-    }
-/*
-    public static Uri getImage2(String path, File cacheDir){
-        File localFile = new File(cacheDir,MD5.getMD5(path)+path.substring(path.lastIndexOf(".")));
-        if(localFile.exists()){
-            return Uri.fromFile(localFile);
-        }else
-        {
-            HttpURLConnection conn;
-            try {
-                conn = (HttpURLConnection) new URL(path).openConnection();
-                conn.setConnectTimeout(5000);
-                conn.setRequestMethod("GET");
-                if(conn.getResponseCode() == 200){
-                    System.out.println("tdw");
-                    FileOutputStream outputStream = new FileOutputStream(localFile);
-                    InputStream inputStream = conn.getInputStream();
-                    byte[] buffer = new byte[1024];
-                    int length = 0;
-                    while((length=inputStream.read(buffer))!=-1){
-                        outputStream.write(buffer, 0, length);
-                    }
-                    inputStream.close();
-                    outputStream.close();
-                    return Uri.fromFile(localFile);
-                }
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }*/
-
-    public static void setPicToView(Bitmap bitmap){
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)){  //检测SD卡是否可用
+    public static void down(Bitmap bitmap){
+        //获取内部存储状态
+        String state = Environment.getExternalStorageState();
+        //如果状态不是mounted，无法读写
+        if (!state.equals(Environment.MEDIA_MOUNTED)) {  // 检测sd是否可用
             return;
         }
-        FileOutputStream fileOutputStream = null;
-        File file = new File(path);
-        file.mkdirs();  //创建文件夹
-        String fileName = path + "head.jpg";  //图片名字
+        //时间命名
+        Calendar now = new GregorianCalendar();
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault());
+        String fileName = simpleDate.format(now.getTime());
         try {
-            fileOutputStream = new FileOutputStream(fileName);
-            if(bitmap != null){
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream); //把数据写入文件
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
             }
+            String picName = path + fileName + ".jpg";   //图片名字
+            FileOutputStream out = new FileOutputStream(picName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);  // 把数据写入文件
+            // 关闭流
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 读取本地文件
+     */
+    public static Bitmap readFile(String url){
+        //获取
+        FileInputStream fs = null;
+        try {
+            fs = new FileInputStream(path + url + ".jpg");
+            Bitmap bitmap = BitmapFactory.decodeStream(fs);
+            return bitmap;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }finally {
-            //关闭流
-            try {
-                fileOutputStream.flush();
-                fileOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return null;
         }
-
     }
+
 }

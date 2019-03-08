@@ -47,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -195,7 +196,6 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 try {
                     JSONObject object = new JSONObject(result);
                     if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                        loadingView.cancel();
                         Log.e("TAG", "获取个人信息数据成功........");
                         //更新
                         runOnUiThread(new Runnable() {
@@ -207,8 +207,11 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 department_tv.setText(responseInfo.getData().getOrgStructureName());
                                 job_tv.setText(responseInfo.getData().getJob());
                                 email_tv.setText(responseInfo.getData().getUserEmail());
+                                String path =  "file://"+ responseInfo.getData().getHeadPortrait();
+                                Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
                             }
                         });
+                        loadingView.cancel();
                         //      setData(object);
                     } else {
                         loadingView.cancel();
@@ -354,6 +357,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                         @Override
                         public void onSuccess(final File file) {
                             // TODO 压缩成功后调用，返回压缩后的图片文件
+                            //上传图片
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("category", 1);
                             hashMap.put("file", file);
@@ -365,27 +369,20 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                     //使用Gson将对象转换为json字符串
                                     String json = gson.toJson(result);
 
-                                    final ResponseInfo<LoadImageData> responseInfo = gson.fromJson( result.toString(), new TypeToken<ResponseInfo<LoadImageData>>() {
+                                    final ResponseInfo<LoadImageData> responseInfo = gson.fromJson(result.toString(), new TypeToken<ResponseInfo<LoadImageData>>() {
                                     }.getType());
                                     if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                                 /*       Log.e("ATG", "发送图片至服务器成功..........");
+                                        Log.e("ATG", "发送图片至服务器成功..........");
+                                        //保存到本地
+                                        Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf(file));
+                                        HttpDownloader.down(bitmap);
+                                        Log.e("tag","成功存储图片到本地...........");
+                                        //判断本地是否有图片,如果没有从服务器获取
 
-                                        Bitmap bt = BitmapFactory.decodeFile(path + file);// 从SD卡中找头像，转换成Bitmap
-                                        //判断本地存储是否有，没有则需要从服务器取头像，取回来的头像再保存
-                                        if (bt != null){
-                                            //更新头像
-                                            updateHeadPortrait(responseInfo.getData().getFileName());
-                                        }else {
-                                            //保存
-                                            HttpDownloader.setPicToView(head);
-                                            //下载文件缓存到本地
-                                            HttpDownloader httpDownloader = new HttpDownloader();
-                                            httpDownloader.download(responseInfo.getData().getFileName());
-                                        }
+                                        //更新头像
+                                        updateHeadPortrait(file);
 
-                                        head = BitmapFactory.decodeFile(responseInfo.getData().getFileName());//转换成Bitmap*/
-
-                                    }else {
+                                    } else {
                                         showToast(responseInfo.getMessage());
                                     }
                                 }
@@ -411,9 +408,9 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     /**
      * 发送patch请求更新头像
      */
-    private void updateHeadPortrait(final String file) {
+    private void updateHeadPortrait(final File file) {
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("headPortraitId", file);
+        hashMap.put("headPortraitId", String.valueOf(file));
         HttpUtil.sendDataAsync(PersonCenterActivity.this, HttpUrl.UPDATEHEADPORTRAIT, 3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -430,46 +427,25 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 //使用Gson将对象转换为json字符串
                 ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0){
+                if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 //加载图片
                                 Picasso.with(PersonCenterActivity.this).load(file).into(headImg_iv);
-                            //    String s = getRealPathFromURI(PersonCenterActivity.this, Uri.parse(file));
+                                Log.e("ATG","成功加载头像........");
                             }
                         });
-                    }else {
+                    } else {
                         showToast(responseInfo.getMessage());
                     }
-                }else {
+                } else {
                     showToast(responseInfo.getMessage());
                 }
             }
         });
 
-    }
-
-    /**
-     * 通过文件Uri获取文件的路径url
-     * @param context
-     * @param contentURI
-     * @return
-     */
-    public static String getRealPathFromURI(Context context, Uri contentURI) {
-        String result;
-        Cursor cursor = context.getContentResolver().query(contentURI,
-                new String[]{MediaStore.Images.ImageColumns.DATA},//
-                null, null, null);
-        if (cursor == null) result = contentURI.getPath();
-        else {
-            cursor.moveToFirst();
-            int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(index);
-            cursor.close();
-        }
-        return result;
     }
 
 }
