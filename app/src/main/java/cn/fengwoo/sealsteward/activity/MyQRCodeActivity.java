@@ -33,8 +33,8 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
 
     @BindView(R.id.scan_ll)
     LinearLayout scan_ll;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.set_back_ll)
@@ -58,7 +58,7 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         scan_ll.setVisibility(View.GONE);
-        add_iv.setVisibility(View.GONE);
+        add_ll.setVisibility(View.GONE);
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("我的二维码");
         set_back_ll.setOnClickListener(this);

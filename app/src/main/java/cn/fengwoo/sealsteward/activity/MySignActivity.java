@@ -23,8 +23,8 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     @BindView(R.id.scan_ll)
     LinearLayout scan_ll;
     @BindView(R.id.title_tv)
@@ -49,7 +49,7 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         scan_ll.setVisibility(View.GONE);
-        add_iv.setVisibility(View.GONE);
+        add_ll.setVisibility(View.GONE);
         title_tv.setText("签名");
         clear_tv.setOnClickListener(this);
         complete_tv.setOnClickListener(this);

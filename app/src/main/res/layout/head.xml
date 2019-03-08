@@ -35,18 +35,18 @@
             android:textSize="18dp" />
 
         <LinearLayout
-            android:id="@+id/add_iv"
+            android:id="@+id/add_ll"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:gravity="center"
+            android:visibility="gone"
             android:layout_centerVertical="true">
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/add"
-                android:visibility="gone" />
+                android:background="@drawable/add"/>
         </LinearLayout>
 
         <ImageView

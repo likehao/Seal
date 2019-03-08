@@ -28,8 +28,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.title_tv)TextView title_tv;
     @BindView(R.id.select_company_rl)
     RelativeLayout select_company_rl;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     private List<String> strings;
     private Intent intent;
 
@@ -46,13 +46,13 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("公司");
-        add_iv.setVisibility(View.VISIBLE);
+        add_ll.setVisibility(View.VISIBLE);
     }
 
     private void setListener() {
         set_back_ll.setOnClickListener(this);
         select_company_rl.setOnClickListener(this);
-        add_iv.setOnClickListener(this);
+        add_ll.setOnClickListener(this);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             case R.id.select_company_rl:
                 selectDialoh();
                 break;
-            case R.id.add_iv:
+            case R.id.add_ll:
                 intent = new Intent(MyCompanyActivity.this,AddCompanyActivity.class);
                 startActivity(intent);
                 break;

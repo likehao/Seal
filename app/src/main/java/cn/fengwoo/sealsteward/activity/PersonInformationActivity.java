@@ -19,8 +19,8 @@ public class PersonInformationActivity extends BaseActivity {
     LinearLayout set_back_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +34,7 @@ public class PersonInformationActivity extends BaseActivity {
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("人员信息");
-        add_iv.setVisibility(View.VISIBLE);
+        add_ll.setVisibility(View.VISIBLE);
     }
     private void setListener() {
         set_back_ll.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +44,7 @@ public class PersonInformationActivity extends BaseActivity {
             }
         });
 
-        add_iv.setOnClickListener(new View.OnClickListener() {
+        add_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PersonInformationActivity.this,OrganizationalStructureActivity.class);

@@ -26,8 +26,8 @@ public class MyUserActivity extends BaseActivity implements View.OnClickListener
     TextView title_tv;
     @BindView(R.id.user_lv)
     ListView user_lv;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     private UserAdapter adapter;
     private List<UserData> list;
     @Override
@@ -45,7 +45,7 @@ public class MyUserActivity extends BaseActivity implements View.OnClickListener
         set_back_ll.setVisibility(View.VISIBLE);
         scan_ll.setVisibility(View.GONE);
         title_tv.setText("用户");
-        add_iv.setVisibility(View.VISIBLE);
+        add_ll.setVisibility(View.VISIBLE);
     }
 
     private void initData() {
@@ -59,7 +59,7 @@ public class MyUserActivity extends BaseActivity implements View.OnClickListener
 
     private void setListener(){
         set_back_ll.setOnClickListener(this);
-        add_iv.setOnClickListener(this);
+        add_ll.setOnClickListener(this);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MyUserActivity extends BaseActivity implements View.OnClickListener
             case R.id.set_back_ll:
                 finish();
                 break;
-            case R.id.add_iv:
+            case R.id.add_ll:
                 Intent intent = new Intent(MyUserActivity.this,AddUserActivity.class);
                 startActivity(intent);
                 break;

@@ -24,14 +24,14 @@
             android:layout_marginTop="20dp"
             android:text="@string/companyName"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="@string/please_input_company_name"
             android:background="@null"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_marginStart="20dp"/>
 
         <View
@@ -45,14 +45,14 @@
             android:layout_marginTop="20dp"
             android:text="@string/Social_Credit_Code"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="@string/please_input_Social_Credit_Code"
             android:background="@null"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_marginStart="20dp"/>
 
         <View
@@ -66,14 +66,14 @@
             android:layout_marginTop="20dp"
             android:text="@string/legal_person"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="@string/please_input_legal_person"
             android:background="@null"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:layout_marginStart="20dp"/>
 
         <View

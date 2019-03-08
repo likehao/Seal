@@ -28,8 +28,8 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
 
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     @BindView(R.id.scan_ll)
     LinearLayout scan_ll;
     @BindView(R.id.title_tv)
@@ -66,7 +66,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         scan_ll.setVisibility(View.GONE);
-        add_iv.setVisibility(View.GONE);
+        add_ll.setVisibility(View.GONE);
         title_tv.setText("组织架构");
         fragmentList = new ArrayList<>();
         fragmentManager = getSupportFragmentManager();

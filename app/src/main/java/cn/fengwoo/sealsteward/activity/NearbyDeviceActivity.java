@@ -40,8 +40,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     LinearLayout scan_ll;
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.on_off_checkBox)

@@ -38,8 +38,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout home_page, record_page, application_page, message_page, mine;
     private TextView title_tv;  //头标题
     private LinearLayout scan_ll;  //扫一扫
-    @BindView(R.id.add_iv)
-    ImageView add_iv;  //添加
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;  //添加
     private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
     private TextView[] textViews = new TextView[5];   //底部导航文字集合
     private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         title_tv = findViewById(R.id.title_tv);
         scan_ll = findViewById(R.id.scan_ll);
 //        scan_ll.setVisibility(View.VISIBLE);
-        add_iv.setVisibility(View.VISIBLE);
+        add_ll.setVisibility(View.VISIBLE);
         home_page = findViewById(R.id.home_page);
         record_page = findViewById(R.id.record_page);
         application_page = findViewById(R.id.application_page);
@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         message_more_iv.setOnClickListener(this);
         scan_ll.setOnClickListener(this);
         //       circle_useSeal_apply_ll.setOnClickListener(this);
-        add_iv.setOnClickListener(this);
+        add_ll.setOnClickListener(this);
     }
 
     @Override
@@ -126,34 +126,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 title_tv.setText("首页");
                 //           scan_ll.setVisibility(View.VISIBLE);
                 record_more_iv.setVisibility(View.GONE);
-                add_iv.setVisibility(View.VISIBLE);
+                add_ll.setVisibility(View.VISIBLE);
                 changeView(0);
                 break;
             case R.id.record_page:
                 title_tv.setText("盖章记录");
                 scan_ll.setVisibility(View.GONE);
-                add_iv.setVisibility(View.GONE);
+                add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.VISIBLE);
                 changeView(1);
                 break;
             case R.id.message_page:
                 title_tv.setText("消息");
                 scan_ll.setVisibility(View.GONE);
-                add_iv.setVisibility(View.GONE);
+                add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 changeView(2);
                 break;
             case R.id.mine:
                 title_tv.setText("我的");
                 scan_ll.setVisibility(View.GONE);
-                add_iv.setVisibility(View.GONE);
+                add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 changeView(3);
                 break;
             case R.id.application_page:
                 title_tv.setText("应用");
                 scan_ll.setVisibility(View.GONE);
-                add_iv.setVisibility(View.GONE);
+                add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 changeView(4);
                 break;
@@ -177,7 +177,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Intent intent = new Intent(MainActivity.this, ScanActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.add_iv:
+            case R.id.add_ll:
                 //添加popuwindow
                 messagePopuwindow = new MessagePopuwindow(MainActivity.this,1);
                 messagePopuwindow.showPopuwindow(view);

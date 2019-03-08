@@ -33,8 +33,8 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
     LinearLayout set_back_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
-    @BindView(R.id.add_iv)
-    ImageView add_iv;
+    @BindView(R.id.add_ll)
+    LinearLayout add_ll;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
@@ -57,7 +57,7 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
     private void initView() {
         title_tv.setText("我的申请");
         set_back_ll.setVisibility(View.VISIBLE);
-        add_iv.setVisibility(View.VISIBLE);
+        add_ll.setVisibility(View.VISIBLE);
         titleList = new ArrayList<String>();
         fragmentList = new ArrayList<Fragment>();
         titleList.add("待审批");
@@ -75,7 +75,7 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
 
     private void setListener() {
         set_back_ll.setOnClickListener(this);
-        add_iv.setOnClickListener(this);
+        add_ll.setOnClickListener(this);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
             case R.id.set_back_ll:
                 finish();
                 break;
-            case R.id.add_iv:
+            case R.id.add_ll:
                 Intent intent = new Intent(MyApplyActivity.this,ApplyUseSealActivity.class);
                 startActivity(intent);
                 break;
