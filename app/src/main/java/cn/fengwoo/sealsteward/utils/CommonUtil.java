@@ -72,6 +72,7 @@ public class CommonUtil {
         editor.putString("orgStructureName",user.getOrgStructureName());
         editor.putString("job",user.getJob());
         editor.putBoolean("needSync",user.getNeedSync());
+     //   editor.putString("systemFuncList", String.valueOf(user.getSystemFuncList()));
 
         //提交
         editor.commit();

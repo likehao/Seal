@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/select_company_rl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/company_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company_name"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_marginStart="20dp"/>
+
+        <ImageView
+            android:id="@+id/select_company_iv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/sure"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+</LinearLayout>

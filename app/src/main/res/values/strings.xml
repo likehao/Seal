@@ -245,5 +245,6 @@
     <string name="please_input_Social_Credit_Code">请输入社会信用代码</string>
     <string name="please_input_legal_person">请输入法人</string>
     <string name="add">添加</string>
+    <string name="fifter_code">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
 </resources>

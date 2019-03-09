@@ -27,6 +27,7 @@
             android:textSize="15sp" />
 
         <EditText
+            android:id="@+id/company_name_et"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="@string/please_input_company_name"
@@ -48,11 +49,14 @@
             android:textSize="15sp" />
 
         <EditText
+            android:id="@+id/social_credit_code_et"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="@string/please_input_Social_Credit_Code"
             android:background="@null"
             android:textSize="12sp"
+            android:inputType="number"
+            android:digits="@string/fifter_code"
             android:layout_marginStart="20dp"/>
 
         <View
@@ -69,6 +73,7 @@
             android:textSize="15sp" />
 
         <EditText
+            android:id="@+id/legal_person_et"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="@string/please_input_legal_person"

@@ -51,4 +51,12 @@ public class HttpUrl {
      * 上传头像
      */
     public static final String UPLOADIMAGE = "/file/uploadimage";
+    /**
+     * 添加公司
+     */
+    public static final String ADDCOMPANY = "/company/addcompany";
+    /**
+     * 用户公司列表
+     */
+    public static final String USERCOMPANY = "/company/usercompany";
 }

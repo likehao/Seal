@@ -50,7 +50,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
     /**
      * 获取当前版本号
      */
-    private void getAppVersion(){
+    public void getAppVersion(){
         PackageManager pm = this.getPackageManager();
         try {
             PackageInfo pi = pm.getPackageInfo(this.getPackageName(),0);

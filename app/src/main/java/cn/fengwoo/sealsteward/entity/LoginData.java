@@ -1,6 +1,7 @@
 package cn.fengwoo.sealsteward.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class LoginData implements Serializable {
 
@@ -16,6 +17,9 @@ public class LoginData implements Serializable {
      "autoGraph": "string",
      "companyId": "string",
      "companyName": "string",
+     "funcIdList": [
+     "string"
+     ],
      "headPortrait": "string",
      "id": "string",
      "job": "string",
@@ -23,6 +27,13 @@ public class LoginData implements Serializable {
      "needSync": true,
      "orgStructureName": "string",
      "realName": "string",
+     "systemFuncList": [
+     {
+     "code": 0,
+     "id": "string",
+     "name": "string"
+     }
+     ],
      "token": "string",
      "userEmail": "string"
      },
@@ -35,6 +46,7 @@ public class LoginData implements Serializable {
     private String autoGraph;
     private String companyId;
     private String companyName;
+    private List<FuncId> funcIdList;
     private String headPortrait;
     private String id;
     private String job;
@@ -42,8 +54,25 @@ public class LoginData implements Serializable {
     private Boolean needSync;
     private String orgStructureName;
     private String realName;
+    private List<SystemFuncListInfo> systemFuncList;
     private String token;
     private String userEmail;
+
+    public List<FuncId> getFuncIdList() {
+        return funcIdList;
+    }
+
+    public void setFuncIdList(List<FuncId> funcIdList) {
+        this.funcIdList = funcIdList;
+    }
+
+    public List<SystemFuncListInfo> getSystemFuncList() {
+        return systemFuncList;
+    }
+
+    public void setSystemFuncList(List<SystemFuncListInfo> systemFuncList) {
+        this.systemFuncList = systemFuncList;
+    }
 
     public String getAddress() {
         return address;
@@ -174,6 +203,7 @@ public class LoginData implements Serializable {
                 ", autoGraph='" + autoGraph + '\'' +
                 ", companyId='" + companyId + '\'' +
                 ", companyName='" + companyName + '\'' +
+                ", funcIdList=" + funcIdList +
                 ", headPortrait='" + headPortrait + '\'' +
                 ", id='" + id + '\'' +
                 ", job='" + job + '\'' +
@@ -181,9 +211,22 @@ public class LoginData implements Serializable {
                 ", needSync=" + needSync +
                 ", orgStructureName='" + orgStructureName + '\'' +
                 ", realName='" + realName + '\'' +
+                ", systemFuncList=" + systemFuncList +
                 ", token='" + token + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 '}';
     }
 
+    class FuncId{
+
+        private String funcIdList;
+
+        public String getFuncIdList() {
+            return funcIdList;
+        }
+
+        public void setFuncIdList(String funcIdList) {
+            this.funcIdList = funcIdList;
+        }
+    }
 }
