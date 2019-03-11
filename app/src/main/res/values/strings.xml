@@ -245,6 +245,7 @@
     <string name="please_input_Social_Credit_Code">请输入社会信用代码</string>
     <string name="please_input_legal_person">请输入法人</string>
     <string name="add">添加</string>
+    <string name="cue">未认证的企业请及时认证,否则影响盖章业务!</string>
     <string name="fifter_code">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
 </resources>

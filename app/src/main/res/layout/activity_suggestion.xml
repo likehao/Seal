@@ -39,7 +39,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="45dp">
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp">
 
                     <LinearLayout
                         android:id="@+id/function_suggestion_ll"
@@ -79,6 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:visibility="gone"
                         android:gravity="center">
 
                         <TextView

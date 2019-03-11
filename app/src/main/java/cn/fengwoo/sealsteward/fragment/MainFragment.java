@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
@@ -24,6 +25,7 @@ import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.GlideImageLoader;
 
 public class MainFragment extends Fragment implements View.OnClickListener{
@@ -45,6 +47,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.approval_record_rl)
     RelativeLayout approval_record_rl;
     private Intent intent;
+    @BindView(R.id.home_companyName_tv)
+    TextView home_companyName_tv;
 
     @Nullable
     @Override
@@ -52,10 +56,15 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         view = inflater.inflate(R.layout.activity_home_fragment,container,false);
 
         ButterKnife.bind(this,view);
+        initView();
         initBanner();
         setListener();
         return view;
     }
+    private void initView(){
+        home_companyName_tv.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+    }
+
     private void setListener() {
         sealDevice_rl.setOnClickListener(this);
         needSeal_rl.setOnClickListener(this);

@@ -117,6 +117,8 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     RelativeLayout headImg_rl;
     @BindView(R.id.headImg_iv)
     ImageView headImg_iv;
+    @BindView(R.id.change_pwd_rl)
+    RelativeLayout change_pwd_rl;
     private LoadingView loadingView;
     private LoginData loginData;
     private static final int REQUEST_CODE_CHOOSE = 1;
@@ -160,6 +162,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         phone_rl.setOnClickListener(this);
         email_rl.setOnClickListener(this);
         headImg_rl.setOnClickListener(this);
+        change_pwd_rl.setOnClickListener(this);
     }
 
     @Override
@@ -277,7 +280,10 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 //获取权限
                 permissions();
                 break;
-
+            case R.id.change_pwd_rl:
+                intent = new Intent(this,ChangePasswordActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

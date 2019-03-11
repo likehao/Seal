@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <View
+        style="@style/line"
+        android:layout_marginTop="10dp"/>
     <RelativeLayout
         android:id="@+id/select_company_rl"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
         android:background="@color/white">
 
         <TextView
@@ -30,5 +33,8 @@
             android:visibility="gone"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
+
+    <View
+        style="@style/line"/>
 
 </LinearLayout>

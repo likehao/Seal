@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.List;
-
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.CompanyInfo;
 
@@ -69,10 +67,12 @@ public class CompanyListAdapter extends BaseAdapter {
      * 监听选中
      * @param positon
      */
-    public void changeSelected(int positon){
+    public int changeSelected(int positon){
         if(positon != mSelect){
             mSelect = positon;
             notifyDataSetChanged();
         }
+        return positon;
     }
+
 }

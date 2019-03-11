@@ -190,7 +190,9 @@
 
                 <View style="@style/line" />
 
-                <RelativeLayout style="@style/pressed_effect">
+                <RelativeLayout
+                    android:id="@+id/change_pwd_rl"
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"

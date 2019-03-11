@@ -10,15 +10,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
+
 import org.json.JSONException;
+
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -36,7 +40,7 @@ import okhttp3.Response;
 /**
  * 我的公司
  */
-public class MyCompanyActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener {
+public class MyCompanyActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
@@ -51,6 +55,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private LoadingView loadingView;
     private CompanyListAdapter companyListAdapter;
     private ArrayList<CompanyInfo> arrayList;
+    private int pos = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,12 +111,12 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     loadingView.cancel();
                     arrayList = new ArrayList<>();
                     for (int i = 0; i < responseInfo.getData().size(); i++) {
-                         arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName()));
+                        arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            companyListAdapter = new CompanyListAdapter(arrayList,MyCompanyActivity.this);
+                            companyListAdapter = new CompanyListAdapter(arrayList, MyCompanyActivity.this);
                             company_list_lv.setAdapter(companyListAdapter);
                             companyListAdapter.notifyDataSetChanged(); //刷新数据
                         }
@@ -146,7 +152,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
      */
     private void selectDialog(final int select) {
         strings = new ArrayList<String>();
-        strings.add("切换公司");
+        strings.add("切换");
+        strings.add("删除");
         strings.add("查看详情");
         final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(MyCompanyActivity.this, strings);
         optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
@@ -156,6 +163,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     //切换选中item
                     companyListAdapter.changeSelected(select);
                     optionBottomDialog.dismiss();
+                    pos = select;
+                } else if (position == 1) {
 
                 } else {
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
@@ -166,8 +175,27 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    private void selectDialog() {
+        strings = new ArrayList<String>();
+        strings.add("查看详情");
+        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(MyCompanyActivity.this, strings);
+        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    startActivity(intent);
+                    optionBottomDialog.dismiss();
+                }
+            }
+        });
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-         selectDialog(position);
+        if (position != pos) {
+            selectDialog(position);
+        }else {
+            selectDialog();
+        }
     }
 }

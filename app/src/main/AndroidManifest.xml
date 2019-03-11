@@ -220,7 +220,8 @@
         <activity android:name=".activity.RechargeRecordActivity" />
         <activity android:name=".activity.WaitHandleActivity" />
         <activity android:name=".activity.ChangeInformationActivity" />
-        <activity android:name=".activity.AddCompanyActivity"></activity>
+        <activity android:name=".activity.AddCompanyActivity" />
+        <activity android:name=".activity.ChangePasswordActivity"></activity>
     </application>
 
 </manifest>
