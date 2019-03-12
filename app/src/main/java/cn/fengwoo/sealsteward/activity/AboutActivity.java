@@ -29,7 +29,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
         Log.d("good", "onCreate: ");
         ButterKnife.bind(this);
         initView();
-        String s ="";
+        String s ="aaa";
         getAppVersion();
     }
 
