@@ -29,6 +29,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddUserActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
+import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.OrganizationalStructureActivity;
 import cn.fengwoo.sealsteward.activity.RechargeRecordActivity;
 import cn.fengwoo.sealsteward.activity.ScanSearchAddSealActivity;
@@ -131,7 +132,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.add_seal_rl:
-                intent = new Intent(getActivity(), ScanSearchAddSealActivity.class);
+                intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 startActivity(intent);
                 break;
             case R.id.service_charge_rl:
