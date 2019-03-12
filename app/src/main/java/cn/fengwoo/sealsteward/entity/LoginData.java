@@ -1,5 +1,9 @@
 package cn.fengwoo.sealsteward.entity;
 
+import android.content.Context;
+
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -228,5 +232,21 @@ public class LoginData implements Serializable {
         public void setFuncIdList(String funcIdList) {
             this.funcIdList = funcIdList;
         }
+    }
+
+    //登录
+    public void login(Context context){
+        context.getSharedPreferences("userdata",Context.MODE_PRIVATE).edit()
+                .putString("login",new Gson().toJson(this)).apply();
+    }
+
+    public static boolean isLogin(Context context){
+        return context.getSharedPreferences("userdata",Context.MODE_PRIVATE).contains("login");
+    }
+
+    //退出
+    public static void logout(Context context){
+        context.getSharedPreferences("userdata",Context.MODE_PRIVATE).edit()
+                .remove("login").apply();
     }
 }

@@ -253,9 +253,12 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                 Gson gson = new Gson();
                 ResponseInfo<LoginData> loginResponseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<LoginData>>() {
                 }.getType());
+
                 if (loginResponseInfo.getData() != null && loginResponseInfo.getCode() == 0) {
                     Log.e("TAG", "登录请求成功。。。。。。。");
                     loadingView.cancel();
+                    //添加一个登陆标记
+                    loginResponseInfo.getData().login(LoginActivity.this);
                     //登录存储信息
                     user = loginResponseInfo.getData();
                     CommonUtil.setUserData(LoginActivity.this,user);

@@ -26,7 +26,8 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/headImg_cir"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"

@@ -1,7 +1,10 @@
 package cn.fengwoo.sealsteward.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
 
 import cn.fengwoo.sealsteward.entity.LoginData;
 

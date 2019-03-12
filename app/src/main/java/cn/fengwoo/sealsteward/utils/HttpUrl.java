@@ -59,4 +59,8 @@ public class HttpUrl {
      * 用户公司列表
      */
     public static final String USERCOMPANY = "/company/usercompany";
+    /**
+     * 删除公司
+     */
+    public static final String DELETECOMPANY = "/company/deletecompany";
 }

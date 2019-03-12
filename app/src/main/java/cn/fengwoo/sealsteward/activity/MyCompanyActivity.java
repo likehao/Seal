@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,8 +31,10 @@ import cn.fengwoo.sealsteward.adapter.CompanyListAdapter;
 import cn.fengwoo.sealsteward.entity.CompanyInfo;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -165,7 +168,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     optionBottomDialog.dismiss();
                     pos = select;
                 } else if (position == 1) {
-
+                    loadingView.show();
+                    deleteDialog(); //提示删除
                 } else {
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     startActivity(intent);
@@ -197,5 +201,55 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         }else {
             selectDialog();
         }
+    }
+
+    /**
+     * 确认是否删除
+     */
+    private void deleteDialog(){
+        CommonDialog commonDialog = new CommonDialog(this,"提示","确认删除该公司？","确认");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteCompany();
+            }
+        });
+    }
+    /**
+     * 删除公司
+     */
+    private void deleteCompany(){
+        HashMap<String , String> hashMap = new HashMap<>();
+        hashMap.put("companyId", CommonUtil.getUserData(this).getCompanyId());
+        HttpUtil.sendDataAsync(this, HttpUrl.DELETECOMPANY, 4, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
+                .getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadingView.cancel();
+                                companyListAdapter.notifyDataSetChanged(); //刷新数据
+                            }
+                        });
+                    }else {
+                            loadingView.cancel();
+                    }
+                }else {
+                    loadingView.cancel();
+                }
+            }
+        });
     }
 }

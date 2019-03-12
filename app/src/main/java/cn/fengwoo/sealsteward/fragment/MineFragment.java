@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,11 +22,13 @@ import android.widget.Toast;
 import com.baidu.mapsdkplatform.comapi.map.C;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,10 +39,12 @@ import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.CircleImageView;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -67,11 +72,13 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     RelativeLayout suggestion_rl;
     @BindView(R.id.logout_bt)
     Button logout_bt;
+    @BindView(R.id.headImg_cir)
+    ImageView headImg_cir;
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
     private Intent intent;
-
+    LoginData loginData;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,6 +90,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     }
 
     private void setListener() {
+        loginData = new LoginData();
+        Picasso.with(getActivity()).load(loginData.getHeadPortrait()).into(headImg_cir);
         set_rl.setOnClickListener(this);
         mine_person_data_ll.setOnClickListener(this);
         my_company_rl.setOnClickListener(this);
@@ -136,6 +145,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.logout_bt:
                 setDialog();
+                LoginData.logout(Objects.requireNonNull(getActivity())); //移除退出标记
                 break;
 
         }

@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 
 public class HomeActivity extends Base2Activity {
 
@@ -31,7 +33,11 @@ public class HomeActivity extends Base2Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+                if (!LoginData.isLogin(HomeActivity.this)){
+                    startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+                }else {
+                    startActivity(new Intent(HomeActivity.this,MainActivity.class));
+                }
                 HomeActivity.this.finish();
                 overridePendingTransition(R.anim.welcome_anim1,R.anim.welcome_anim2); //淡出淡入动画效果
             }
