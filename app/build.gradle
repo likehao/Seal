@@ -168,5 +168,7 @@ dependencies {
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     //Luban图片压缩
     implementation 'top.zibin:Luban:1.1.8'
+    //选择器
+    implementation 'com.contrarywind:Android-PickerView:4.1.7'
 
 }

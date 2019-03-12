@@ -42,6 +42,7 @@ import cn.fengwoo.sealsteward.activity.SuggestionActivity;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CircleImageView;
@@ -74,24 +75,32 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     Button logout_bt;
     @BindView(R.id.headImg_cir)
     ImageView headImg_cir;
+    @BindView(R.id.companyName)
+    TextView companyName;
+    @BindView(R.id.phone)
+    TextView phone;
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
     private Intent intent;
-    LoginData loginData;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mine_fragment,container,false);
 
         ButterKnife.bind(this,view);
+        initView();
         setListener();
         return view;
     }
 
+    private void initView() {
+        Picasso.with(getActivity()).load("file://"+ CommonUtil.getUserData(getActivity()).getHeadPortrait()).into(headImg_cir);
+        companyName.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+        phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
+    }
+
     private void setListener() {
-        loginData = new LoginData();
-        Picasso.with(getActivity()).load(loginData.getHeadPortrait()).into(headImg_cir);
         set_rl.setOnClickListener(this);
         mine_person_data_ll.setOnClickListener(this);
         my_company_rl.setOnClickListener(this);
@@ -132,7 +141,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.my_apply_rl:
-                intent = new Intent(getActivity(), MyApplyActivity.class);
+                intent = new Intent(getActivity(), MyApplyActiv ity.class);
                 startActivity(intent);
                 break;
             case R.id.nearby_device_rl:
@@ -144,7 +153,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.logout_bt:
-                setDialog();
+                logoutDialog();
                 LoginData.logout(Objects.requireNonNull(getActivity())); //移除退出标记
                 break;
 
@@ -154,7 +163,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     /**
      * 退出
      */
-    private void setDialog(){
+    private void logoutDialog(){
         final CommonDialog commonDialog = new CommonDialog(getActivity(),"提示","确认退出吗？","确定");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {

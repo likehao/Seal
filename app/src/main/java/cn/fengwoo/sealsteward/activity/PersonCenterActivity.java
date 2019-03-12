@@ -24,8 +24,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mapsdkplatform.comapi.map.C;
+import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.contrarywind.listener.OnItemSelectedListener;
+import com.contrarywind.view.WheelView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -52,6 +58,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -73,6 +80,7 @@ import cn.fengwoo.sealsteward.utils.GlideEngineImage;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.JsonAddressData;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import io.reactivex.functions.Consumer;
@@ -124,6 +132,12 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     private static final int REQUEST_CODE_CHOOSE = 1;
     private static String path = "/sdcard/myHead/";// sd路径
     private Bitmap head;
+    @BindView(R.id.wheelview)
+    WheelView wheelview;
+    @BindView(R.id.address_rl)
+    RelativeLayout address_rl;
+    @BindView(R.id.address_tv)
+    TextView address_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +155,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         set_back_ll.setVisibility(View.VISIBLE);
         loadingView = new LoadingView(this);
         loginData = new LoginData();
+
     }
 
     /**
@@ -163,6 +178,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         email_rl.setOnClickListener(this);
         headImg_rl.setOnClickListener(this);
         change_pwd_rl.setOnClickListener(this);
+        address_rl.setOnClickListener(this);
     }
 
     @Override
@@ -212,6 +228,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 email_tv.setText(responseInfo.getData().getUserEmail());
                                 String path =  "file://"+ responseInfo.getData().getHeadPortrait();
                                 Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
+                                address_tv.setText(responseInfo.getData().getAddress());
                             }
                         });
                         loadingView.cancel();
@@ -283,6 +300,9 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
             case R.id.change_pwd_rl:
                 intent = new Intent(this,ChangePasswordActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.address_rl:
+                selectAddress();
                 break;
         }
     }
@@ -454,4 +474,11 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
 
     }
 
+    /**
+     * 选择地址
+     */
+    private void selectAddress(){
+        JsonAddressData jsonAddressData = new JsonAddressData();
+        jsonAddressData.showPickerView(PersonCenterActivity.this);
+    }
 }
