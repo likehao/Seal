@@ -161,6 +161,7 @@
                 android:background="@color/line" />
 
             <RelativeLayout
+                android:visibility="gone"
                 style="@style/pressed_effect">
 
                 <TextView
@@ -190,6 +191,7 @@
             </RelativeLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
@@ -251,6 +253,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 style="@style/pressed_effect">
 
                 <TextView
@@ -279,7 +282,8 @@
 
             </RelativeLayout>
 
-            <View style="@style/line" />
+            <View style="@style/line"
+                android:layout_marginTop="10dp"/>
 
             <Button
                 android:id="@+id/nextBt"
