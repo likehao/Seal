@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-
+        Log.d("good", "onCreate: ");
         ButterKnife.bind(this);
         initView();
 
