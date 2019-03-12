@@ -101,9 +101,9 @@ public class JsonAddressData {
     /**
      * 弹出选择器
      */
-    public void showPickerView(Activity activity) {
+    String address = null;
+    public String showPickerView(Activity activity) {
         initJsonData(activity);  //解析
-     //   final String[] tx = {null};
         OptionsPickerView pvOptions = new OptionsPickerBuilder(activity, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
@@ -120,7 +120,7 @@ public class JsonAddressData {
                         && options3Items.get(options1).get(options2).size() > 0 ?
                         options3Items.get(options1).get(options2).get(options3) : "";
 
-                String tx = opt1tx + opt2tx + opt3tx;
+                address = opt1tx + opt2tx + opt3tx;
             }
         })
 
@@ -134,5 +134,6 @@ public class JsonAddressData {
         pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
+        return address;
     }
 }

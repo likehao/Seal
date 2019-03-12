@@ -28,7 +28,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
 
         ButterKnife.bind(this);
         initView();
-
+        String s ="";
         getAppVersion();
     }
 

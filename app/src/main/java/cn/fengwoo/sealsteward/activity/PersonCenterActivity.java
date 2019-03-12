@@ -479,6 +479,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
      */
     private void selectAddress(){
         JsonAddressData jsonAddressData = new JsonAddressData();
-        jsonAddressData.showPickerView(PersonCenterActivity.this);
+        String address = jsonAddressData.showPickerView(PersonCenterActivity.this);
+        address_tv.setText(address);
     }
 }
