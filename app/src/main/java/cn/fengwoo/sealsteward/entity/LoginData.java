@@ -249,4 +249,5 @@ public class LoginData implements Serializable {
         context.getSharedPreferences("userdata",Context.MODE_PRIVATE).edit()
                 .remove("login").apply();
     }
+
 }
