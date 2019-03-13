@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -20,6 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.polidea.rxandroidble2.RxBleClient;
+import com.polidea.rxandroidble2.scan.ScanResult;
+import com.polidea.rxandroidble2.scan.ScanSettings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +35,9 @@ import cn.fengwoo.sealsteward.adapter.SealAdapter;
 import cn.fengwoo.sealsteward.database.SealItemBean;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Utils;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 附近设备
@@ -61,6 +69,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private SealAdapter adapter;
     private Intent intent;
     boolean b;
+
+    private RxBleClient rxBleClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +82,25 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         initCheck();
         initData();
         setListener();
+        scanBle();
     }
 
+    private void scanBle(){
+        // ble 设备扫描
+        Disposable scanSubscription = rxBleClient.scanBleDevices(
+                new ScanSettings.Builder()
+                        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        scanResult -> {
+                            addScanResult(scanResult);
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                );
+
+    }
     private void initView() {
         scan_ll.setVisibility(View.GONE);
         set_back_ll.setVisibility(View.VISIBLE);
@@ -102,7 +130,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 return;
             }
         }
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //获取蓝牙适配器
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); //获取蓝牙适配器
         //请求打开蓝牙
         Intent requestBluetoothOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         //请求开启蓝牙
@@ -110,10 +138,12 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData() {
-        //注册广播接收器
-        registerReceiver(registerReceiver, Utils.intentFilter());
-        //开始扫描
-        startDiscovery();
+//        //注册广播接收器
+//        registerReceiver(registerReceiver, Utils.intentFilter());
+//        //开始扫描
+//        startDiscovery();
+
+        rxBleClient = RxBleClient.create(this);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         seal_lv.setAdapter(arrayAdapter);
 
@@ -164,6 +194,22 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         }
     };
 
+
+    //扫描到蓝牙添加到列表中
+    private void addScanResult(ScanResult scanResult) {
+        //蓝牙设备名字和Mac地址
+        String deviceName =  scanResult.getBleDevice().getName();
+        String deviceMac =  scanResult.getBleDevice().getMacAddress();
+        //过滤蓝牙
+        if (deviceName != null && (deviceName.equals("BLE-baihe")||deviceName.contains("BHQKL"))) {
+            String itemName = deviceName + "->" + deviceMac;
+            if (!arrayList.contains(itemName)) {
+                arrayList.add(itemName);
+                arrayAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     //扫描到蓝牙添加到列表中
     private void addBluetooth(BluetoothDevice device) {
         //蓝牙设备名字和Mac地址
@@ -186,7 +232,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.on_off_checkBox:
-                if (b){
+                if (b) {
                     mBluetoothAdapter.enable();
                 }
                 break;

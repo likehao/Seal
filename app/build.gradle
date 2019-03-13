@@ -49,6 +49,10 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 //分享
 MobSDK {
@@ -113,7 +117,6 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
     implementation 'com.android.support:support-v4:28.0.0-rc02'
     implementation 'com.android.support:design:28.0.0-rc02'
     implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
@@ -121,59 +124,82 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
     //百度定位
     implementation files('libs/BaiduLBS_Android.jar')
+
     //支付宝支付
     implementation files('libs/alipaySdk-20180601.jar')
+
     //微信支付
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     implementation files('libs/jcore-android-1.2.5.jar')
+
     //圆形头像
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.makeramen:roundedimageview:2.2.1'
+
     //Popuwindow
     implementation 'com.longsh:OptionFrame:1.0.0'
+
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
     //okhttp请求框架
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+
     //注解框架
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
     //沉浸式状态栏
     implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta01'
+
     //签名
     implementation 'com.github.venusic:E-signature:0.2'
+
     //banner
     implementation 'com.youth.banner:banner:1.4.10'
+
     //zxing
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
+
     //SwitchButton开关
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+
     //SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-18'
+
     //加载PDF
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
     //Gson
     implementation 'com.google.code.gson:gson:2.8.5'
+
     //侧滑删除
     implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+
     //知乎图片选择器
     implementation 'com.zhihu.android:matisse:0.5.2-beta4'
+
     //权限申请
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+
     //Luban图片压缩
     implementation 'top.zibin:Luban:1.1.8'
+
     //选择器
     implementation 'com.contrarywind:Android-PickerView:4.1.7'
+
     //蓝牙操作库
     implementation 'com.polidea.rxandroidble2:rxandroidble:1.8.1'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-
 }
