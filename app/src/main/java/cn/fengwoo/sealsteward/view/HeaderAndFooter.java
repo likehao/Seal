@@ -3,6 +3,8 @@ package cn.fengwoo.sealsteward.view;
 import android.app.Application;
 import android.content.Context;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -36,5 +38,13 @@ public class HeaderAndFooter extends Application {
                 return new ClassicsFooter(context).setDrawableSize(20);
             }
         });
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        Logger.addLogAdapter(new AndroidLogAdapter());
+
     }
 }

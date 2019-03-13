@@ -202,4 +202,7 @@ dependencies {
     //蓝牙操作库
     implementation 'com.polidea.rxandroidble2:rxandroidble:1.8.1'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+    //log
+    implementation 'com.orhanobut:logger:2.2.0'
 }
