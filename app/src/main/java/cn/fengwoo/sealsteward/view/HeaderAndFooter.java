@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.view;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -19,7 +20,7 @@ import cn.fengwoo.sealsteward.R;
 /**
  * SmartRefreshLayout使用指定Header 和 Footer
  */
-public class HeaderAndFooter extends Application {
+public class HeaderAndFooter extends MultiDexApplication {
     //static 代码段可以防止内存泄露
     static {
         //设置全局的Header构建器

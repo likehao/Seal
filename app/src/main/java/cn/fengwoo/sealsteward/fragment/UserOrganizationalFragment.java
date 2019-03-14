@@ -1,30 +1,46 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.ChangeInformationActivity;
+import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.adapter.ExpandListViewAdapter;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.FirstModel;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SecondModel;
 import cn.fengwoo.sealsteward.entity.ThirdModel;
 import cn.fengwoo.sealsteward.utils.Dept;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
+import cn.fengwoo.sealsteward.utils.Utils;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 用户组织架构
@@ -52,6 +68,7 @@ public class UserOrganizationalFragment extends Fragment{
         mAdapter = new NodeTreeAdapter(getActivity(),mListView,mLinkedList);
         mListView.setAdapter(mAdapter);
         initData();
+        getDate();
         return view;
 
     }
@@ -121,23 +138,66 @@ public class UserOrganizationalFragment extends Fragment{
             }
         }
 
-        for (int i = 0;i < 5;i++){
-            data.add(new Dept(101+i,11, "三级部门"+i));
-        }
-
-        for (int i = 0;i < 5;i++){
-            data.add(new Dept(106+i,22, "三级部门"+i));
-        }
-        for (int i = 0;i < 5;i++){
-            data.add(new Dept(111+i,33, "三级部门"+i));
-        }
-        for (int i = 0;i < 5;i++){
-            data.add(new Dept(115+i,44, "三级部门"+i));
-        }
+//        for (int i = 0;i < 5;i++){
+//            data.add(new Dept(101+i,11, "三级部门"+i));
+//        }
+//
+//        for (int i = 0;i < 5;i++){
+//            data.add(new Dept(106+i,22, "三级部门"+i));
+//        }
+//        for (int i = 0;i < 5;i++){
+//            data.add(new Dept(111+i,33, "三级部门"+i));
+//        }
+//        for (int i = 0;i < 5;i++){
+//            data.add(new Dept(115+i,44, "三级部门"+i));
+//        }
 
 //        for (int i = 0;i < 5;i++){
 //            data.add(new Dept(401+i,101, "四级部门"+i));
 //        }
     }
+
+
+    private void getDate() {
+        Utils.log("good");
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("loadType", "0");
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.ORGANIZATIONAL_STRUCTURE,1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                loadingView.cancel();
+//                showMsg(e + "");
+                Utils.log(e.toString());
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Utils.log(response.toString());
+                String result = response.body().string();
+//                Gson gson = new Gson();
+//                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+//                }.getType());
+//                if (responseInfo.getCode() == 0) {
+//                    if (responseInfo.getData()) {
+//                        loadingView.cancel();
+//                        String newName = information_et.getText().toString().trim();
+//                        Intent intent = new Intent(ChangeInformationActivity.this, PersonCenterActivity.class);
+//                        //       intent.putExtra("changeRealName", newName);
+//                        startActivity(intent);
+//                        finish();
+//                        showMsg("修改成功");
+//                    }else {
+//                        loadingView.cancel();
+//                        showMsg(responseInfo.getMessage());
+//                    }
+//                }else {
+//                    loadingView.cancel();
+//                    showMsg(responseInfo.getMessage());
+//                }
+            }
+        });
+    }
+
 
 }

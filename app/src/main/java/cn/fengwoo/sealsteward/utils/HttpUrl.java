@@ -63,4 +63,8 @@ public class HttpUrl {
      * 删除公司
      */
     public static final String DELETECOMPANY = "/company/deletecompany";
+
+
+
+    public static final String  ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
 }
