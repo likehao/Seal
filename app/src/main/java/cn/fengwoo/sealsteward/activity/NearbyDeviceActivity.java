@@ -71,6 +71,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     boolean b;
 
     private RxBleClient rxBleClient;
+    private Disposable scanSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private void scanBle(){
         // ble 设备扫描
-        Disposable scanSubscription = rxBleClient.scanBleDevices(
+         scanSubscription = rxBleClient.scanBleDevices(
                 new ScanSettings.Builder()
                         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -249,5 +250,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     public void onDestroy() {
 //        unregisterReceiver(registerReceiver);
         super.onDestroy();
+        scanSubscription.dispose();
     }
 }
