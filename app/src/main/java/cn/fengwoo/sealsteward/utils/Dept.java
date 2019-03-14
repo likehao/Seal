@@ -1,5 +1,7 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.text.TextUtils;
+
 /**
  * Created by HQOCSHheqing on 2016/8/2.
  *
@@ -8,14 +10,14 @@ package cn.fengwoo.sealsteward.utils;
  */
 public class Dept extends Node<Integer>{
 
-    private int id;//部门ID
-    private int parentId;//父亲节点ID
+    private String id;//部门ID
+    private String parentId;//父亲节点ID
     private String name;//部门名称
 
     public Dept() {
     }
 
-    public Dept(int id, int parentId, String name) {
+    public Dept(String id, String parentId, String name) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
@@ -26,7 +28,7 @@ public class Dept extends Node<Integer>{
      * @return
      */
     @Override
-    public Integer get_id() {
+    public String get_id() {
         return id;
     }
 
@@ -35,7 +37,7 @@ public class Dept extends Node<Integer>{
      * @return
      */
     @Override
-    public Integer get_parentId() {
+    public String get_parentId() {
         return parentId;
     }
 
@@ -46,7 +48,8 @@ public class Dept extends Node<Integer>{
 
     @Override
     public boolean parent(Node dest) {
-        if (id == ((Integer)dest.get_parentId()).intValue()){
+//        if (id == ((Integer)dest.get_parentId()).intValue()){
+        if (id.equals(dest.get_parentId())){
             return true;
         }
         return false;
@@ -54,25 +57,28 @@ public class Dept extends Node<Integer>{
 
     @Override
     public boolean child(Node dest) {
-        if (parentId == ((Integer)dest.get_id()).intValue()){
+        if(TextUtils.isEmpty(parentId)){
+            parentId = " ";
+        }
+        if (parentId.equals(dest.get_id())){
             return true;
         }
         return false;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
     }
 

@@ -22,8 +22,8 @@ public abstract class Node<T> {
     private boolean isExpand = false;//当前状态是否展开
 
 
-    public abstract T get_id();//得到当前节点ID
-    public abstract T get_parentId();//得到当前节点的父ID
+    public abstract String get_id();//得到当前节点ID
+    public abstract String get_parentId();//得到当前节点的父ID
     public abstract String get_label();//要显示的内容
     public abstract boolean parent(Node dest);//判断当前节点是否是dest的父亲节点
     public abstract boolean child(Node dest);//判断当前节点是否是dest的孩子节点

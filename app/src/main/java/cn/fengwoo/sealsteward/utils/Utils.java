@@ -25,4 +25,9 @@ public class Utils {
             Logger.d(str);
         }
     }
+
+
+    public static int hexStringToInt(String hexString){
+        return Integer.valueOf(hexString,16);
+    }
 }
