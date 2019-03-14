@@ -169,8 +169,8 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeBg(int index){
         textViews[0].setTextColor(index == 0 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
-        linearLayouts[0].setBackground(index == 0 ? getDrawable(R.drawable.select_user_organizational) : getDrawable(R.drawable.user_organizational));
+        linearLayouts[0].setBackground(index == 0 ? getResources().getDrawable(R.drawable.select_user_organizational) : getResources().getDrawable(R.drawable.user_organizational));
         textViews[1].setTextColor(index == 1 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
-        linearLayouts[1].setBackground(index == 1 ? getDrawable(R.drawable.select_seal_organizational) : getDrawable(R.drawable.seal_organizational));
+        linearLayouts[1].setBackground(index == 1 ? getResources().getDrawable(R.drawable.select_seal_organizational) : getResources().getDrawable(R.drawable.seal_organizational));
     }
 }
