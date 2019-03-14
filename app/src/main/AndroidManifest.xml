@@ -222,7 +222,9 @@
         <activity android:name=".activity.WaitHandleActivity" />
         <activity android:name=".activity.ChangeInformationActivity" />
         <activity android:name=".activity.AddCompanyActivity" />
-        <activity android:name=".activity.ChangePasswordActivity"></activity>
+        <activity android:name=".activity.ChangePasswordActivity" />
+        <activity android:name=".activity.AddAutographActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

@@ -179,6 +179,9 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * 查看公司详情
+     */
     private void selectDialog() {
         strings = new ArrayList<String>();
         strings.add("查看详情");
@@ -190,15 +193,17 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
+
                 }
             }
         });
     }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position != pos) {
             selectDialog(position);
-        }else {
+        } else {
             selectDialog();
         }
     }
@@ -206,8 +211,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     /**
      * 确认是否删除
      */
-    private void deleteDialog(){
-        CommonDialog commonDialog = new CommonDialog(this,"提示","确认删除该公司？","确认");
+    private void deleteDialog() {
+        CommonDialog commonDialog = new CommonDialog(this, "提示", "确认删除该公司？", "确认");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override
@@ -216,12 +221,15 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             }
         });
     }
+
     /**
      * 删除公司
      */
-    private void deleteCompany(){
-        HashMap<String , String> hashMap = new HashMap<>();
-        hashMap.put("companyId", CommonUtil.getUserData(this).getCompanyId());
+    private void deleteCompany() {
+        CompanyInfo companyInfo = new CompanyInfo();
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("companyId", companyInfo.getId());
         HttpUtil.sendDataAsync(this, HttpUrl.DELETECOMPANY, 4, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -232,10 +240,11 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
-                .getType());
-                if (responseInfo.getCode() == 0){
-                    if (responseInfo.getData()){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -243,10 +252,10 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                                 companyListAdapter.notifyDataSetChanged(); //刷新数据
                             }
                         });
-                    }else {
-                            loadingView.cancel();
+                    } else {
+                        loadingView.cancel();
                     }
-                }else {
+                } else {
                     loadingView.cancel();
                 }
             }

@@ -392,16 +392,13 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 @Override
                                 public void onReqSuccess(Object result) {
                                     Gson gson = new Gson();
-                                    //使用Gson将对象转换为json字符串
-                                    String json = gson.toJson(result);
-
                                     final ResponseInfo<LoadImageData> responseInfo = gson.fromJson(result.toString(), new TypeToken<ResponseInfo<LoadImageData>>() {
                                     }.getType());
                                     if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                                         Log.e("ATG", "发送图片至服务器成功..........");
                                         //保存到本地
                                         Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf(file));
-                                        HttpDownloader.down(bitmap);
+                                        HttpDownloader.down(bitmap, null);
                                         Log.e("tag","成功存储图片到本地...........");
                                         //判断本地是否有图片,如果没有从服务器获取
 
@@ -409,7 +406,9 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                         updateHeadPortrait(file);
 
                                     } else {
+                                        Looper.prepare();
                                         showToast(responseInfo.getMessage());
+                                        Looper.loop();
                                     }
                                 }
 

@@ -63,8 +63,24 @@ public class HttpUrl {
      * 删除公司
      */
     public static final String DELETECOMPANY = "/company/deletecompany";
-
-
-
+    /**
+     * 公司详情
+     */
+    public static final String COMPANYINFO = "/company/companyinfo";
+    /**
+     * 签名
+     */
+    public static final String AUTOGRAPH = "/user/updateautograph";
+    /**
+     * 广告
+     */
+    public static final String BANNER = "/user/banner";
+    /**
+     * 下载图片
+     */
+    public static final String DOWNLOADIMG = "/file/uploadimage";
+    /**
+     * 组织架构
+     */
     public static final String  ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
 }

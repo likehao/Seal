@@ -26,10 +26,8 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        Log.d("good", "onCreate: ");
         ButterKnife.bind(this);
         initView();
-        String s ="aaa";
         getAppVersion();
     }
 

@@ -28,6 +28,7 @@ import cn.fengwoo.sealsteward.activity.RecordDetailActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
 import cn.fengwoo.sealsteward.entity.RecordData;
+import cn.fengwoo.sealsteward.view.HeaderAndFooter;
 
 /**
  * 记录

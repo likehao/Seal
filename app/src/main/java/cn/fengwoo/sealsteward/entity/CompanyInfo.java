@@ -29,6 +29,9 @@ public class CompanyInfo implements Serializable {
     private String legalPersonName;
     private String socialCreditCode;
 
+    public CompanyInfo(){
+
+    }
     public CompanyInfo(String companyName) {
         this.companyName = companyName;
     }

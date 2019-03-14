@@ -247,5 +247,8 @@
     <string name="add">添加</string>
     <string name="cue">未认证的企业请及时认证,否则影响盖章业务!</string>
     <string name="fifter_code">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="add_autograph">添加签名</string>
+    <string name="autograph_null">我还是空的快来添加吧</string>
+    <string name="rewrite">重写</string>
 
 </resources>
