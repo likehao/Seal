@@ -49,7 +49,16 @@ public class SealOrganizationalFragment extends Fragment {
         view = inflater.inflate(R.layout.user_organizational_fragment, container, false);
         ButterKnife.bind(this, view);
         mListView = (ListView) view.findViewById(R.id.id_tree);
-        mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList);
+        mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList,0,0);
+        mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
+            @Override
+            public void clicked(String id,int type) {
+                Utils.log("id:" + id);
+                if (type == 3) {
+//                    selectDialog(id);
+                }
+            }
+        });
         mListView.setAdapter(mAdapter);
         initData();
         getDate();

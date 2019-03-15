@@ -252,6 +252,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
+                Utils.log("*** login ***:" + result);
                 Gson gson = new Gson();
                 ResponseInfo<LoginData> loginResponseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<LoginData>>() {
                 }.getType());

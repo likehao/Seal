@@ -1,11 +1,14 @@
 package cn.fengwoo.sealsteward.adapter;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,10 +39,17 @@ public class NodeTreeAdapter extends BaseAdapter {
     private int retract;//缩进值
     private Context context;
     private ClickItemListener clickItemListener;
+    private  CheckBoxCheckedlistener checkBoxCheckedlistener;
+    private int isSingleSelection; // 是否单选,0表示没有选择，1表示单选，2表示多选
+    private int typeWillShowCB; // 要显示check box的类型，0代表都不要显示
+    private SparseBooleanArray selectArray;
 
-    public NodeTreeAdapter(Context context, ListView listView, LinkedList<Node> linkedList){
+
+    public NodeTreeAdapter(Context context, ListView listView, LinkedList<Node> linkedList,int isSingleSelection,int typeWillShowCB){
         inflater = LayoutInflater.from(context);
         this.context = context;
+        selectArray = new SparseBooleanArray();
+
         nodeLinkedList = linkedList;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,6 +59,9 @@ public class NodeTreeAdapter extends BaseAdapter {
         });
         //缩进值，大家可以将它配置在资源文件中，从而实现适配
         retract = (int)(context.getResources().getDisplayMetrics().density*10+0.5f);
+
+        this.isSingleSelection = isSingleSelection;
+        this.typeWillShowCB = typeWillShowCB;
     }
 
     /**
@@ -126,14 +139,52 @@ public class NodeTreeAdapter extends BaseAdapter {
         if (convertView == null){
             convertView = inflater.inflate(R.layout.tree_listview_item,null);
             holder = new ViewHolder();
-            holder.imageView = (ImageView)convertView.findViewById(R.id.id_treenode_icon);
-            holder.label = (TextView)convertView.findViewById(R.id.id_treenode_label);
-            holder.confirm = (LinearLayout)convertView.findViewById(R.id.id_confirm);
+            holder.imageView = convertView.findViewById(R.id.id_treenode_icon);
+            holder.label = convertView.findViewById(R.id.id_treenode_label);
+            holder.confirm = convertView.findViewById(R.id.id_confirm);
+            holder.checkBox = convertView.findViewById(R.id.cb);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder)convertView.getTag();
         }
         Node node = nodeLinkedList.get(position);
+
+        // check box
+        if (isSingleSelection == 0) {
+            holder.checkBox.setVisibility(View.GONE);
+        }else{
+            if(node.get_type() == typeWillShowCB){
+                holder.checkBox.setVisibility(View.VISIBLE);
+            }else {
+                holder.checkBox.setVisibility(View.GONE);
+            }
+        }
+
+
+        holder.checkBox.setTag(position);
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int tag = Integer.parseInt(buttonView.getTag().toString());
+                if (isChecked) {
+                    checkBoxCheckedlistener.checked(node.get_id(),node.get_label());
+                    for (int i = 0; i < getCount(); i++) {
+                        if (tag == i) {
+                            selectArray.put(i, true);
+                        }else {
+                            selectArray.put(i, false);
+                        }
+                    }
+                } else {
+                    selectArray.put(tag, false);
+                }
+                notifyDataSetChanged();
+            }
+        });
+        holder.checkBox.setChecked(selectArray.get(position));
+
+
+
         holder.label.setText(node.get_label());
         if(node.get_icon() == -1){
             holder.imageView.setVisibility(View.INVISIBLE);
@@ -142,12 +193,12 @@ public class NodeTreeAdapter extends BaseAdapter {
             holder.imageView.setImageResource(node.get_icon());
         }
         holder.confirm.setTag(position);
-        holder.confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context,"选中:"+v.getTag(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        holder.confirm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(context,"选中:"+v.getTag(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         holder.label.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +215,7 @@ public class NodeTreeAdapter extends BaseAdapter {
         public ImageView imageView;
         public TextView label;
         public LinearLayout confirm;
+        public CheckBox checkBox;
     }
 
 
@@ -171,8 +223,15 @@ public class NodeTreeAdapter extends BaseAdapter {
         void clicked(String id,int typeInt);
     }
 
+    public interface CheckBoxCheckedlistener{
+        void checked(String id,String name);
+    }
+
     public void setClickItemListener(ClickItemListener clickItemListener){
         this.clickItemListener = clickItemListener;
     }
 
+    public void setCheckBoxCheckedlistener(CheckBoxCheckedlistener checkBoxCheckedlistener){
+        this.checkBoxCheckedlistener = checkBoxCheckedlistener;
+    }
 }

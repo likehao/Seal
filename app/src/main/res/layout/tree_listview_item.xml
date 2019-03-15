@@ -15,17 +15,25 @@
     <!--保证整块区域可点，使用户好点击-->
     <LinearLayout
         android:id="@+id/id_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="65dp"
+        android:layout_height="35dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:clickable="true"
         android:paddingBottom="8dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:paddingTop="8dp">
 
+        <CheckBox
+            android:layout_gravity="center"
+            android:focusable="false"
+            android:id="@+id/cb"
+            android:layout_width="25dp"
+            android:layout_height="20dp" />
+
         <ImageView
+            android:visibility="gone"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:scaleType="centerInside" />

@@ -88,4 +88,8 @@ public class HttpUrl {
      * 用户详情
      */
     public static final String  USER_INFO = "/company/companyorgstr";
+    /**
+     * 添加用户
+     */
+    public static final String  ADD_USER = "/user/adduser";
 }
