@@ -209,4 +209,7 @@ dependencies {
     //配置方法数超过 64K 的应用
     implementation 'com.android.support:multidex:1.0.3'
 
+    // shared preference
+    implementation 'com.white:easysp:1.0.0'
+
 }

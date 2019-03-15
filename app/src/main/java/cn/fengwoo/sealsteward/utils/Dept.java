@@ -13,14 +13,25 @@ public class Dept extends Node<Integer>{
     private String id;//部门ID
     private String parentId;//父亲节点ID
     private String name;//部门名称
+    private int typeInt;
+
+    public int getTypeInt() {
+        return typeInt;
+    }
+
+    public void setTypeInt(int typeInt) {
+        this.typeInt = typeInt;
+    }
+
 
     public Dept() {
     }
 
-    public Dept(String id, String parentId, String name) {
+    public Dept(String id, String parentId, String name,int typeInt) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
+        this.typeInt = typeInt;
     }
 
     /**
@@ -44,6 +55,11 @@ public class Dept extends Node<Integer>{
     @Override
     public String get_label() {
         return name;
+    }
+
+    @Override
+    public int get_type() {
+        return typeInt;
     }
 
     @Override

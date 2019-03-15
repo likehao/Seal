@@ -202,6 +202,9 @@
         <activity android:name=".activity.MyQRCodeActivity" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.AboutActivity" />
+
+        <activity android:name=".activity.UserInfoActivity" />
+
         <activity android:name=".activity.SuggestionActivity" />
         <activity android:name=".activity.FileActivity" />
         <activity android:name=".activity.ApprovalActivity" />

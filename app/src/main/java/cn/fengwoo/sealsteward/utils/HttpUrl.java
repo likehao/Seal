@@ -78,9 +78,14 @@ public class HttpUrl {
     /**
      * 下载图片
      */
-    public static final String DOWNLOADIMG = "/file/uploadimage";
+    public static final String DOWNLOADIMG = "/file/scanimage";
     /**
      * 组织架构
      */
     public static final String  ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
+
+    /**
+     * 用户详情
+     */
+    public static final String  USER_INFO = "/company/companyorgstr";
 }

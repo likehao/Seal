@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".activity.UserInfoActivity">
+
+    <include layout="@layout/head" />
+
+    <cn.fengwoo.sealsteward.view.ReboundScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <View style="@style/line" />
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="用户名称"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/realName_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp"
+                        android:background="@null"
+                        android:textColor="@color/gray_text"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/phone_number"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/mobilePhone_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp"
+                        android:background="@null"
+                        android:text=""
+                        android:textColor="@color/gray_text"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+
+
+
+
+                <View style="@style/line" />
+
+            </LinearLayout>
+            <!--修改密码开始!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+
+            <!--公司开始！！！！！！！！！！！！！！！！！！！！！！！！！-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <View style="@style/line" />
+
+
+                <RelativeLayout style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/department"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/department_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:background="@null"
+                        android:textColor="@color/gray_text"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/position"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/job_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:background="@null"
+                        android:textColor="@color/gray_text"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+                <View style="@style/line" />
+
+                <RelativeLayout
+                    android:id="@+id/permission"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="权限信息"
+                        android:textColor="@color/black" />
+
+
+                    <View style="@style/right_arrow" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </cn.fengwoo.sealsteward.view.ReboundScrollView>
+</LinearLayout>

@@ -18,6 +18,7 @@ import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.Node;
+import cn.fengwoo.sealsteward.utils.Utils;
 
 /**
  * Created by HQOCSHheqing on 2016/8/3.
@@ -34,6 +35,7 @@ public class NodeTreeAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private int retract;//缩进值
     private Context context;
+    private ClickItemListener clickItemListener;
 
     public NodeTreeAdapter(Context context, ListView listView, LinkedList<Node> linkedList){
         inflater = LayoutInflater.from(context);
@@ -73,6 +75,11 @@ public class NodeTreeAdapter extends BaseAdapter {
             }
             node.setIsExpand(!old);
             notifyDataSetChanged();
+        }else{
+            Utils.log("else");
+
+
+
         }
     }
     /**
@@ -141,6 +148,14 @@ public class NodeTreeAdapter extends BaseAdapter {
                 Toast.makeText(context,"选中:"+v.getTag(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.label.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickItemListener.clicked(node.get_id(),node.get_type());
+            }
+        });
+
         convertView.setPadding(node.get_level()*retract,5,5,5);
         return convertView;
     }
@@ -149,6 +164,15 @@ public class NodeTreeAdapter extends BaseAdapter {
         public ImageView imageView;
         public TextView label;
         public LinearLayout confirm;
+    }
+
+
+    public interface ClickItemListener{
+        void clicked(String id,int typeInt);
+    }
+
+    public void setClickItemListener(ClickItemListener clickItemListener){
+        this.clickItemListener = clickItemListener;
     }
 
 }
