@@ -50,7 +50,7 @@ public class LoginData implements Serializable {
     private String autoGraph;
     private String companyId;
     private String companyName;
-    private List<FuncId> funcIdList;
+    private List<SystemFuncListInfo> funcIdList;
     private String headPortrait;
     private String id;
     private String job;
@@ -62,11 +62,11 @@ public class LoginData implements Serializable {
     private String token;
     private String userEmail;
 
-    public List<FuncId> getFuncIdList() {
+    public List<SystemFuncListInfo> getFuncIdList() {
         return funcIdList;
     }
 
-    public void setFuncIdList(List<FuncId> funcIdList) {
+    public void setFuncIdList(List<SystemFuncListInfo> funcIdList) {
         this.funcIdList = funcIdList;
     }
 

@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
 import com.orhanobut.logger.Logger;
+import com.white.easysp.EasySP;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -237,9 +238,9 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
      */
     private void loginGet(final String phone, final String password) {
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("mobilePhone",phone);
-        hashMap.put("password",password);
-        HttpUtil.sendDataAsync(this,HttpUrl.LOGIN,1, hashMap, null, new Callback() {
+        hashMap.put("mobilePhone", phone);
+        hashMap.put("password", password);
+        HttpUtil.sendDataAsync(this, HttpUrl.LOGIN, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -264,9 +265,21 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     loginResponseInfo.getData().login(LoginActivity.this);
                     //登录存储信息
                     user = loginResponseInfo.getData();
-                    CommonUtil.setUserData(LoginActivity.this,user);
+                    CommonUtil.setUserData(LoginActivity.this, user);
 
-                    HistoryInfo historyInfo = new HistoryInfo(phone,user.getRealName(),new Date().getTime());
+
+                    // 本地存入权限
+                    String targetPermissionJson = "";
+                    if (user.getAdmin()) {
+                        targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
+                    } else {
+                        targetPermissionJson = new Gson().toJson(user.getFuncIdList());
+                    }
+                    Utils.log(targetPermissionJson);
+                    EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
+
+
+                    HistoryInfo historyInfo = new HistoryInfo(phone, user.getRealName(), new Date().getTime());
                     //添加
                     accountDao.insert(historyInfo);
                     intent = new Intent(LoginActivity.this, MainActivity.class);

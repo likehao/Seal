@@ -82,14 +82,24 @@ public class HttpUrl {
     /**
      * 组织架构
      */
-    public static final String  ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
+    public static final String ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
 
     /**
      * 用户详情
      */
-    public static final String  USER_INFO = "/company/companyorgstr";
+    public static final String USER_INFO = "/company/companyorgstr";
     /**
      * 添加用户
      */
-    public static final String  ADD_USER = "/user/adduser";
+    public static final String ADD_USER = "/user/adduser";
+    /**
+     * 添加用户ete
+     */
+    public static final String DELETE_USER = "/company/deleteuser";
+    /**
+     * 添加用户ete
+     */
+    public static final String ADD_USER_PERMISSION = "/user/adduserpermission";
+
+
 }

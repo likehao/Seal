@@ -139,7 +139,53 @@ public class UserOrganizationalFragment extends Fragment {
                     String uID = CommonUtil.getUserData(getActivity()).getId();
                     if (uID.equals(uid)) {
                         Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
+                    }else {
+                        // delete user
+                        Utils.log("delete user");
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("userId", uid);
+                        HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETE_USER, 4, hashMap, null, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Utils.log(e.toString());
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String result = response.body().string();
+                                Utils.log(result);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+                                // init
+                                mLinkedList = new LinkedList<>();
+
+                                getDate();
+
+//                                Gson gson = new Gson();
+//                                OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
+//                                Utils.log(organizationalStructureData.getData().get(0).getName());
+//                                for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
+//                                    if (dataBean.getType() != filterType) {
+//                                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType()));
+//                                    }
+//                                }
+//                                getActivity().runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
+//                                        mAdapter.notifyDataSetChanged();
+//                                    }
+//                                });
+                            }
+                        });
                     }
+
                 } else if (position == 1) {
 //                    loadingView.show();
 //                    deleteDialog(); //提示删除

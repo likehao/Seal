@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.white.easysp.EasySP;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +35,7 @@ import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.AddUserInfo;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -123,9 +125,15 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             case R.id.add_user_next_Bt:
 
                 addUser();
+                // 判断是不是有 添加用户权限
+                String permissionJson = EasySP.init(this).getString("permission");
+                if(permissionJson.contains(Constants.permission17)){
+                }
+
 
 //                intent = new Intent(this, SetPowerActivity.class);
 //                startActivity(intent);
+
                 break;
         }
     }
@@ -152,47 +160,35 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                Utils.log("***:" + result);
+                Utils.log("addUser:" + result);
 
                 JSONObject jsonObject = null;
+                JSONObject jsonObject2 = null;
                 try {
                     jsonObject = new JSONObject(result);
                     String state = jsonObject.getString("message");
                     if (state.equals("成功")) {
+
+
+                        String dataString = jsonObject.getString("data");
+
+                        jsonObject2 = new JSONObject(dataString);
+                        String userId = jsonObject2.getString("id");
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                
+                                Intent intent = new Intent();
+                                intent.putExtra("userId", userId);
+                                intent.setClass(AddUserActivity.this, SetPowerActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                         });
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-//                Gson gson = new Gson();
-//                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}.getType());
-//                if (responseInfo.getCode() == 0){
-//                    if (responseInfo.getData()){
-//                        loadingView.cancel();
-//                        finish();
-//                        Looper.prepare();
-//                        showToast("添加成功");
-//                        Looper.loop();
-//                    }else {
-//                        loadingView.cancel();
-//                        Looper.prepare();
-//                        showToast(responseInfo.getMessage());
-//                        Looper.loop();
-//                    }
-//                }else {
-//                    loadingView.cancel();
-//                    Looper.prepare();
-//                    showToast(responseInfo.getMessage());
-//                    Looper.loop();
-//                }
-
             }
         });
     }
