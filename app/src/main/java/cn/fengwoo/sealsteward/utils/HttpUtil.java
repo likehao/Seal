@@ -64,6 +64,9 @@ public class HttpUtil {
 
     /**
      * 发送请求
+     *
+     *  type 1 get
+     *  type 2 post
      *  type 4 delete ;
      *
      * @param url      地址

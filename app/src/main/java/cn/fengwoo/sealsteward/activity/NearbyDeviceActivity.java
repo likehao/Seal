@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.polidea.rxandroidble2.RxBleClient;
+import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
 
@@ -64,6 +65,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private static BluetoothAdapter mBluetoothAdapter = null;
     //listview绑定的数组
     private ArrayList<String> arrayList = new ArrayList<String>();
+
+    private List<ScanResult> scanResultsList = new ArrayList<>();
+
     private ArrayAdapter<String> arrayAdapter = null;
     private List<SealItemBean> lists;
     private SealAdapter adapter;
@@ -72,7 +76,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private RxBleClient rxBleClient;
     private Disposable scanSubscription;
-
+    private Disposable disposable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,6 +210,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             String itemName = deviceName + "->" + deviceMac;
             if (!arrayList.contains(itemName)) {
                 arrayList.add(itemName);
+                scanResultsList.add(scanResult);
                 arrayAdapter.notifyDataSetChanged();
             }
         }
@@ -242,8 +247,22 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        intent = new Intent(this, AddSealActivity.class);
-        startActivity(intent);
+
+        Utils.log(scanResultsList.get(position).getBleDevice().getMacAddress());
+
+        String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
+        RxBleDevice device = rxBleClient.getBleDevice(macAddress);
+        disposable = device.establishConnection(false) // <-- autoConnect flag
+                .subscribe(
+                        rxBleConnection -> {
+                            // All GATT operations are done through the rxBleConnection.
+                            intent = new Intent(this, AddSealActivity.class);
+                            startActivity(intent);
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                );
     }
 
     @Override
