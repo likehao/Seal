@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -12,16 +13,20 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.MainActivity;
+import cn.fengwoo.sealsteward.activity.SelectSealRecodeActivity;
 import cn.fengwoo.sealsteward.adapter.TopRightPopuAdapter;
 
 public class AddPopuwindow extends PopupWindow {
     private ListView listView;
     public View mview;
     private List<String> listData;
+    private TextView scree_tv,newest_tv;
 
     public AddPopuwindow(Activity context){
         final Activity activity = context;
@@ -67,6 +72,10 @@ public class AddPopuwindow extends PopupWindow {
                 },300);
             }
         });
+
+        scree_tv = mview.findViewById(R.id.scree_tv);
+        newest_tv = mview.findViewById(R.id.newest_tv);
+        setListener();
     }
 
     //显示
@@ -78,6 +87,17 @@ public class AddPopuwindow extends PopupWindow {
         }
     }
 
+    private void setListener(){
+        //筛选
+        scree_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                Intent intent = new Intent(mview.getContext(),SelectSealRecodeActivity.class);
+                mview.getContext().startActivity(intent);
+            }
+        });
+    }
     public void setItemClickListener(AdapterView.OnItemClickListener listener){
         listView.setOnItemClickListener(listener);
     }
@@ -87,4 +107,5 @@ public class AddPopuwindow extends PopupWindow {
         lp.alpha = bgAlpha; //0.0-1.0
         activity.getWindow().setAttributes(lp);
     }
+
 }

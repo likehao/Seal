@@ -3,7 +3,6 @@ package cn.fengwoo.sealsteward.bdlocation;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 

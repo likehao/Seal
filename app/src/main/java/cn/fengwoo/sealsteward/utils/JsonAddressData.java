@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
@@ -26,7 +27,7 @@ public class JsonAddressData {
     /**
      * 解析数据
      */
-    private void initJsonData(Activity activity){
+    public void initJsonData(Activity activity){
         /**
          * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
          * 关键逻辑在于循环体
@@ -101,6 +102,7 @@ public class JsonAddressData {
     /**
      * 弹出选择器
      */
+
     String address = null;
     public String showPickerView(Activity activity) {
         initJsonData(activity);  //解析
@@ -121,6 +123,7 @@ public class JsonAddressData {
                         options3Items.get(options1).get(options2).get(options3) : "";
 
                 address = opt1tx + opt2tx + opt3tx;
+
             }
         })
 
@@ -130,9 +133,9 @@ public class JsonAddressData {
                 .setContentTextSize(20)
                 .build();
 
-        /*pvOptions.setPicker(options1Items);//一级选择器
-        pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
-        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        pvOptions.setPicker(options1Items);//一级选择器
+        pvOptions.setPicker(options1Items, options2Items);//二级选择器
+        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器   添加数据
         pvOptions.show();
         return address;
     }

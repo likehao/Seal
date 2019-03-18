@@ -54,9 +54,9 @@
                         android:layout_centerInParent="true"
                         android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            style="@style/cycleApplication"
-                            android:src="@drawable/ic_launcher" />
+                        <ImageView
+                            style="@style/imageView"
+                            android:background="@drawable/nearby_device"/>
 
                         <TextView
                             style="@style/application_text"
@@ -76,9 +76,9 @@
                         android:layout_centerInParent="true"
                         android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            style="@style/cycleApplication"
-                            android:src="@drawable/need_seal" />
+                        <ImageView
+                            style="@style/imageView"
+                            android:background="@drawable/i_need_seal"/>
 
                         <TextView
                             style="@style/application_text"
@@ -99,9 +99,9 @@
                         android:layout_centerInParent="true"
                         android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            style="@style/cycleApplication"
-                            android:src="@drawable/user_seal_apply" />
+                        <ImageView
+                            style="@style/imageView"
+                            android:background="@drawable/use_seal_apply"/>
 
                         <TextView
                             style="@style/application_text"
@@ -121,9 +121,9 @@
                         android:layout_centerInParent="true"
                         android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            style="@style/cycleApplication"
-                            android:src="@drawable/apply_record" />
+                        <ImageView
+                            style="@style/imageView"
+                            android:background="@drawable/apply_record"/>
 
                         <TextView
                             style="@style/application_text"
@@ -159,7 +159,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/ic_launcher" />
+                        android:background="@drawable/seal_select" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -209,7 +209,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/ic_launcher" />
+                        android:background="@drawable/location_iv" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -248,7 +248,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/ic_launcher" />
+                        android:background="@drawable/seal_select" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -388,7 +388,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/ic_launcher" />
+                        android:background="@drawable/fail_time" />
 
                     <TextView
                         android:layout_width="wrap_content"

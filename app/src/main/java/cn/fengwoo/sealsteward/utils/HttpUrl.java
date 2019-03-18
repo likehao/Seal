@@ -48,6 +48,10 @@ public class HttpUrl {
      */
     public static final String UPDATEHEADPORTRAIT = "/user/updateheadportrait";
     /**
+     * 更新地址
+     */
+    public static final String UPDATEADDRESS = "/user/updateaddress";
+    /**
      * 上传头像
      */
     public static final String UPLOADIMAGE = "/file/uploadimage";
@@ -82,7 +86,15 @@ public class HttpUrl {
     /**
      * 组织架构
      */
-    public static final String ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
+    public static final String  ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
+    /**
+     * 建议
+     */
+    public static final String  SUGGESTION = "/user/feedback";
+    /**
+     * 修改密码
+     */
+    public static final String  UPDATEPASSWORD = "/user/updatepassword";
 
     /**
      * 用户详情

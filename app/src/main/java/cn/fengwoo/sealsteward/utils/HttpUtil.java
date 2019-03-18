@@ -77,6 +77,7 @@ public class HttpUtil {
      *  type 4 delete ;
      *
      * @param url      地址
+     * @param type     1,get 2,post 3,patch ,4delete
      * @param params   字典
      * @param data     发送的JSON对象
      * @param callback 回调
@@ -131,8 +132,8 @@ public class HttpUtil {
                     if (formBody != null) {
                         request = addHeaders(activity).url(requestUrl).patch(formBody).build();
                     }
-                }else {
-                    requestUrl = String.format("%s/%s?%s",BASE_URL,url,tempParams.toString());
+                } else {
+                    requestUrl = String.format("%s/%s?%s", BASE_URL, url, tempParams.toString());
                     request = addHeaders(activity).url(requestUrl).delete().build();
                 }
             }
@@ -143,6 +144,7 @@ public class HttpUtil {
         if (request != null) {
             final Call call = client.newCall(request);
             call.enqueue(callback);
+
         }
     }
 

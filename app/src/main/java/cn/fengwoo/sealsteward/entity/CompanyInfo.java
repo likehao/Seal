@@ -32,8 +32,9 @@ public class CompanyInfo implements Serializable {
     public CompanyInfo(){
 
     }
-    public CompanyInfo(String companyName) {
+    public CompanyInfo(String companyName,String id) {
         this.companyName = companyName;
+        this.id = id;
     }
 
 

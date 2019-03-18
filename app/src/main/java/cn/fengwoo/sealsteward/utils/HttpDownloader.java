@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,38 +37,40 @@ public class HttpDownloader {
 
     /**
      * 下载图片
+     *
      * @param activity
      * @param category
      * @param fileName
      */
-    public static void downLoadImg(Activity activity, Integer category, final String fileName){
+    public static void downLoadImg(Activity activity, Integer category, final String fileName) {
 
-            HashMap<String , String> hashMap = new HashMap<>();
-            hashMap.put("category",category+"");
-            hashMap.put("fileName",fileName);
-            HttpUtil.sendDataAsync(activity, HttpUrl.DOWNLOADIMG, 1, hashMap, null, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("category", category + "");
+        hashMap.put("fileName", fileName);
+        HttpUtil.sendDataAsync(activity, HttpUrl.DOWNLOADIMG, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
-                }
+            }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    byte[] imgData = response.body().bytes();
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(imgData,0,imgData.length);
-                    //保存到本地
-                    down(bitmap,fileName);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                byte[] imgData = response.body().bytes();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                //保存到本地
+                down(bitmap, fileName);
 
-                }
-            });
+            }
+        });
 
     }
 
     /**
      * 保存到SD卡
+     *
      * @param bitmap
      */
-    public static void down(Bitmap bitmap,String fileName){
+    public static void down(Bitmap bitmap, String fileName) {
         //获取内部存储状态
         String state = Environment.getExternalStorageState();
         //如果状态不是mounted，无法读写
@@ -75,7 +80,7 @@ public class HttpDownloader {
         //时间命名
         Calendar now = new GregorianCalendar();
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault());
-      //  String fileName = simpleDate.format(now.getTime());
+        //  String fileName = simpleDate.format(now.getTime());
         try {
             File file = new File(path);
             if (!file.exists()) {
@@ -95,20 +100,18 @@ public class HttpDownloader {
     /**
      * 读取本地文件
      */
-    public static Bitmap readFile(String url){
+    public static Bitmap readFile(String url) {
         //获取
         FileInputStream fs = null;
         try {
-            String s = path + url;
-            File file = new File(path + url);
-            fs = new FileInputStream(file);
+            String str = path + url;
 
+            fs = new FileInputStream("file://"+str);
             Bitmap bitmap = BitmapFactory.decodeStream(fs);
-
-            //Bitmap bitmap1 = BitmapFactory.decodeFile(file.toString());
-            Bitmap bitmap3 = BitmapFactory.decodeFile(s);
-            return bitmap3;
-        } catch (FileNotFoundException e) {
+            String bitmap1 = String.valueOf(fs);
+            fs.close();
+            return bitmap;
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }

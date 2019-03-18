@@ -1,6 +1,7 @@
 package cn.fengwoo.sealsteward.utils;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,6 +25,7 @@ public class FileUtil {
                 Cursor cur = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] { MediaStore.Images.ImageColumns._ID, MediaStore.Images.ImageColumns.DATA }, buff.toString(), null, null);
                 int index = 0;
                 int dataIdx = 0;
+                assert cur != null;
                 for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
                     index = cur.getColumnIndex(MediaStore.Images.ImageColumns._ID);
                     index = cur.getInt(index);
@@ -44,6 +46,7 @@ public class FileUtil {
             // 4.2.2以后
             String[] proj = { MediaStore.Images.Media.DATA };
             Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            assert cursor != null;
             if (cursor.moveToFirst()) {
                 int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 path = cursor.getString(columnIndex);
@@ -51,9 +54,33 @@ public class FileUtil {
             cursor.close();
 
             return new File(path);
-        } else {
-            //Log.i(TAG, "Uri Scheme:" + uri.getScheme());
         }
         return null;
+    }
+
+    /**
+     * File转Uri
+     * @param context
+     * @param imageFile
+     * @return
+     */
+    public static Uri getImageContentUri(Context context,File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Images.Media._ID }, MediaStore.Images.Media.DATA + "=? ",
+                new String[] { filePath }, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
     }
 }

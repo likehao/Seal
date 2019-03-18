@@ -20,6 +20,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private LoadingView loadingView;
     private CompanyListAdapter companyListAdapter;
     private ArrayList<CompanyInfo> arrayList;
-    private int pos = 0;
+    private int pos = 0;   //初始选择
+    private String selectCompanyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +116,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     loadingView.cancel();
                     arrayList = new ArrayList<>();
                     for (int i = 0; i < responseInfo.getData().size(); i++) {
-                        arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName()));
+                        arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
+                                responseInfo.getData().get(i).getId()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -168,10 +171,11 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     optionBottomDialog.dismiss();
                     pos = select;
                 } else if (position == 1) {
-                    loadingView.show();
-                    deleteDialog(); //提示删除
+                    deleteDialog(select); //提示删除
+                    optionBottomDialog.dismiss();
                 } else {
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent.putExtra("companyId",selectCompanyId);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }
@@ -190,7 +194,9 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
+
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent.putExtra("companyId",selectCompanyId);  //选中的公司ID
                     startActivity(intent);
                     optionBottomDialog.dismiss();
 
@@ -201,6 +207,9 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //赋值选择的那一条数据获取它的id
+        selectCompanyId = arrayList.get(position).getId();
+        //判断点击的是被选中的还是未选中的公司
         if (position != pos) {
             selectDialog(position);
         } else {
@@ -211,54 +220,47 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     /**
      * 确认是否删除
      */
-    private void deleteDialog() {
-        CommonDialog commonDialog = new CommonDialog(this, "提示", "确认删除该公司？", "确认");
+    private void deleteDialog(final int deleteSelect) {
+        final CommonDialog commonDialog = new CommonDialog(this, "提示", "确认删除该公司？", "确认");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteCompany();
-            }
-        });
-    }
-
-    /**
-     * 删除公司
-     */
-    private void deleteCompany() {
-        CompanyInfo companyInfo = new CompanyInfo();
-
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("companyId", companyInfo.getId());
-        HttpUtil.sendDataAsync(this, HttpUrl.DELETECOMPANY, 4, hashMap, null, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                loadingView.cancel();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
-                }
-                        .getType());
-                if (responseInfo.getCode() == 0) {
-                    if (responseInfo.getData()) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingView.cancel();
-                                companyListAdapter.notifyDataSetChanged(); //刷新数据
-                            }
-                        });
-                    } else {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("companyId", selectCompanyId);
+                HttpUtil.sendDataAsync(MyCompanyActivity.this, HttpUrl.DELETECOMPANY, 4, hashMap, null, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
                         loadingView.cancel();
                     }
-                } else {
-                    loadingView.cancel();
-                }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = response.body().string();
+                        Gson gson = new Gson();
+                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                        }.getType());
+                        commonDialog.dialog.dismiss();
+                        if (responseInfo.getCode() == 0) {
+                            if (responseInfo.getData()) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        arrayList.remove(deleteSelect);
+                                        companyListAdapter.notifyDataSetChanged(); //刷新数据
+
+                                    }
+                                });
+                            }
+                        } else {
+                            Looper.prepare();
+                            showToast(responseInfo.getMessage());
+                            Looper.loop();
+                        }
+                    }
+                });
             }
         });
     }
+
 }

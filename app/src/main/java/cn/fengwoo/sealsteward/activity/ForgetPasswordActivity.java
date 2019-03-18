@@ -68,7 +68,6 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
                 break;
             case R.id.forgetPassword_next_bt:
                 checkForgetPwdCode();
-
                 break;
             case R.id.forget_pwd_getCode_bt:
                 //判断电话号码

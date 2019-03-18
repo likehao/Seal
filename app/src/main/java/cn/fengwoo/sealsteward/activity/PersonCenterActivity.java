@@ -2,17 +2,15 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,65 +20,44 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.baidu.mapsdkplatform.comapi.map.C;
-import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.contrarywind.listener.OnItemSelectedListener;
 import com.contrarywind.view.WheelView;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
-import com.zhihu.matisse.internal.entity.IncapableCause;
-import com.zhihu.matisse.internal.entity.Item;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.JsonBean;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
-import cn.fengwoo.sealsteward.utils.FileToHashMap;
 import cn.fengwoo.sealsteward.utils.FileUtil;
+import cn.fengwoo.sealsteward.utils.GetJsonDataUtil;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
 import cn.fengwoo.sealsteward.utils.GlideEngineImage;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.utils.JsonAddressData;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -139,6 +116,10 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     RelativeLayout address_rl;
     @BindView(R.id.address_tv)
     TextView address_tv;
+
+    private List<JsonBean> options1Items = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,7 +208,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 department_tv.setText(responseInfo.getData().getOrgStructureName());
                                 job_tv.setText(responseInfo.getData().getJob());
                                 email_tv.setText(responseInfo.getData().getUserEmail());
-                                String path =  "file://"+ responseInfo.getData().getHeadPortrait();
+                                String path = "file://" + responseInfo.getData().getHeadPortrait();
                                 Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
                                 address_tv.setText(responseInfo.getData().getAddress());
                             }
@@ -275,7 +256,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.name_rl:
                 intent = new Intent(this, ChangeInformationActivity.class);
-                intent.putExtra("sealName", realName_tv.getText().toString());
+                intent.putExtra("realName", realName_tv.getText().toString());
                 intent.putExtra("TAG", 1);
                 startActivity(intent);
                 finish();
@@ -299,7 +280,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 permissions();
                 break;
             case R.id.change_pwd_rl:
-                intent = new Intent(this,ChangePasswordActivity.class);
+                intent = new Intent(this, ChangePasswordActivity.class);
                 startActivity(intent);
                 break;
             case R.id.address_rl:
@@ -402,7 +383,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                         //保存到本地
                                         Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf(file));
                                         HttpDownloader.down(bitmap, null);
-                                        Log.e("tag","成功存储图片到本地...........");
+                                        Log.e("tag", "成功存储图片到本地...........");
                                         //判断本地是否有图片,如果没有从服务器获取
 
                                         //更新头像
@@ -464,7 +445,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                             public void run() {
                                 //加载图片
                                 Picasso.with(PersonCenterActivity.this).load(file).into(headImg_iv);
-                                Log.e("ATG","成功加载头像........");
+                                Log.e("ATG", "成功加载头像........");
                             }
                         });
                     } else {
@@ -481,9 +462,143 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     /**
      * 选择地址
      */
-    private void selectAddress(){
-        JsonAddressData jsonAddressData = new JsonAddressData();
-        String address = jsonAddressData.showPickerView(PersonCenterActivity.this);
-        address_tv.setText(address);
+    String address = null;
+    private void selectAddress() {
+        //Gson解析省市区数据
+        initJsonData(PersonCenterActivity.this);
+        //条件选择器
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(PersonCenterActivity.this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                String opt1tx = options1Items.size() > 0 ?
+                        options1Items.get(options1).getPickerViewText() : "";
+
+                String opt2tx = options2Items.size() > 0
+                        && options2Items.get(options1).size() > 0 ?
+                        options2Items.get(options1).get(options2) : "";
+
+                String opt3tx = options2Items.size() > 0
+                        && options3Items.get(options1).size() > 0
+                        && options3Items.get(options1).get(options2).size() > 0 ?
+                        options3Items.get(options1).get(options2).get(options3) : "";
+
+                address = opt1tx + opt2tx + opt3tx;
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("address", address);
+                HttpUtil.sendDataAsync(PersonCenterActivity.this, HttpUrl.UPDATEADDRESS, 3, hashMap, null, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e("TAG",e+"");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = response.body().string();
+                        Gson gson = new Gson();
+                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                        }.getType());
+                        if (responseInfo.getCode() == 0) {
+                            if (responseInfo.getData()) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        address_tv.setText(address);
+                                    }
+                                });
+                            }
+                        }else {
+                            Looper.prepare();
+                            showToast(responseInfo.getMessage());
+                            Looper.loop();
+                            Log.e("TAG", "获取个人信息数据失败........");
+                        }
+                    }
+                });
+            }
+        })
+
+                .setTitleText("城市选择")
+                .setDividerColor(Color.BLACK)
+                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                .setContentTextSize(20)
+                .build();
+                if (options1Items.size() != 0) {
+                    pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器   添加数据
+                    pvOptions.show();
+                }
     }
+
+    /**
+     * 解析数据
+     */
+    public void initJsonData(Activity activity) {
+        /**
+         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
+         * 关键逻辑在于循环体
+         *
+         * */
+        String JsonData = new GetJsonDataUtil().getJson(activity, "province.json");//获取assets目录下的json文件数据
+
+        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+
+        /**
+         * 添加省份数据
+         *
+         * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
+         * PickerView会通过getPickerViewText方法获取字符串显示出来。
+         */
+        options1Items = jsonBean;
+
+        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
+            ArrayList<String> cityList = new ArrayList<>();//该省的城市列表（第二级）
+            ArrayList<ArrayList<String>> province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+
+            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
+                String cityName = jsonBean.get(i).getCityList().get(c).getName();
+                cityList.add(cityName);//添加城市
+                ArrayList<String> city_AreaList = new ArrayList<>();//该城市的所有地区列表
+
+                //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
+                /*if (jsonBean.get(i).getCityList().get(c).getArea() == null
+                        || jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
+                    city_AreaList.add("");
+                } else {
+                    city_AreaList.addAll(jsonBean.get(i).getCityList().get(c).getArea());
+                }*/
+                city_AreaList.addAll(jsonBean.get(i).getCityList().get(c).getArea());
+                province_AreaList.add(city_AreaList);//添加该省所有地区数据
+            }
+
+            /**
+             * 添加城市数据
+             */
+            options2Items.add(cityList);
+
+            /**
+             * 添加地区数据
+             */
+            options3Items.add(province_AreaList);
+        }
+
+    }
+        /**
+         * Gson解析
+         * @param result
+         * @return
+         */
+        public ArrayList<JsonBean> parseData(String result) {
+            ArrayList<JsonBean> detail = new ArrayList<>();
+            try {
+                JSONArray data = new JSONArray(result);
+                Gson gson = new Gson();
+                for (int i = 0; i < data.length(); i++) {
+                    JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
+                    detail.add(entity);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return detail;
+        }
 }

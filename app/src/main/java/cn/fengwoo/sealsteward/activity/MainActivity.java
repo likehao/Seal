@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ import cn.fengwoo.sealsteward.utils.PermissionUtils;
 import cn.fengwoo.sealsteward.view.AddPopuwindow;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private LinearLayout home_page, record_page, application_page, message_page, mine;
     private TextView title_tv;  //头标题
@@ -102,6 +103,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         imageViews[4] = findViewById(R.id.application_iv);
         record_more_iv = findViewById(R.id.record_more_iv);
         message_more_iv = findViewById(R.id.message_more_iv);
+        popuwindow = new AddPopuwindow(MainActivity.this);
+        messagePopuwindow = new MessagePopuwindow(MainActivity.this,1);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
     }
@@ -159,12 +162,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.record_more_iv:
                 //盖章记录更多popuwindow
-                popuwindow = new AddPopuwindow(MainActivity.this);
                 popuwindow.showPopuwindow(view);
                 //       popDialog();
                 break;
  /*           case R.id.message_more_iv:
-                messagePopuwindow = new MessagePopuwindow(MainActivity.this);
                 messagePopuwindow.showPopuwindow(view);
                 break;*/
    /*         case R.id.circle_useSeal_apply_ll:
@@ -179,7 +180,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.add_ll:
                 //添加popuwindow
-                messagePopuwindow = new MessagePopuwindow(MainActivity.this,1);
                 messagePopuwindow.showPopuwindow(view);
                 break;
         }
@@ -326,7 +326,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
     /*
     @Override
     protected void onPause() {
@@ -371,4 +370,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             System.exit(0);  //正常结束程序
         }
     }
+
 }

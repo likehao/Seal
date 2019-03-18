@@ -81,6 +81,20 @@
             android:textColor="@color/white"
             android:visibility="gone" />
 
+        <CheckBox
+            android:id="@+id/check"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="10dp"
+            android:button="@null"
+            android:text="@string/edit"
+            android:checked="false"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/set_back_ll"
             android:layout_width="60dp"

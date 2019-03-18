@@ -16,7 +16,7 @@
             android:layout_height="15dp"
             android:layout_marginStart="15dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/ic_launcher" />
+            android:background="@drawable/seal_select" />
 
         <TextView
             android:id="@+id/record_seal_address_tv"

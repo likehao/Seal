@@ -1,6 +1,8 @@
 package cn.fengwoo.sealsteward.entity;
 
-public class UserData {
+import java.io.Serializable;
+
+public class UserData implements Serializable{
 
     private int photo;
     private String name;

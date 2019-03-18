@@ -24,6 +24,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+/**
+ * 添加公司
+ */
 public class AddCompanyActivity extends BaseActivity implements View.OnClickListener{
 
     @BindView(R.id.set_back_ll)

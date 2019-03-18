@@ -63,7 +63,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/ic_launcher" />
+                        android:src="@drawable/apply_msg" />
 
                     <ImageView
                         android:layout_width="10dp"
@@ -94,7 +94,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/ic_launcher" />
+                        android:src="@drawable/police_msg" />
 
                     <ImageView
                         android:layout_width="10dp"
@@ -125,7 +125,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/ic_launcher" />
+                        android:src="@drawable/system_msg" />
 
                     <ImageView
                         android:layout_width="10dp"

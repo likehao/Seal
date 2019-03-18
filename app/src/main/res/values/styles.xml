@@ -50,6 +50,14 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
+    <!--imageview-->
+    <style name="imageView">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <!--应用圆形图下文字-->
     <style name="application_text">
         <item name="android:layout_width">wrap_content</item>

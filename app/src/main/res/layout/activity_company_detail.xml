@@ -17,7 +17,12 @@
         android:background="@color/white"
         android:orientation="vertical">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
         <RelativeLayout
+            android:id="@+id/company_name_rl"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
@@ -29,20 +34,28 @@
                 android:text="@string/companyName"
                 android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/detail_companyName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:textColor="@color/gray_text"
-                android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/detail_companyName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_text"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="30dp"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/arrowIv1"
+                    style="@style/right_arrow"
+                    android:visibility="gone"/>
+
         </RelativeLayout>
 
         <View style="@style/line_left" />
 
         <RelativeLayout
+            android:id="@+id/social_code_rl"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
@@ -60,14 +73,20 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
+                android:layout_marginEnd="30dp"
                 android:textColor="@color/gray_text"
                 android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/arrowIv2"
+                style="@style/right_arrow"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <View style="@style/line_left" />
 
         <RelativeLayout
+            android:id="@+id/legal_person_rl"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
@@ -85,9 +104,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="30dp"
                 android:textColor="@color/gray_text"
                 android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/arrowIv3"
+                style="@style/right_arrow"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <View style="@style/line_left" />
@@ -104,20 +128,27 @@
                 android:text="@string/authenticating_state"
                 android:textColor="@color/black" />
 
-            <EditText
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="30dp"
                 android:background="@null"
                 android:text="@string/none_authentication"
                 android:textColor="@color/gray_text"
                 android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/arrowIv4"
+                style="@style/right_arrow"
+                android:visibility="gone"/>
         </RelativeLayout>
 
-        <View style="@style/line_left" />
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+<!--
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -191,16 +222,16 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
 
-    <Button
+  <!--  <Button
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textColor="@color/white"
         android:layout_gravity="center"
         android:background="@drawable/login_circle_bg"
-        android:text="@string/authentication"/>
+        android:text="@string/authentication"/>-->
 </LinearLayout>

@@ -147,9 +147,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 }else {
                     loadingView.cancel();
                     Log.e("ATG","获取广告图失败!!!!!!!!!!!!!!");
-                    Looper.prepare();
                     Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
-                    Looper.loop();
                 }
 
             }

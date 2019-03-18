@@ -278,7 +278,6 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     Utils.log(targetPermissionJson);
                     EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
 
-
                     HistoryInfo historyInfo = new HistoryInfo(phone, user.getRealName(), new Date().getTime());
                     //添加
                     accountDao.insert(historyInfo);

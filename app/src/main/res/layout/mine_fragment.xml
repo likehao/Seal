@@ -94,8 +94,7 @@
                 </RelativeLayout>
 
                 <View
-                    style="@style/line"
-                    android:layout_marginStart="15dp"/>
+                    style="@style/line_left"/>
 
                 <RelativeLayout
                     android:id="@+id/my_sign_rl"
@@ -245,8 +244,7 @@
                 </RelativeLayout>
 
                 <View
-                    style="@style/line"
-                    android:layout_marginStart="15dp"/>
+                    style="@style/line_left"/>
 
                 <RelativeLayout
                     android:id="@+id/suggestion_rl"
@@ -265,8 +263,7 @@
                 </RelativeLayout>
 
                 <View
-                    style="@style/line"
-                    android:layout_marginStart="15dp"/>
+                    style="@style/line_left"/>
 
                 <RelativeLayout
                     style="@style/pressed_effect">

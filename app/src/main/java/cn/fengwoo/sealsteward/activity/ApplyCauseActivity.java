@@ -18,6 +18,9 @@ import cn.fengwoo.sealsteward.adapter.CauseAdapter;
 import cn.fengwoo.sealsteward.entity.ApplyCauseData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 
+/**
+ * 申请事由（我要盖章进入）
+ */
 public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnItemClickListener{
 
     @BindView(R.id.cause_lv)

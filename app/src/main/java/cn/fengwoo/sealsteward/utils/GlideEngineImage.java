@@ -6,7 +6,10 @@ import android.net.Uri;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.RequestOptions;
 import com.zhihu.matisse.engine.ImageEngine;
+
+import cn.fengwoo.sealsteward.R;
 
 /**
  * Glide加载图片类,重写此类防止Glide4.0之后api调用方式更改会导致出错
@@ -17,12 +20,14 @@ public class GlideEngineImage implements ImageEngine{
      */
     @Override
     public void loadThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
+
         Glide.with(context)
                 .load(uri)
               //  .asBitmap()  // some .jpeg files are actually gif
                 .placeholder(placeholder)   //这里可自己添加占位图
                 .override(resize, resize)
                 .centerCrop()
+            //    .error(R.drawable.photo_03)
                 .into(imageView);
     }
 
@@ -35,6 +40,7 @@ public class GlideEngineImage implements ImageEngine{
                 .placeholder(placeholder)
                 .override(resize, resize)
                 .centerCrop()
+           //     .error(R.drawable.photo_03)//这里可自己添加出错图
                 .into(imageView);
     }
 

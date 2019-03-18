@@ -83,21 +83,41 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
      */
     private void initData() {
         Intent intent = getIntent();
-        String name = intent.getStringExtra("sealName");
-        String mobilePhone = intent.getStringExtra("mobilePhone");
-        String userEmail = intent.getStringExtra("userEmail");
+        String realName = intent.getStringExtra("realName");             //姓名
+        String mobilePhone = intent.getStringExtra("mobilePhone");    //电话
+        String userEmail = intent.getStringExtra("userEmail");       //邮箱
+        String companyName = intent.getStringExtra("companyName");   //公司名字
+        String socialCode = intent.getStringExtra("socialCode");    //社会信用代码
+        String legalPerson = intent.getStringExtra("legalPerson");   //法人
         tag = intent.getIntExtra("TAG", 0);
         //判断点击的是哪个
-        if (tag == 1) {
-            information_et.setText(name);
-            information_et.setSelection(name.length());  //将光标移至文字末尾
-        } else if(tag == 2){
-            information_et.setText(mobilePhone);
-            information_et.setSelection(mobilePhone.length());
-        }else {
-            information_et.setText(userEmail);
-            information_et.setSelection(userEmail.length());
+        switch (tag){
+            case 1:
+                information_et.setText(realName);
+                information_et.setSelection(realName.length());  //将光标移至文字末尾
+                break;
+            case 2:
+                information_et.setText(mobilePhone);
+                information_et.setSelection(mobilePhone.length());
+                break;
+            case 3:
+                information_et.setText(userEmail);
+                information_et.setSelection(userEmail.length());
+                break;
+            case 4:
+                information_et.setText(companyName);
+                information_et.setSelection(companyName.length());
+                break;
+            case 5:
+                information_et.setText(socialCode);
+                information_et.setSelection(socialCode.length());
+                break;
+            case 6:
+                information_et.setText(legalPerson);
+                information_et.setSelection(legalPerson.length());
+                break;
         }
+
     }
 
     @Override
