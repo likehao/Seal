@@ -34,13 +34,18 @@
                     android:text="@string/seal_name"
                     android:textColor="@color/black" />
 
-                <TextView
+
+                <EditText
+                    android:id="@+id/et_seal_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:text="@string/please_input_seal_name" />
+                    android:background="@null"
+                    android:hint="@string/please_input_seal_name"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="30dp" />
+
 
             </RelativeLayout>
 
@@ -63,13 +68,18 @@
                     android:text="@string/seal_number"
                     android:textColor="@color/black" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/et_seal_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:text="@string/please_input_seal_number" />
+                    android:background="@null"
+                    android:hint="@string/please_input_seal_number"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="30dp" />
+
+
 
             </RelativeLayout>
 
@@ -93,6 +103,7 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/tv_mac"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -122,13 +133,18 @@
                     android:text="@string/use_Range"
                     android:textColor="@color/black" />
 
-                <TextView
+
+                <EditText
+                    android:id="@+id/et_range"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:text="@string/please_input_use_Range" />
+                    android:background="@null"
+                    android:hint="@string/please_input_use_Range"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="30dp" />
+
 
 
             </RelativeLayout>
@@ -140,6 +156,7 @@
                 android:background="@color/line" />
 
             <RelativeLayout
+                android:id="@+id/rl_choose_department"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white">
@@ -153,12 +170,15 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/tv_department"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="35dp"
                     android:text="@string/select_belong_department" />
+                <View
+                    style="@style/right_arrow" />
 
             </RelativeLayout>
 
@@ -169,6 +189,7 @@
                 android:background="@color/line" />
 
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white">
@@ -184,12 +205,14 @@
             </RelativeLayout>
 
             <ImageView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_launcher"
                 android:layout_marginStart="20dp"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -198,6 +221,7 @@
                 android:text="@string/set_map_intercept"/>
 
             <cn.fengwoo.sealsteward.utils.MyMapView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -208,8 +232,9 @@
             </cn.fengwoo.sealsteward.utils.MyMapView>
 
             <Button
+                android:id="@+id/btn_next"
                 android:layout_width="280dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="50dp"
                 android:layout_marginTop="50dp"

@@ -257,6 +257,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         rxBleConnection -> {
                             // All GATT operations are done through the rxBleConnection.
                             intent = new Intent(this, AddSealActivity.class);
+                            intent.putExtra("mac", macAddress);
                             startActivity(intent);
                         },
                         throwable -> {

@@ -116,6 +116,7 @@ public class UserOrganizationalFragment extends Fragment {
                     public void run() {
                         mLinkedList.addAll(NodeHelper.sortNodes(data));
                         mAdapter.notifyDataSetChanged();
+                        Utils.log("mAdapter.notifyDataSetChanged();");
                     }
                 });
             }
@@ -158,30 +159,24 @@ public class UserOrganizationalFragment extends Fragment {
                                     @Override
                                     public void run() {
                                         Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
-
                                     }
                                 });
 
                                 // init
-                                mLinkedList = new LinkedList<>();
 
-                                getDate();
+                                data .clear();
 
-//                                Gson gson = new Gson();
-//                                OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
-//                                Utils.log(organizationalStructureData.getData().get(0).getName());
-//                                for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
-//                                    if (dataBean.getType() != filterType) {
-//                                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType()));
-//                                    }
-//                                }
-//                                getActivity().runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
+                                mLinkedList.clear();
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
 //                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
-//                                        mAdapter.notifyDataSetChanged();
-//                                    }
-//                                });
+
+                                        optionBottomDialog.dismiss();
+                                        getDate();
+                                    }
+                                });
                             }
                         });
                     }
@@ -193,7 +188,12 @@ public class UserOrganizationalFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                     intent.putExtra("uid", uid);
                     startActivity(intent);
-                    optionBottomDialog.dismiss();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            optionBottomDialog.dismiss();
+                        }
+                    });
                 }
             }
         });

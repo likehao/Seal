@@ -107,6 +107,7 @@ allprojects {
         maven {
             url "https://jitpack.io"
         }
+        maven { url 'https://maven.google.com' }
     }
 }
 
@@ -211,5 +212,8 @@ dependencies {
 
     // shared preference
     implementation 'com.white:easysp:1.0.0'
+
+    // 相册选择
+    implementation 'org.devio.takephoto:takephoto_library:4.1.0'
 
 }

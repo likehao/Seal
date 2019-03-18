@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,9 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.longsh.optionframelibrary.OptionBottomDialog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,8 +23,10 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.UserInfoActivity;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -43,6 +49,8 @@ public class SealOrganizationalFragment extends Fragment {
     private List<Node> data;
     private int filterType;
 
+    private String idString;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,8 +62,9 @@ public class SealOrganizationalFragment extends Fragment {
             @Override
             public void clicked(String id,int type) {
                 Utils.log("id:" + id);
-                if (type == 3) {
-//                    selectDialog(id);
+                if (type == 4) {
+                    idString = id;
+                    selectDialog(id);
                 }
             }
         });
@@ -101,6 +110,76 @@ public class SealOrganizationalFragment extends Fragment {
                         mAdapter.notifyDataSetChanged();
                     }
                 });
+            }
+        });
+    }
+
+
+    private void selectDialog( String uid) {
+        Utils.log("**********"+ CommonUtil.getUserData(getActivity()).getId());
+
+        ArrayList strings = new ArrayList<String>();
+//        strings.add("切换");
+        strings.add("删除");
+        strings.add("查看详情");
+        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(getActivity(), strings);
+        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Utils.log("position"+position);
+                if (position == 0) {
+                    // delete
+                    String uID = CommonUtil.getUserData(getActivity()).getId();
+
+                        // delete user
+                        Utils.log("delete seal");
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("sealId", idString);
+                        HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETE_SEAL, 4, hashMap, null, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Utils.log(e.toString());
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String result = response.body().string();
+                                Utils.log(result);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+                                // init
+                                data .clear();
+
+                                mLinkedList.clear();
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+//                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
+
+                                        optionBottomDialog.dismiss();
+                                        getDate();
+                                    }
+                                });
+                            }
+                        });
+
+
+                } else if (position == 1) {
+//                    loadingView.show();
+//                    deleteDialog(); //提示删除
+
+                    Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                    intent.putExtra("uid", uid);
+                    startActivity(intent);
+                    optionBottomDialog.dismiss();
+                }
             }
         });
     }

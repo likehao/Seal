@@ -82,6 +82,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.JsonAddressData;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
@@ -385,12 +386,14 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                             // TODO 压缩成功后调用，返回压缩后的图片文件
                             //上传图片
                             HashMap<String, Object> hashMap = new HashMap<>();
+                            Utils.log(file.length() +"");
                             hashMap.put("category", 1);
                             hashMap.put("file", file);
                             HttpUtil httpUtil = new HttpUtil(PersonCenterActivity.this);
                             httpUtil.upLoadFile(PersonCenterActivity.this, HttpUrl.UPLOADIMAGE, hashMap, new ReqCallBack<Object>() {
                                 @Override
                                 public void onReqSuccess(Object result) {
+                                    Utils.log("onReqSuccess");
                                     Gson gson = new Gson();
                                     final ResponseInfo<LoadImageData> responseInfo = gson.fromJson(result.toString(), new TypeToken<ResponseInfo<LoadImageData>>() {
                                     }.getType());
@@ -414,6 +417,8 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
 
                                 @Override
                                 public void onReqFailed(String errorMsg) {
+                                    Utils.log("onReqFailed");
+
                                     Looper.prepare();
                                     showToast(errorMsg);
                                     Looper.loop();

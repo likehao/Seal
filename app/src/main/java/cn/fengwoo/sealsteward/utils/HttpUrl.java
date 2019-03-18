@@ -93,13 +93,25 @@ public class HttpUrl {
      */
     public static final String ADD_USER = "/user/adduser";
     /**
-     * 添加用户ete
+     * delete用户
      */
     public static final String DELETE_USER = "/company/deleteuser";
     /**
-     * 添加用户ete
+     * 添加用户权限
      */
     public static final String ADD_USER_PERMISSION = "/user/adduserpermission";
+    /**
+     * 核对添加seal
+     */
+    public static final String SEAL_CHECK_ADD = "/seal/checkadd";
+    /**
+     * 添加seal
+     */
+    public static final String ADD_SEAL = "/seal/addseal";
+    /**
+     * delete seal
+     */
+    public static final String DELETE_SEAL = "/seal/deleteseal";
 
 
 }

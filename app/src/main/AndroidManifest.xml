@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cn.fengwoo.sealsteward">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -64,6 +65,7 @@
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
+                tools:replace="android:resource"
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
@@ -196,6 +198,7 @@
         <activity android:name=".activity.ForgetPasswordActivity" />
         <activity android:name=".activity.SetPasswordActivity" />
         <activity android:name=".activity.AddSealActivity" />
+        <activity android:name=".activity.AddSealSecStepActivity" />
         <activity android:name=".activity.AddUserActivity" />
         <activity android:name=".activity.MyApplyActivity" />
         <activity android:name=".activity.NearbyDeviceActivity" />
