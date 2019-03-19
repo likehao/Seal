@@ -177,6 +177,7 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String codeString = jsonObject.getString("code");
+                    String msgString = jsonObject.getString("message");
                     if (codeString.equals("0")) {
                         Utils.log("success");
                         runOnUiThread(new Runnable() {
@@ -191,6 +192,13 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                                 intent.putExtra("orgStructrueId", departmentId);
                                 startActivity(intent);
                                 finish();
+                            }
+                        });
+                    }else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(AddSealActivity.this, msgString, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

@@ -97,6 +97,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_add_seal_sec_step);
         ButterKnife.bind(this);
         initView();
+
+        permissions();
+
         initData();
 
     }
@@ -316,8 +319,8 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                         if (permission.granted) {
                             //     PersonCenterActivity.myModule_choiceImageEnum= MyModule_ChoiceImageEnum.PERFECTINFORMATION_PERSIONFRAGMENT_USERIMAGE;
                             //开启图片选择器
-                            takePhoto.onPickFromCapture(imageUri);
-
+//                            takePhoto.onPickFromCapture(imageUri);
+                            Utils.log("accept");
                         } else if (permission.shouldShowRequestPermissionRationale) {
                             showToast("您已拒绝权限申请");
                         } else {
