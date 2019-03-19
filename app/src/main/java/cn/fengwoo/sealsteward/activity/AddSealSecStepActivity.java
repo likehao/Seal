@@ -2,17 +2,22 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +33,8 @@ import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.yuyh.library.imgsel.ISNav;
+import com.yuyh.library.imgsel.config.ISCameraConfig;
 
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.app.TakePhotoImpl;
@@ -87,7 +94,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     private String sealNoString;
     private String scopeString;
     private String orgStructrueIdString;
+    private static final int REQ_TAKE_PHOTO = 333;
 
+    private String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpeg";
 
 
     @Override
@@ -113,7 +122,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
     private void initData() {
 
-        nameString =getIntent().getStringExtra("name");
+        nameString = getIntent().getStringExtra("name");
         macString = getIntent().getStringExtra("mac");
 
         sealNoString = getIntent().getStringExtra("sealNo");
@@ -157,7 +166,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         file.mkdirs();
 
 
-
         //压缩文件
         Luban.with(this)
                 .load(file)   //传入原图
@@ -193,7 +201,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 //        File file = new File(path);
 
         HashMap<String, Object> hashMap = new HashMap<>();
-        Utils.log(file.length() +"");
+        Utils.log(file.length() + "");
         hashMap.put("category", 3);
         hashMap.put("file", file);
         HttpUtil httpUtil = new HttpUtil(AddSealSecStepActivity.this);
@@ -206,9 +214,14 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 }.getType());
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     Log.e("ATG", "发送图片至服务器成功..........");
-                    Utils.log(responseInfo.getCode() +"");
+                    Utils.log(responseInfo.getCode() + "");
                     addSeal();
-
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showToast(responseInfo.getMessage());
+                        }
+                    });
 
                 } else {
                     Looper.prepare();
@@ -243,6 +256,49 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         getTakePhoto().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_TAKE_PHOTO) {
+
+            Utils.log(imgPath);
+
+
+            File file = new File(imgPath);
+            file.mkdirs();
+
+
+            //压缩文件
+            Luban.with(this)
+                    .load(file)   //传入原图
+                    .ignoreBy(100)     //不压缩的阈值，单位为K
+                    //  .setTargetDir(getPath())   //缓存压缩图片路径
+                    .filter(new CompressionPredicate() {
+                        @Override
+                        public boolean apply(String path) {
+                            return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                        }
+                    })
+                    .setCompressListener(new OnCompressListener() {
+                        @Override
+                        public void onStart() {
+                            // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                        }
+
+                        @Override
+                        public void onSuccess(final File file) {
+                            // TODO 压缩成功后调用，返回压缩后的图片文件
+                            //上传图片
+                            Utils.log(file.length() +"");
+                            uploadPic(file);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            // TODO 当压缩过程出现问题时调用
+                        }
+                    }).launch();
+
+        }
+
     }
 
     @Override
@@ -296,11 +352,63 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                     // 从相册选
                     takePhoto.onPickFromGallery();
                 } else if (position == 1) {
-                    takePhoto.onPickFromCapture(imageUri);
+//                    takePhoto.onPickFromCapture(imageUri);
+
+//                    ISCameraConfig config = new ISCameraConfig.Builder()
+//                            .needCrop(true) // 裁剪
+//                            .cropSize(1, 1, 200, 200)
+//                            .build();
+//
+//                    ISNav.getInstance().toCameraActivity(this, config, 123);
+
+                    takePhoto();
                 }
             }
         });
     }
+
+
+    /**
+     * 拍照获取
+     */
+    public void takePhoto() {
+        File imgFile = new File(imgPath);
+        if (!imgFile.getParentFile().exists()) {
+            imgFile.getParentFile().mkdirs();
+        }
+        Uri imgUri = null;
+
+        //        if (Build.VERSION.SDK_INT >= 24) {//这里用这种传统的方法无法调起相机
+        //            imgUri = FileProvider.getUriForFile(mActivity, AUTHORITIES, imgFile);
+        //        } else {
+        //            imgUri = Uri.fromFile(imgFile);
+        //        }
+        /*
+        * 1.现象
+            在项目中调用相机拍照和录像的时候，android4.x,Android5.x,Android6.x均没有问题,在Android7.x下面直接闪退
+           2.原因分析
+            Android升级到7.0后对权限又做了一个更新即不允许出现以file://的形式调用隐式APP，需要用共享文件的形式：content:// URI
+           3.解决方案
+            下面是打开系统相机的方法，做了android各个版本的兼容:
+        * */
+
+        if (Build.VERSION.SDK_INT < 24) {
+            // 从文件中创建uri
+            imgUri = Uri.fromFile(imgFile);
+        } else {
+            //兼容android7.0 使用共享文件的形式
+            ContentValues contentValues = new ContentValues(1);
+            contentValues.put(MediaStore.Images.Media.DATA, imgFile.getAbsolutePath());
+            imgUri = this.getApplication().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+        }
+
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+        this.startActivityForResult(intent, REQ_TAKE_PHOTO);
+    }
+
+
 
 
     /**
@@ -328,14 +436,32 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                         }
                     }
                 });
-    }
 
+
+//        Utils.log( "permission:"+ContextCompat.checkSelfPermission(AddSealSecStepActivity.this, android.Manifest.permission.CAMERA)+"");
+//        ActivityCompat.requestPermissions(AddSealSecStepActivity.this, new String[]{android.Manifest.permission.CAMERA}, 1);
+//
+//        if (Build.VERSION.SDK_INT > 22) {
+//            if (ContextCompat.checkSelfPermission(AddSealSecStepActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                //先判断有没有权限 ，没有就在这里进行权限的申请
+//                ActivityCompat.requestPermissions(AddSealSecStepActivity.this, new String[]{android.Manifest.permission.CAMERA}, 1);
+//
+//            } else {
+//                //说明已经获取到摄像头权限了 想干嘛干嘛
+//            }
+//        } else {
+//                //这个说明系统版本在6.0之下，不需要动态获取权限。
+//
+//        }
+
+
+    }
 
 
     /**
      * 添加公司
      */
-    private void addSeal(){
+    private void addSeal() {
 //        loadingView.show();
         AddSealData addSealData = new AddSealData();
         addSealData.setDataProtocolVersion("2");
@@ -353,30 +479,31 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 Utils.log("fail");
 
                 Looper.prepare();
-                showToast(e+"");
+                showToast(e + "");
                 Looper.loop();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                Utils.log("success:"+result);
+                Utils.log("success:" + result);
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}.getType());
-                if (responseInfo.getCode() == 0){
-                    if (responseInfo.getData()){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
 //                        loadingView.cancel();
                         finish();
                         Looper.prepare();
                         showToast("添加成功");
                         Looper.loop();
-                    }else {
+                    } else {
 //                        loadingView.cancel();
                         Looper.prepare();
                         showToast(responseInfo.getMessage());
                         Looper.loop();
                     }
-                }else {
+                } else {
 //                    loadingView.cancel();
                     Looper.prepare();
                     showToast(responseInfo.getMessage());

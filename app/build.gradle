@@ -216,4 +216,7 @@ dependencies {
     // 相册选择
     implementation 'org.devio.takephoto:takephoto_library:4.1.0'
 
+    // camera
+    implementation 'com.yuyh.imgsel:library:2.0.6'
+
 }
