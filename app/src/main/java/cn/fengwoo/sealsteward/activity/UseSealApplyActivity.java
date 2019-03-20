@@ -2,9 +2,12 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -26,6 +29,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.go_approval_tv)
     TextView go_approval_tv;
     private Intent intent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
                 intent = new Intent(UseSealApplyActivity.this,ApprovalConfirmActivity.class);
                 startActivity(intent);
                 break;
+
         }
     }
-
 }

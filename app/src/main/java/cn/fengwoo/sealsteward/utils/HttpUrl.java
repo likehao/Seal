@@ -124,6 +124,18 @@ public class HttpUrl {
      * delete seal
      */
     public static final String DELETE_SEAL = "/seal/deleteseal";
+    /**
+     * 添加用印申请
+     */
+    public static final String ADDUSESEAL = "/apply/adduseseal";
+    /**
+     * 审批列表
+     */
+    public static final String APPLYLIST = "/apply/applylist";
+    /**
+     * 申请列表（--我要盖章--）
+     */
+    public static final String USESEALAPPLYLIST = "/apply/usesealapplylist";
 
 
 }

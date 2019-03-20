@@ -1,42 +1,25 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.baidu.mapapi.SDKInitializer;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -71,14 +54,11 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.btn_next)
     Button btnNext;
     private String macString = "";
-
     private String departmentId;
     private String departmentName;
     private String sealName;
     private String sealNumber;
     private String useRange;
-
-
     private LoadingView loadingView;
 
     @Override
@@ -121,7 +101,7 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
         switch (view.getId()) {
             case R.id.rl_choose_department:
                 Intent intent = new Intent(this, OrganizationalManagementActivity.class);
-                startActivityForResult(intent,123);
+                startActivityForResult(intent, 123);
                 break;
             case R.id.btn_next:
                 sealName = etSealName.getText().toString().trim();
@@ -141,18 +121,19 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == 123){
-            departmentId = data.getExtras().getString("id");
-            departmentName = data.getExtras().getString("name");
-            Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
-            tvDepartment.setText(departmentName);
+        if (requestCode == 123 && resultCode == RESULT_OK) {
+            if (data != null) {
+                departmentId = data.getExtras().getString("id");
+                departmentName = data.getExtras().getString("name");
+                Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
+                tvDepartment.setText(departmentName);
+            }
         }
     }
 
 
-
     /**
-     * 发送请求刷新个人信息
+     * 发送添加的印章信息
      */
     private void checkSeal() {
         loadingView.show();
@@ -165,7 +146,7 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                 Utils.log(e.toString());
                 loadingView.cancel();
                 Looper.prepare();
-                Toast.makeText(AddSealActivity.this, e + "", Toast.LENGTH_SHORT).show();
+                showToast(e + "");
                 Looper.loop();
             }
 
@@ -177,7 +158,7 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String codeString = jsonObject.getString("code");
-                    String msgString = jsonObject.getString("message");
+                    String msg = jsonObject.getString("message");
                     if (codeString.equals("0")) {
                         Utils.log("success");
                         runOnUiThread(new Runnable() {
@@ -194,13 +175,10 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                                 finish();
                             }
                         });
-                    }else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(AddSealActivity.this, msgString, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    } else {
+                        Looper.prepare();
+                        showToast(msg);
+                        Looper.loop();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

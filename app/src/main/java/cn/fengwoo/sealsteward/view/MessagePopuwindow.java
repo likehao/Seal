@@ -30,7 +30,7 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //判断是首页还是记录详情进入
         if (code == 1){
-            mview = inflater.inflate(R.layout.message_popuwindowlayout,null);
+            mview = inflater.inflate(R.layout.message_popuwindowlayout,null);   //添加人员，添加印章
             initView();
         }else {
             mview = inflater.inflate(R.layout.see_record_popuwindow,null);

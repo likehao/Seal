@@ -10,8 +10,8 @@
     <include layout="@layout/head" />
 
     <ListView
-        android:layout_marginTop="60dp"
         android:id="@+id/id_tree"
+        android:layout_marginTop="60dp"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:divider="#aaa"

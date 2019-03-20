@@ -15,12 +15,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:layout_marginTop="10dp"
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/seal_name_rl"
                 style="@style/pressed_effect">
 
                 <TextView
@@ -32,10 +33,11 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/sealName_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/iv5"
+                    android:layout_toStartOf="@+id/iv5"
                     android:text="@string/please_select_seal" />
 
                 <ImageView
@@ -54,6 +56,7 @@
                 android:layout_marginStart="15dp" />
 
             <RelativeLayout
+                android:id="@+id/apply_time_rl"
                 style="@style/pressed_effect">
 
                 <TextView
@@ -64,12 +67,17 @@
                     android:text="@string/apply_time"
                     android:textColor="@color/black" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/apply_time_et"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/iv2"
-                    android:text="@string/please_input_time" />
+                    android:layout_toStartOf="@+id/iv2"
+                    android:background="@null"
+                    android:textSize="12sp"
+                    android:inputType="number"
+                    android:gravity="end"
+                    android:hint="@string/please_input_time" />
 
                 <ImageView
                     android:id="@+id/iv2"
@@ -89,6 +97,7 @@
                 android:background="@color/line" />
 
             <RelativeLayout
+                android:id="@+id/failTime_rl"
                 style="@style/pressed_effect">
 
                 <TextView
@@ -100,10 +109,11 @@
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/fail_time_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/iv3"
+                    android:layout_toStartOf="@+id/iv3"
                     android:text="@string/please_fail_time" />
 
                 <ImageView
@@ -176,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/iv4"
+                    android:layout_toStartOf="@+id/iv4"
                     android:text="@string/please_input_file_number" />
 
                 <ImageView
@@ -198,7 +208,8 @@
                 android:background="@color/line" />
 
             <RelativeLayout
-                style="@style/pressed_effect">
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -218,6 +229,7 @@
                 android:background="@color/background">
 
                 <EditText
+                    android:id="@+id/apply_cause_et"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -227,7 +239,8 @@
             </LinearLayout>
 
             <RelativeLayout
-                style="@style/pressed_effect">
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -240,6 +253,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/apply_sign_ll"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="15dp"
@@ -268,7 +282,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/iv7"
+                    android:layout_toStartOf="@+id/iv7"
                     android:text="@string/please_copy_people" />
 
                 <ImageView

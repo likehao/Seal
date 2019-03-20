@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,12 +31,13 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 组织管理
  */
 public class OrganizationalManagementActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = OrganizationalManagementActivity.class.getSimpleName();
@@ -108,9 +110,11 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Utils.log(result);
+                Log.e("TAG",result);
                 Gson gson = new Gson();
                 OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
-                Utils.log(organizationalStructureData.getData().get(0).getName());
+             //   Utils.log(organizationalStructureData.getData().get(0).getName());
+                assert organizationalStructureData != null;
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1 && dataBean.getType() != filterType2) {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType()));
@@ -132,7 +136,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         edit_tv.setVisibility(View.VISIBLE);
         edit_tv.setText("确定");
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("关于");
+        title_tv.setText("选择部门");
         set_back_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
     }
