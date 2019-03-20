@@ -103,8 +103,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         imageViews[4] = findViewById(R.id.application_iv);
         record_more_iv = findViewById(R.id.record_more_iv);
         message_more_iv = findViewById(R.id.message_more_iv);
-        popuwindow = new AddPopuwindow(MainActivity.this);
-        messagePopuwindow = new MessagePopuwindow(MainActivity.this,1);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
     }
@@ -162,6 +160,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.record_more_iv:
                 //盖章记录更多popuwindow
+                popuwindow = new AddPopuwindow(MainActivity.this);  //不能放到initview里初始化，会导致一开始进入屏幕灰暗透明度不为1
                 popuwindow.showPopuwindow(view);
                 //       popDialog();
                 break;
@@ -180,6 +179,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.add_ll:
                 //添加popuwindow
+                messagePopuwindow = new MessagePopuwindow(MainActivity.this,1);
                 messagePopuwindow.showPopuwindow(view);
                 break;
         }

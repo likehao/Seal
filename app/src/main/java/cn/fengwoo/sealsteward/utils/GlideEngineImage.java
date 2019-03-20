@@ -22,8 +22,8 @@ public class GlideEngineImage implements ImageEngine{
     public void loadThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView, Uri uri) {
 
         Glide.with(context)
+                .asBitmap()  // some .jpeg files are actually gif
                 .load(uri)
-              //  .asBitmap()  // some .jpeg files are actually gif
                 .placeholder(placeholder)   //这里可自己添加占位图
                 .override(resize, resize)
                 .centerCrop()
@@ -35,8 +35,8 @@ public class GlideEngineImage implements ImageEngine{
     public void loadGifThumbnail(Context context, int resize, Drawable placeholder, ImageView imageView,
                                  Uri uri) {
         Glide.with(context)
+                .asBitmap()
                 .load(uri)
-           //     .asBitmap()
                 .placeholder(placeholder)
                 .override(resize, resize)
                 .centerCrop()
@@ -57,8 +57,8 @@ public class GlideEngineImage implements ImageEngine{
     @Override
     public void loadGifImage(Context context, int resizeX, int resizeY, ImageView imageView, Uri uri) {
         Glide.with(context)
+                .asGif()
                 .load(uri)
-           //     .asGif()
                 .override(resizeX, resizeY)
                 .priority(Priority.HIGH)
                 .into(imageView);

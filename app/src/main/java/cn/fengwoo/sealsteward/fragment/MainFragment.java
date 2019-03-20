@@ -60,7 +60,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     String[] images= new String[] {"url","url"};
     String[] titles=new String[]{"我是广告，全场2折起","全场2折起"};
     //设置图片集合
-    private List<Bitmap> imageViews = new ArrayList<Bitmap>();
+    private List<String> imageViews = new ArrayList<String>();
     @BindView(R.id.banner)
     Banner banner;
     @BindView(R.id.sealDevice_rl)
@@ -125,17 +125,26 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     Log.e("ATG","获取广告图成功!!!!!!!!!!!!!!");
                     loadingView.cancel();
                     Bitmap bitmap = null;
+                    String imgName = null;
+                    int count = responseInfo.getData().size();   //banner图片总数
                     //设置图片集合
-                    for (int i = 0; i < responseInfo.getData().size(); i++){
-                      //  Picasso.with(getActivity()).load(responseInfo.getData().get(i).getImageFile()).into(banner);
-                        bitmap = HttpDownloader.readFile(responseInfo.getData().get(i).getImageFile());
-                        if (bitmap == null) {
-                            HttpDownloader.downLoadImg(getActivity(),8,responseInfo.getData().get(i).getImageFile());
-                        }
+                    for (int i = 0; i < count; i++) {
+                        imgName = responseInfo.getData().get(i).getImageFile();
+                        HttpDownloader.downLoadImg(getActivity(), 8, responseInfo.getData().get(i).getImageFile());
+                        bitmap = HttpDownloader.readFile(imgName);
+//                        if (bitmap == null) {
+//                            HttpDownloader.downLoadImg(getActivity(), 8, responseInfo.getData().get(i).getImageFile());
+//                        } else {
+//                            //设置图片加载器
+//                            banner.setImageLoader(new GlideImageLoader());
+//                            imageViews.add(bitmap);
+//                        }
+                        //设置图片加载器
+                        banner.setImageLoader(new GlideImageLoader());
+                        imageViews.add("file://"+"/sdcard/SealDownImage/" + imgName);
                     }
-                    //设置图片加载器
-                    banner.setImageLoader(new GlideImageLoader());
-                    imageViews.add(bitmap);
+
+                        Integer integer = imageViews.size();
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -147,7 +156,9 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 }else {
                     loadingView.cancel();
                     Log.e("ATG","获取广告图失败!!!!!!!!!!!!!!");
+                    Looper.prepare();
                     Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
+                    Looper.loop();
                 }
 
             }

@@ -267,7 +267,6 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     user = loginResponseInfo.getData();
                     CommonUtil.setUserData(LoginActivity.this, user);
 
-
                     // 本地存入权限
                     String targetPermissionJson = "";
                     if (user.getAdmin()) {

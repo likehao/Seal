@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ public class WaitApplyAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder viewHolder;

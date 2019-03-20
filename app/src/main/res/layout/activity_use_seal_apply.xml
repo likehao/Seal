@@ -100,12 +100,16 @@
                         android:text="@string/apply_time"
                         android:textColor="@color/black" />
 
-                    <TextView
+                    <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/iv2"
-                        android:text="@string/please_input_time" />
+                        android:layout_toStartOf="@+id/iv2"
+                        android:background="@null"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:layoutDirection="rtl"
+                        android:hint="@string/please_input_time" />
 
                     <ImageView
                         android:id="@+id/iv2"
@@ -232,7 +236,8 @@
                     android:background="@color/line" />
 
                 <RelativeLayout
-                    style="@style/pressed_effect">
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -261,7 +266,8 @@
                 </LinearLayout>
 
                 <RelativeLayout
-                    style="@style/pressed_effect">
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="wrap_content"

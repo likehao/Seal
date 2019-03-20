@@ -45,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/id_confirm"
-        android:layout_toRightOf="@id/id_treenode_icon"
+        android:layout_toStartOf="@id/id_confirm"
+        android:layout_toEndOf="@id/id_treenode_icon"
         android:textColor="@android:color/black"
         android:textSize="12sp" />
 

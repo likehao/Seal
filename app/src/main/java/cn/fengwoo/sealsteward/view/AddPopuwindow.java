@@ -31,7 +31,7 @@ public class AddPopuwindow extends PopupWindow {
     public AddPopuwindow(Activity context){
         final Activity activity = context;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mview = inflater.inflate(R.layout.popuwindow_dialog,null);
+        mview = inflater.inflate(R.layout.popuwindow_dialog,null);   //筛选，最新
         //设置选择的popuwindow的View
         this.setContentView(mview);
         //获取屏幕宽高度

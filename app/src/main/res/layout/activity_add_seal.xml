@@ -34,7 +34,6 @@
                     android:text="@string/seal_name"
                     android:textColor="@color/black" />
 
-
                 <EditText
                     android:id="@+id/et_seal_name"
                     android:layout_width="wrap_content"
@@ -43,6 +42,7 @@
                     android:layout_centerVertical="true"
                     android:background="@null"
                     android:hint="@string/please_input_seal_name"
+                    android:gravity="end"
                     android:textSize="12sp"
                     android:layout_marginEnd="30dp" />
 
@@ -77,9 +77,9 @@
                     android:background="@null"
                     android:hint="@string/please_input_seal_number"
                     android:textSize="12sp"
+                    android:gravity="end"
+                    android:inputType="number"
                     android:layout_marginEnd="30dp" />
-
-
 
             </RelativeLayout>
 
@@ -108,9 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="15dp"
-                    android:text="00" />
-
+                    android:layout_marginEnd="15dp" />
 
             </RelativeLayout>
 
@@ -133,7 +131,6 @@
                     android:text="@string/use_Range"
                     android:textColor="@color/black" />
 
-
                 <EditText
                     android:id="@+id/et_range"
                     android:layout_width="wrap_content"
@@ -143,9 +140,8 @@
                     android:background="@null"
                     android:hint="@string/please_input_use_Range"
                     android:textSize="12sp"
+                    android:gravity="end"
                     android:layout_marginEnd="30dp" />
-
-
 
             </RelativeLayout>
 
@@ -175,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="35dp"
+                    android:layout_marginEnd="30dp"
                     android:text="@string/select_belong_department" />
                 <View
                     style="@style/right_arrow" />

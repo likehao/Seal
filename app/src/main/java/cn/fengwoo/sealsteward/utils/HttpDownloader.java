@@ -106,7 +106,7 @@ public class HttpDownloader {
         try {
             String str = path + url;
 
-            fs = new FileInputStream("file://"+str);
+            fs = new FileInputStream("file://"+ path +str);
             Bitmap bitmap = BitmapFactory.decodeStream(fs);
             String bitmap1 = String.valueOf(fs);
             fs.close();

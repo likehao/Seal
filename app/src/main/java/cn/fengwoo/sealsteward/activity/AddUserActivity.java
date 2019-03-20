@@ -130,7 +130,6 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 if(permissionJson.contains(Constants.permission17)){
                 }
 
-
 //                intent = new Intent(this, SetPowerActivity.class);
 //                startActivity(intent);
 
@@ -141,7 +140,6 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     private void addUser() {
         loadingView.show();
         AddUserInfo addUserInfo = new AddUserInfo();
-
         addUserInfo.setOrgStructureId(departmentId);
         addUserInfo.setOrgStructureName(departmentName);
         addUserInfo.setMobilePhone(phone_number_et.getText().toString().replace(" ",""));
@@ -168,8 +166,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                     jsonObject = new JSONObject(result);
                     String state = jsonObject.getString("message");
                     if (state.equals("成功")) {
-
-
+                        loadingView.cancel();
                         String dataString = jsonObject.getString("data");
 
                         jsonObject2 = new JSONObject(dataString);
@@ -185,6 +182,11 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                                 finish();
                             }
                         });
+                    }else {
+                        loadingView.cancel();
+                        Looper.prepare();
+                        showToast(state);
+                        Looper.loop();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

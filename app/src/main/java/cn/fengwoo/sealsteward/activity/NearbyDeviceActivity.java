@@ -45,12 +45,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class NearbyDeviceActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    @BindView(R.id.scan_ll)
-    LinearLayout scan_ll;
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
-    @BindView(R.id.add_ll)
-    LinearLayout add_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.on_off_checkBox)
@@ -107,7 +103,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     }
     private void initView() {
-        scan_ll.setVisibility(View.GONE);
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("附近的设备");
     /*    switchButton = findViewById(R.id.switch_bt);
@@ -259,6 +254,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             intent = new Intent(this, AddSealActivity.class);
                             intent.putExtra("mac", macAddress);
                             startActivity(intent);
+                            finish();
                         },
                         throwable -> {
                             // Handle an error here.

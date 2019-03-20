@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -33,14 +34,17 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -324,7 +328,8 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 .choose(MimeType.ofImage())  //图片类型
                 .countable(true)    //选中后显示数字;false:选中后显示对号
                 .capture(true)  //是否提供拍照功能
-                .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))//存储到哪里
+                //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
+                .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))
                 .maxSelectable(1)   //可选最大数
                 .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
@@ -342,6 +347,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             //获取选择的文件返回的uri
+            assert data != null;
             List<Uri> mSelected = Matisse.obtainResult(data);
             //将uri转为file
             File fileByUri = FileUtil.getFileByUri(mSelected.get(0), this);
@@ -367,7 +373,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                             // TODO 压缩成功后调用，返回压缩后的图片文件
                             //上传图片
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            Utils.log(file.length() +"");
+                            Utils.log(file.length() + "");
                             hashMap.put("category", 1);
                             hashMap.put("file", file);
                             HttpUtil httpUtil = new HttpUtil(PersonCenterActivity.this);
@@ -395,15 +401,10 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                         Looper.loop();
                                     }
                                 }
-
                                 @Override
                                 public void onReqFailed(String errorMsg) {
-                                    Utils.log("onReqFailed");
-
-                                    Looper.prepare();
-                                    showToast(errorMsg);
-                                    Looper.loop();
                                     Log.e("TAG", "发送图片至服务器失败........");
+                                    showToast(errorMsg);
                                 }
                             });
                         }
@@ -448,8 +449,6 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 Log.e("ATG", "成功加载头像........");
                             }
                         });
-                    } else {
-                        showToast(responseInfo.getMessage());
                     }
                 } else {
                     showToast(responseInfo.getMessage());
@@ -463,6 +462,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
      * 选择地址
      */
     String address = null;
+
     private void selectAddress() {
         //Gson解析省市区数据
         initJsonData(PersonCenterActivity.this);
@@ -489,7 +489,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 HttpUtil.sendDataAsync(PersonCenterActivity.this, HttpUrl.UPDATEADDRESS, 3, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        Log.e("TAG",e+"");
+                        Log.e("TAG", e + "");
                     }
 
                     @Override
@@ -507,7 +507,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                     }
                                 });
                             }
-                        }else {
+                        } else {
                             Looper.prepare();
                             showToast(responseInfo.getMessage());
                             Looper.loop();
@@ -523,10 +523,10 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
                 .setContentTextSize(20)
                 .build();
-                if (options1Items.size() != 0) {
-                    pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器   添加数据
-                    pvOptions.show();
-                }
+        if (options1Items.size() != 0) {
+            pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器   添加数据
+            pvOptions.show();
+        }
     }
 
     /**
@@ -582,23 +582,25 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         }
 
     }
-        /**
-         * Gson解析
-         * @param result
-         * @return
-         */
-        public ArrayList<JsonBean> parseData(String result) {
-            ArrayList<JsonBean> detail = new ArrayList<>();
-            try {
-                JSONArray data = new JSONArray(result);
-                Gson gson = new Gson();
-                for (int i = 0; i < data.length(); i++) {
-                    JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
-                    detail.add(entity);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+    /**
+     * Gson解析
+     *
+     * @param result
+     * @return
+     */
+    public ArrayList<JsonBean> parseData(String result) {
+        ArrayList<JsonBean> detail = new ArrayList<>();
+        try {
+            JSONArray data = new JSONArray(result);
+            Gson gson = new Gson();
+            for (int i = 0; i < data.length(); i++) {
+                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
+                detail.add(entity);
             }
-            return detail;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return detail;
+    }
 }
