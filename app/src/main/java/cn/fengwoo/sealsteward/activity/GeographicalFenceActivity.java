@@ -63,7 +63,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("设置电子围栏");
+        title_tv.setText("设置地理围栏");
         initLocationOption();
     }
 
