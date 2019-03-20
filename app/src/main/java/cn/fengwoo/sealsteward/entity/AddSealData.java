@@ -16,6 +16,16 @@ public class AddSealData {
     private String sealNo;
     private String scope;
     private String orgStructrueId;
+    private String sealPrint;
+
+
+    public String getSealPrint() {
+        return sealPrint;
+    }
+
+    public void setSealPrint(String sealPrint) {
+        this.sealPrint = sealPrint;
+    }
 
     public String getDataProtocolVersion() {
         return dataProtocolVersion;

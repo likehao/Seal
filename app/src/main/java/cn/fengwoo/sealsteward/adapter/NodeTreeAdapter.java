@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.yuyh.library.imgsel.utils.LogUtils;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -203,7 +205,10 @@ public class NodeTreeAdapter extends BaseAdapter {
         holder.label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickItemListener.clicked(node.get_id(),node.get_type());
+                if (node.get_parent() != null) {
+                    Utils.log("*************************************************************************" + node.get_parent().get_label());
+                    clickItemListener.clicked(node.get_id(),node.get_type(), node.get_parent().get_label());
+                }
             }
         });
 
@@ -220,7 +225,7 @@ public class NodeTreeAdapter extends BaseAdapter {
 
 
     public interface ClickItemListener{
-        void clicked(String id,int typeInt);
+        void clicked(String id,int typeInt,String parentName);
     }
 
     public interface CheckBoxCheckedlistener{

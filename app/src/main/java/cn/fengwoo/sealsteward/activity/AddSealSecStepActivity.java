@@ -98,6 +98,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
     private String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpeg";
 
+    private String sealPringString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +216,10 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     Log.e("ATG", "发送图片至服务器成功..........");
                     Utils.log(responseInfo.getCode() + "");
+
+                    // 保存 印模 名字
+                    sealPringString = responseInfo.getData().getFileName();
+
                     addSeal();
                     runOnUiThread(new Runnable() {
                         @Override
@@ -222,7 +227,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                             showToast(responseInfo.getMessage());
                         }
                     });
-
                 } else {
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
@@ -459,7 +463,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
 
     /**
-     * 添加公司
+     * 添加seal
      */
     private void addSeal() {
 //        loadingView.show();
@@ -471,6 +475,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         addSealData.setOrgStructrueId(orgStructrueIdString);
         addSealData.setScope(scopeString);
         addSealData.setSealNo(sealNoString);
+        addSealData.setSealPrint(sealPringString);
 
         HttpUtil.sendDataAsync(AddSealSecStepActivity.this, HttpUrl.ADD_SEAL, 2, null, addSealData, new Callback() {
             @Override

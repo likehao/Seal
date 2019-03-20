@@ -1,8 +1,6 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -22,7 +20,6 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
-import cn.fengwoo.sealsteward.fragment.UserOrganizationalFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -37,8 +34,8 @@ import okhttp3.Response;
 /**
  * 关于
  */
-public class OrganizationalManagementActivity extends BaseActivity implements View.OnClickListener {
-    private static final String TAG = OrganizationalManagementActivity.class.getSimpleName();
+public class SelectSealActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = SelectSealActivity.class.getSimpleName();
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.edit_tv)
@@ -60,7 +57,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         ButterKnife.bind(this);
         initView();
         mListView = findViewById(R.id.id_tree);
-        mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 2);
+        mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 4);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
             public void clicked(String id, int type,String parentName) {
@@ -112,7 +109,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
                 OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
                 Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
-                    if (dataBean.getType() != filterType1 && dataBean.getType() != filterType2) {
+                    if (dataBean.getType() != filterType1 ) {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType()));
                     }
                 }
@@ -132,7 +129,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         edit_tv.setVisibility(View.VISIBLE);
         edit_tv.setText("确定");
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("选部门");
+        title_tv.setText("选择印章");
         set_back_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
     }

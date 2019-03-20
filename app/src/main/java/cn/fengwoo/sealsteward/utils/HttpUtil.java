@@ -55,6 +55,7 @@ public class HttpUtil {
     private Handler okHttpHandler;
     private LoginData loginData = new LoginData();
 
+
     /**
      * 初始化RequestManager
      */
@@ -74,7 +75,9 @@ public class HttpUtil {
      *
      *  type 1 get
      *  type 2 post
-     *  type 4 delete ;
+     *  type 3 patch
+     *  type 4 delete
+     *  type 5 put
      *
      * @param url      地址
      * @param type     1,get 2,post 3,patch ,4delete
@@ -93,6 +96,7 @@ public class HttpUtil {
         String requestUrl = null;
         Request request = null;
         RequestBody formBody = null;
+        RequestBody body;
         try {
             StringBuilder tempParams = new StringBuilder();
             int pos = 0;
@@ -106,7 +110,7 @@ public class HttpUtil {
                     tempParams.append(String.format("%s=%s", key, URLEncoder.encode(params.get(key), "utf-8")));
                     pos++;
                 }
-                if (type == 3) {  //拼接patch数据
+                if (type == 3 ) {  //拼接patch数据
                     FormBody.Builder builder = new FormBody.Builder();
                     for (String key : params.keySet()) {
                         builder.add(key, params.get(key));
@@ -118,11 +122,15 @@ public class HttpUtil {
             if (data != null) {
                 Gson gson = new Gson();
                 String json = gson.toJson(data);
-                RequestBody body = RequestBody.create(MEDIA_TYPE_JSON, json);
+                body = RequestBody.create(MEDIA_TYPE_JSON, json);
                 requestUrl = String.format("%s/%s", BASE_URL, url);
-                //放入头信息
-                request = addHeaders(activity).url(requestUrl).post(body).build();
 
+                if (type == 5) {
+                    request = addHeaders(activity).url(requestUrl).put(body).build();
+                } else {
+                    //放入头信息
+                    request = addHeaders(activity).url(requestUrl).post(body).build();
+                }
             } else {
                 if (type == 1) {
                     requestUrl = String.format("%s/%s?%s", BASE_URL, url, tempParams.toString());
@@ -132,6 +140,13 @@ public class HttpUtil {
                     if (formBody != null) {
                         request = addHeaders(activity).url(requestUrl).patch(formBody).build();
                     }
+                }else if(type ==5){
+                    Gson gson = new Gson();
+                    String json = gson.toJson(data);
+                    body = RequestBody.create(MEDIA_TYPE_JSON, json);
+                    requestUrl = String.format("%s/%s", BASE_URL, url);
+                    requestUrl = String.format("%s/%s?%s", BASE_URL, url, tempParams.toString());
+                    request = addHeaders(activity).url(requestUrl).put(body).build();
                 } else {
                     requestUrl = String.format("%s/%s?%s", BASE_URL, url, tempParams.toString());
                     request = addHeaders(activity).url(requestUrl).delete().build();

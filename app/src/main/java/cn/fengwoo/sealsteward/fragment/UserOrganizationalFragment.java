@@ -69,7 +69,7 @@ public class UserOrganizationalFragment extends Fragment {
         mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList,0,0);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
-            public void clicked(String id,int type) {
+            public void clicked(String id,int type,String parentName) {
                 Utils.log("id:" + id);
                 if (type == 3) {
                     selectDialog(id);

@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.SealInfoActivity;
 import cn.fengwoo.sealsteward.activity.UserInfoActivity;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
@@ -50,6 +51,7 @@ public class SealOrganizationalFragment extends Fragment {
     private int filterType;
 
     private String idString;
+    private String departmentName;
 
     @Nullable
     @Override
@@ -60,11 +62,12 @@ public class SealOrganizationalFragment extends Fragment {
         mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList,0,0);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
-            public void clicked(String id,int type) {
+            public void clicked(String id,int type,String parentName) {
                 Utils.log("id:" + id);
                 if (type == 4) {
                     idString = id;
                     selectDialog(id);
+                    departmentName = parentName;
                 }
             }
         });
@@ -175,8 +178,12 @@ public class SealOrganizationalFragment extends Fragment {
 //                    loadingView.show();
 //                    deleteDialog(); //提示删除
 
-                    Intent intent = new Intent(getActivity(), UserInfoActivity.class);
-                    intent.putExtra("uid", uid);
+                    Intent intent = new Intent(getActivity(), SealInfoActivity.class);
+
+                    Utils.log("sealID:" + uid);
+
+                    intent.putExtra("departmentName", departmentName);
+                    intent.putExtra("sealID", uid);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }

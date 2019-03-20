@@ -86,15 +86,15 @@ public class HttpUrl {
     /**
      * 组织架构
      */
-    public static final String  ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
+    public static final String ORGANIZATIONAL_STRUCTURE = "/company/companyorgstr";
     /**
      * 建议
      */
-    public static final String  SUGGESTION = "/user/feedback";
+    public static final String SUGGESTION = "/user/feedback";
     /**
      * 修改密码
      */
-    public static final String  UPDATEPASSWORD = "/user/updatepassword";
+    public static final String UPDATEPASSWORD = "/user/updatepassword";
 
     /**
      * 用户详情
@@ -124,6 +124,17 @@ public class HttpUrl {
      * delete seal
      */
     public static final String DELETE_SEAL = "/seal/deleteseal";
+
+    /**
+     * seal 信息
+     */
+    public static final String SEAL_INFO = "/seal/sealinfo";
+
+
+    /**
+     * seal 更新信息
+     */
+    public static final String SEAL_UPDATE_INFO = "/seal/updateseal";
 
 
 }
