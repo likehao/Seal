@@ -3,13 +3,17 @@ package cn.fengwoo.sealsteward.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
-import android.provider.Settings;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -18,11 +22,15 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.CircleOptions;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -30,15 +38,29 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.entity.UpdateEnclosureData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 地理围栏
  */
-public class GeographicalFenceActivity extends BaseActivity implements View.OnClickListener{
+public class GeographicalFenceActivity extends BaseActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     @BindView(R.id.mapView)
     MapView mapView;
@@ -46,11 +68,33 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
     LinearLayout set_back_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
+
+    @BindView(R.id.et_address)
+    EditText mEtAddress;
+    @BindView(R.id.widthSeekBar)
+    SeekBar mWidthSeekBar;
+
+    @BindView(R.id.tv_radius)
+    TextView tv_radius;
+    @BindView(R.id.tv_cancel)
+    TextView tvCancel;
+    @BindView(R.id.tv_save)
+    TextView tvSave;
+
     private Intent intent;
     private LocationClient locationClient = null;
     private String locationAddress; //定位地址
     private BaiduMap baiduMap = null;
-    private Double latitude,longitude;
+    private Double latitude, longitude;
+
+    private String currentAddr;
+    private String selectAddress;
+    private LatLng selectPoint;
+    private int radioInt = 50;
+    private String scopeString, sealIdString,longitudeString,latitudeString,addressString;
+    private OnGetGeoCoderResultListener listener;
+
+    private LatLng latLng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,23 +102,72 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_geographical_fence);
         ButterKnife.bind(this);
+        initData();
         initView();
+
     }
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
+        //初始化地图
+        baiduMap = mapView.getMap();
+
         title_tv.setText("设置地理围栏");
         initLocationOption();
+        mWidthSeekBar.setOnSeekBarChangeListener(this);
+
+
+
+
+        baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+            public void onMapClick(LatLng point) {
+                selectPoint = point;
+                baiduMap.clear();
+                // 添加圆
+                OverlayOptions ooCircle = new CircleOptions().fillColor(0xAAFFFF00)
+                        .center(point).stroke(new Stroke(5, 0xAA00FF00))
+                        .radius(radioInt);
+                baiduMap.addOverlay(ooCircle);
+                LatLng llA = point;
+                getAddress(point.latitude, point.longitude);
+
+            }
+            public boolean onMapPoiClick(MapPoi poi) {
+                return false;
+            }
+        });
+
+         latLng = new LatLng(Double.parseDouble(latitudeString), Double.parseDouble(longitudeString));
+
+        OverlayOptions ooCircle1 = new CircleOptions().fillColor(0xAAFFFF00)
+                .center(latLng).stroke(new Stroke(5, 0xAA00FF00))
+                .radius(Integer.parseInt(scopeString));
+        baiduMap.addOverlay(ooCircle1);
+
+    }
+
+    private void initData() {
+        mWidthSeekBar.setProgress(50);
+        scopeString = getIntent().getStringExtra("scope");
+        sealIdString = getIntent().getStringExtra("sealId");
+
+        longitudeString = getIntent().getStringExtra("longitude");
+        latitudeString = getIntent().getStringExtra("latitude");
+        addressString = getIntent().getStringExtra("address");
+        if (addressString.length() > 1) {
+            currentAddr = addressString;
+        }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.set_back_ll:
                 finish();
                 break;
         }
     }
+
     /**
      * 初始化定位参数配置
      */
@@ -144,8 +237,17 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         locationOption.setOpenAutoNotifyMode(3000, 1, LocationClientOption.LOC_SENSITIVITY_HIGHT);
 
         locationClient.setLocOption(locationOption);
-        //开始定位
-        locationClient.start();
+
+        if (addressString.length() > 1) {
+            MapStatus.Builder builder = new MapStatus.Builder();
+            LatLng latLng = new LatLng(Double.parseDouble(latitudeString), Double.parseDouble(longitudeString));
+            builder.target(latLng).zoom(18.0f);
+            baiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+        } else {
+            //开始定位
+            locationClient.start();
+        }
+
     }
 
     /**
@@ -155,6 +257,9 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
 
+            currentAddr = bdLocation.getAddrStr();
+            Utils.log(currentAddr);
+
             //获取定位类型、定位错误返回码
             int errorCode = bdLocation.getLocType();
             if (errorCode == BDLocation.TypeGpsLocation) {
@@ -162,7 +267,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                 showToast(bdLocation.getAddrStr());
             } else if (errorCode == BDLocation.TypeNetWorkLocation) {
                 // 网络定位结果
-                Log.i("TAG","网络定位成功!!!!!!!!!!!!!!!!!");
+                Log.i("TAG", "网络定位成功!!!!!!!!!!!!!!!!!");
 
             } else if (errorCode == BDLocation.TypeOffLineLocation) {
                 // 离线定位结果
@@ -180,7 +285,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
             //获取经纬度信息
             latitude = bdLocation.getLatitude();
             longitude = bdLocation.getLongitude();
-            getAddress(latitude,longitude);
+            getAddress(latitude, longitude);
         }
 
         /**
@@ -238,13 +343,14 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
 
     /**
      * 根据经纬度反编译定位更精准
+     *
      * @param latitude
      * @param longitude
      */
-    public void getAddress(final double latitude, final double longitude){
+    public void getAddress(final double latitude, final double longitude) {
         GeoCoder geoCoder = GeoCoder.newInstance();
-        final com.baidu.mapapi.model.LatLng latLng = new com.baidu.mapapi.model.LatLng(latitude,longitude);
-        OnGetGeoCoderResultListener listener = new OnGetGeoCoderResultListener() {
+        final LatLng latLng = new LatLng(latitude, longitude);
+         listener = new OnGetGeoCoderResultListener() {
             @Override
             public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
 
@@ -252,18 +358,18 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
 
             @Override
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
-                if (reverseGeoCodeResult == null || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR){
+                if (reverseGeoCodeResult == null || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
                     //没有检索到结果
-                    Toast.makeText(GeographicalFenceActivity.this,"定位失败",Toast.LENGTH_LONG).show();
+                    Toast.makeText(GeographicalFenceActivity.this, "定位失败", Toast.LENGTH_LONG).show();
                     return;
                 }
+                currentAddr = reverseGeoCodeResult.getAddress();
                 locationAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
-                if (locationAddress != null && !"".equals(locationAddress) && !"null".equals(locationAddress)){
+                if (locationAddress != null && !"".equals(locationAddress) && !"null".equals(locationAddress)) {
 
-                    //初始化地图
-                    baiduMap = mapView.getMap();
+
                     //设定中心坐标
-                    LatLng latLng = new LatLng(latitude,longitude);
+                    LatLng latLng = new LatLng(latitude, longitude);
                     //地图状态
                     MapStatus mapStatus = new MapStatus.Builder()
                             .target(latLng)
@@ -278,12 +384,15 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                     //创建标记marker
                     MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(bitmapDescriptor);
                     //添加marker到地图
-                    baiduMap.addOverlay(markerOptions);
+//                    baiduMap.addOverlay(markerOptions);
 
+                    mEtAddress.setText(currentAddr);
+
+                    Utils.log("currentAddr" + currentAddr);
                  /*   //关闭定位
                     locationClient.stop();
                     locationClient.unRegisterLocationListener(locationListener);*/
-                }else {
+                } else {
                     showToast("获取定位地址失败");
                 }
             }
@@ -292,18 +401,21 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
         geoCoder.destroy();
     }
+
     @Override
     protected void onResume() {
         //在activity执行onResume时必须调用mMapView. onResume ()
         mapView.onResume();
         super.onResume();
     }
+
     @Override
     protected void onPause() {
         //在activity执行onPause时必须调用mMapView. onPause ()
         mapView.onPause();
         super.onPause();
     }
+
     @Override
     protected void onDestroy() {
         //在activity执行onDestroy时必须调用mMapView.onDestroy()
@@ -311,4 +423,99 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         super.onDestroy();
     }
 
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        radioInt = progress;
+        tv_radius.setText(progress + "m");
+
+        // init
+        baiduMap.clear();
+
+        if(selectPoint == null){
+            selectPoint = latLng;
+        }
+
+        // 添加圆
+        OverlayOptions ooCircle = new CircleOptions().fillColor(0xAAFFFF00)
+                .center(selectPoint).stroke(new Stroke(5, 0xAA00FF00))
+                .radius(progress);
+
+
+        baiduMap.addOverlay(ooCircle);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+
+    private void updateEnclosure() {
+        Utils.log("updateEnclosure");
+        showLoadingView();
+        UpdateEnclosureData updateEnclosureData = new UpdateEnclosureData();
+
+        updateEnclosureData.setAddress(currentAddr);
+        updateEnclosureData.setEnableFlag(true);
+        updateEnclosureData.setLatitude(selectPoint.latitude);
+        updateEnclosureData.setLongitude(selectPoint.longitude);
+        updateEnclosureData.setScope(String.valueOf(radioInt));
+        updateEnclosureData.setSealId(sealIdString);
+
+
+        HttpUtil.sendDataAsync(GeographicalFenceActivity.this, HttpUrl.SEAL_UPDATE_ENCLOSURE, 5, null, updateEnclosureData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Looper.prepare();
+                cancelLoadingView();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log("updateEnclosure:" + result);
+
+                JSONObject jsonObject = null;
+                JSONObject jsonObject2 = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String state = jsonObject.getString("message");
+                    if (state.equals("成功")) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cancelLoadingView();
+                                finish();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    @OnClick({R.id.tv_cancel, R.id.tv_save,R.id.set_back_ll})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_cancel:
+                finish();
+                break;
+            case R.id.tv_save:
+                updateEnclosure();
+                break;
+            case R.id.set_back_ll:
+                finish();
+                break;
+        }
+    }
 }

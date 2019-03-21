@@ -219,6 +219,12 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.rl_set_limit: // 地理围栏
                 if (sbLimit.isChecked()) {
                     intent = new Intent(this, GeographicalFenceActivity.class);
+                    intent.putExtra("sealId", responseInfo.getData().getId());
+                    intent.putExtra("scope", responseInfo.getData().getSealEnclosure().getScope()+"");
+
+                    intent.putExtra("longitude", responseInfo.getData().getSealEnclosure().getLongitude()+"");
+                    intent.putExtra("latitude", responseInfo.getData().getSealEnclosure().getLatitude()+"");
+                    intent.putExtra("address", responseInfo.getData().getSealEnclosure().getAddress());
                     startActivity(intent);
                 }
 

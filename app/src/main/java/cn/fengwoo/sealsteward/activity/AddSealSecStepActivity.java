@@ -351,7 +351,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 if (position == 0) {
                     // 从相册选
                     takePhoto.onPickFromGallery();
+                    optionBottomDialog.dismiss();
                 } else if (position == 1) {
+
 //                    takePhoto.onPickFromCapture(imageUri);
 
 //                    ISCameraConfig config = new ISCameraConfig.Builder()
@@ -360,7 +362,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 //                            .build();
 //
 //                    ISNav.getInstance().toCameraActivity(this, config, 123);
-
+                    optionBottomDialog.dismiss();
                     takePhoto();
                 }
             }

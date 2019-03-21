@@ -3,21 +3,22 @@ package cn.fengwoo.sealsteward.entity;
 import java.util.List;
 
 public class SealInfoData {
+
     /**
      * id : 4c1f302ba6234a6bb86c2efcf2cd66d9
      * mac : 00:15:84:00:01:67
-     * name : dhhj
+     * name : 一23
      * sealNo : 1233
-     * scope : cghh
-     * sealPrint : null
+     * scope : 455
+     * sealPrint : df57e850cf52432d8f22555d1bceabe7.jpg
      * serviceTime : 1555579046000
      * serviceType : 1
      * dataProtocolVersion : 2
      * orgStructrueId : 3030397b3e084fee9767654e4f477ccb
      * crossDepartmentApply : true
-     * enableEnclosure : false
-     * sealEnclosure : null
-     * sealApproveFlowList : [{"id":"d38dfc3623b14dc7b0206cd619261bb7","sealId":"4c1f302ba6234a6bb86c2efcf2cd66d9","approveUser":"78c396f1aed245ec9dae37f5fd9648df","approveUserName":"13480635240","approveUserPhone":"13480635240","orgStructureName":"公章管理处","approveType":0,"approveLevel":3}]
+     * enableEnclosure : true
+     * sealEnclosure : {"id":"53d3365047264461845512af33e50f90","sealId":"4c1f302ba6234a6bb86c2efcf2cd66d9","longitude":114.11955517277585,"latitude":22.66782909090512,"scope":455,"address":"asdfsd","enableFlag":true}
+     * sealApproveFlowList : [{"id":"43cdeef2b274455ea0e03c78259a575b","sealId":"4c1f302ba6234a6bb86c2efcf2cd66d9","approveUser":"78c396f1aed245ec9dae37f5fd9648df","approveUserName":"13480635240","approveUserPhone":"13480635240","orgStructureName":"公章管理处","approveType":0,"approveLevel":3}]
      */
 
     private String id;
@@ -32,7 +33,7 @@ public class SealInfoData {
     private String orgStructrueId;
     private boolean crossDepartmentApply;
     private boolean enableEnclosure;
-    private Object sealEnclosure;
+    private SealEnclosureBean sealEnclosure;
     private List<SealApproveFlowListBean> sealApproveFlowList;
 
     public String getId() {
@@ -131,11 +132,11 @@ public class SealInfoData {
         this.enableEnclosure = enableEnclosure;
     }
 
-    public Object getSealEnclosure() {
+    public SealEnclosureBean getSealEnclosure() {
         return sealEnclosure;
     }
 
-    public void setSealEnclosure(Object sealEnclosure) {
+    public void setSealEnclosure(SealEnclosureBean sealEnclosure) {
         this.sealEnclosure = sealEnclosure;
     }
 
@@ -147,9 +148,85 @@ public class SealInfoData {
         this.sealApproveFlowList = sealApproveFlowList;
     }
 
+    public static class SealEnclosureBean {
+        /**
+         * id : 53d3365047264461845512af33e50f90
+         * sealId : 4c1f302ba6234a6bb86c2efcf2cd66d9
+         * longitude : 114.11955517277585
+         * latitude : 22.66782909090512
+         * scope : 455
+         * address : asdfsd
+         * enableFlag : true
+         */
+
+        private String id;
+        private String sealId;
+        private double longitude;
+        private double latitude;
+        private int scope;
+        private String address;
+        private boolean enableFlag;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getSealId() {
+            return sealId;
+        }
+
+        public void setSealId(String sealId) {
+            this.sealId = sealId;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
+        public int getScope() {
+            return scope;
+        }
+
+        public void setScope(int scope) {
+            this.scope = scope;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public boolean isEnableFlag() {
+            return enableFlag;
+        }
+
+        public void setEnableFlag(boolean enableFlag) {
+            this.enableFlag = enableFlag;
+        }
+    }
+
     public static class SealApproveFlowListBean {
         /**
-         * id : d38dfc3623b14dc7b0206cd619261bb7
+         * id : 43cdeef2b274455ea0e03c78259a575b
          * sealId : 4c1f302ba6234a6bb86c2efcf2cd66d9
          * approveUser : 78c396f1aed245ec9dae37f5fd9648df
          * approveUserName : 13480635240

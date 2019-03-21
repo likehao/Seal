@@ -148,5 +148,10 @@ public class HttpUrl {
      */
     public static final String SEAL_UPDATE_INFO = "/seal/updateseal";
 
+  /**
+     * seal 更新地理围栏信息
+     */
+    public static final String SEAL_UPDATE_ENCLOSURE = "/seal/updateenclosure";
+
 
 }
