@@ -186,7 +186,8 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
 //                bundle.putSerializable("map", myMap);
 //                intent.putExtras(bundle);
 
-
+                intent.putExtra("id", m_id);
+                intent.putExtra("name", m_name);
                 setResult(RESULT_OK,intent);
                 finish();
                 break;
