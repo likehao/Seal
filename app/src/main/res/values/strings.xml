@@ -172,7 +172,7 @@
     <string name="not_connect_seal">暂未连接印章</string>
     <string name="bluetooth">蓝牙</string>
     <string name="copyright">版权所有</string>
-    <string name="seal_device">印章设备</string>
+    <string name="seal_device">附近设备</string>
     <string name="residual_electricity">剩余电量</string>
     <string name="start_time">启动次数</string>
     <string name="finish_time">已盖次数</string>

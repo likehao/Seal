@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,17 +20,21 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.polidea.rxandroidble2.RxBleClient;
+import com.polidea.rxandroidble2.RxBleDevice;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.squareup.picasso.Picasso;
+import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -44,10 +49,12 @@ import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.entity.BannerData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.GlideImageLoader;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -172,7 +179,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 intent.putExtra("isAddNewSeal", false);
 
-                startActivity(intent);
+                startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
                 break;
             case R.id.needSeal_rl:
                 intent = new Intent(getActivity(), ApplyCauseActivity.class);
@@ -205,4 +212,94 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         banner.stopAutoPlay();
     }
 
+    @SuppressLint("CheckResult")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case Constants.TO_NEARBY_DEVICE:
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
+                    // 三期
+                    // 握手
+
+
+
+
+                    RxBleClient rxBleClient = RxBleClient.create(getActivity());
+                    RxBleDevice device = rxBleClient.getBleDevice(EasySP.init(getActivity()).getString("mac"));
+
+
+
+
+                    device.establishConnection(false)
+                            .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
+                            .doOnNext(notificationObservable -> {
+                                // Notification has been set up
+                                Utils.log( "*********************" );
+                            })
+                            .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
+                            .subscribe(
+                                    bytes -> {
+                                        // Given characteristic has been changes, here is the value.
+                                        Utils.log(bytes.length +" : " + Utils.bytesToHexString(bytes));
+                                    },
+                                    throwable -> {
+                                        // Handle an error here.
+                                    }
+                            );
+
+
+                    device.establishConnection(false)
+                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
+                            .subscribe(
+                                    characteristicValue -> {
+                                        // Characteristic value confirmed.
+                                        Utils.log(characteristicValue.length +" : " + Utils.bytesToHexString(characteristicValue));
+                                    },
+                                    throwable -> {
+                                        // Handle an error here.
+                                    }
+                            );
+
+
+//                    device.establishConnection(false)
+//                            .flatMapSingle(rxBleConnection -> rxBleConnection.readCharacteristic(Constants.WRITE_UUID)
+//                                    .doOnNext(bytes -> {
+//                                        // Process read data.
+//                                    })
+//                                    .flatMap(bytes -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
+//                            )
+//                            .subscribe(
+//                                    writeBytes -> {
+//                                        // Written data.
+//                                    },
+//                                    throwable -> {
+//                                        // Handle an error here.
+//                                    }
+//                            );
+
+                    // 获取电量
+
+
+//                    device.establishConnection(false)
+//                            .flatMapSingle(rxBleConnection -> rxBleConnection.readCharacteristic(Constants.))
+//                            .subscribe(
+//                                    characteristicValue -> {
+//                                        // Read characteristic value.
+//                                    },
+//                                    throwable -> {
+//                                        // Handle an error here.
+//                                    }
+//                            );
+
+
+                } else {
+
+                }
+
+
+
+                break;
+        }
+    }
 }

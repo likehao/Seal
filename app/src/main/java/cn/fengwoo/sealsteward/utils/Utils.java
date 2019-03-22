@@ -12,6 +12,7 @@ import com.orhanobut.logger.Logger;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -76,4 +77,38 @@ public class Utils {
         return arrayList.size();
     }
 
+
+    public static byte[] createShakeHandsData() {
+        byte[] targetBytes = new byte[10];
+        Calendar now = Calendar.getInstance();
+        targetBytes[0] = (byte) 0xFF;
+        targetBytes[1] = (byte) 6;
+        targetBytes[2] = (byte) 0xA0;
+        targetBytes[3] = (byte)(now.get(Calendar.YEAR)-2000);
+        targetBytes[4] = (byte) (now.get(Calendar.MONTH) + 1);
+        targetBytes[5] = (byte) (now.get(Calendar.DAY_OF_MONTH));
+        targetBytes[6] = (byte) (now.get(Calendar.HOUR_OF_DAY));
+        targetBytes[7] = (byte) (now.get(Calendar.MINUTE));
+        targetBytes[8] = (byte) (now.get(Calendar.SECOND));
+        targetBytes[9] = (byte) (targetBytes[0] + targetBytes[1]  + targetBytes[2] + targetBytes[3] + targetBytes[4] + targetBytes[5] + targetBytes[6] + targetBytes[7] + targetBytes[8]);
+        return targetBytes;
+    }
+
+
+
+    /**
+     * byte转字符串
+     */
+    public static String bytesToHexString(byte[] bytes) {
+        String str = "";
+        for (int i = 0; i < bytes.length; i++) {
+            String hex = Integer.toHexString(bytes[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            str += hex.toUpperCase()+" ";
+        }
+
+        return (str);
+    }
 }

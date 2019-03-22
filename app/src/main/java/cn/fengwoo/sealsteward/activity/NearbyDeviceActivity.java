@@ -31,6 +31,7 @@ import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
 import com.squareup.picasso.Picasso;
+import com.white.easysp.EasySP;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +47,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.SealAdapter;
 import cn.fengwoo.sealsteward.database.SealItemBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.SealData;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -93,6 +95,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private Disposable scanSubscription;
     private Disposable disposable;
     private boolean isAddNewSeal;
+
+    private ResponseInfo<List<SealData>> responseInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +115,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         initData();
         setListener();
-        scanBle();
+//        scanBle();
     }
 
     private void getSealList() {
@@ -129,19 +134,18 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
                 loadingView.cancel();
                 String result = response.body().string();
-                Utils.log("getSealList"+result);
+                Utils.log("getSealList" + result);
                 Gson gson = new Gson();
-                final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<SealData>>>() {
                 }.getType());
                 try {
                     JSONObject object = new JSONObject(result);
                     if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                        Log.e("TAG", "获取个人信息数据成功........");
                         //更新
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
+                                scanBle();
                             }
                         });
                         loadingView.cancel();
@@ -165,9 +169,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     }
 
-    private void scanBle(){
+    private void scanBle() {
         // ble 设备扫描
-         scanSubscription = rxBleClient.scanBleDevices(
+        scanSubscription = rxBleClient.scanBleDevices(
                 new ScanSettings.Builder()
                         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -181,6 +185,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 );
 
     }
+
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("附近的设备");
@@ -277,11 +282,21 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     //扫描到蓝牙添加到列表中
     private void addScanResult(ScanResult scanResult) {
         //蓝牙设备名字和Mac地址
-        String deviceName =  scanResult.getBleDevice().getName();
-        String deviceMac =  scanResult.getBleDevice().getMacAddress();
+        String deviceName = scanResult.getBleDevice().getName();
+        String deviceMac = scanResult.getBleDevice().getMacAddress();
         //过滤蓝牙
-        if (deviceName != null && (deviceName.equals("BLE-baihe")||deviceName.contains("BHQKL"))) {
-            String itemName = deviceName + "->" + deviceMac;
+        if (deviceName != null && (deviceName.equals("BLE-baihe") || deviceName.contains("BHQKL"))) {
+            String itemName = "";
+            if (!isAddNewSeal) {
+                // 如果不是增加新设备的情况，如果seal list里存在这个seal，替换掉名字
+                if (hasTheSeal(deviceMac)) {
+                    itemName = getNameFromList(deviceMac);
+                } else {
+                    itemName = deviceName + "->" + deviceMac;
+                }
+            } else {
+                itemName = deviceName + "->" + deviceMac;
+            }
             if (!arrayList.contains(itemName)) {
                 arrayList.add(itemName);
                 scanResultsList.add(scanResult);
@@ -290,19 +305,55 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    //扫描到蓝牙添加到列表中
-    private void addBluetooth(BluetoothDevice device) {
-        //蓝牙设备名字和Mac地址
-        String deviceName = device.getName();
-        String deviceMac = device.getAddress();
-        //过滤蓝牙
-        if (deviceName != null && deviceName.equals("BLE-baihe")) {
-            String itemName = deviceName + "->" + deviceMac;
-            if (!arrayList.contains(itemName)) {
-                arrayList.add(itemName);
-                arrayAdapter.notifyDataSetChanged();
+    private boolean hasTheSeal(String thisMac) {
+        boolean hasTheSealTag = false;
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(thisMac)) {
+                hasTheSealTag = true;
             }
         }
+        return hasTheSealTag;
+    }
+
+    private String getNameFromList(String thisMac) {
+        String name = "";
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(thisMac)) {
+                name = sealData.getName();
+            }
+        }
+        return name;
+    }
+
+
+    //扫描到蓝牙添加到列表中
+    private void addBluetooth(BluetoothDevice device) {
+//        //蓝牙设备名字和Mac地址
+//        String deviceName = device.getName();
+//        String deviceMac = device.getAddress();
+//        //过滤蓝牙
+//        if (deviceName != null && deviceName.equals("BLE-baihe")) {
+//            String itemName = "";
+//            if (!isAddNewSeal) {
+//                // 如果不是增加新设备的情况，如果seal list里存在这个seal，替换掉名字
+////                for (SealData sealData : responseInfo.getData()) {
+////                    if (sealData.getMac().equals(device.getAddress())) {
+////                        itemName = sealData.getName();
+////                    }
+////                }
+//                if (hasTheSeal(device.getAddress())) {
+//                    itemName = getNameFromList(device.getAddress());
+//                } else {
+//                    itemName = deviceName + "->" + deviceMac;
+//                }
+//            } else {
+//                itemName = deviceName + "->" + deviceMac;
+//            }
+//            if (!arrayList.contains(itemName)) {
+//                arrayList.add(itemName);
+//                arrayAdapter.notifyDataSetChanged();
+//            }
+//        }
     }
 
     @Override
@@ -324,16 +375,45 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         Utils.log(scanResultsList.get(position).getBleDevice().getMacAddress());
 
+        String thisMac = scanResultsList.get(position).getBleDevice().getMacAddress();
+
+        if (!hasTheSeal(thisMac)) {
+            showToast("你没有权限操作这个印章。");
+            return;
+        }
+
+
+
+
+
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
         RxBleDevice device = rxBleClient.getBleDevice(macAddress);
         disposable = device.establishConnection(false) // <-- autoConnect flag
                 .subscribe(
                         rxBleConnection -> {
                             // All GATT operations are done through the rxBleConnection.
-                            intent = new Intent(this, AddSealActivity.class);
-                            intent.putExtra("mac", macAddress);
-                            startActivity(intent);
-                            finish();
+
+
+                            // sava dataProtocolVersion
+                            // 根据 ble 名字来判断 dataProtocolVersion
+                            if(scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")){
+                                EasySP.init(this).putString("dataProtocolVersion", "3");
+                            }else{
+                                EasySP.init(this).putString("dataProtocolVersion", "2");
+                            }
+
+                            // save mac
+                            EasySP.init(this).putString("mac", scanResultsList.get(position).getBleDevice().getMacAddress());
+
+
+                            if (isAddNewSeal) {
+                                intent = new Intent(this, AddSealActivity.class);
+                                intent.putExtra("mac", macAddress);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                finish();
+                            }
                         },
                         throwable -> {
                             // Handle an error here.
