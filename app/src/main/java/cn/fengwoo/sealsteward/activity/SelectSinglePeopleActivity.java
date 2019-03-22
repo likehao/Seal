@@ -63,7 +63,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
 //        getIntentData();
         initView();
         mListView = findViewById(R.id.id_tree);
-        mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 2, 3);
+        mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 3);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
             public void clicked(String id, int type,String parentName) {
