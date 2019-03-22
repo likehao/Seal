@@ -138,6 +138,7 @@ public class NodeTreeAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
+        Node node = nodeLinkedList.get(position);
         if (convertView == null){
             convertView = inflater.inflate(R.layout.tree_listview_item,null);
             holder = new ViewHolder();
@@ -145,22 +146,13 @@ public class NodeTreeAdapter extends BaseAdapter {
             holder.label = convertView.findViewById(R.id.id_treenode_label);
             holder.confirm = convertView.findViewById(R.id.id_confirm);
             holder.checkBox = convertView.findViewById(R.id.cb);
+            holder.iv_right = convertView.findViewById(R.id.iv_right);
+
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder)convertView.getTag();
         }
-        Node node = nodeLinkedList.get(position);
 
-        // check box
-        if (isSingleSelection == 0) {
-            holder.checkBox.setVisibility(View.GONE);
-        }else{
-            if(node.get_type() == typeWillShowCB){
-                holder.checkBox.setVisibility(View.VISIBLE);
-            }else {
-                holder.checkBox.setVisibility(View.GONE);
-            }
-        }
 
 
         holder.checkBox.setTag(position);
@@ -178,12 +170,55 @@ public class NodeTreeAdapter extends BaseAdapter {
                         }
                     }
                 } else {
+                    checkBoxCheckedlistener.unchecked(node.get_id(),node.get_label());
                     selectArray.put(tag, false);
                 }
-                notifyDataSetChanged();
+                if (isSingleSelection != 2) {  // 非多选状态时
+                    notifyDataSetChanged();
+                }
             }
         });
-        holder.checkBox.setChecked(selectArray.get(position));
+
+
+
+        // check box
+        if (isSingleSelection == 0) {
+            holder.checkBox.setVisibility(View.GONE);
+        }else{
+            if(node.get_type() == typeWillShowCB){
+                holder.checkBox.setVisibility(View.VISIBLE);
+                if (node.is_check()==1) {
+                    holder.checkBox.setChecked(true);
+                } else if(node.is_check() == 0) {
+                    holder.checkBox.setChecked(false);
+                }
+
+                if (node.is_gray()) {
+                    // 灰色时不能点，变成灰色
+                    holder.checkBox.setEnabled(false);
+                    holder.checkBox.setVisibility(View.GONE);
+                    holder.iv_right.setVisibility(View.VISIBLE);
+                }else {
+                    holder.checkBox.setEnabled(true);
+                    holder.checkBox.setVisibility(View.VISIBLE);
+                    holder.iv_right.setVisibility(View.GONE);
+                }
+            }else {
+                holder.checkBox.setVisibility(View.GONE);
+            }
+        }
+
+
+
+
+
+
+
+
+
+        if (isSingleSelection != 2) {  // 非多选状态时
+            holder.checkBox.setChecked(selectArray.get(position));
+        }
 
 
 
@@ -221,6 +256,7 @@ public class NodeTreeAdapter extends BaseAdapter {
         public TextView label;
         public LinearLayout confirm;
         public CheckBox checkBox;
+        public ImageView iv_right;
     }
 
 
@@ -230,6 +266,7 @@ public class NodeTreeAdapter extends BaseAdapter {
 
     public interface CheckBoxCheckedlistener{
         void checked(String id,String name);
+        void unchecked(String id, String name);
     }
 
     public void setClickItemListener(ClickItemListener clickItemListener){

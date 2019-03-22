@@ -206,8 +206,10 @@
         <activity android:name=".activity.MyQRCodeActivity" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.ExamineActivity" />
         <activity android:name=".activity.SealInfoActivity" />
         <activity android:name=".activity.SelectSealActivity" />
+        <activity android:name=".activity.SelectPeopleActivity" />
 
         <activity android:name=".activity.UserInfoActivity" />
 

@@ -21,7 +21,7 @@ import cn.fengwoo.sealsteward.view.LoadingView;
 
 public class BaseActivity extends AppCompatActivity{
     public ImmersionBar immersionBar;
-    LoadingView loadingView;
+    protected LoadingView loadingView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +33,7 @@ public class BaseActivity extends AppCompatActivity{
         immersionBar.init();
         loadingView = new LoadingView(this);
 
+        Utils.log(this.toString());
     }
 
     @Override

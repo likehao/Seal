@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AboutActivity"
+    android:background="@color/background">
+
+    <include layout="@layout/head" />
+
+    <LinearLayout
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_one"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/pressed_effect"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="一级审批"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:text="0人" />
+
+            <View style="@style/right_arrow" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="@color/line" />
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_two"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/pressed_effect"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="二级审批"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:text="0人" />
+
+            <View style="@style/right_arrow" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="@color/line" />
+
+
+        <RelativeLayout
+            android:id="@+id/rl_three"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/pressed_effect"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="三级审批"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:text="0人" />
+
+            <View style="@style/right_arrow" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="@color/line" />
+
+
+        <RelativeLayout
+            android:id="@+id/rl_four"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            style="@style/pressed_effect"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="抄送到"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_four"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:text="0人" />
+
+            <View style="@style/right_arrow" />
+
+        </RelativeLayout>
+
+        <View
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="@color/line" />
+
+
+
+
+
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="@string/add_approval"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:background="@drawable/login_circle_bg"/>
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,13 +22,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
 import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -34,11 +45,19 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.SealAdapter;
 import cn.fengwoo.sealsteward.database.SealItemBean;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 附近设备
@@ -73,17 +92,77 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private RxBleClient rxBleClient;
     private Disposable scanSubscription;
     private Disposable disposable;
+    private boolean isAddNewSeal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_device);
 
         ButterKnife.bind(this);
+        getIntentData();
         initView();
         initCheck();
+
+        // 不是增加印章的情况时，访问后台拿seal list
+        if (!isAddNewSeal) {
+            getSealList();
+        }
+
         initData();
         setListener();
         scanBle();
+    }
+
+    private void getSealList() {
+        loadingView.show();
+        HttpUtil.sendDataAsync(this, HttpUrl.SEAL_LIST, 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Looper.prepare();
+                Toast.makeText(NearbyDeviceActivity.this, e + "", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+                Log.e("TAG", "获取个人信息数据失败........");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
+                String result = response.body().string();
+                Utils.log("getSealList"+result);
+                Gson gson = new Gson();
+                final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
+                }.getType());
+                try {
+                    JSONObject object = new JSONObject(result);
+                    if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                        Log.e("TAG", "获取个人信息数据成功........");
+                        //更新
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            }
+                        });
+                        loadingView.cancel();
+                    } else {
+                        loadingView.cancel();
+                        Looper.prepare();
+                        showToast(responseInfo.getMessage());
+                        Looper.loop();
+                        Log.e("TAG", "获取个人信息数据失败........");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void getIntentData() {
+        isAddNewSeal = getIntent().getBooleanExtra("isAddNewSeal", false);
+
     }
 
     private void scanBle(){

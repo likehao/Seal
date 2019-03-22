@@ -28,6 +28,9 @@ import com.longsh.optionframelibrary.OptionBottomDialog;
 import com.orhanobut.logger.Logger;
 import com.white.easysp.EasySP;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +47,7 @@ import cn.fengwoo.sealsteward.database.AccountDao;
 import cn.fengwoo.sealsteward.entity.HistoryInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.SystemFuncListInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.FromToJson;
@@ -274,6 +278,13 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     } else {
                         targetPermissionJson = new Gson().toJson(user.getFuncIdList());
                     }
+
+                    JSONArray jsonArray = null;
+
+//                        jsonArray = new JSONArray(targetPermissionJson);
+                        List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
+
+
                     Utils.log(targetPermissionJson);
                     EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
 

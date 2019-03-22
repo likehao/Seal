@@ -90,7 +90,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     private boolean isEditable = false;
     private Intent intent;
 
-     ResponseInfo<SealInfoData> responseInfo;
+    ResponseInfo<SealInfoData> responseInfo;
 
     private String departmentId;
 
@@ -104,7 +104,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         getData();
 
 
-        getSealInfo();
+        getSealInfo(false);
     }
 
     private void initView() {
@@ -141,7 +141,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         sbTransDepartment.setEnabled(true);
     }
 
-    private void getSealInfo() {
+    private void getSealInfo(boolean isEditable) {
 
         showLoadingView();
         HashMap<String, String> hashMap = new HashMap<>();
@@ -152,7 +152,11 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onFailure(Call call, IOException e) {
                 cancelLoadingView();
-                setUneditable();
+                if (isEditable) {
+                    setEditable();
+                } else {
+                    setUneditable();
+                }
             }
 
             @Override
@@ -180,7 +184,11 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             // 两个开关状态
                             sbLimit.setChecked(responseInfo.getData().isEnableEnclosure());
                             sbTransDepartment.setChecked(responseInfo.getData().isCrossDepartmentApply());
-                            setUneditable();
+                            if (isEditable) {
+                                setEditable();
+                            } else {
+                                setUneditable();
+                            }
                         }
                     });
                     cancelLoadingView();
@@ -212,18 +220,23 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.rl_choose_department:
                 intent = new Intent(this, OrganizationalManagementActivity.class);
-                startActivityForResult(intent,123);
+                startActivityForResult(intent, 123);
                 break;
             case R.id.rl_examine:
+                intent = new Intent(this, ExamineActivity.class);
+                intent.putExtra("sealId", responseInfo.getData().getId());
+                intent.putExtra("sealApproveFlowList", new Gson().toJson(responseInfo.getData().getSealApproveFlowList()));
+
+                startActivityForResult(intent, 88);
                 break;
             case R.id.rl_set_limit: // 地理围栏
                 if (sbLimit.isChecked()) {
                     intent = new Intent(this, GeographicalFenceActivity.class);
                     intent.putExtra("sealId", responseInfo.getData().getId());
-                    intent.putExtra("scope", responseInfo.getData().getSealEnclosure().getScope()+"");
+                    intent.putExtra("scope", responseInfo.getData().getSealEnclosure().getScope() + "");
 
-                    intent.putExtra("longitude", responseInfo.getData().getSealEnclosure().getLongitude()+"");
-                    intent.putExtra("latitude", responseInfo.getData().getSealEnclosure().getLatitude()+"");
+                    intent.putExtra("longitude", responseInfo.getData().getSealEnclosure().getLongitude() + "");
+                    intent.putExtra("latitude", responseInfo.getData().getSealEnclosure().getLatitude() + "");
                     intent.putExtra("address", responseInfo.getData().getSealEnclosure().getAddress());
                     startActivity(intent);
                 }
@@ -248,7 +261,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         SealInfoUpdateData sealInfoUpdateData = new SealInfoUpdateData();
 
         sealInfoUpdateData.setDataProtocolVersion("2");
-        sealInfoUpdateData.setId( responseInfo.getData().getId());
+        sealInfoUpdateData.setId(responseInfo.getData().getId());
         sealInfoUpdateData.setMac(responseInfo.getData().getMac());
         sealInfoUpdateData.setName(etSealName.getText().toString().trim());
         sealInfoUpdateData.setOrgStructrueId(departmentId);
@@ -264,7 +277,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
                 cancelLoadingView();
-                showToast(e+"");
+                showToast(e + "");
                 Looper.loop();
             }
 
@@ -279,12 +292,12 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                     jsonObject = new JSONObject(result);
                     String state = jsonObject.getString("message");
                     if (state.equals("成功")) {
-                       runOnUiThread(new Runnable() {
-                           @Override
-                           public void run() {
-                               cancelLoadingView();
-                           }
-                       });
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cancelLoadingView();
+                            }
+                        });
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -299,13 +312,16 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == 123){
+        if (resultCode == 123) {
             departmentId = data.getExtras().getString("id");
             departmentName = data.getExtras().getString("name");
             Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
             tvDepartment.setText(departmentName);
         }
 
+        if (requestCode == 88) {
+            getSealInfo(true);
+        }
 
     }
 

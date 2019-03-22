@@ -1,10 +1,7 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -17,30 +14,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
-import cn.fengwoo.sealsteward.fragment.UserOrganizationalFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
+import cn.fengwoo.sealsteward.utils.SerializableMap;
 import cn.fengwoo.sealsteward.utils.Utils;
-import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 组织管理
+ * 关于
  */
-public class OrganizationalManagementActivity extends BaseActivity implements View.OnClickListener {
-    private static final String TAG = OrganizationalManagementActivity.class.getSimpleName();
+public class SelectPeopleActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = SelectPeopleActivity.class.getSimpleName();
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.edit_tv)
@@ -52,17 +49,21 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
     private LinkedList<Node> mLinkedList = new LinkedList<>();
     private View view;
     private List<Node> data;
-    private int filterType1, filterType2;
+    private int filterType1;
     private String m_id, m_name;
+
+    private String typeString;
+    private Map<String, String> selectedUidsMap; // user id和类型的map
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organizational_management);
         ButterKnife.bind(this);
+        getIntentData();
         initView();
         mListView = findViewById(R.id.id_tree);
-        mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 2);
+        mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 2, 3);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
             public void clicked(String id, int type,String parentName) {
@@ -76,14 +77,17 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         mAdapter.setCheckBoxCheckedlistener(new NodeTreeAdapter.CheckBoxCheckedlistener() {
             @Override
             public void checked(String id, String name) {
-                Utils.log("***id:" + id + "  ***name:" + name);
-                m_id = id;
-                m_name = name;
+                Utils.log("checked ***id:" + id + "  ***name:" + name);
+//                m_id = id;
+//                m_name = name;
+                selectedUidsMap.put(id, typeString);
             }
 
             @Override
             public void unchecked(String id, String name) {
+                Utils.log("unchecked ***id:" + id + "  ***name:" + name);
 
+                selectedUidsMap.remove(id);
             }
         });
 
@@ -92,14 +96,20 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         getDate();
     }
 
+    private void getIntentData() {
+        typeString = getIntent().getStringExtra("type");
+        Bundle bundle = getIntent().getExtras();
+        SerializableMap serializableMap = (SerializableMap) bundle.get("map");
+        Utils.log(serializableMap.getMap().size()+"");
+        selectedUidsMap = serializableMap.getMap();
+    }
+
     private void initData() {
-        filterType1 = 3;  // 人
-        filterType2 = 4;  // 章
+        filterType1 = 4;  // 章
         data = new ArrayList<>();
         mLinkedList.addAll(NodeHelper.sortNodes(data));
         mAdapter.notifyDataSetChanged();
     }
-
 
     private void getDate() {
         Utils.log("good");
@@ -115,14 +125,27 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Utils.log(result);
-                Log.e("TAG",result);
                 Gson gson = new Gson();
                 OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
-             //   Utils.log(organizationalStructureData.getData().get(0).getName());
-                assert organizationalStructureData != null;
+                Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
-                    if (dataBean.getType() != filterType1 && dataBean.getType() != filterType2) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),2,false));
+                    if (dataBean.getType() != filterType1 ) {
+
+                        int isCheckInt;
+                        boolean isGrayBoolean;
+                        String theType = selectedUidsMap.get(dataBean.getId());
+                        if (theType != null) { // 从map得到的值不为空，说明map里有这个，要把isCheck置为1,check box选中
+                            isCheckInt = 1;
+                            if (theType.equals(typeString)) {
+                                isGrayBoolean = false;
+                            } else {
+                                isGrayBoolean = true;
+                            }
+                        } else {
+                            isCheckInt = 0;
+                            isGrayBoolean = false;
+                        }
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),isCheckInt,isGrayBoolean));
                     }
                 }
                 runOnUiThread(new Runnable() {
@@ -141,7 +164,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         edit_tv.setVisibility(View.VISIBLE);
         edit_tv.setText("确定");
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("选择部门");
+        title_tv.setText("选择人员");
         set_back_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
     }
@@ -155,9 +178,16 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
             case R.id.edit_tv:
                 Utils.log("confirm");
                 Intent intent = new Intent();
-                intent.putExtra("id", m_id);
-                intent.putExtra("name", m_name);
-                setResult(123,intent);
+
+
+                final SerializableMap myMap=new SerializableMap();
+                myMap.setMap(selectedUidsMap);//将map数据添加到封装的myMap中
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("map", myMap);
+                intent.putExtras(bundle);
+
+
+                setResult(125,intent);
                 finish();
                 break;
         }

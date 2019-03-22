@@ -75,6 +75,11 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 m_id = id;
                 m_name = name;
             }
+
+            @Override
+            public void unchecked(String id, String name) {
+
+            }
         });
 
         mListView.setAdapter(mAdapter);
@@ -110,7 +115,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1 ) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType()));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),2,false));
                     }
                 }
                 runOnUiThread(new Runnable() {

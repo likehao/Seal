@@ -27,6 +27,11 @@ public abstract class Node<T> {
     public abstract String get_label();//要显示的内容
     public abstract int get_type();//要显示的内容
 
+    public abstract int is_check();//是否选中
+    public abstract boolean is_gray();//是否为灰
+
+
+
     public abstract boolean parent(Node dest);//判断当前节点是否是dest的父亲节点
     public abstract boolean child(Node dest);//判断当前节点是否是dest的孩子节点
 

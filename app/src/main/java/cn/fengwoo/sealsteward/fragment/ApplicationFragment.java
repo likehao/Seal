@@ -133,6 +133,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.add_seal_rl:
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
+                intent.putExtra("isAddNewSeal", true);
                 startActivity(intent);
                 break;
             case R.id.service_charge_rl:

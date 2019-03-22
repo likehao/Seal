@@ -103,7 +103,7 @@ public class SealOrganizationalFragment extends Fragment {
                 Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType()));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType(),2,false));
                     }
                 }
                 getActivity().runOnUiThread(new Runnable() {

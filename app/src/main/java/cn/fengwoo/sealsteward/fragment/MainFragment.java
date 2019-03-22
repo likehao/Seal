@@ -170,6 +170,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.sealDevice_rl:
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
+                intent.putExtra("isAddNewSeal", false);
+
                 startActivity(intent);
                 break;
             case R.id.needSeal_rl:

@@ -26,17 +26,19 @@
         android:paddingTop="8dp">
 
         <CheckBox
-            android:layout_gravity="center"
-            android:focusable="false"
             android:id="@+id/cb"
             android:layout_width="25dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:focusable="false" />
 
         <ImageView
-            android:visibility="gone"
+            android:id="@+id/iv_right"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            android:src="@drawable/right"
+            android:visibility="gone" />
     </LinearLayout>
 
 
@@ -45,8 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/id_confirm"
         android:layout_toEndOf="@id/id_treenode_icon"
+        android:layout_toStartOf="@id/id_confirm"
         android:textColor="@android:color/black"
         android:textSize="12sp" />
 
