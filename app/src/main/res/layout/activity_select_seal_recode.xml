@@ -17,7 +17,9 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <RelativeLayout style="@style/pressed_effect">
+        <RelativeLayout
+            android:id="@+id/select_person_rl"
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -27,12 +29,22 @@
                 android:text="@string/person"
                 android:textColor="@color/black" />
 
+            <TextView
+                android:id="@+id/select_person_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp" />
+
             <ImageView style="@style/right_arrow" />
         </RelativeLayout>
 
         <View style="@style/line_left" />
 
-        <RelativeLayout style="@style/pressed_effect">
+        <RelativeLayout
+            android:id="@+id/select_seal_rl"
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,12 +54,22 @@
                 android:text="@string/seal"
                 android:textColor="@color/black" />
 
+            <TextView
+                android:id="@+id/select_seal_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp" />
+
             <ImageView style="@style/right_arrow" />
         </RelativeLayout>
 
         <View style="@style/line_left" />
 
-        <RelativeLayout style="@style/pressed_effect">
+        <RelativeLayout
+            android:id="@+id/select_nearTime_rl"
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,12 +79,22 @@
                 android:text="@string/nearest"
                 android:textColor="@color/black" />
 
+            <TextView
+                android:id="@+id/select_nearTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp" />
+
             <ImageView style="@style/right_arrow" />
         </RelativeLayout>
 
         <View style="@style/line_left" />
 
-        <RelativeLayout style="@style/pressed_effect">
+        <RelativeLayout
+            android:id="@+id/select_beginTime_rl"
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -72,12 +104,22 @@
                 android:text="@string/begin_time"
                 android:textColor="@color/black" />
 
+            <TextView
+                android:id="@+id/select_beginTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp" />
+
             <ImageView style="@style/right_arrow" />
         </RelativeLayout>
 
         <View style="@style/line_left" />
 
-        <RelativeLayout style="@style/pressed_effect">
+        <RelativeLayout
+            android:id="@+id/select_endTime_rl"
+            style="@style/pressed_effect">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,6 +129,14 @@
                 android:text="@string/over_time"
                 android:textColor="@color/black" />
 
+            <TextView
+                android:id="@+id/select_endTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp" />
+
             <ImageView style="@style/right_arrow" />
         </RelativeLayout>
 
@@ -95,6 +145,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/select_bt"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

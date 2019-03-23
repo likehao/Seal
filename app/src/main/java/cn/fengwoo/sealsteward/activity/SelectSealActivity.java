@@ -27,12 +27,13 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 选择印章
  */
 public class SelectSealActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = SelectSealActivity.class.getSimpleName();
@@ -49,7 +50,8 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     private List<Node> data;
     private int filterType1, filterType2;
     private String m_id, m_name;
-
+    LoadingView loadingView;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +95,13 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         data = new ArrayList<>();
         mLinkedList.addAll(NodeHelper.sortNodes(data));
         mAdapter.notifyDataSetChanged();
+        intent = getIntent();
+        //查询盖章记录跳转过来的时候隐藏掉title
+        int code = intent.getIntExtra("code",0);
+        if (code != 0 && code == 1){
+            title_tv.setVisibility(View.GONE);
+        }
     }
-
 
     private void getDate() {
         Utils.log("good");
@@ -103,6 +110,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         HttpUtil.sendDataAsync(this, HttpUrl.ORGANIZATIONAL_STRUCTURE, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
                 Utils.log(e.toString());
             }
 
@@ -125,10 +133,10 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                         mAdapter.notifyDataSetChanged();
                     }
                 });
+                loadingView.cancel();
             }
         });
     }
-
 
     private void initView() {
         edit_tv.setVisibility(View.VISIBLE);
@@ -137,6 +145,8 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         title_tv.setText("选择印章");
         set_back_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
+        loadingView = new LoadingView(this);
+        loadingView.show();
     }
 
     @Override
@@ -147,7 +157,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.edit_tv:
                 Utils.log("confirm");
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.putExtra("id", m_id);
                 intent.putExtra("name", m_name);
                 setResult(123,intent);

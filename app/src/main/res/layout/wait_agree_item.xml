@@ -18,7 +18,7 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="请审批"
+            android:text="@string/please_apply"
             android:textColor="@color/black" />
     </LinearLayout>
 

@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/tv_cause"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:text="@string/please_apply"
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/seal_name"
+            android:textColor="@color/black"
             android:textSize="12sp" />
 
         <View
@@ -43,7 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="10dp"
-            android:text="公章"
+            android:text="@string/seal"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -51,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -60,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/Failure_time"
+            android:textColor="@color/black"
             android:textSize="12sp" />
 
         <View
@@ -72,7 +75,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:textColor="@color/black"
             android:text="2017-05-10 10:10:10"
             android:textSize="12sp" />
     </LinearLayout>
@@ -81,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -90,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/apply_time"
+            android:textColor="@color/black"
             android:textSize="12sp" />
 
         <View
@@ -104,6 +109,7 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:text="20"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -119,6 +125,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:text="01/01 01:01:01"
+            android:textColor="@color/black"
             android:textSize="12sp" />
         <TextView
             android:id="@+id/item1_tv"
@@ -131,6 +138,7 @@
             android:layout_marginEnd="10dp"
             android:visibility="gone"
             android:text="@string/see_record"
+            android:textColor="@color/black"
             android:textSize="12sp" />
         <TextView
             android:id="@+id/item2_tv"
@@ -142,6 +150,7 @@
             android:gravity="center"
             android:layout_centerInParent="true"
             android:text="@string/revoke"
+            android:textColor="@color/black"
             android:textSize="12sp" />
     </RelativeLayout>
 

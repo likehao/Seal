@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -106,7 +107,7 @@ public class SealOrganizationalFragment extends Fragment {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType(),2,false));
                     }
                 }
-                getActivity().runOnUiThread(new Runnable() {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mLinkedList.addAll(NodeHelper.sortNodes(data));
@@ -161,7 +162,7 @@ public class SealOrganizationalFragment extends Fragment {
 
                                 mLinkedList.clear();
 
-                                getActivity().runOnUiThread(new Runnable() {
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
 //                                        mLinkedList.addAll(NodeHelper.sortNodes(data));

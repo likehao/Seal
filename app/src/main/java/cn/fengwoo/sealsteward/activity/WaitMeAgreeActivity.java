@@ -85,11 +85,12 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         wait_me_agree_apply_smartRL.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                waitMeAgreeDataList.clear(); //清除数据
                 ApplyListData applyListData = new ApplyListData();
-                applyListData.setCurPage(0);
+                applyListData.setCurPage(1);
                 applyListData.setHasExportPdf(false);
                 applyListData.setHasPage(true);
-                applyListData.setPageSize(5);
+                applyListData.setPageSize(10);
                 applyListData.setParam(6);
                 HttpUtil.sendDataAsync(WaitMeAgreeActivity.this, HttpUrl.APPLYLIST, 2, null, applyListData, new Callback() {
                     @Override

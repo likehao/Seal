@@ -3,7 +3,10 @@ package cn.fengwoo.sealsteward.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,15 +18,28 @@ import android.widget.TimePicker;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DateUtils;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 申请用印
@@ -39,18 +55,24 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     RelativeLayout seal_name_rl;
     @BindView(R.id.apply_time_rl)
     RelativeLayout apply_time_rl;  //申请的次数
+    @BindView(R.id.apply_time_et)
+    EditText apply_time_et;
     @BindView(R.id.failTime_rl)
     RelativeLayout failTime_rl;   //失效时间
     @BindView(R.id.apply_cause_et)
     EditText apply_cause_et;   //申请事由
-    private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
     @BindView(R.id.sealName_TV)
     TextView sealName_TV;
-    String sealName;
     @BindView(R.id.apply_sign_ll)
     LinearLayout apply_sign_ll;
     @BindView(R.id.fail_time_tv)
     TextView fail_time_tv;
+
+    private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
+    private String sealName,sealId;
+    private String name,failTime,cause;
+    private String applyCount;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +100,12 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.nextBt:
-                Intent intent = new Intent(this, UploadFileActivity.class);
-                startActivity(intent);
+                if (checkData()){
+                    useSealApply();
+                }
                 break;
             case R.id.seal_name_rl:
-                intent = new Intent(this,OrganizationalManagementActivity.class);
+                intent = new Intent(this,SelectSealActivity.class);
                 startActivityForResult(intent,SELECTSEALREQUESTCODE);
                 break;
             case R.id.apply_sign_ll:
@@ -96,6 +119,80 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * 校验用印申请
+     */
+    String time;
+    private void useSealApply(){
+        AddUseSealApplyBean useSealApplyBean = new AddUseSealApplyBean();
+        useSealApplyBean.setApplyCause(cause);
+        useSealApplyBean.setApplyCount(Integer.valueOf(applyCount));
+        String userId = CommonUtil.getUserData(this).getId();
+        useSealApplyBean.setApplyUser(userId);
+        //时间转时间戳
+        try {
+            time = DateUtils.dateToStamp(failTime);
+            useSealApplyBean.setExpireTime(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        useSealApplyBean.setSealId(sealId);
+        HttpUtil.sendDataAsync(ApplyUseSealActivity.this, HttpUrl.CHECKUSESEAL, 2, null, useSealApplyBean, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"用印申请错误!!!!!!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
+                .getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        intent = new Intent(ApplyUseSealActivity.this, UploadFileActivity.class);
+                        intent.putExtra("cause",cause);
+                        intent.putExtra("applyCount",applyCount);
+                        intent.putExtra("userId",userId);
+                        intent.putExtra("failTime",time);
+                        intent.putExtra("sealId",sealId);
+                        startActivity(intent);
+                        Log.e("ATG","用印申请check成功!!!!!!!");
+                    }
+                }else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+
+            }
+        });
+    }
+
+    private Boolean checkData(){
+        name = sealName_TV.getText().toString().trim();
+        applyCount = apply_time_et.getText().toString().trim();
+        failTime = fail_time_tv.getText().toString().trim();
+        cause = apply_cause_et.getText().toString().trim();
+        if (TextUtils.isEmpty(name)){
+            showToast("请选择印章名称");
+            return false;
+        }
+        if (TextUtils.isEmpty(applyCount) && !applyCount.equals("0")){
+            showToast("请输入申请次数");
+            return false;
+        }
+        if (TextUtils.isEmpty(failTime)){
+            showToast("请选择失效时间");
+            return false;
+        }
+        if (TextUtils.isEmpty(cause)){
+            showToast("请填写申请事由");
+            return false;
+        }
+        return true;
+    }
     /**
      * 时间选择器
      */
@@ -128,10 +225,12 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECTSEALREQUESTCODE && resultCode == RESULT_OK){
-            //获取选择的印章名称
+        if (requestCode == SELECTSEALREQUESTCODE){
+            //获取选择的印章名称和印章ID
             if (data != null){
+                sealId = data.getStringExtra("id");
                 sealName = data.getStringExtra("name");
+                Log.e("TAG","id------------:" + sealId + "  name------------:" + sealName);
                 sealName_TV.setText(sealName);
             }
         }

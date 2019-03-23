@@ -26,6 +26,14 @@ public class AddUseSealApplyBean implements Serializable {
     private String sealId;
     private List<String> imgList;
 
+    public List<String> getImgList() {
+        return imgList;
+    }
+
+    public void setImgList(List<String> imgList) {
+        this.imgList = imgList;
+    }
+
     public String getApplyCause() {
         return applyCause;
     }
@@ -74,6 +82,8 @@ public class AddUseSealApplyBean implements Serializable {
                 ", applyUser='" + applyUser + '\'' +
                 ", expireTime='" + expireTime + '\'' +
                 ", sealId='" + sealId + '\'' +
+                ", imgList=" + imgList +
                 '}';
     }
+
 }

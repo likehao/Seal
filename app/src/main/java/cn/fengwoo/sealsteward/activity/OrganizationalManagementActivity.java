@@ -54,7 +54,8 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
     private List<Node> data;
     private int filterType1, filterType2;
     private String m_id, m_name;
-
+    LoadingView loadingView;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +101,6 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         mAdapter.notifyDataSetChanged();
     }
 
-
     private void getDate() {
         Utils.log("good");
         HashMap<String, String> hashMap = new HashMap<>();
@@ -108,6 +108,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         HttpUtil.sendDataAsync(this, HttpUrl.ORGANIZATIONAL_STRUCTURE, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
                 Utils.log(e.toString());
             }
 
@@ -132,6 +133,8 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
                         mAdapter.notifyDataSetChanged();
                     }
                 });
+                loadingView.cancel();
+
             }
         });
     }
@@ -144,6 +147,8 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         title_tv.setText("选择部门");
         set_back_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
+        loadingView = new LoadingView(this);
+        loadingView.show();
     }
 
     @Override
@@ -154,7 +159,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
                 break;
             case R.id.edit_tv:
                 Utils.log("confirm");
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.putExtra("id", m_id);
                 intent.putExtra("name", m_name);
                 setResult(123,intent);

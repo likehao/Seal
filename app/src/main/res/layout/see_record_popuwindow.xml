@@ -15,7 +15,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:text="@string/Photograph_upload" />
+            android:text="@string/see_apply_file" />
 
         <View
             style="@style/line" />
@@ -25,9 +25,9 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:text="@string/export_PDF" />
+            android:text="@string/upload_photo" />
 
-        <View
+    <!--    <View
             style="@style/line" />
 
         <TextView
@@ -35,6 +35,6 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:text="@string/see_seal_file" />
+            android:text="@string/see_seal_file" />-->
     </LinearLayout>
 </LinearLayout>

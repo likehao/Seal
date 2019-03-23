@@ -1,8 +1,10 @@
 package cn.fengwoo.sealsteward.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class GetApplyListBean implements Serializable {
+
     /**
      * 审批列表返回数据
      * "data": [
@@ -35,35 +37,33 @@ public class GetApplyListBean implements Serializable {
      * ],
      */
     private String applyCause;
-    private String sealName;
-    private String expireTime;
     private Integer applyCount;
+    private String applyPdf;
     private String applyTime;
+    private String applyUser;
     private String applyUserName;
+    private Integer approveStatus;
+    private String autoGraph;
+    private Integer availableCount;
+    private String expireTime;
+    private String headPortrait;
+    private String id;
+    private String lastStampAddress;
+    private String lastStampTime;
     private String orgStructureName;
-
+    private Integer photoCount;
+    private String sealId;
+    private String sealName;
+    private Integer stampCount;
+    private String stampPdf;
+    private List<String> stampRecordImgList;
+    private String stampRecordPdf;
     public String getApplyCause() {
         return applyCause;
     }
 
     public void setApplyCause(String applyCause) {
         this.applyCause = applyCause;
-    }
-
-    public String getSealName() {
-        return sealName;
-    }
-
-    public void setSealName(String sealName) {
-        this.sealName = sealName;
-    }
-
-    public String getExpireTime() {
-        return expireTime;
-    }
-
-    public void setExpireTime(String expireTime) {
-        this.expireTime = expireTime;
     }
 
     public Integer getApplyCount() {
@@ -74,12 +74,28 @@ public class GetApplyListBean implements Serializable {
         this.applyCount = applyCount;
     }
 
+    public String getApplyPdf() {
+        return applyPdf;
+    }
+
+    public void setApplyPdf(String applyPdf) {
+        this.applyPdf = applyPdf;
+    }
+
     public String getApplyTime() {
         return applyTime;
     }
 
     public void setApplyTime(String applyTime) {
         this.applyTime = applyTime;
+    }
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
     }
 
     public String getApplyUserName() {
@@ -90,6 +106,70 @@ public class GetApplyListBean implements Serializable {
         this.applyUserName = applyUserName;
     }
 
+    public Integer getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(Integer approveStatus) {
+        this.approveStatus = approveStatus;
+    }
+
+    public String getAutoGraph() {
+        return autoGraph;
+    }
+
+    public void setAutoGraph(String autoGraph) {
+        this.autoGraph = autoGraph;
+    }
+
+    public Integer getAvailableCount() {
+        return availableCount;
+    }
+
+    public void setAvailableCount(Integer availableCount) {
+        this.availableCount = availableCount;
+    }
+
+    public String getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(String expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    public String getHeadPortrait() {
+        return headPortrait;
+    }
+
+    public void setHeadPortrait(String headPortrait) {
+        this.headPortrait = headPortrait;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLastStampAddress() {
+        return lastStampAddress;
+    }
+
+    public void setLastStampAddress(String lastStampAddress) {
+        this.lastStampAddress = lastStampAddress;
+    }
+
+    public String getLastStampTime() {
+        return lastStampTime;
+    }
+
+    public void setLastStampTime(String lastStampTime) {
+        this.lastStampTime = lastStampTime;
+    }
+
     public String getOrgStructureName() {
         return orgStructureName;
     }
@@ -98,16 +178,90 @@ public class GetApplyListBean implements Serializable {
         this.orgStructureName = orgStructureName;
     }
 
+    public Integer getPhotoCount() {
+        return photoCount;
+    }
+
+    public void setPhotoCount(Integer photoCount) {
+        this.photoCount = photoCount;
+    }
+
+    public String getSealId() {
+        return sealId;
+    }
+
+    public void setSealId(String sealId) {
+        this.sealId = sealId;
+    }
+
+    public String getSealName() {
+        return sealName;
+    }
+
+    public void setSealName(String sealName) {
+        this.sealName = sealName;
+    }
+
+    public Integer getStampCount() {
+        return stampCount;
+    }
+
+    public void setStampCount(Integer stampCount) {
+        this.stampCount = stampCount;
+    }
+
+    public String getStampPdf() {
+        return stampPdf;
+    }
+
+    public void setStampPdf(String stampPdf) {
+        this.stampPdf = stampPdf;
+    }
+
+    public List<String> getStampRecordImgList() {
+        return stampRecordImgList;
+    }
+
+    public void setStampRecordImgList(List<String> stampRecordImgList) {
+        this.stampRecordImgList = stampRecordImgList;
+    }
+
+    public String getStampRecordPdf() {
+        return stampRecordPdf;
+    }
+
+    public void setStampRecordPdf(String stampRecordPdf) {
+        this.stampRecordPdf = stampRecordPdf;
+    }
+
     @Override
     public String toString() {
         return "GetApplyListBean{" +
                 "applyCause='" + applyCause + '\'' +
-                ", sealName='" + sealName + '\'' +
-                ", expireTime='" + expireTime + '\'' +
-                ", applyCount='" + applyCount + '\'' +
+                ", applyCount=" + applyCount +
+                ", applyPdf='" + applyPdf + '\'' +
                 ", applyTime='" + applyTime + '\'' +
+                ", applyUser='" + applyUser + '\'' +
                 ", applyUserName='" + applyUserName + '\'' +
+                ", approveStatus=" + approveStatus +
+                ", autoGraph='" + autoGraph + '\'' +
+                ", availableCount=" + availableCount +
+                ", expireTime='" + expireTime + '\'' +
+                ", headPortrait='" + headPortrait + '\'' +
+                ", id='" + id + '\'' +
+                ", lastStampAddress='" + lastStampAddress + '\'' +
+                ", lastStampTime='" + lastStampTime + '\'' +
                 ", orgStructureName='" + orgStructureName + '\'' +
+                ", photoCount=" + photoCount +
+                ", sealId='" + sealId + '\'' +
+                ", sealName='" + sealName + '\'' +
+                ", stampCount=" + stampCount +
+                ", stampPdf='" + stampPdf + '\'' +
+                ", stampRecordImgList=" + stampRecordImgList +
+                ", stampRecordPdf='" + stampRecordPdf + '\'' +
                 '}';
     }
+
+
+
 }

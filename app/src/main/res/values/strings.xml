@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">印章管家</string>
     <string name="home_page">印章</string>
+    <string name="main_home_page">首页</string>
     <string name="record">记录</string>
     <string name="application">应用</string>
     <string name="mine">我的</string>
@@ -71,6 +72,7 @@
     <string name="Remainder">剩余次数</string>
     <string name="Already_locked">已锁定</string>
     <string name="Failure_time">失效时间</string>
+    <string name="deadline">过期时间</string>
     <string name="failure_time">失效时间:</string>
     <string name="service_fee_time">服务费到期时间</string>
     <string name="seal_time">当前盖章次数</string>
@@ -96,6 +98,9 @@
     <string name="apply_bill">申请单据</string>
     <string name="seal_photo">盖章后拍照</string>
     <string name="see_apply_bill">查看申请单据</string>
+    <string name="see_apply_file">查看申请文件</string>
+    <string name="upload_photo">上传照片</string>
+    <string name="upload_photo_number">上传照片数</string>
     <string name="see_seal_address">查看盖章位置</string>
     <string name="apply_type">申请类型</string>
     <string name="apply_time">申请次数</string>
@@ -262,5 +267,14 @@
     <string name="select">查询</string>
     <string name="voice_switch">语音开关</string>
     <string name="ends_verification_code">发送验证码</string>
+    <string name="seal_add">—— 盖章统计 ——</string>
+    <string name="connected_seal">—— 已连印章 ——</string>
+    <string name="not_location">暂无定位信息</string>
+    <string name="not_electric">无电量信息</string>
+    <string name="use">已用:</string>
+    <string name="surplus">剩余:</string>
+    <string name="picture">照片:</string>
+    <string name="lately_seal_time">最近盖章时间</string>
+    <string name="lately_seal_address">最近盖章地址</string>
 
 </resources>

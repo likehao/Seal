@@ -121,7 +121,7 @@ public class AddAutographActivity extends AppCompatActivity implements View.OnCl
         File file = new File(path);
         //上传图片
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("category", 1);
+        hashMap.put("category", 2);
         hashMap.put("file", file);
         HttpUtil httpUtil = new HttpUtil(AddAutographActivity.this);
         httpUtil.upLoadFile(AddAutographActivity.this, HttpUrl.UPLOADIMAGE, hashMap, new ReqCallBack<Object>() {

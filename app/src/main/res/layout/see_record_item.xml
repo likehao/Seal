@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout style="@style/details">
+
+            <TextView
+                style="@style/details_text"
+                android:text="@string/serial_number" />
+
+            <View style="@style/detail_view" />
+
+            <TextView
+                android:id="@+id/serial_number_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:text="公章"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/details">
+
+            <TextView
+                style="@style/details_text"
+                android:text="@string/sealTime" />
+
+            <View style="@style/detail_view" />
+
+            <TextView
+                android:id="@+id/sealTime_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:text="公章"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/details"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                style="@style/details_text"
+                android:text="@string/seal_address" />
+
+            <View style="@style/detail_view" />
+
+            <TextView
+                android:id="@+id/seal_address_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="20dp"
+                android:paddingStart="10dp"
+                android:text="公章"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <View
+            style="@style/line_left"
+            android:layout_marginTop="15dp"/>
+    </LinearLayout>
+</LinearLayout>

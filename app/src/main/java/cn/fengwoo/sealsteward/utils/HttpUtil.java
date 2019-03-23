@@ -124,7 +124,6 @@ public class HttpUtil {
                 String json = gson.toJson(data);
                 body = RequestBody.create(MEDIA_TYPE_JSON, json);
                 requestUrl = String.format("%s/%s", BASE_URL, url);
-
                 if (type == 5) {
                     request = addHeaders(activity).url(requestUrl).put(body).build();
                 } else {
@@ -144,7 +143,6 @@ public class HttpUtil {
                     Gson gson = new Gson();
                     String json = gson.toJson(data);
                     body = RequestBody.create(MEDIA_TYPE_JSON, json);
-                    requestUrl = String.format("%s/%s", BASE_URL, url);
                     requestUrl = String.format("%s/%s?%s", BASE_URL, url, tempParams.toString());
                     request = addHeaders(activity).url(requestUrl).put(body).build();
                 } else {

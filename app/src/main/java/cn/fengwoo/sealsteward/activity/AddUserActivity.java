@@ -123,7 +123,6 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.add_user_next_Bt:
-
                 addUser();
                 // 判断是不是有 添加用户权限
                 String permissionJson = EasySP.init(this).getString("permission");
@@ -132,7 +131,6 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
 
 //                intent = new Intent(this, SetPowerActivity.class);
 //                startActivity(intent);
-
                 break;
         }
     }

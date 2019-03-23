@@ -11,7 +11,7 @@ public class ApplyListData implements Serializable {
      "hasExportPdf": true,
      "hasPage": true,   是否分页
      "pageSize": 0,     条数
-     "param": 0       status状态（0-待审批,1-已审批,2-审批中,3-已驳回）
+     "param": 0       status状态（0-待审批,1-已审批,2-审批中,3-已驳回,4已撤销,5已关闭,6待我审批）
      }
      */
     private Integer curPage;

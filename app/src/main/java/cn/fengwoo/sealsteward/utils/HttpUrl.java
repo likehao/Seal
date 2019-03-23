@@ -1,10 +1,9 @@
 package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
-    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
+//    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
+    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest";  //测试环境
 //    public static final String URL = "http://192.168.0.117:8800/";  //调试环境
-//    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //线上
-
     /**
      * 登录
      */
@@ -131,6 +130,10 @@ public class HttpUrl {
      */
     public static final String ADDUSESEAL = "/apply/adduseseal";
     /**
+     * 检验用印申请
+     */
+    public static final String CHECKUSESEAL = "/apply/checkuseseal";
+    /**
      * 审批列表
      */
     public static final String APPLYLIST = "/apply/applylist";
@@ -144,11 +147,22 @@ public class HttpUrl {
      */
     public static final String SEAL_INFO = "/seal/sealinfo";
 
-
     /**
      * seal 更新信息
      */
     public static final String SEAL_UPDATE_INFO = "/seal/updateseal";
+    /**
+     * 申请详情
+     */
+    public static final String APPLYDETAIL = "/apply/applydetail";
+    /**
+     * 盖章记录详情
+     */
+    public static final String SEALRECORDLIST = "/stamp/applystamprecordlist";
+    /**
+     * 盖章记录
+     */
+    public static final String STAMPRECORDAPPLYLIST = "/apply/stamprecordapplylist";
 
     /**
      * seal 更新地理围栏信息

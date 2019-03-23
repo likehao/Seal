@@ -4,15 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -23,8 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,18 +41,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.AddSealData;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
-import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
@@ -78,10 +69,8 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     TextView title_tv;
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
-
     @BindView((R.id.iv))
     ImageView imageView;
-
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
     private Uri imageUri;
@@ -91,9 +80,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     private String scopeString;
     private String orgStructrueIdString;
     private static final int REQ_TAKE_PHOTO = 333;
-
     private String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpeg";
-
     private String sealPringString;
 
     @Override
@@ -103,8 +90,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_add_seal_sec_step);
         ButterKnife.bind(this);
         initView();
-
-        permissions();
 
         initData();
 
@@ -147,7 +132,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             case R.id.iv:
 //                photoAndCamera();
 //                getTakePhoto();
-                selectDialog();
+                permissions();
                 break;
         }
     }
@@ -215,7 +200,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
                     // 保存 印模 名字
                     sealPringString = responseInfo.getData().getFileName();
-
+                    //添加印章
                     addSeal();
                     runOnUiThread(new Runnable() {
                         @Override
@@ -258,13 +243,10 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQ_TAKE_PHOTO) {
-
             Utils.log(imgPath);
-
 
             File file = new File(imgPath);
             file.mkdirs();
-
 
             //压缩文件
             Luban.with(this)
@@ -287,7 +269,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                         public void onSuccess(final File file) {
                             // TODO 压缩成功后调用，返回压缩后的图片文件
                             //上传图片
-                            Utils.log(file.length() +"");
+                            Utils.log(file.length() + "");
                             uploadPic(file);
                         }
 
@@ -306,7 +288,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         getTakePhoto().onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
@@ -339,7 +320,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
     private void selectDialog() {
 //        Utils.log("**********"+ CommonUtil.getUserData(this).getId());
-        ArrayList strings = new ArrayList<String>();
+        ArrayList<String> strings = new ArrayList<String>();
         strings.add("从相册选");
         strings.add("拍照");
         final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(this, strings);
@@ -353,7 +334,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                     takePhoto.onPickFromGallery();
                     optionBottomDialog.dismiss();
                 } else if (position == 1) {
-
 //                    takePhoto.onPickFromCapture(imageUri);
 
 //                    ISCameraConfig config = new ISCameraConfig.Builder()
@@ -404,13 +384,10 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             imgUri = this.getApplication().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
         }
 
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
         this.startActivityForResult(intent, REQ_TAKE_PHOTO);
     }
-
-
 
 
     /**
@@ -431,6 +408,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                             //开启图片选择器
 //                            takePhoto.onPickFromCapture(imageUri);
                             Utils.log("accept");
+                            selectDialog();
                         } else if (permission.shouldShowRequestPermissionRationale) {
                             showToast("您已拒绝权限申请");
                         } else {
@@ -461,7 +439,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
 
     /**
-     * 添加公司
+     * 添加印章
      */
     private void addSeal() {
 //        loadingView.show();
@@ -491,21 +469,14 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 String result = response.body().string();
                 Utils.log("success:" + result);
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                ResponseInfo<AddSealData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddSealData>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0) {
-                    if (responseInfo.getData()) {
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
 //                        loadingView.cancel();
-                        finish();
-                        Looper.prepare();
-                        showToast("添加成功");
-                        Looper.loop();
-                    } else {
-//                        loadingView.cancel();
-                        Looper.prepare();
-                        showToast(responseInfo.getMessage());
-                        Looper.loop();
-                    }
+                    finish();
+                    Looper.prepare();
+                    showToast("添加成功");
+                    Looper.loop();
                 } else {
 //                    loadingView.cancel();
                     Looper.prepare();

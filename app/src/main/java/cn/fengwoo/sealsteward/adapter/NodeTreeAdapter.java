@@ -93,8 +93,6 @@ public class NodeTreeAdapter extends BaseAdapter {
         }else{
             Utils.log("else");
 
-
-
         }
     }
     /**

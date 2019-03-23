@@ -23,7 +23,9 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,11 +77,12 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
         reject_apply_smartRL.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                waitApplyDataList.clear(); //清除数据
                 ApplyListData applyListData = new ApplyListData();
-                applyListData.setCurPage(0);
+                applyListData.setCurPage(1);
                 applyListData.setHasExportPdf(false);
                 applyListData.setHasPage(true);
-                applyListData.setPageSize(5);
+                applyListData.setPageSize(10);
                 applyListData.setParam(3);
                 HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYLIST, 2, null, applyListData, new Callback() {
                     @Override
@@ -99,10 +102,10 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
                                 String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
-                                        ,expireTime,app.getApplyCount(),applyTime));
+                                        ,expireTime,app.getApplyCount(),applyTime,app.getId()));
                             }
                             //请求数据
-                            getActivity().runOnUiThread(new Runnable() {
+                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,4);
@@ -135,7 +138,34 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(), UseSealApplyActivity.class);
-        startActivity(intent);
+        HashMap<String ,String> hashMap = new HashMap<>();
+        hashMap.put("applyId", waitApplyDataList.get(position).getId());
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYDETAIL, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"查看详情错误错误!!!!!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<GetApplyListBean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<GetApplyListBean>>(){}
+                        .getType());
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
+                    Intent intent = new Intent(getActivity(), UseSealApplyActivity.class);
+                    intent.putExtra("sealName",waitApplyDataList.get(position).getSealName());
+                    intent.putExtra("count",waitApplyDataList.get(position).getApplyCount());
+                    intent.putExtra("failTime",waitApplyDataList.get(position).getFailTime());
+                    intent.putExtra("cause",waitApplyDataList.get(position).getCause());
+                    startActivity(intent);
+                }else {
+                    Looper.prepare();
+                    Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+
+            }
+        });
     }
 }

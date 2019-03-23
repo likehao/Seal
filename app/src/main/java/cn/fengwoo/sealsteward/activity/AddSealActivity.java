@@ -117,11 +117,9 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 123 && resultCode == 123) {
+        if (requestCode == 123) {
             if (data != null) {
                 departmentId = data.getExtras().getString("id");
                 departmentName = data.getExtras().getString("name");
@@ -130,7 +128,6 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
             }
         }
     }
-
 
     /**
      * 发送添加的印章信息

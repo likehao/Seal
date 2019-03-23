@@ -33,7 +33,7 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
             mview = inflater.inflate(R.layout.message_popuwindowlayout,null);   //添加人员，添加印章
             initView();
         }else {
-            mview = inflater.inflate(R.layout.see_record_popuwindow,null);
+            mview = inflater.inflate(R.layout.see_record_popuwindow,null);   //查看申请文件，上传照片
         }
         //设置选择的popuwindow的View
         this.setContentView(mview);

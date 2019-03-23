@@ -3,7 +3,6 @@ package cn.fengwoo.sealsteward.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
@@ -30,16 +28,10 @@ import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.squareup.picasso.Picasso;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -66,9 +58,6 @@ import okhttp3.internal.Util;
 public class MainFragment extends Fragment implements View.OnClickListener {
 
     private View view;
-    //设置图片资源:url或本地资源
-    String[] images = new String[]{"url", "url"};
-    String[] titles = new String[]{"我是广告，全场2折起", "全场2折起"};
     //设置图片集合
     private List<String> imageViews = new ArrayList<String>();
     @BindView(R.id.banner)
@@ -128,6 +117,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Looper.loop();
             }
 
+            @SuppressLint("SdCardPath")
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();

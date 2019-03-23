@@ -34,11 +34,12 @@
 
                 <TextView
                     android:id="@+id/sealName_TV"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:gravity="end"
                     android:layout_toStartOf="@+id/iv5"
-                    android:text="@string/please_select_seal" />
+                    android:hint="@string/please_select_seal" />
 
                 <ImageView
                     android:id="@+id/iv5"
@@ -69,7 +70,7 @@
 
                 <EditText
                     android:id="@+id/apply_time_et"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/iv2"
@@ -114,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/iv3"
-                    android:text="@string/please_fail_time" />
+                    android:hint="@string/please_fail_time" />
 
                 <ImageView
                     android:id="@+id/iv3"

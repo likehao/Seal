@@ -51,7 +51,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
     private List<Node> data;
     private int filterType1;
     private String m_id, m_name;
-
+    private Intent intent;
     private String typeString;
 //    private Map<String, String> selectedUidsMap; // user id和类型的map
 
@@ -109,6 +109,12 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
         data = new ArrayList<>();
         mLinkedList.addAll(NodeHelper.sortNodes(data));
         mAdapter.notifyDataSetChanged();
+        intent = getIntent();
+        //查询盖章记录跳转过来的时候隐藏掉title
+        int code = intent.getIntExtra("code",0);
+        if (code == 1){
+            title_tv.setVisibility(View.GONE);
+        }
     }
 
     private void getDate() {
@@ -179,7 +185,6 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
                 Utils.log("confirm");
                 Intent intent = new Intent();
 
-
 //                final SerializableMap myMap=new SerializableMap();
 //                myMap.setMap(selectedUidsMap);//将map数据添加到封装的myMap中
 //                Bundle bundle=new Bundle();
@@ -188,7 +193,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
 
                 intent.putExtra("id", m_id);
                 intent.putExtra("name", m_name);
-                setResult(RESULT_OK,intent);
+                setResult(10,intent);
                 finish();
                 break;
         }

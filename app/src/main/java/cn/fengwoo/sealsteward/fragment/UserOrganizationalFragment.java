@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,7 +112,7 @@ public class UserOrganizationalFragment extends Fragment {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType(),2,false));
                     }
                 }
-                getActivity().runOnUiThread(new Runnable() {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mLinkedList.addAll(NodeHelper.sortNodes(data));
@@ -168,7 +169,7 @@ public class UserOrganizationalFragment extends Fragment {
 
                                 mLinkedList.clear();
 
-                                getActivity().runOnUiThread(new Runnable() {
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
 //                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
@@ -188,7 +189,7 @@ public class UserOrganizationalFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                     intent.putExtra("uid", uid);
                     startActivity(intent);
-                    getActivity().runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             optionBottomDialog.dismiss();

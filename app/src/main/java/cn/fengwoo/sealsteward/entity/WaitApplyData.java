@@ -12,13 +12,15 @@ public class WaitApplyData implements Serializable {
     private String failTime;
     private Integer applyCount;
     private String applyTime;
+    private String id;
 
-    public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime) {
+    public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime,String id) {
         this.cause = cause;
         this.sealName = sealName;
         this.failTime = failTime;
         this.applyCount = applyCount;
         this.applyTime = applyTime;
+        this.id = id;
     }
 
     public String getCause() {
@@ -59,6 +61,14 @@ public class WaitApplyData implements Serializable {
 
     public void setApplyTime(String applyTime) {
         this.applyTime = applyTime;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

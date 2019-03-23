@@ -36,7 +36,7 @@
 
                 <EditText
                     android:id="@+id/et_seal_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
@@ -44,7 +44,7 @@
                     android:hint="@string/please_input_seal_name"
                     android:gravity="end"
                     android:textSize="12sp"
-                    android:layout_marginEnd="30dp" />
+                    android:layout_marginEnd="15dp" />
 
 
             </RelativeLayout>
@@ -70,7 +70,7 @@
 
                 <EditText
                     android:id="@+id/et_seal_number"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
@@ -79,7 +79,7 @@
                     android:textSize="12sp"
                     android:gravity="end"
                     android:inputType="number"
-                    android:layout_marginEnd="30dp" />
+                    android:layout_marginEnd="15dp" />
 
             </RelativeLayout>
 
@@ -133,7 +133,7 @@
 
                 <EditText
                     android:id="@+id/et_range"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
@@ -141,7 +141,7 @@
                     android:hint="@string/please_input_use_Range"
                     android:textSize="12sp"
                     android:gravity="end"
-                    android:layout_marginEnd="30dp" />
+                    android:layout_marginEnd="15dp" />
 
             </RelativeLayout>
 
@@ -167,11 +167,12 @@
 
                 <TextView
                     android:id="@+id/tv_department"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="30dp"
+                    android:gravity="end"
                     android:text="@string/select_belong_department" />
                 <View
                     style="@style/right_arrow" />
