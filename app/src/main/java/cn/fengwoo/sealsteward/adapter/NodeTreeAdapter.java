@@ -237,15 +237,15 @@ public class NodeTreeAdapter extends BaseAdapter {
 //            }
 //        });
 
-//        holder.label.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (node.get_parent() != null) {
-//                    Utils.log("*************************************************************************" + node.get_parent().get_label());
-//                    clickItemListener.clicked(node.get_id(),node.get_type(), node.get_parent().get_label());
-//                }
-//            }
-//        });
+        holder.label.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (node.get_parent() != null) {
+                    Utils.log("*************************************************************************" + node.get_parent().get_label());
+                    clickItemListener.clicked(node.get_id(),node.get_type(), node.get_parent().get_label());
+                }
+            }
+        });
 
         convertView.setPadding(node.get_level()*retract,5,5,5);
         return convertView;

@@ -45,7 +45,7 @@
     <TextView
         android:id="@+id/id_treenode_label"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/id_treenode_icon"
         android:layout_toStartOf="@id/id_confirm"
