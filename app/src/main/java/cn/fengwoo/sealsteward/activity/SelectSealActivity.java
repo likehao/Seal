@@ -120,7 +120,8 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 Utils.log(result);
                 Gson gson = new Gson();
                 OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
-                Utils.log(organizationalStructureData.getData().get(0).getName());
+             //   Utils.log(organizationalStructureData.getData().get(0).getName());
+                assert organizationalStructureData!= null;
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1 ) {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),2,false));

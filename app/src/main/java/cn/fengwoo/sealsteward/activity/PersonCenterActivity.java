@@ -83,7 +83,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.my_QRCode_rl)
-    RelativeLayout my_QRCode_rl;
+    RelativeLayout my_QRCode_rl;  //二维码功能暂时隐藏
     private Intent intent;
     @BindView(R.id.name_rl)
     RelativeLayout name_rl;
@@ -212,7 +212,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 department_tv.setText(responseInfo.getData().getOrgStructureName());
                                 job_tv.setText(responseInfo.getData().getJob());
                                 email_tv.setText(responseInfo.getData().getUserEmail());
-                                String path = "file://" + responseInfo.getData().getHeadPortrait();
+                                String path = "file://"+responseInfo.getData().getHeadPortrait();
                                 Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
                                 address_tv.setText(responseInfo.getData().getAddress());
                             }

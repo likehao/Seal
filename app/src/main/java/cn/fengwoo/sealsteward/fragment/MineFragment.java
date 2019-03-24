@@ -182,10 +182,10 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                         final ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
                         if (responseInfo.getData()){
-                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            intent = new Intent(getActivity(), LoginActivity.class);
                             startActivity(intent);
                             commonDialog.dialog.dismiss();
-                            getActivity().finish();
+                            Objects.requireNonNull(getActivity()).finish();
                             Log.e("TAG","退出成功.........");
                         }else {
                             Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();

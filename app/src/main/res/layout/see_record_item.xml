@@ -23,7 +23,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingStart="10dp"
-                android:text="公章"
+                android:textColor="@color/black"
+                android:enabled="true"
+                android:textIsSelectable="true"
+                android:focusable="true"
+                android:longClickable="true"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -41,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingStart="10dp"
-                android:text="公章"
+                android:textColor="@color/black"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -62,7 +66,7 @@
                 android:layout_weight="1"
                 android:paddingEnd="20dp"
                 android:paddingStart="10dp"
-                android:text="公章"
+                android:textColor="@color/black"
                 android:textSize="12sp" />
         </LinearLayout>
 

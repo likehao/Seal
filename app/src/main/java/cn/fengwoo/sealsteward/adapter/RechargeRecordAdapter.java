@@ -45,29 +45,35 @@ public class RechargeRecordAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.recharge_record_item,null);
             viewHolder.recharge_time_tv = view.findViewById(R.id.recharge_time_tv);
+            viewHolder.recharge_result_tv = view.findViewById(R.id.recharge_result_tv);
             viewHolder.recharge_seal_name_tv = view.findViewById(R.id.recharge_seal_name_tv);
             viewHolder.recharge_department_tv = view.findViewById(R.id.recharge_department_tv);
             viewHolder.recharge_set_meal_tv = view.findViewById(R.id.recharge_set_meal_tv);
             viewHolder.recharge_end_time_tv = view.findViewById(R.id.recharge_end_time_tv);
             viewHolder.recharge_money_tv = view.findViewById(R.id.recharge_money_tv);
+            viewHolder.recharge_way_tv = view.findViewById(R.id.recharge_way_tv);
             view.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.recharge_time_tv.setText(recordDataList.get(position).getRechargeTime());
+        viewHolder.recharge_result_tv.setText(String.valueOf(recordDataList.get(position).getRechargeResult()));
         viewHolder.recharge_seal_name_tv.setText(recordDataList.get(position).getSealName());
         viewHolder.recharge_department_tv.setText(recordDataList.get(position).getDepartment());
         viewHolder.recharge_set_meal_tv.setText(recordDataList.get(position).getSetMeal());
         viewHolder.recharge_end_time_tv.setText(recordDataList.get(position).getEndTime());
-        viewHolder.recharge_money_tv.setText(recordDataList.get(position).getMoney());
+        viewHolder.recharge_money_tv.setText(String.valueOf(recordDataList.get(position).getMoney()));
+        viewHolder.recharge_way_tv.setText(recordDataList.get(position).getRechargeWay()+"");
         return view;
     }
     class ViewHolder{
         private TextView recharge_time_tv;  //充值时间
+        private TextView recharge_result_tv;  //充值时间
         private TextView recharge_seal_name_tv;  //充值印章名称
         private TextView recharge_department_tv; //充值部门
         private TextView recharge_set_meal_tv; //充值套餐
         private TextView recharge_end_time_tv; //充值服务费到期时间
         private TextView recharge_money_tv; //充值金额
+        private TextView recharge_way_tv; //支付方式
     }
 }

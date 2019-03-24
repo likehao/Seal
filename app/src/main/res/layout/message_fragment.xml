@@ -18,10 +18,7 @@
 
             <View style="@style/line" />
 
-            <LinearLayout
-                android:id="@+id/wait_me_agree_ll"
-                style="@style/message_pressed_effect"
-                android:visibility="gone">
+            <LinearLayout style="@style/message_pressed_effect">
 
                 <RelativeLayout
                     android:layout_width="45dp"
@@ -32,7 +29,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/ic_launcher" />
+                        android:src="@drawable/system_msg" />
 
                     <ImageView
                         android:layout_width="10dp"
@@ -46,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
-                    android:text="@string/wait_me_agree"
+                    android:text="@string/system_message"
                     android:textColor="@color/black" />
             </LinearLayout>
 
@@ -114,7 +111,9 @@
 
             <View style="@style/line_left" />
 
-            <LinearLayout style="@style/message_pressed_effect">
+            <LinearLayout
+                android:id="@+id/wait_me_agree_ll"
+                style="@style/message_pressed_effect">
 
                 <RelativeLayout
                     android:layout_width="45dp"
@@ -125,7 +124,7 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/system_msg" />
+                        android:src="@drawable/wait_me_apply" />
 
                     <ImageView
                         android:layout_width="10dp"
@@ -139,9 +138,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
-                    android:text="@string/system_message"
+                    android:text="@string/wait_me_agree"
                     android:textColor="@color/black" />
             </LinearLayout>
+
 
             <View style="@style/line" />
         </LinearLayout>

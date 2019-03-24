@@ -50,6 +50,7 @@ public class SeeRecordAdapter extends BaseAdapter {
         viewHolder.serial_number_tv.setText(beanList.get(position).getSerialNumber());
         viewHolder.sealTime_tv.setText(beanList.get(position).getSealTime());
         viewHolder.seal_address_tv.setText(beanList.get(position).getSealAddress());
+
         return view;
     }
     class ViewHolder{

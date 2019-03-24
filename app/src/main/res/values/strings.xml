@@ -194,7 +194,7 @@
     <string name="wait_me_agree">待我审批</string>
     <string name="apply_notify">审批通知</string>
     <string name="alarm_message">告警消息</string>
-    <string name="system_message">系统公告</string>
+    <string name="system_message">系统消息</string>
     <string name="go_approval">去审批</string>
     <string name="add_person">添加人员</string>
     <string name="add_seal">添加印章</string>
@@ -276,5 +276,6 @@
     <string name="picture">照片:</string>
     <string name="lately_seal_time">最近盖章时间</string>
     <string name="lately_seal_address">最近盖章地址</string>
+    <string name="recharge_way">支付方式</string>
 
 </resources>

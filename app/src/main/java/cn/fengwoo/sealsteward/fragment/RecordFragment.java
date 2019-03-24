@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
@@ -23,6 +24,10 @@ import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +43,14 @@ import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.bean.ApplyListData;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.RecordListBean;
 import cn.fengwoo.sealsteward.bean.StampRecordData;
 import cn.fengwoo.sealsteward.bean.StampRecordList;
 import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -113,12 +120,12 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 String failTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime()));  //过期时间戳转为时间
                                 String sealTime = DateUtils.getDateString(Long.parseLong(app.getLastStampTime()));  //最近盖章时间戳转为时间
                                 int photoCount; //如果没有照片数获取的是null,所以显示0不显示null在界面上
-                                if (app.getPhotoCount() == null){
+                                if (app.getPhotoCount() == null) {
                                     photoCount = 0;
-                                }else {
+                                } else {
                                     photoCount = app.getPhotoCount();
                                 }
-                                list.add(new RecordData(app.getApplyCause(), app.getSealName(), app.getApplyUserName()
+                                list.add(new RecordData(app.getId(),app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                         , app.getApplyCount(), app.getAvailableCount(), photoCount
                                         , failTime, sealTime, app.getLastStampAddress()));
                             }
@@ -161,13 +168,52 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
     private void setListener() {
         record_lv.setOnItemClickListener(this);
+    }
+
+    /**
+     * 处理注册事件
+     * @param messageEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        if (s.equals("1")){
+            record_refreshLayout.autoRefresh();  //自动刷新
+        }
 
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        //   intent = new Intent(getActivity(), RecordDetailActivity.class);
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);   //注册Eventbus
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);  //解除注册
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         intent = new Intent(getActivity(), SeeRecordActivity.class);
+        StampRecordList stampRecordList = new StampRecordList();
+        stampRecordList.getId();
+        intent.putExtra("id",list.get(position).getId());
+        intent.putExtra("count",list.get(position).getSealCount());
+        intent.putExtra("restCount",list.get(position).getRestCount());
+        intent.putExtra("photoNum",list.get(position).getUploadPhotoNum());
+        intent.putExtra("sealPerson",list.get(position).getSealPeople());
+        intent.putExtra("sealName",list.get(position).getSealName());
         startActivity(intent);
     }
 }

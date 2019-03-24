@@ -1,5 +1,8 @@
 package cn.fengwoo.sealsteward.bean;
 
+/**
+ * 定义消息事件类
+ */
 public class MessageEvent {
     public String msgType,msg;
 

@@ -15,12 +15,16 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.MainActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealRecodeActivity;
 import cn.fengwoo.sealsteward.adapter.TopRightPopuAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.fragment.RecordFragment;
 
 public class AddPopuwindow extends PopupWindow {
     private ListView listView;
@@ -95,6 +99,14 @@ public class AddPopuwindow extends PopupWindow {
                 dismiss();
                 Intent intent = new Intent(mview.getContext(),SelectSealRecodeActivity.class);
                 mview.getContext().startActivity(intent);
+            }
+        });
+        //最新
+        newest_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new MessageEvent("1","刷新"));
+                dismiss();
             }
         });
     }

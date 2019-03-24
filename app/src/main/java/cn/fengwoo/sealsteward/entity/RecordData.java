@@ -11,8 +11,18 @@ public class RecordData {
     private String failTime;
     private String sealTime;
     private String sealAddress;
+    private String id;
 
-    public RecordData(String couse, String sealName, String sealPeople, Integer sealCount, Integer restCount, Integer uploadPhotoNum, String failTime, String sealTime, String sealAddress) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public RecordData(String id,String couse, String sealName, String sealPeople, Integer sealCount, Integer restCount, Integer uploadPhotoNum, String failTime, String sealTime, String sealAddress) {
+        this.id = id;
         this.couse = couse;
         this.sealName = sealName;
         this.sealPeople = sealPeople;

@@ -53,8 +53,8 @@
 
     <!--imageview-->
     <style name="imageView">
-        <item name="android:layout_width">30dp</item>
-        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
@@ -106,10 +106,9 @@
     <!--详情布局-->
     <style name="details">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">10dp</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginTop">15dp</item>
         <item name="android:orientation">horizontal</item>
     </style>
 

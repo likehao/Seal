@@ -13,6 +13,7 @@ public class StampRecordData implements Serializable {
      }
      */
     private Integer curPage;
+    private Boolean hasExportPdf;
     private Boolean hasPage;
     private Integer pageSize;
     private Parem param;
@@ -21,6 +22,7 @@ public class StampRecordData implements Serializable {
     public String toString() {
         return "StampRecordData{" +
                 "curPage=" + curPage +
+                "hasExportPdf=" + hasExportPdf +
                 ", hasPage=" + hasPage +
                 ", pageSize=" + pageSize +
                 ", param=" + param +
@@ -35,6 +37,13 @@ public class StampRecordData implements Serializable {
         this.curPage = curPage;
     }
 
+    public Boolean getHasExportPdf() {
+        return hasExportPdf;
+    }
+
+    public void setHasExportPdf(Boolean hasExportPdf) {
+        this.hasExportPdf = hasExportPdf;
+    }
     public Boolean getHasPage() {
         return hasPage;
     }

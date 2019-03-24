@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +81,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
     @BindView(R.id.select_bt)
     Button selectBt;
     Intent intent;
-    private String person;
+    private String person,personId,sealId;
     private final static int SELECTPERSONREQUESTCODE = 123;
     private final static int SELECTSEALREQUESTCODE = 10;
 
@@ -141,7 +142,46 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
      * 查询盖章记录请求
      */
     private void selectRecord(){
-        
+        StampRecordData stampRecordData = new StampRecordData();
+        StampRecordData.Parem parem = new StampRecordData.Parem();
+        stampRecordData.setCurPage(1);
+        stampRecordData.setHasExportPdf(false);
+        stampRecordData.setHasPage(true);
+        stampRecordData.setPageSize(10);
+        try {
+            //时间转为时间戳
+            if (end != null && begin != null){
+                String endTime = DateUtils.dateToStamp2(end);
+                String startTime = DateUtils.dateToStamp2(begin);
+                parem.Parem(personId,endTime,sealId,startTime);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        stampRecordData.setParam(parem);
+
+        HttpUtil.sendDataAsync(SelectSealRecodeActivity.this, HttpUrl.STAMPRECORDAPPLYLIST, 2, null, stampRecordData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<List<StampRecordList>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<StampRecordList>>>() {
+                }.getType());
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+
+                } else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+            }
+        });
+
     }
     /**
      * 获取最近时间选择器
@@ -157,7 +197,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         SinglePicker<String> picker = new SinglePicker<String>(this,list);
         picker.setCanceledOnTouchOutside(true);
         picker.setDividerRatio(WheelView.DividerConfig.FILL);
-        picker.setTextColor(0xFF999999);
+        picker.setTextColor(0xFF000000);
 //        picker.setSubmitTextColor(0xFFFB2C3C);
 //        picker.setCancelTextColor(0xFFFB2C3C);
         picker.setTextSize(15);
@@ -217,11 +257,18 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         timePicker.show();
     }
 
+    /**
+     * 回调结果
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECTPERSONREQUESTCODE) {
             if (data != null) {
                 person = Objects.requireNonNull(data.getExtras()).getString("name");
+                personId = data.getExtras().getString("id");
                 selectPersonTv.setText(person);
 
             }
@@ -229,8 +276,11 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         if (requestCode == SELECTSEALREQUESTCODE){
             if (data != null) {
                 person = data.getExtras().getString("name");
+                sealId = data.getExtras().getString("id");
                 selectSealTv.setText(person);
             }
         }
     }
+
+
 }
