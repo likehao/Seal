@@ -425,6 +425,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     public void onDestroy() {
 //        unregisterReceiver(registerReceiver);
         super.onDestroy();
-        scanSubscription.dispose();
+        if (scanSubscription != null){
+            scanSubscription.dispose();
+        }
     }
 }

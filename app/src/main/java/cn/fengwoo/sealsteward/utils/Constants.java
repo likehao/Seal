@@ -38,5 +38,7 @@ public class Constants {
     public static final UUID WRITE_UUID = UUID.fromString("00002AF1-0000-1000-8000-00805F9B34FB");
     public static final UUID NOTIFY_UUID = UUID.fromString("00002AF0-0000-1000-8000-00805F9B34FB");
 
+    // APP_ID 替换为你的应用从官方网站申请到的合法appId
+    public static final String APP_ID = "wxf3669f6ea87d71d4";
 
 }

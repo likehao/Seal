@@ -15,7 +15,7 @@ public class DateUtils {
      */
     public static boolean isDateOneBigger(String str1, String str2) {
         boolean isBigger = false;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dt1 = null;
         Date dt2 = null;
         try {
@@ -57,7 +57,7 @@ public class DateUtils {
      */
     public static String getDateString(long time) {
         Date date = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:00", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return format.format(date);
     }
 
@@ -69,7 +69,7 @@ public class DateUtils {
      */
     public static String dateToStamp(String s) throws ParseException{
         String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse(s);
         long ts = date.getTime();
         res = String.valueOf(ts);

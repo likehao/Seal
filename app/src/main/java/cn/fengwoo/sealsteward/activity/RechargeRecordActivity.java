@@ -56,6 +56,7 @@ public class RechargeRecordActivity extends BaseActivity {
     SmartRefreshLayout recharge_smt;
     RechargeRecordAdapter recordAdapter;
     List<RechargeRecordData> recordDataList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +82,7 @@ public class RechargeRecordActivity extends BaseActivity {
     /**
      * 获取充值记录信息
      */
-    private void getRechagreRecord(){
+    private void getRechagreRecord() {
         recharge_smt.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -93,36 +94,47 @@ public class RechargeRecordActivity extends BaseActivity {
                 HttpUtil.sendDataAsync(RechargeRecordActivity.this, HttpUrl.RECHARGERECORD, 2, null, applyListData, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        Log.e("TAG",e+"错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+                        Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
                         Gson gson = new Gson();
-                        ResponseInfo<List<RechargeRecordBean>> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<List<RechargeRecordBean>>>(){}
+                        ResponseInfo<List<RechargeRecordBean>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<RechargeRecordBean>>>() {
+                        }
                                 .getType());
-                        if (responseInfo.getData() != null && responseInfo.getCode() == 0){
-                            for(RechargeRecordBean app : responseInfo.getData()) {
-                                //时间戳转为时间
-                                String rechargeTime = DateUtils.getDateString(Long.parseLong(app.getRechargeTime()));// 支付时间
-                            //    String expireTime = DateUtils.getDateString(Long.parseLong(app.getCurrentServiceExpireTime()));// 服务费到期时间
+                        if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                            for (RechargeRecordBean app : responseInfo.getData()) {
+                                try {
+                                    Integer type = null;
+                                    //时间戳转为时间
+                                    String rechargeTime = DateUtils.getDateString(Long.parseLong(app.getRechargeTime()));// 支付时间
+                                    String expireTime = DateUtils.getDateString(Long.parseLong(app.getCurrentServiceExpireTime()));// 服务费到期时间
+                                 /*   if (app.getPaymentType() == 1) {
+                                        type = Integer.parseInt("微信");
+                                    } else {
+                                        type = Integer.parseInt("支付宝");
+                                    }*/
+                                    recordDataList.add(new RechargeRecordData(rechargeTime, app.getPaymentResult(), app.getSealName()
+                                            , app.getOrgStructureName(), app.getPackageContent(),app.getPaymentType() , expireTime, app.getAmountOfMoney()));
+                                } catch (NumberFormatException e) {
+                                    e.printStackTrace();
+                                }
 
-                                recordDataList.add(new RechargeRecordData(rechargeTime,app.getPaymentResult(),app.getSealName()
-                                ,app.getOrgStructureName(),app.getPackageContent(),app.getPaymentType() ,app.getCurrentServiceExpireTime(),app.getAmountOfMoney()));
                             }
                             //请求数据
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    recordAdapter = new RechargeRecordAdapter(recordDataList,RechargeRecordActivity.this);
+                                    recordAdapter = new RechargeRecordAdapter(recordDataList, RechargeRecordActivity.this);
                                     recharge_record_lv.setAdapter(recordAdapter);
                                     recordAdapter.notifyDataSetChanged(); //刷新数据
                                     refreshLayout.finishRefresh(); //刷新完成
                                 }
                             });
 
-                        }else {
+                        } else {
                             refreshLayout.finishRefresh(); //刷新完成
                             Looper.prepare();
                             showToast(responseInfo.getMessage());
@@ -141,5 +153,11 @@ public class RechargeRecordActivity extends BaseActivity {
                 refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recharge_smt.autoRefresh();  //自动刷新
     }
 }

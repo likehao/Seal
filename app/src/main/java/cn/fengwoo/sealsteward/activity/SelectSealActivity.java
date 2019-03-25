@@ -157,15 +157,33 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.edit_tv:
-                Utils.log("confirm");
-                intent = new Intent();
-                intent.putExtra("id", m_id);
-                intent.putExtra("name", m_name);
-                setResult(123,intent);
-                finish();
+                getSure();
                 break;
         }
     }
 
-
+    /**
+     * 判断是选章还是服务费的确定
+     */
+    private void getSure(){
+        Utils.log("confirm");
+        intent = getIntent();
+        String serviceRecharge = intent.getStringExtra("serviceRecharge");
+        if (serviceRecharge != null && serviceRecharge.equals("pay")){
+            intent.putExtra("id", m_id);
+            if (m_id != null){
+                intent = new Intent(this,PayActivity.class);
+                intent.putExtra("sealId",m_id);
+                startActivity(intent);
+            }else {
+                showToast("请选择需要充值的印章");
+            }
+        }else {
+            intent = new Intent();
+            intent.putExtra("id", m_id);
+            intent.putExtra("name", m_name);
+            setResult(123,intent);
+            finish();
+        }
+    }
 }

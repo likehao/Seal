@@ -201,11 +201,11 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         TimePickerView timePicker = new TimePickerBuilder(ApplyUseSealActivity.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String format = simpleDateFormat.format(date);  //选择的时间
                 //获取当前时间
                 Date nowTime = new Date();
-                SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+                SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String nowT = dateFormat.format(nowTime);
                 //判断选择的时间是否过期
                 Boolean compare = DateUtils.isDateOneBigger(format,nowT);

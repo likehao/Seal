@@ -137,10 +137,6 @@ public class HttpUrl {
      * 审批列表
      */
     public static final String APPLYLIST = "/apply/applylist";
-    /**
-     * 申请列表（--我要盖章--）
-     */
-    public static final String USESEALAPPLYLIST = "/apply/usesealapplylist";
 
     /**
      * seal 信息
@@ -175,7 +171,7 @@ public class HttpUrl {
     public static final String UPDATE_EXAMINE = "/approvalflow/updatesealapprovalflow";
 
     /**
-     * 申请列表
+     * 申请列表（--我要盖章--）
      */
     public static final String USE_SEAL_APPLYLIST = "/apply/usesealapplylist";
 
@@ -187,6 +183,14 @@ public class HttpUrl {
      * 充值记录
      */
     public static final String RECHARGERECORD = "/cost/rechargerecord";
+    /**
+     * 费用套餐
+     */
+    public static final String RECHARGE_PACKAGES = "/cost/rechargepackages";
+    /**
+     * 支付下单
+     */
+    public static final String ADDORDER = "/cost/addorder";
 
 
 }

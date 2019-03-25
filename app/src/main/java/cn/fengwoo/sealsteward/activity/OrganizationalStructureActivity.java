@@ -76,7 +76,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
         linearLayouts[1] = tab2_ll;
         changeView(0);  //启动默认
         //判断点击
-        setJudge();
+     //   setJudge();
     }
 
     private void setListener() {

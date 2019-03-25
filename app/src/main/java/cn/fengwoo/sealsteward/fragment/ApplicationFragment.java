@@ -33,6 +33,7 @@ import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.OrganizationalStructureActivity;
 import cn.fengwoo.sealsteward.activity.RechargeRecordActivity;
 import cn.fengwoo.sealsteward.activity.ScanSearchAddSealActivity;
+import cn.fengwoo.sealsteward.activity.SelectSealActivity;
 import cn.fengwoo.sealsteward.activity.StartPasswordActivity;
 import cn.fengwoo.sealsteward.activity.WaitHandleActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
@@ -136,9 +137,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 intent.putExtra("isAddNewSeal", true);
                 startActivity(intent);
                 break;
-            case R.id.service_charge_rl:
-                intent = new Intent(getActivity(), OrganizationalStructureActivity.class);
-                intent.putExtra("electronic", 1);
+            case R.id.service_charge_rl:   //服务费充值
+                intent = new Intent(getActivity(), SelectSealActivity.class);
+             //   intent.putExtra("electronic", 1);
+                intent.putExtra("serviceRecharge","pay");
                 startActivity(intent);
                 break;
             case R.id.recharge_record_rl:

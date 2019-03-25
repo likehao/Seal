@@ -277,5 +277,12 @@
     <string name="lately_seal_time">最近盖章时间</string>
     <string name="lately_seal_address">最近盖章地址</string>
     <string name="recharge_way">支付方式</string>
-
+    <string name="select_packages">选择套餐</string>
+    <string name="select_recharge_way">选择支付方式</string>
+    <string name="WeChat">微信</string>
+    <string name="alipay">支付宝</string>
+    <string name="pay_amountOfMoney">支付金额</string>
+    <string name="get_money">收款方</string>
+    <string name="sure_pay">确认支付</string>
+    <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
 </resources>

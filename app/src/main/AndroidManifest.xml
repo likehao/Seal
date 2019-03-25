@@ -60,16 +60,30 @@
 
         <!-- Matisse使用拍照添加一个provider -->
         <provider
-            tools:replace="android:authorities"
             android:name="android.support.v4.content.FileProvider"
             android:authorities="cn.fengwoo.sealsteward.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
-                tools:replace="android:resource"
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
+                android:resource="@xml/filepaths"
+                tools:replace="android:resource" />
         </provider>
+
+        <!--微信支付-->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="wxf3669f6ea87d71d4" />
+            </intent-filter>
+        </activity>
 
         <!-- 添加百度定位AK -->
         <meta-data
@@ -99,20 +113,6 @@
         <activity
             android:name=".activity.HomeActivity"
             android:screenOrientation="portrait" />
-
-        <!-- 支付宝支付 -->
-        <activity
-            android:name="com.alipay.sdk.app.H5PayActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:exported="false"
-            android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name="com.alipay.sdk.app.H5AuthActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
-            android:exported="false"
-            android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <!-- JPUSH推送！！！！！！！！！！！！！！！！ -->
         <meta-data
@@ -211,9 +211,7 @@
         <activity android:name=".activity.SealInfoActivity" />
         <activity android:name=".activity.SelectSealActivity" />
         <activity android:name=".activity.SelectPeopleActivity" />
-
         <activity android:name=".activity.UserInfoActivity" />
-
         <activity android:name=".activity.SuggestionActivity" />
         <activity android:name=".activity.FileActivity" />
         <activity android:name=".activity.ApprovalActivity" />
@@ -236,9 +234,12 @@
         <activity android:name=".activity.AddCompanyActivity" />
         <activity android:name=".activity.ChangePasswordActivity" />
         <activity android:name=".activity.OrganizationalManagementActivity" />
-        <activity android:name=".activity.AddAutographActivity"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".activity.SelectSealRecodeActivity"/>
+        <activity
+            android:name=".activity.AddAutographActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".activity.SelectSealRecodeActivity" />
+        <activity android:name=".activity.PayActivity" />
+        <activity android:name=".activity.SurePayActivity"/>
     </application>
 
 </manifest>
