@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.app.Application;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Looper;
@@ -13,6 +14,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.HideKeyBroadUtils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.MyApp;
 
 
 /**
@@ -22,10 +24,11 @@ import cn.fengwoo.sealsteward.view.LoadingView;
 public class BaseActivity extends AppCompatActivity{
     public ImmersionBar immersionBar;
     protected LoadingView loadingView;
+    protected MyApp application;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        application = (MyApp) getApplication();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //保持竖屏
         immersionBar = ImmersionBar.with(this)
         .statusBarDarkFont(true,0.2f)   //状态栏字体是深色，不写默认为亮色,如果当前设备不支持状态栏字体变色，会使当前状态栏加上透明度，否则不执行透明度

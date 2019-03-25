@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
+import com.polidea.rxandroidble2.RxBleConnection;
 import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.internal.RxBleLog;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -35,6 +36,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.AddSealActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
@@ -50,10 +52,16 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.MyApp;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Connection;
 import okhttp3.Response;
 import okhttp3.internal.Util;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
@@ -74,6 +82,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.home_companyName_tv)
     TextView home_companyName_tv;
     LoadingView loadingView;
+    private RxBleConnection rxBleConnection;
 
     @Nullable
     @Override
@@ -84,6 +93,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         initView();
         initBanner();
         setListener();
+
+
         return view;
     }
 
@@ -217,26 +228,39 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         switch (requestCode) {
             case Constants.TO_NEARBY_DEVICE:
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
+                    if (resultCode != RESULT_OK) {
+                        return;
+                    }
                     // 三期
                     // 握手
 
                     Utils.log("EasySP.init(getActivity()).getString(\"dataProtocolVersion\").equals(\"3\")");
-
-
                     RxBleClient rxBleClient = RxBleClient.create(getActivity());
                     rxBleClient.setLogLevel(RxBleLog.VERBOSE);
                     RxBleDevice device = rxBleClient.getBleDevice(EasySP.init(getActivity()).getString("mac"));
 
                     byte[] byteTime = CommonUtil.getDateTime();
-
-                    device.establishConnection(false)
+                    device.establishConnection(false);
+                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
+//                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
                             .doOnNext(notificationObservable -> {
+                                ((MyApp) getActivity().getApplication()).getConnectionObservable()
+//                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
+                                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
+                                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(
+                                                characteristicValue -> {
+                                                    // Characteristic value confirmed.
+                                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                },
+                                                throwable -> {
+                                                    // Handle an error here.
+                                                }
+                                        );
                                 // Notification has been set up
-                                Utils.log("********   doOnNext    *************");
-
-                                Utils.log(Utils.bytesToHexString(new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()));
-
+//                                Utils.log("********   doOnNext    *************");
+//                                Utils.log(Utils.bytesToHexString(new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()));
                             })
                             .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
                             .subscribe(
@@ -245,77 +269,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
                                     },
                                     throwable -> {
-                                        Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
-
                                         // Handle an error here.
+                                        Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
                                     }
                             );
 
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Utils.log("write");
-                            device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
-                                    .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
-                                    .subscribe(
-                                            characteristicValue -> {
-                                                // Characteristic value confirmed.
-                                                Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                            },
-                                            throwable -> {
-                                                // Handle an error here.
-                                            }
-                                    );
-
-                        }
-                    },3000);
-
-
-//                    device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
-//                            .subscribe(
-//                                    characteristicValue -> {
-//                                        // Characteristic value confirmed.
-//                                        Utils.log(characteristicValue.length +" : " + Utils.bytesToHexString(characteristicValue));
-//                                    },
-//                                    throwable -> {
-//                                        // Handle an error here.
-//                                    }
-//                            );
-
-
-//                    device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.readCharacteristic(Constants.WRITE_UUID)
-//                                    .doOnNext(bytes -> {
-//                                        // Process read data.
-//                                    })
-//                                    .flatMap(bytes -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
-//                            )
-//                            .subscribe(
-//                                    writeBytes -> {
-//                                        // Written data.
-//                                    },
-//                                    throwable -> {
-//                                        // Handle an error here.
-//                                    }
-//                            );
-
                     // 获取电量
-
-
-//                    device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.readCharacteristic(Constants.))
-//                            .subscribe(
-//                                    characteristicValue -> {
-//                                        // Read characteristic value.
-//                                    },
-//                                    throwable -> {
-//                                        // Handle an error here.
-//                                    }
-//                            );
 
 
                 } else {

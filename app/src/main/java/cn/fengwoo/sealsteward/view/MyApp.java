@@ -8,6 +8,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.polidea.rxandroidble2.RxBleConnection;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -18,17 +19,39 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import cn.fengwoo.sealsteward.R;
+import io.reactivex.Observable;
 
 /**
  * SmartRefreshLayout使用指定Header 和 Footer
  */
-public class HeaderAndFooter extends MultiDexApplication {
+public class MyApp extends MultiDexApplication {
     //蓝牙协定服务对象
     private BluetoothGattService service = null;
     //蓝牙协定服务写入对象
     private BluetoothGattCharacteristic wrt_char = null;
     //蓝牙协定服务通知对象
     private BluetoothGattCharacteristic ntf_char = null;
+
+    public Observable<RxBleConnection> getConnectionObservable() {
+        return connectionObservable;
+    }
+
+    public void setConnectionObservable(Observable<RxBleConnection> connectionObservable) {
+        this.connectionObservable = connectionObservable;
+    }
+
+    private Observable<RxBleConnection> connectionObservable;
+
+
+    public RxBleConnection getRxBleConnection() {
+        return rxBleConnection;
+    }
+
+    public void setRxBleConnection(RxBleConnection rxBleConnection) {
+        this.rxBleConnection = rxBleConnection;
+    }
+
+    private RxBleConnection rxBleConnection;
 
 
     //static 代码段可以防止内存泄露

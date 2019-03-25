@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
+import com.polidea.rxandroidble2.RxBleConnection;
 import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
@@ -53,13 +54,19 @@ import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.ReplayingShare;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.MyApp;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+
 
 /**
  * 附近设备
@@ -95,8 +102,11 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private Disposable scanSubscription;
     private Disposable disposable;
     private boolean isAddNewSeal;
-
     private ResponseInfo<List<SealData>> responseInfo;
+
+    private PublishSubject<Boolean> disconnectTriggerSubject = PublishSubject.create();
+
+    private Observable<RxBleConnection> connectionObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,14 +232,12 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData() {
-//        //注册广播接收器
-//        registerReceiver(registerReceiver, Utils.intentFilter());
-//        //开始扫描
-//        startDiscovery();
+
 
         rxBleClient = RxBleClient.create(this);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         seal_lv.setAdapter(arrayAdapter);
+
 
     }
 
@@ -251,32 +259,32 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    /**
-     * 注册广播
-     */
-    private BroadcastReceiver registerReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-
-            String action = intent.getAction();
-            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                showToast("正在扫描到列表...");
-            } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                        if (device != null) {
-                            addBluetooth(device);
-                        }
-                    }
-                });
-            }
-            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                showToast("扫描结束.");
-            }
-        }
-    };
+//    /**
+//     * 注册广播
+//     */
+//    private BroadcastReceiver registerReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, final Intent intent) {
+//
+//            String action = intent.getAction();
+//            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+//                showToast("正在扫描到列表...");
+//            } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+//                        if (device != null) {
+//                            addBluetooth(device);
+//                        }
+//                    }
+//                });
+//            }
+//            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+//                showToast("扫描结束.");
+//            }
+//        }
+//    };
 
 
     //扫描到蓝牙添加到列表中
@@ -388,11 +396,16 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
         RxBleDevice device = rxBleClient.getBleDevice(macAddress);
-        disposable = device.establishConnection(false) // <-- autoConnect flag
+
+        connectionObservable = prepareConnectionObservable(device);
+
+        ((MyApp)getApplication()).setConnectionObservable(connectionObservable);
+
+        disposable = connectionObservable // <-- autoConnect flag
                 .subscribe(
                         rxBleConnection -> {
                             // All GATT operations are done through the rxBleConnection.
-
+                            application.setRxBleConnection(rxBleConnection);
 
                             // sava dataProtocolVersion
                             // 根据 ble 名字来判断 dataProtocolVersion
@@ -412,6 +425,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 startActivity(intent);
                                 finish();
                             } else {
+                                setResult(RESULT_OK);
                                 finish();
                             }
                         },
@@ -424,7 +438,19 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onDestroy() {
 //        unregisterReceiver(registerReceiver);
-        super.onDestroy();
         scanSubscription.dispose();
+        super.onDestroy();
+
+
+        rxBleClient = null;
     }
+
+
+    private Observable<RxBleConnection> prepareConnectionObservable( RxBleDevice bleDevice) {
+        return bleDevice
+                .establishConnection(false)
+                .takeUntil(disconnectTriggerSubject)
+                .compose(ReplayingShare.instance());
+    }
+
 }
