@@ -75,8 +75,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
         textViews[1] = tab2_tv;
         linearLayouts[1] = tab2_ll;
         changeView(0);  //启动默认
-        //判断点击
-     //   setJudge();
+        edite_tv.setVisibility(View.VISIBLE);
     }
 
     private void setListener() {
@@ -100,7 +99,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
                 break;
             case R.id.edit_tv:
           //      Intent intent = new Intent(this,GeographicalFenceActivity.class);  //跳转电子围栏
-                Intent intent = new Intent(this,SetApprovalActivity.class);
+                Intent intent = new Intent(this,EditOrganizationActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -110,14 +109,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
      * 判断是否是服务费充值还是组织架构进入
      */
 
-    private void setJudge(){
-        Intent intent = getIntent();
-        int code = intent.getIntExtra("electronic",0);
-        if (code == 1){
-            edite_tv.setVisibility(View.VISIBLE);
-            edite_tv.setText("下一步");
-        }
-    }
+
 
     private void changeView(int index) {
         changeBg(index);

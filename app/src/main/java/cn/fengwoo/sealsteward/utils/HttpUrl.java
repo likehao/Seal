@@ -2,8 +2,9 @@ package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
 //    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
-    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest";  //正式环境
 //    public static final String URL = "http://192.168.0.117:8800/";  //调试环境
+    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //线上
+
     /**
      * 登录
      */
@@ -192,5 +193,14 @@ public class HttpUrl {
      */
     public static final String ADDORDER = "/cost/addorder";
 
+    /**
+     * delete 组织
+     */
+    public static final String DELETE_ORG = "/company/deleteorgstr";
+
+    /**
+     * edit 组织名字
+     */
+    public static final String EDIT_ORG = "/company/updateorgstrname";
 
 }

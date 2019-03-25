@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
+import com.polidea.rxandroidble2.RxBleConnection;
 import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.internal.RxBleLog;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -28,13 +30,17 @@ import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.squareup.picasso.Picasso;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.AddSealActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
@@ -48,12 +54,20 @@ import cn.fengwoo.sealsteward.utils.GlideImageLoader;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.MyApp;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Connection;
 import okhttp3.Response;
 import okhttp3.internal.Util;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
@@ -73,7 +87,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private Intent intent;
     @BindView(R.id.home_companyName_tv)
     TextView home_companyName_tv;
+    @BindView(R.id.tv_battery)
+    TextView tv_battery;
     LoadingView loadingView;
+    private RxBleConnection rxBleConnection;
 
     @Nullable
     @Override
@@ -84,6 +101,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         initView();
         initBanner();
         setListener();
+
+
         return view;
     }
 
@@ -217,107 +236,82 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         switch (requestCode) {
             case Constants.TO_NEARBY_DEVICE:
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
+                    if (resultCode != RESULT_OK) {
+                        return;
+                    }
                     // 三期
                     // 握手
 
                     Utils.log("EasySP.init(getActivity()).getString(\"dataProtocolVersion\").equals(\"3\")");
-
-
                     RxBleClient rxBleClient = RxBleClient.create(getActivity());
                     rxBleClient.setLogLevel(RxBleLog.VERBOSE);
                     RxBleDevice device = rxBleClient.getBleDevice(EasySP.init(getActivity()).getString("mac"));
 
                     byte[] byteTime = CommonUtil.getDateTime();
+                    byte[] eleByte = new byte[]{0};
 
-                    device.establishConnection(false)
+                    device.establishConnection(false);
+                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
+//                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
                             .doOnNext(notificationObservable -> {
-                                // Notification has been set up
-                                Utils.log("********   doOnNext    *************");
-
-                                Utils.log(Utils.bytesToHexString(new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()));
-
+                                // Notification has been set up ，监听设置成功，然后握手
+                                ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
+                                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(
+                                                characteristicValue -> {
+                                                    // Characteristic value confirmed.
+//                                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                },
+                                                throwable -> {
+                                                    // Handle an error here.
+                                                }
+                                        );
                             })
                             .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     bytes -> {
                                         // Given characteristic has been changes, here is the value.
                                         Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
+
+                                        if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
+                                            Utils.log("握手成功");
+                                            // 每隔1min定时获取电量
+                                            new RxTimerUtil().interval(60000, new RxTimerUtil.IRxNext() {
+                                                @Override
+                                                public void doNext(long number) {
+                                                    Utils.log("a loop");
+                                                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
+//                                                    .interval(2,TimeUnit.SECONDS).take(5).timeInterval()
+                                                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                                            .subscribe(
+                                                                    characteristicValue -> {
+                                                                        // Characteristic value confirmed.
+//                                                                Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                                    },
+                                                                    throwable -> {
+                                                                        // Handle an error here.
+                                                                    }
+                                                            );
+                                                }
+                                            });
+
+                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
+                                            String batteryString = Utils.bytesToHexString(bytes).substring(9, 11);
+                                            int batteryInt = Integer.parseInt(batteryString, 16);
+                                            Utils.log("batteryInt:" + batteryInt);
+                                            // 刷新ui,赋值电量
+                                            tv_battery.setText(String.valueOf(batteryInt));
+                                        }
                                     },
                                     throwable -> {
-                                        Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
-
                                         // Handle an error here.
+                                        Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
                                     }
                             );
-
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Utils.log("write");
-                            device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
-                                    .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
-                                    .subscribe(
-                                            characteristicValue -> {
-                                                // Characteristic value confirmed.
-                                                Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                            },
-                                            throwable -> {
-                                                // Handle an error here.
-                                            }
-                                    );
-
-                        }
-                    },3000);
-
-
-//                    device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
-//                            .subscribe(
-//                                    characteristicValue -> {
-//                                        // Characteristic value confirmed.
-//                                        Utils.log(characteristicValue.length +" : " + Utils.bytesToHexString(characteristicValue));
-//                                    },
-//                                    throwable -> {
-//                                        // Handle an error here.
-//                                    }
-//                            );
-
-
-//                    device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.readCharacteristic(Constants.WRITE_UUID)
-//                                    .doOnNext(bytes -> {
-//                                        // Process read data.
-//                                    })
-//                                    .flatMap(bytes -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, Utils.createShakeHandsData()))
-//                            )
-//                            .subscribe(
-//                                    writeBytes -> {
-//                                        // Written data.
-//                                    },
-//                                    throwable -> {
-//                                        // Handle an error here.
-//                                    }
-//                            );
-
-                    // 获取电量
-
-
-//                    device.establishConnection(false)
-//                            .flatMapSingle(rxBleConnection -> rxBleConnection.readCharacteristic(Constants.))
-//                            .subscribe(
-//                                    characteristicValue -> {
-//                                        // Read characteristic value.
-//                                    },
-//                                    throwable -> {
-//                                        // Handle an error here.
-//                                    }
-//                            );
-
-
                 } else {
 
                 }

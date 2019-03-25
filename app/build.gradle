@@ -48,11 +48,11 @@ android {
             jniLibs.srcDirs = ['libs']  //JPush
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildToolsVersion '23.0.0'
 }
 //分享
 MobSDK {
@@ -223,5 +223,4 @@ dependencies {
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
-
 }
