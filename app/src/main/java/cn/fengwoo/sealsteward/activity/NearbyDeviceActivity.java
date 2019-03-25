@@ -117,13 +117,15 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         getIntentData();
         initView();
         initCheck();
-
+        initData();
         // 不是增加印章的情况时，访问后台拿seal list
         if (!isAddNewSeal) {
             getSealList();
+        }else{
+            scanBle();
         }
 
-        initData();
+
         setListener();
 //        scanBle();
     }
@@ -315,10 +317,14 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private boolean hasTheSeal(String thisMac) {
         boolean hasTheSealTag = false;
-        for (SealData sealData : responseInfo.getData()) {
-            if (sealData.getMac().equals(thisMac)) {
-                hasTheSealTag = true;
+        if (responseInfo != null) {
+            for (SealData sealData : responseInfo.getData()) {
+                if (sealData.getMac().equals(thisMac)) {
+                    hasTheSealTag = true;
+                }
             }
+        }else {
+            hasTheSealTag = true; // 如果responseInfo为空时，hasTheSealTag为true
         }
         return hasTheSealTag;
     }

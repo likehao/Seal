@@ -1,9 +1,9 @@
 package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
-    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
+//    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
 //    public static final String URL = "http://192.168.0.117:8800/";  //调试环境
-//    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //线上
+    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //线上
 
     /**
      * 登录
