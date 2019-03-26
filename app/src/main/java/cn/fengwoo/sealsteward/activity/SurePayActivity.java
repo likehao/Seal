@@ -135,7 +135,7 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
                         req.packageValue = "Sign=WXPay";//固定值Sign=WXPay
                         req.sign = sign;//签名
                         api.sendReq(req);//将订单信息对象发送给微信服务器，即发送支付请求
-                        
+
                     } else {
                         String orderStr = data.get("orderString").getAsString();
                         if (orderStr != null) {
