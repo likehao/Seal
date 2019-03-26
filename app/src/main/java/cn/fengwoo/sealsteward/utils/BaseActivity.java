@@ -1,9 +1,7 @@
 package cn.fengwoo.sealsteward.utils;
 
-import android.app.Application;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -12,7 +10,6 @@ import android.widget.Toast;
 import com.gyf.barlibrary.ImmersionBar;
 
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.utils.HideKeyBroadUtils;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 

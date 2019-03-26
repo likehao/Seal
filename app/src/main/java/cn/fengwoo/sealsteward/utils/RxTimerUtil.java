@@ -52,7 +52,7 @@ public class RxTimerUtil { private static Disposable mDisposable;
      * @param next
      */
     public static void interval(long milliseconds,final IRxNext next){
-        Observable.interval(milliseconds, TimeUnit.MILLISECONDS)
+        Observable.interval(0,milliseconds, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
                     @Override

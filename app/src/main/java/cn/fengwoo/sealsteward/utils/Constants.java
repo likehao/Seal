@@ -7,8 +7,11 @@ public class Constants {
     // EasySP 保存的数据
     // dataProtocolVersion   String // 是二期还是三期   2 为二，3为三
     // mac  String  // mac地址
+    //currentSealId  // 当前seal id
+    //currentApplyId  // 当前 申请 id
 
     public static final int TO_NEARBY_DEVICE = 20;
+    public static final int TO_WANT_SEAL = 21;
 
     public static final String permission1 = "266b076d34e511e998a22cfda1ba8f68";//添加印章"
     public static final String permission2 = "7680b087421611e9af5a2cfda1ba8f68";//"编辑印章信息"

@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class ApplyCauseData implements Serializable {
 
     private String cause;
-    private Integer count;
+    private long count;
 
-    public ApplyCauseData(String cause, Integer count) {
+    public ApplyCauseData(String cause, long count) {
         this.cause = cause;
         this.count = count;
     }
@@ -20,11 +20,11 @@ public class ApplyCauseData implements Serializable {
         this.cause = cause;
     }
 
-    public Integer getCount() {
+    public long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(long count) {
         this.count = count;
     }
 

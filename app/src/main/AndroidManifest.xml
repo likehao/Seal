@@ -206,6 +206,9 @@
         <activity android:name=".activity.MyQRCodeActivity" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.PwdUserActivity" />
+        <activity android:name=".activity.AddPwdUserActivity" />
+        <activity android:name=".activity.VoiceActivity" />
         <activity android:name=".activity.EditOrganizationActivity" />
         <activity android:name=".activity.EditOrganizationNameActivity" />
         <activity android:name=".activity.SelectSinglePeopleActivity" />

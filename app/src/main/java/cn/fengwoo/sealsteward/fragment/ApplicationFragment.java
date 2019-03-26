@@ -1,11 +1,9 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +21,13 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -31,13 +36,26 @@ import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.OrganizationalStructureActivity;
+import cn.fengwoo.sealsteward.activity.PwdUserActivity;
 import cn.fengwoo.sealsteward.activity.RechargeRecordActivity;
 import cn.fengwoo.sealsteward.activity.ScanSearchAddSealActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealActivity;
 import cn.fengwoo.sealsteward.activity.StartPasswordActivity;
+import cn.fengwoo.sealsteward.activity.VoiceActivity;
 import cn.fengwoo.sealsteward.activity.WaitHandleActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
+import cn.fengwoo.sealsteward.utils.DataProtocol;
+import cn.fengwoo.sealsteward.utils.DataTrans;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.MyApp;
+import cn.qqtheme.framework.picker.SinglePicker;
+import cn.qqtheme.framework.widget.WheelView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 应用
@@ -45,7 +63,7 @@ import cn.fengwoo.sealsteward.view.CommonDialog;
 public class ApplicationFragment extends Fragment implements View.OnClickListener {
     private View view;
     @BindView(R.id.organizational_structure_rl)  //组织架构
-    RelativeLayout organizational_structure_rl;
+            RelativeLayout organizational_structure_rl;
     @BindView(R.id.start_psd_rl)
     RelativeLayout start_psd_rl;
     @BindView(R.id.key_psd_rl)
@@ -66,15 +84,24 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.service_charge_rl)
     RelativeLayout service_charge_rl;  //服务费充值
     @BindView(R.id.recharge_record_rl)  //充值记录
-    RelativeLayout recharge_record_rl;
+            RelativeLayout recharge_record_rl;
     @BindView(R.id.use_seal_apply_rl)   //用印申请
-    RelativeLayout use_seal_apply_rl;
+            RelativeLayout use_seal_apply_rl;
     @BindView(R.id.approvalRecord_rl)
     RelativeLayout approvalRecord_rl;  //审批记录
     @BindView(R.id.wait_me_agree_rl)
     RelativeLayout wait_me_agree_rl;  //待我审批
     @BindView(R.id.wait_handle_rl)
     RelativeLayout wait_handle_rl;  //待处理
+
+    @BindView(R.id.wait_time_rl)
+    RelativeLayout wait_time_rl;
+    @BindView(R.id.rl_voice)
+    RelativeLayout rl_voice;
+    @BindView(R.id.rl_pwd_user)
+    RelativeLayout rl_pwd_user;
+
+    private SinglePicker<String> picker;
 
     @Nullable
     @Override
@@ -99,6 +126,9 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         approvalRecord_rl.setOnClickListener(this);
         wait_me_agree_rl.setOnClickListener(this);
         wait_handle_rl.setOnClickListener(this);
+        wait_time_rl.setOnClickListener(this);
+        rl_voice.setOnClickListener(this);
+        rl_pwd_user.setOnClickListener(this);
     }
 
     @Override
@@ -126,8 +156,23 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 setDialog();
                 break;
             case R.id.press_time_rl:
-                setPopSeekBar();
+//                setPopSeekBar();
+                readPressTime();
                 break;
+            case R.id.wait_time_rl:
+                readDelayTime();
+                break;
+
+            case R.id.rl_voice:
+                intent = new Intent(getActivity(), VoiceActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.rl_pwd_user:
+                intent = new Intent(getActivity(), PwdUserActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.add_person_rl:
                 intent = new Intent(getActivity(), AddUserActivity.class);
                 startActivity(intent);
@@ -203,12 +248,70 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         seekBar.setOnSeekBarChangeListener(seekBarChange);
     }
 
+    /**
+     *
+     */
+    @SuppressLint("CheckResult")
+    private void readPressTime() {
+        // 发送查询：长按时间
+        byte[] select_press_time = new byte[]{0};
+        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SELECTPRESSTIME, select_press_time).getBytes()))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                );
+
+    }
+
+    /**
+     *
+     */
+    @SuppressLint("CheckResult")
+    private void readDelayTime() {
+        byte[] select_seal_delay = new byte[]{0};
+        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SELECTSEALDELAY, select_seal_delay).getBytes()))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                );
+
+    }
+
     private void setDialog() {
         final CommonDialog commonDialog = new CommonDialog(getActivity(), "提示", "确定重置设备吗？", "重置");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
+            @SuppressLint("CheckResult")
             @Override
             public void onClick(View v) {
+                String reStr = DataTrans.hexString2binaryString("11100000");
+                byte[] resByte = DataTrans.toBytes(reStr);
+                ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.RESET, resByte).getBytes()))
+                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                characteristicValue -> {
+                                    // Characteristic value confirmed.
+                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                },
+                                throwable -> {
+                                    // Handle an error here.
+                                }
+                        );
                 commonDialog.dialog.dismiss();
             }
         });
@@ -259,5 +362,124 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
 
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        // read press time
+        if (event.msgType.equals("ble_time_press")) {
+            List<String> list = new ArrayList<>();
+            list.add("1");
+            list.add("2");
+            list.add("3");
+            list.add("4");
+            list.add("5");
+            list.add("6");
+            list.add("7");
+            list.add("8");
+            list.add("9");
+            list.add("10");
+            list.add("11");
+            list.add("12");
+            list.add("13");
+            list.add("14");
+            list.add("15");
+            picker = new SinglePicker<String>(getActivity(), list);
+            picker.setCanceledOnTouchOutside(true);
+            picker.setDividerRatio(WheelView.DividerConfig.FILL);
+            picker.setTextColor(0xFF000000);
+//        picker.setSubmitTextColor(0xFFFB2C3C);
+//        picker.setCancelTextColor(0xFFFB2C3C);
+            picker.setTextSize(15);
+            picker.setSelectedIndex(Integer.parseInt(event.msg) - 1);
+            picker.setLineSpaceMultiplier(2);   //设置每项的高度，范围为2-4
+            picker.setContentPadding(0, 10);
+            picker.setCycleDisable(true);
+            picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
+                @SuppressLint("CheckResult")
+                @Override
+                public void onItemPicked(int index, String item) {
+                    Utils.log(item);
+                    byte[] select_press_time = new byte[]{(byte) (index + 1)};
+                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.PRESSTIME, select_press_time).getBytes()))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    characteristicValue -> {
+                                        // Characteristic value confirmed.
+                                        Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                    },
+                                    throwable -> {
+                                        // Handle an error here.
+                                    }
+                            );
+                }
+            });
+            picker.show();
+        } else if (event.msgType.equals("ble_time_delay")) {
+            List<String> list = new ArrayList<>();
+            for (int i = 1; i <= 10; i++) {
+                int sec = i * 30;
+                // 转为分，秒
+                if (sec > 30) {
+                    int minPart = sec / 60;
+                    int secPart = sec % 60;
+                    if (secPart == 0) {
+                        list.add(minPart + "分");
+                    } else {
+                        list.add(minPart + "分" + secPart + "秒");
+                    }
+                } else {
+                    list.add(sec + "秒");
+                }
+            }
+
+            picker = new SinglePicker<String>(getActivity(), list);
+            picker.setCanceledOnTouchOutside(true);
+            picker.setDividerRatio(WheelView.DividerConfig.FILL);
+            picker.setTextColor(0xFF000000);
+//        picker.setSubmitTextColor(0xFFFB2C3C);
+//        picker.setCancelTextColor(0xFFFB2C3C);
+            picker.setTextSize(15);
+            picker.setSelectedIndex(Integer.parseInt(event.msg) - 1);
+            picker.setLineSpaceMultiplier(2);   //设置每项的高度，范围为2-4
+            picker.setContentPadding(0, 10);
+            picker.setCycleDisable(true);
+            picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
+                @SuppressLint("CheckResult")
+                @Override
+                public void onItemPicked(int index, String item) {
+                    Utils.log(item);
+                    byte[] select_seal_delay = new byte[]{(byte) (index + 1)};
+                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SETSEALDELAY, select_seal_delay).getBytes()))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    characteristicValue -> {
+                                        // Characteristic value confirmed.
+                                        Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                    },
+                                    throwable -> {
+                                        // Handle an error here.
+                                    }
+                            );
+                }
+            });
+            picker.show();
+
+        }
+    }
 
 }

@@ -328,6 +328,7 @@
                                     android:src="@color/mediumAquamarine" />
 
                                 <TextView
+                                    android:id="@+id/tv_times_left"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -364,6 +365,7 @@
                                     android:src="@color/lightCoral" />
 
                                 <TextView
+                                    android:id="@+id/tv_times_done"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"

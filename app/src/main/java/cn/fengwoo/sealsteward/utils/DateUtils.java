@@ -83,4 +83,19 @@ public class DateUtils {
         res = String.valueOf(ts);
         return res;
     }
+
+    public static String hexTimeToTimeStamp (String hexString)throws ParseException {
+        String str = "";
+        String[] times = hexString.split(" ");
+        String years = "20" + Integer.valueOf(times[0], 16);
+        String month = Integer.valueOf(times[1],16) + "";
+        String day = Integer.valueOf(times[2],16) + "";
+        String hour = Integer.valueOf(times[3],16) + "";
+        String min = Integer.valueOf(times[4],16) + "";
+        String sec = Integer.valueOf(times[5],16) + "";
+        String all = years + "-" + month + "-" + day  + " " + hour + ":" + min + ":" + sec;
+        str = dateToStamp(all);
+        return str;
+    }
+
 }

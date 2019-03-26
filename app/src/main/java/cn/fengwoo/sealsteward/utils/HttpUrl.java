@@ -203,4 +203,15 @@ public class HttpUrl {
      */
     public static final String EDIT_ORG = "/company/updateorgstrname";
 
+    /**
+     *  stamp upload record
+     */
+    public static final String STAMP_UPLOAD_RECORD = "/stamp/uploadrecord";
+
+   /**
+     *  add 密码用户
+     */
+    public static final String ADD_PWD_USER = "/seal/addofflineuser";
+
+
 }

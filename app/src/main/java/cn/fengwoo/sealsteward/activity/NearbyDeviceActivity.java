@@ -52,6 +52,7 @@ import cn.fengwoo.sealsteward.entity.SealData;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReplayingShare;
@@ -339,6 +340,17 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         return name;
     }
 
+    private String getSealIdFromList(String thisMac) {
+        String id = "";
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(thisMac)) {
+                id = sealData.getId();
+            }
+        }
+        return id;
+    }
+
+
 
     //扫描到蓝牙添加到列表中
     private void addBluetooth(BluetoothDevice device) {
@@ -421,8 +433,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 EasySP.init(this).putString("dataProtocolVersion", "2");
                             }
 
-                            // save mac
+                            // save mac & seal id
                             EasySP.init(this).putString("mac", scanResultsList.get(position).getBleDevice().getMacAddress());
+                            EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
 
 
                             if (isAddNewSeal) {
@@ -431,7 +444,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 startActivity(intent);
                                 finish();
                             } else {
-                                setResult(RESULT_OK);
+                                setResult(Constants.TO_NEARBY_DEVICE);
                                 finish();
                             }
                         },
