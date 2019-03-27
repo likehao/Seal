@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.fragment;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -43,6 +44,7 @@ import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CircleImageView;
@@ -95,7 +97,17 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     }
 
     private void initView() {
-        Picasso.with(getActivity()).load("file://"+ CommonUtil.getUserData(getActivity()).getHeadPortrait()).into(headImg_cir);
+        String headPortrait = CommonUtil.getUserData(getActivity()).getHeadPortrait();
+        if(headPortrait != null && !headPortrait.isEmpty()){
+            //先从本地读取，没有则下载
+            Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
+            if(bitmap == null){
+                HttpDownloader.downLoadImg(getActivity(),1,headPortrait);
+            } else{
+                String headPortraitPath = "file://" + HttpDownloader.path + headPortrait;
+                Picasso.with(getActivity()).load(headPortraitPath).into(headImg_cir);
+            }
+        }
         companyName.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
         phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
     }
@@ -122,7 +134,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.mine_person_data_ll:  //个人信息
                 intent = new Intent(getActivity(), PersonCenterActivity.class);
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent,1);
                 break;
             case R.id.my_company_rl:
                 intent = new Intent(getActivity(), MyCompanyActivity.class);
@@ -157,6 +170,12 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 LoginData.logout(Objects.requireNonNull(getActivity())); //移除退出标记
                 break;
 
+        }
+    }
+
+    public void onActivityResult(int requestCode,int resultCode,Intent data){
+        if(requestCode == 1 && resultCode == 1){
+            initView();
         }
     }
 

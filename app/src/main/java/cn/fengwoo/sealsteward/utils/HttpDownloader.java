@@ -36,7 +36,7 @@ import okhttp3.Response;
  */
 public class HttpDownloader {
 
-    public static String path = "/sdcard/SealDownImage/";// sd路径
+    public static final String path = "/sdcard/SealDownImage/";// sd路径
 
     /**
      * 下载图片
@@ -80,10 +80,6 @@ public class HttpDownloader {
         if (!state.equals(Environment.MEDIA_MOUNTED)) {  // 检测sd是否可用
             return;
         }
-        //时间命名
-        Calendar now = new GregorianCalendar();
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault());
-        //  String fileName = simpleDate.format(now.getTime());
         try {
             File file = new File(path);
             if (!file.exists()) {
@@ -137,12 +133,44 @@ public class HttpDownloader {
             int width = opts.outWidth;
             int height = opts.outHeight;
             WeakReference<Bitmap> weak = new WeakReference<Bitmap>(BitmapFactory.decodeFile(filePath, opts));
+            Bitmap bitmap = Bitmap.createScaledBitmap(weak.get(), width, height, true);
 
-            return Bitmap.createScaledBitmap(weak.get(), width, height, true);
+            return bitmap;
         }catch (Exception ex){
 
         }
 
         return null;
+    }
+
+    /**
+     * 保存bitmap到SD卡中
+     * @param bitmap
+     * @param fileName
+     */
+    public static void saveBitmapToSDCard(Bitmap bitmap, String fileName){
+        //获取内部存储状态
+        String state = Environment.getExternalStorageState();
+        //如果状态不是mounted，无法读写
+        if (!state.equals(Environment.MEDIA_MOUNTED)) {  // 检测sd是否可用
+            return;
+        }
+        if(bitmap == null || fileName == null){
+            return;
+        }
+        try {
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            String picName = path + fileName;   //图片名字
+            FileOutputStream out = new FileOutputStream(picName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);  // 把数据写入文件
+            // 关闭流
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

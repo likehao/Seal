@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,6 +50,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.JsonBean;
+import cn.fengwoo.sealsteward.database.AccountDao;
+import cn.fengwoo.sealsteward.entity.HistoryInfo;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
@@ -65,6 +68,7 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.ReboundScrollView;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -109,10 +113,11 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     ImageView headImg_iv;
     @BindView(R.id.change_pwd_rl)
     RelativeLayout change_pwd_rl;
+
     private LoadingView loadingView;
     private LoginData loginData;
     private static final int REQUEST_CODE_CHOOSE = 1;
-    private static String path = "/sdcard/myHead/";// sd路径
+    //private static String path = "/sdcard/myHead/";// sd路径
     private Bitmap head;
     @BindView(R.id.wheelview)
     WheelView wheelview;
@@ -212,8 +217,16 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 department_tv.setText(responseInfo.getData().getOrgStructureName());
                                 job_tv.setText(responseInfo.getData().getJob());
                                 email_tv.setText(responseInfo.getData().getUserEmail());
-                                String path = "file://"+responseInfo.getData().getHeadPortrait();
-                                Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
+                                String headPortrait = responseInfo.getData().getHeadPortrait();
+                                if(headPortrait != null && !headPortrait.isEmpty()){
+                                    Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
+                                    if(bitmap == null){
+                                        HttpDownloader.downLoadImg(PersonCenterActivity.this,1,headPortrait);
+                                    } else{
+                                        String path = "file://" + HttpDownloader.path + responseInfo.getData().getHeadPortrait();
+                                        Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
+                                    }
+                                }
                                 address_tv.setText(responseInfo.getData().getAddress());
                             }
                         });
@@ -252,6 +265,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.set_back_ll:
+                setResult(1);
                 finish();
                 break;
             case R.id.my_QRCode_rl:
@@ -387,13 +401,14 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                     if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                                         Log.e("ATG", "发送图片至服务器成功..........");
                                         //保存到本地
-                                        Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf(file));
-                                        HttpDownloader.down(bitmap, null);
-                                        Log.e("tag", "成功存储图片到本地...........");
-                                        //判断本地是否有图片,如果没有从服务器获取
-
+                                        String imgName = responseInfo.getData().getFileName();//图片名称
+                                        String filePath = file.getPath();
+                                        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                                        if(bitmap != null){
+                                            HttpDownloader.saveBitmapToSDCard(bitmap,imgName);
+                                        }
                                         //更新头像
-                                        updateHeadPortrait(file);
+                                        updateHeadPortrait(imgName);
 
                                     } else {
                                         Looper.prepare();
@@ -457,7 +472,53 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         });
 
     }
+    private void updateHeadPortrait(final String fileName) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("headPortraitId", fileName);
+        HttpUtil.sendDataAsync(PersonCenterActivity.this, HttpUrl.UPDATEHEADPORTRAIT, 3, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+                Log.e("TAG", "更换头像失败........");
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                //使用Gson将对象转换为json字符串
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    //更新缓存
+                    LoginData loginData = CommonUtil.getUserData(PersonCenterActivity.this);
+                    if(loginData != null){
+                        loginData.setHeadPortrait(fileName);
+                        CommonUtil.setUserData(PersonCenterActivity.this,loginData);
+                    }
+
+                    AccountDao accountDao = new AccountDao(PersonCenterActivity.this);
+                    HistoryInfo historyInfo = new HistoryInfo(loginData.getMobilePhone(), loginData.getRealName(), loginData.getHeadPortrait(), new Date().getTime());
+                    accountDao.insert(historyInfo);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //加载图片
+                            String filePath = "file://"+HttpDownloader.path + fileName;
+                            Picasso.with(PersonCenterActivity.this).load(filePath).into(headImg_iv);
+                            Log.e("ATG", "成功加载头像........");
+                        }
+                    });
+                } else{
+                    showToast(responseInfo.getMessage());
+                }
+            }
+        });
+
+    }
     /**
      * 选择地址
      */
