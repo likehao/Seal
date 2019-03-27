@@ -52,6 +52,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     private String m_id, m_name;
     LoadingView loadingView;
     Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 4);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
-            public void clicked(String id, int type,String parentName) {
+            public void clicked(String id, int type, String parentName) {
                 Utils.log("id:" + id);
                 if (type == 3) {
 //                    selectDialog(id);
@@ -97,8 +98,8 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         mAdapter.notifyDataSetChanged();
         intent = getIntent();
         //查询盖章记录跳转过来的时候隐藏掉title
-        int code = intent.getIntExtra("code",0);
-        if (code != 0 && code == 1){
+        int code = intent.getIntExtra("code", 0);
+        if (code != 0 && code == 1) {
             title_tv.setVisibility(View.GONE);
         }
     }
@@ -120,11 +121,11 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 Utils.log(result);
                 Gson gson = new Gson();
                 OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
-             //   Utils.log(organizationalStructureData.getData().get(0).getName());
-                assert organizationalStructureData!= null;
+                //   Utils.log(organizationalStructureData.getData().get(0).getName());
+                assert organizationalStructureData != null;
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
-                    if (dataBean.getType() != filterType1 ) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),2,false));
+                    if (dataBean.getType() != filterType1) {
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false));
                     }
                 }
                 runOnUiThread(new Runnable() {
@@ -165,24 +166,24 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     /**
      * 判断是选章还是服务费的确定
      */
-    private void getSure(){
+    private void getSure() {
         Utils.log("confirm");
         intent = getIntent();
         String serviceRecharge = intent.getStringExtra("serviceRecharge");
-        if (serviceRecharge != null && serviceRecharge.equals("pay")){
+        if (serviceRecharge != null && serviceRecharge.equals("pay")) {
             intent.putExtra("id", m_id);
-            if (m_id != null){
-                intent = new Intent(this,PayActivity.class);
-                intent.putExtra("sealId",m_id);
+            if (m_id != null) {
+                intent = new Intent(this, PayActivity.class);
+                intent.putExtra("sealId", m_id);
                 startActivity(intent);
-            }else {
+            } else {
                 showToast("请选择需要充值的印章");
             }
-        }else {
+        } else {
             intent = new Intent();
             intent.putExtra("id", m_id);
             intent.putExtra("name", m_name);
-            setResult(123,intent);
+            setResult(123, intent);
             finish();
         }
     }

@@ -12,17 +12,17 @@
         <item name="android:button">@drawable/down_up_arrow</item>
     </style>
 
-    <!--    &lt;!&ndash;小圆圈消息数&ndash;&gt;
-        <style name="message_num">
-            <item name="android:layout_width">15dp</item>
-            <item name="android:layout_height">15dp</item>
-            <item name="android:background">@drawable/message_circle</item>
-            <item name="android:text">10</item>
-            <item name="android:layout_gravity">center</item>
-            <item name="android:gravity">center</item>
-            <item name="android:textColor">@color/white</item>
-            <item name="android:textSize">10sp</item>
-        </style>-->
+    <!--小圆圈消息数-->
+    <style name="message_num">
+        <item name="android:layout_width">15dp</item>
+        <item name="android:layout_height">15dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:background">@drawable/message_circle</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:visibility">gone</item>
+    </style>
 
     <!--灰色细线条-->
     <style name="line">

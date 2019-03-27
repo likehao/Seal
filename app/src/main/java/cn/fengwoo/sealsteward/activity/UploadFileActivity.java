@@ -40,6 +40,7 @@ import cn.fengwoo.sealsteward.adapter.RecycleviewAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
@@ -290,7 +291,12 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
                         loadingView.cancel();
+                        Intent intent = new Intent(UploadFileActivity.this, MainActivity.class);
+                        startActivity(intent);
                         finish();
+                        Looper.prepare();
+                        showToast("申请成功");
+                        Looper.loop();
                     }
                 }else {
                     loadingView.cancel();

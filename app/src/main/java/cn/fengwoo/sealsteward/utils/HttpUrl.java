@@ -202,6 +202,18 @@ public class HttpUrl {
      * edit 组织名字
      */
     public static final String EDIT_ORG = "/company/updateorgstrname";
+    /**
+     * 消息数
+     */
+    public static final String MESSAGE = "/user/message";
+    /**
+     * 消息列表
+     */
+    public static final String MESSAGEDETAIL = "/user/messagedetail";
+    /**
+     * 已读消息
+     */
+    public static final String UPDATEREADMSG = "/user/updatereadmessage";
 
     /**
      *  stamp upload record

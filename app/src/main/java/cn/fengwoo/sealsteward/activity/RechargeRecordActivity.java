@@ -107,17 +107,12 @@ public class RechargeRecordActivity extends BaseActivity {
                         if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                             for (RechargeRecordBean app : responseInfo.getData()) {
                                 try {
-                                    Integer type = null;
+                                    Integer type;
                                     //时间戳转为时间
                                     String rechargeTime = DateUtils.getDateString(Long.parseLong(app.getRechargeTime()));// 支付时间
                                     String expireTime = DateUtils.getDateString(Long.parseLong(app.getCurrentServiceExpireTime()));// 服务费到期时间
-                                 /*   if (app.getPaymentType() == 1) {
-                                        type = Integer.parseInt("微信");
-                                    } else {
-                                        type = Integer.parseInt("支付宝");
-                                    }*/
                                     recordDataList.add(new RechargeRecordData(rechargeTime, app.getPaymentResult(), app.getSealName()
-                                            , app.getOrgStructureName(), app.getPackageContent(),app.getPaymentType() , expireTime, app.getAmountOfMoney()));
+                                            , app.getOrgStructureName(), app.getPackageContent(),app.getPaymentType(), expireTime, app.getAmountOfMoney()));
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
                                 }

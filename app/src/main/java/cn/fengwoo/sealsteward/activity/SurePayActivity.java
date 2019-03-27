@@ -110,13 +110,13 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
                 JsonObject jsonObject = (JsonObject) parse.parse(result);
                 Integer code = jsonObject.get("code").getAsInt();
                 JsonObject data = jsonObject.get("data").getAsJsonObject();
-                JsonObject content = data.get("content").getAsJsonObject();
 
                 if (code == 0) {
                     if (type == 1) {
                         /**
                          * 微信支付
                          */
+                        JsonObject content = data.get("content").getAsJsonObject();
                         IWXAPI api = WXAPIFactory.createWXAPI(SurePayActivity.this,"wxf3669f6ea87d71d4",false); //调用支付接口,填写自己的APPID
                         api.registerApp("wxf3669f6ea87d71d4");
                         PayReq req = new PayReq();//PayReq就是订单信息对象
@@ -135,7 +135,7 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
                         req.packageValue = "Sign=WXPay";//固定值Sign=WXPay
                         req.sign = sign;//签名
                         api.sendReq(req);//将订单信息对象发送给微信服务器，即发送支付请求
-
+                        finish();
                     } else {
                         String orderStr = data.get("orderString").getAsString();
                         if (orderStr != null) {

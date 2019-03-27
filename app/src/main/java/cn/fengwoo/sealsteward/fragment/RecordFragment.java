@@ -81,6 +81,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         ButterKnife.bind(this, view);
         initData();
         setListener();
+        record_refreshLayout.autoRefresh(); //自动刷新
         setSmartRefreshLayout();
         return view;
     }
@@ -216,4 +217,5 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         intent.putExtra("sealName",list.get(position).getSealName());
         startActivity(intent);
     }
+
 }

@@ -71,7 +71,7 @@
                 tools:replace="android:resource" />
         </provider>
 
-        <!--微信支付-->
+        <!-- 微信支付 -->
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -244,7 +244,8 @@
             android:screenOrientation="landscape" />
         <activity android:name=".activity.SelectSealRecodeActivity" />
         <activity android:name=".activity.PayActivity" />
-        <activity android:name=".activity.SurePayActivity"/>
+        <activity android:name=".activity.SurePayActivity" />
+        <activity android:name=".activity.MessageListActivity"></activity>
     </application>
 
 </manifest>

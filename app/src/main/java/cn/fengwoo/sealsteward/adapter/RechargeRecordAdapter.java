@@ -57,13 +57,21 @@ public class RechargeRecordAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.recharge_time_tv.setText(recordDataList.get(position).getRechargeTime());
-        viewHolder.recharge_result_tv.setText(String.valueOf(recordDataList.get(position).getRechargeResult()));
+        if (recordDataList.get(position).getRechargeResult()){
+            viewHolder.recharge_result_tv.setText("成功");
+        }else {
+            viewHolder.recharge_result_tv.setText("失败");
+        }
         viewHolder.recharge_seal_name_tv.setText(recordDataList.get(position).getSealName());
         viewHolder.recharge_department_tv.setText(recordDataList.get(position).getDepartment());
         viewHolder.recharge_set_meal_tv.setText(recordDataList.get(position).getSetMeal());
         viewHolder.recharge_end_time_tv.setText(recordDataList.get(position).getEndTime());
         viewHolder.recharge_money_tv.setText(String.valueOf(recordDataList.get(position).getMoney()));
-        viewHolder.recharge_way_tv.setText(recordDataList.get(position).getRechargeWay()+"");
+        if (recordDataList.get(position).getRechargeWay() == 1){
+             viewHolder.recharge_way_tv.setText("微信");
+        }else {
+            viewHolder.recharge_way_tv.setText("支付宝");
+        }
         return view;
     }
     class ViewHolder{

@@ -1,40 +1,62 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.MessageData;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.fragment.MainFragment;
 import cn.fengwoo.sealsteward.fragment.MessageFragment;
 import cn.fengwoo.sealsteward.fragment.MineFragment;
 import cn.fengwoo.sealsteward.fragment.RecordFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
 import cn.fengwoo.sealsteward.view.AddPopuwindow;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private LinearLayout home_page, record_page, application_page, message_page, mine;
     private TextView title_tv;  //头标题
@@ -67,6 +89,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
      * 两次点击的间隔时间
      */
     private static final int QUIT_INTERVAL = 2000;
+    @BindView(R.id.msgSum_tv)
+    TextView msgSum_tv;  //消息总数
+    private Timer timer;
+    int sum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +105,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         ZXingLibrary.initDisplayOpinion(this);
         changeView(0);  //启动默认显示主页面
         setListener();
+
+        timer = new Timer();
+        timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法
+
     }
+
+    /**
+     * 开启定时器
+     */
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+ //               getMessageNum();
+            }
+            super.handleMessage(msg);
+        }
+    };
+    TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            Message message = new Message();
+            message.what = 1;
+            handler.sendMessage(message);
+        }
+    };
 
     private void initView() {
         title_tv = findViewById(R.id.title_tv);
@@ -105,6 +157,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         message_more_iv = findViewById(R.id.message_more_iv);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
+
     }
 
     private void setListener() {
@@ -179,7 +232,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.add_ll:
                 //添加popuwindow
-                messagePopuwindow = new MessagePopuwindow(MainActivity.this,1);
+                messagePopuwindow = new MessagePopuwindow(MainActivity.this, 1);
                 messagePopuwindow.showPopuwindow(view);
                 break;
         }
@@ -326,27 +379,58 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    /*
-    @Override
-    protected void onPause() {
-        super.onPause();
-        CameraManager.get().closeDriver();
-    }*/
-/*
-    private void popDialog() {
-        dialogList = new ArrayList<String>();
-        dialogList.add("添加人员");
-        dialogList.add("添加印章");
-        final AddPopuwindow addPopuwindow = new AddPopuwindow(MainActivity.this,dialogList);
-        addPopuwindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+
+    /**
+     * 获取消息
+     */
+
+    @SuppressLint("SetTextI18n")
+    private void getMessageNum() {
+        HttpUtil.sendDataAsync(MainActivity.this, HttpUrl.MESSAGE, 1, null, null, new Callback() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                if (position == 0) {
-                    Toast.makeText(MainActivity.this, "11111", Toast.LENGTH_LONG).show();
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<List<MessageData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<MessageData>>>() {
                 }
+                        .getType());
+                assert responseInfo != null;
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+
+//                    //关闭定时器
+//                    stopTimer();
+                    for (MessageData messageData : responseInfo.getData()) {
+                        int msgNum = messageData.getUnreadCount();
+                        sum += msgNum;
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //显示消息总数
+                            if (sum != 0) {
+                                msgSum_tv.setVisibility(View.VISIBLE);
+                                msgSum_tv.setText(sum + "");
+
+                            }
+                        }
+                    });
+                    Log.e("TAG", "获取消息成功!!!!!!!!!!!!!!!!");
+
+                } else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+
             }
         });
-    }*/
+
+    }
 
     //按下物理返回键,popuwindow消失
     @Override
@@ -371,4 +455,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getMessageNum();
+
+    }
+
+    private void  stopTimer(){
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+    }
 }
