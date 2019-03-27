@@ -2,9 +2,9 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,12 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.barteksc.pdfviewer.PDFView;
 import com.mob.MobSDK;
+
+import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.BASE64Encoder;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -32,8 +34,6 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
     LinearLayout set_back_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
-    @BindView(R.id.pdfView)
-    PDFView pdfView;
     @BindView(R.id.pdf_share_iv)
     ImageView pdf_share_iv;
     @BindView(R.id.webView)
@@ -57,54 +57,43 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         pdf_share_iv.setOnClickListener(this);
 
         Intent intent = getIntent();
-        Integer code = intent.getIntExtra("1",0);
-        String applyPdf = intent.getStringExtra("applyPdf");
-        String stampPdf = intent.getStringExtra("stampPdf");
-        String stampRecordPdf = intent.getStringExtra("stampRecordPdf");
-
-        if (code == 1){
+        String fileName = intent.getStringExtra("fileName");
+        if(fileName != null && !fileName.isEmpty()){
             String url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + CommonUtil.getUserData(this).getCompanyId()
-                    + "&fileName=" + applyPdf;
-            pdfView(url);
-        }else if(code == 2){
-            pdfView(stampPdf);
-        }else{
-            pdfView(stampRecordPdf);
+                    + "&fileName=" + fileName;
+            loadPdf(url);
         }
     }
 
-    /**
-     * 加载PDF文件
-     * @param pdf
-     */
-    @SuppressLint("SetJavaScriptEnabled")
-    private void pdfView(String pdf){
-    /*    WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        //    webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); //刷新页面,只从网络获取不使用缓存
-        webSettings.setSupportZoom(true); //设置可以支持缩放
-        webSettings.setDomStorageEnabled(true);  //设置适应Html5
-        webView.loadUrl(pdf);*/
-
-        webView.loadUrl(pdf);
-        //覆盖WebView默认使用第三方或系统默认浏览器打开网页的行为，使网页用WebView打开
-        webView.setWebViewClient(new WebViewClient(){
+    private  void loadPdf(String pdfUrl){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // TODO Auto-generated method stub
-                //返回值是true的时候控制去WebView打开，为false调用系统浏览器或第三方浏览器
+                // 返回值是true的时候控制去WebView打开，为false调用系统浏览器或第三方浏览器
                 view.loadUrl(url);
                 return true;
             }
         });
-     /*   pdfView.fromUri(Uri.parse(pdf))
-              //  .fromAsset(pdf)
-                .pages(0,2,1,3,3,3)
-                .defaultPage(0)
-                .enableAnnotationRendering(true)
-                .swipeHorizontal(false)
-                .spacing(10)
-                .load();*/
+        WebSettings settings = webView.getSettings();
+        settings.setSavePassword(false);
+        settings.setJavaScriptEnabled(true);
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
+        settings.setBuiltInZoomControls(true);
+        webView.setWebChromeClient(new WebChromeClient());
+        if (!"".equals(pdfUrl)) {
+            byte[] bytes = null;
+            try {// 获取以字符编码为utf-8的字符
+                bytes = pdfUrl.getBytes("UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            if (bytes != null) {
+                pdfUrl = new BASE64Encoder().encode(bytes);// BASE64转码
+            }
+        }
+        webView.loadUrl("file:///android_asset/pdfjs/web/viewer.html?file=" + pdfUrl);
+
     }
     @Override
     public void onClick(View v) {

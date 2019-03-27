@@ -221,18 +221,15 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         String s = messageEvent.msgType;
         if (s.equals("申请文件")){
             Intent intent = new Intent(this, FileActivity.class);
-            intent.putExtra("applyPdf",applyPdf);
-            intent.putExtra("1",1);
+            intent.putExtra("fileName",applyPdf);
             startActivity(intent);
         }else if (s.equals("盖章文件")){
             Intent intent = new Intent(this, FileActivity.class);
-            intent.putExtra("stampPdf",stampPdf);
-            intent.putExtra("1",2);
+            intent.putExtra("fileName",stampPdf);
             startActivity(intent);
         }else {
             Intent intent = new Intent(this, FileActivity.class);
-            intent.putExtra("stampRecordPdf",stampRecordPdf);
-            intent.putExtra("1",3);
+            intent.putExtra("fileName",stampRecordPdf);
             startActivity(intent);
         }
 
