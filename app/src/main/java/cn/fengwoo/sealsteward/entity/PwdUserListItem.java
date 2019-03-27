@@ -2,30 +2,30 @@ package cn.fengwoo.sealsteward.entity;
 
 import java.io.Serializable;
 
-public class AddPwdUserUploadReturn implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class PwdUserListItem implements Serializable {
+    private static final long serialVersionUID=1L;
 
     /**
-     * id : 11d81bfaddea4acc9c3eb7d3e20d09a6
+     * id : 637210766cd54af5ae63f487fec48161
      * userId : 36d206e430ea49aabc79fea2c076f9b6
-     * userName : null
+     * userName : 易额额
      * sealId : 48e7c3e171ed4bb490f82a0d5ef349ec
-     * sealName : null
-     * orgStructureName : null
-     * userNumber : null
-     * password : 170258
+     * sealName : 1223
+     * orgStructureName : 公章管理处
+     * userNumber : 83
+     * password : 826984
      * userType : 1
-     * stampCount : 1122
-     * expireTime : 1553689320000
+     * stampCount : 55
+     * expireTime : 1553748132000
      */
 
     private String id;
     private String userId;
-    private Object userName;
+    private String userName;
     private String sealId;
-    private Object sealName;
-    private Object orgStructureName;
-    private Object userNumber;
+    private String sealName;
+    private String orgStructureName;
+    private int userNumber;
     private String password;
     private int userType;
     private int stampCount;
@@ -47,11 +47,11 @@ public class AddPwdUserUploadReturn implements Serializable {
         this.userId = userId;
     }
 
-    public Object getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(Object userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -63,27 +63,27 @@ public class AddPwdUserUploadReturn implements Serializable {
         this.sealId = sealId;
     }
 
-    public Object getSealName() {
+    public String getSealName() {
         return sealName;
     }
 
-    public void setSealName(Object sealName) {
+    public void setSealName(String sealName) {
         this.sealName = sealName;
     }
 
-    public Object getOrgStructureName() {
+    public String getOrgStructureName() {
         return orgStructureName;
     }
 
-    public void setOrgStructureName(Object orgStructureName) {
+    public void setOrgStructureName(String orgStructureName) {
         this.orgStructureName = orgStructureName;
     }
 
-    public Object getUserNumber() {
+    public int getUserNumber() {
         return userNumber;
     }
 
-    public void setUserNumber(Object userNumber) {
+    public void setUserNumber(int userNumber) {
         this.userNumber = userNumber;
     }
 

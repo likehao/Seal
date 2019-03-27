@@ -1,6 +1,14 @@
 package cn.fengwoo.sealsteward.entity;
 
 public class AddPwdUserUpload {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     /**
      * userId : string
      * expireTime : 2019
@@ -8,10 +16,22 @@ public class AddPwdUserUpload {
      * userType : 1
      */
 
+
+    private String id;
     private String userId;
     private String expireTime;
     private int stampCount;
     private int userType;
+
+    public String getUserNumber() {
+        return userNumber;
+    }
+
+    public void setUserNumber(String userNumber) {
+        this.userNumber = userNumber;
+    }
+
+    private String userNumber;
 
     public String getSealId() {
         return sealId;

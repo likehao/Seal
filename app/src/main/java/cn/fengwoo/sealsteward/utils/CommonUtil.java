@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.service.autofill.DateTransformation;
 
 import com.google.gson.Gson;
 
@@ -245,7 +246,7 @@ public class CommonUtil {
 
 
     /**
-     *
+     * 添加按键密码和权限
      */
     public static byte[] addPwd(String pwd,int sealTimes, String timeStamp) {
         byte[] time = DataTrans.shortToByteArray((short) sealTimes, false);
@@ -271,6 +272,28 @@ public class CommonUtil {
         return startByte;
     }
 
+
+    /**
+     * 修改次数
+     */
+    public static byte[] changeTimes(String pwdcode,int sealTimes, String timeStamp) {
+        byte[] time = DataTrans.shortToByteArray((short) sealTimes, false);
+
+        Date date = new Date(Long.valueOf(timeStamp));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR)% 2000;
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DATE);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        int sec = calendar.get(Calendar.SECOND);
+
+        byte[] pwdCodeBytes = DataTrans.intToBytesLittle(Integer.parseInt(pwdcode));
+
+        byte[] startByte = new byte[]{pwdCodeBytes[0],pwdCodeBytes[1],pwdCodeBytes[2],pwdCodeBytes[3],time[0], time[1], (byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
+        return startByte;
+    }
 
 
     /**

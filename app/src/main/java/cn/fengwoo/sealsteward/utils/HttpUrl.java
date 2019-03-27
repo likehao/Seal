@@ -1,7 +1,7 @@
 package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
-//    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
+    //    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
 //    public static final String URL = "http://192.168.0.117:8800/";  //调试环境
     public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //线上
 
@@ -216,14 +216,31 @@ public class HttpUrl {
     public static final String UPDATEREADMSG = "/user/updatereadmessage";
 
     /**
-     *  stamp upload record
+     * stamp upload record
      */
     public static final String STAMP_UPLOAD_RECORD = "/stamp/uploadrecord";
 
-   /**
-     *  add 密码用户
+    /**
+     * add 密码用户
      */
     public static final String ADD_PWD_USER = "/seal/addofflineuser";
+
+
+    /**
+     * update 密码用户
+     */
+    public static final String UPDATE_PWD_USER = "/seal/updateofflineuser";
+
+
+    /**
+     * 获取密码用户列表
+     */
+    public static final String PWD_USER_LIST = "/seal/offlineuserlist";
+
+    /**
+     * delete 密码用户
+     */
+    public static final String DELETE_PWD_USER = "/seal/deleteofflineuser";
 
 
 }

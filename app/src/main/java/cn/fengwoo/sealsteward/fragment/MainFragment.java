@@ -352,11 +352,20 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                             Utils.log(pressTime + "");
                                             EventBus.getDefault().post(new MessageEvent("ble_time_delay", pressTime + ""));
 
-                                        }
-                                   else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B6 ")) {
+                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B6 ")) {
                                             int voiceState = bytes[3];
                                             Utils.log(voiceState + "");
                                             EventBus.getDefault().post(new MessageEvent("ble_read_voice", voiceState + ""));
+
+                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A4 00 ")) {
+                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
+                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
+                                            EventBus.getDefault().post(new MessageEvent("ble_add_pwd", pwdCode + ""));
+
+                                        }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B1 00 ")) {
+//                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
+//                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
+                                            EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count",  "success"));
 
                                         }
                                     },
@@ -393,6 +402,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                             .subscribe(
                                     characteristicValue -> {
                                         // Characteristic value confirmed.
+                                        Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+
                                     },
                                     throwable -> {
                                         // Handle an error here.
