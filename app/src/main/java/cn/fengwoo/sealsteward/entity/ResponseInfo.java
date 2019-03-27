@@ -7,15 +7,6 @@ public class ResponseInfo<T> implements Serializable {
     private String message;
     private T data;
     private Integer code;
-    private String fileName;
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
 
     public ResponseInfo(){
 
