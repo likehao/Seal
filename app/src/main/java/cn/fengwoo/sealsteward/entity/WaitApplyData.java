@@ -13,14 +13,16 @@ public class WaitApplyData implements Serializable {
     private Integer applyCount;
     private String applyTime;
     private String id;
+    private Integer approveStatus;
 
-    public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime,String id) {
+    public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime, String id, Integer approveStatus) {
         this.cause = cause;
         this.sealName = sealName;
         this.failTime = failTime;
         this.applyCount = applyCount;
         this.applyTime = applyTime;
         this.id = id;
+        this.approveStatus = approveStatus;
     }
 
     public String getCause() {
@@ -69,6 +71,14 @@ public class WaitApplyData implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(Integer approveStatus) {
+        this.approveStatus = approveStatus;
     }
 
 }

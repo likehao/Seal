@@ -191,7 +191,9 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 HttpUtil.sendDataAsync(getActivity(), HttpUrl.LOGOUT, 1, null, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        Looper.prepare();
                         Toast.makeText(getActivity(),e+"",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
                     }
 
                     @Override

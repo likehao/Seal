@@ -12,16 +12,15 @@ public class RecordData {
     private String sealTime;
     private String sealAddress;
     private String id;
+    private Integer approveStatus;
+    private String applyPdf;
+    private String stampPdf;
+    private String stampRecordPdf;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public RecordData(String id,String couse, String sealName, String sealPeople, Integer sealCount, Integer restCount, Integer uploadPhotoNum, String failTime, String sealTime, String sealAddress) {
+    public RecordData(String id,String couse, String sealName, String sealPeople,
+                      Integer sealCount, Integer restCount, Integer uploadPhotoNum,
+                      String failTime, String sealTime, String sealAddress,Integer approveStatus
+    ,String applyPdf ,String stampPdf ,String stampRecordPdf) {
         this.id = id;
         this.couse = couse;
         this.sealName = sealName;
@@ -32,6 +31,11 @@ public class RecordData {
         this.failTime = failTime;
         this.sealTime = sealTime;
         this.sealAddress = sealAddress;
+        this.approveStatus = approveStatus;
+        this.applyPdf = applyPdf;
+        this.stampPdf = stampPdf;
+        this.stampRecordPdf = stampRecordPdf;
+
     }
 
     public String getCouse() {
@@ -104,5 +108,46 @@ public class RecordData {
     public void setSealAddress(String sealAddress) {
         this.sealAddress = sealAddress;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Integer getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(Integer approveStatus) {
+        this.approveStatus = approveStatus;
+    }
+
+    public String getApplyPdf() {
+        return applyPdf;
+    }
+
+    public void setApplyPdf(String applyPdf) {
+        this.applyPdf = applyPdf;
+    }
+
+    public String getStampPdf() {
+        return stampPdf;
+    }
+
+    public void setStampPdf(String stampPdf) {
+        this.stampPdf = stampPdf;
+    }
+
+    public String getStampRecordPdf() {
+        return stampRecordPdf;
+    }
+
+    public void setStampRecordPdf(String stampRecordPdf) {
+        this.stampRecordPdf = stampRecordPdf;
+    }
+
 
 }

@@ -285,4 +285,7 @@
     <string name="get_money">收款方</string>
     <string name="sure_pay">确认支付</string>
     <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
+    <string name="closing_documents">关闭单据</string>
+    <string name="see_record_file">查看记录文件</string>
+    <string name="seeSeal_file">查看盖章文件</string>
 </resources>

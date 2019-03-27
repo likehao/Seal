@@ -14,16 +14,24 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddSealActivity;
 import cn.fengwoo.sealsteward.activity.AddUserActivity;
+import cn.fengwoo.sealsteward.activity.FileActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
+import cn.fengwoo.sealsteward.adapter.TopRightPopuAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 
 public class MessagePopuwindow extends PopupWindow implements View.OnClickListener{
     private ListView listView;
     public View mview;
     private TextView add_user_tv,add_seal_tv;
     private Intent intent;
+    private TextView see_apply_file_tv,see_seal_file_tv,see_record_file_tv;
 
     public MessagePopuwindow(Activity context,int code){
         final Activity activity = context;
@@ -31,9 +39,14 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
         //判断是首页还是记录详情进入
         if (code == 1){
             mview = inflater.inflate(R.layout.message_popuwindowlayout,null);   //添加人员，添加印章
-            initView();
-        }else {
+            initView(1);
+        }else if (code == 3){
+            mview = inflater.inflate(R.layout.see_file_popuwindow,null);   //查看申请文件,查看盖章文件,查看记录文件
+            initView(3);
+        }
+        else {
             mview = inflater.inflate(R.layout.see_record_popuwindow,null);   //查看申请文件，上传照片
+            initView(2);
         }
         //设置选择的popuwindow的View
         this.setContentView(mview);
@@ -46,11 +59,9 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
         this.setWidth(width / 3);
         //设置弹出的popuwindow的高
         this.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-/*
-        listView = mview.findViewById(R.id.list);
+ /*       listView = mview.findViewById(R.id.list);
         final TopRightPopuAdapter topRightPopuAdapter = new TopRightPopuAdapter(listData,context);
-        listView.setAdapter(topRightPopuAdapter);
-*/
+        listView.setAdapter(topRightPopuAdapter);*/
         //设置弹窗是否可以点击
         this.setFocusable(true);
         this.setOutsideTouchable(true);
@@ -80,11 +91,22 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
 
     }
 
-    private void initView(){
-        add_user_tv = mview.findViewById(R.id.add_user_tv);
-        add_user_tv.setOnClickListener(this);
-        add_seal_tv = mview.findViewById(R.id.add_seal_tv);
-        add_seal_tv.setOnClickListener(this);
+    private void initView(int i){
+        if (i == 1){
+            add_user_tv = mview.findViewById(R.id.add_user_tv);
+            add_user_tv.setOnClickListener(this);
+            add_seal_tv = mview.findViewById(R.id.add_seal_tv);
+            add_seal_tv.setOnClickListener(this);
+        }else if (i == 3){
+            see_apply_file_tv = mview.findViewById(R.id.see_apply_file_tv);
+            see_apply_file_tv.setOnClickListener(this);
+            see_seal_file_tv = mview.findViewById(R.id.see_seal_file_tv);
+            see_seal_file_tv.setOnClickListener(this);
+            see_record_file_tv = mview.findViewById(R.id.see_record_file_tv);
+            see_record_file_tv.setOnClickListener(this);
+        }
+
+
     }
     //显示
     public void showPopuwindow(View view){
@@ -123,7 +145,20 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
                 mview.getContext().startActivity(intent);
                 this.dismiss();
                 break;
+            case R.id.see_apply_file_tv:  //查看申请文件
+                EventBus.getDefault().post(new MessageEvent("申请文件","申请文件"));
+                this.dismiss();
+                break;
+            case R.id.see_seal_file_tv:   //查看盖章文件
+                EventBus.getDefault().post(new MessageEvent("盖章文件","盖章文件"));
+                this.dismiss();
+                break;
+            case R.id.see_record_file_tv:   //查看记录文件
+                EventBus.getDefault().post(new MessageEvent("记录文件","记录文件"));
+                this.dismiss();
+                break;
 
         }
     }
+
 }

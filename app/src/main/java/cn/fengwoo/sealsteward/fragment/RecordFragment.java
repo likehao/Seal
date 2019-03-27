@@ -128,7 +128,9 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 }
                                 list.add(new RecordData(app.getId(),app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                         , app.getApplyCount(), app.getAvailableCount(), photoCount
-                                        , failTime, sealTime, app.getLastStampAddress()));
+                                        , failTime, sealTime, app.getLastStampAddress(),app.getApproveStatus(),
+                                       app.getApplyPdf() ,app.getStampPdf(),app.getStampRecordPdf()));
+
                             }
                             //请求数据
                             Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
@@ -160,11 +162,6 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
             }
         });
-
-      /*  //设置 Header 为 贝塞尔雷达 样式
-        record_refreshLayout.setRefreshHeader(new BezierRadarHeader(getActivity()).setEnableHorizontalDrag(true));
-        //设置 Footer 为 球脉冲 样式
-        record_refreshLayout.setRefreshFooter(new BallPulseFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Scale));*/
     }
 
     private void setListener() {
@@ -215,6 +212,10 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         intent.putExtra("photoNum",list.get(position).getUploadPhotoNum());
         intent.putExtra("sealPerson",list.get(position).getSealPeople());
         intent.putExtra("sealName",list.get(position).getSealName());
+        intent.putExtra("status",list.get(position).getApproveStatus());
+        intent.putExtra("applyPdf",list.get(position).getApplyPdf());
+        intent.putExtra("stampPdf",list.get(position).getStampPdf());
+        intent.putExtra("stampRecordPdf",list.get(position).getStampRecordPdf());
         startActivity(intent);
     }
 

@@ -26,6 +26,10 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
 import cn.fengwoo.sealsteward.adapter.SeeRecordAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.RecordListBean;
 import cn.fengwoo.sealsteward.bean.SeeRecordBean;
 import cn.fengwoo.sealsteward.bean.SeeRecordDetailBean;
@@ -80,6 +85,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     private SeeRecordAdapter seeRecordAdapter;
     private List<SeeRecordBean> list;
     String id;
+    private Integer status;
+    private String applyPdf,stampPdf,stampRecordPdf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +116,11 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         String sealName = intent.getStringExtra("sealName");
         String sealPerson = intent.getStringExtra("sealPerson");
 
+        applyPdf = intent.getStringExtra("applyPdf");
+        stampPdf = intent.getStringExtra("stampPdf");
+        stampRecordPdf = intent.getStringExtra("stampRecordPdf");
+
+        status = intent.getIntExtra("status",0);
         detail_sealPerson_tv.setText(sealPerson);
         detail_sealCount_tv.setText(count+"");
         detail_restCount_tv.setText(restCount+"");
@@ -188,11 +200,44 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.message_more_iv:
-                messagePopuwindow = new MessagePopuwindow(this,2);
-                messagePopuwindow.showPopuwindow(v);
+                //根据单据是否已关闭状态显示不同的popuwindow
+                if (status == 5){
+                    messagePopuwindow = new MessagePopuwindow(this,3);
+                    messagePopuwindow.showPopuwindow(v);
+                }else {
+                    messagePopuwindow = new MessagePopuwindow(this,2);
+                    messagePopuwindow.showPopuwindow(v);
+                }
                 break;
         }
     }
+
+    /**
+     * 处理注册事件
+     * @param messageEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        if (s.equals("申请文件")){
+            Intent intent = new Intent(this, FileActivity.class);
+            intent.putExtra("applyPdf",applyPdf);
+            intent.putExtra("1",1);
+            startActivity(intent);
+        }else if (s.equals("盖章文件")){
+            Intent intent = new Intent(this, FileActivity.class);
+            intent.putExtra("stampPdf",stampPdf);
+            intent.putExtra("1",2);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(this, FileActivity.class);
+            intent.putExtra("stampRecordPdf",stampRecordPdf);
+            intent.putExtra("1",3);
+            startActivity(intent);
+        }
+
+    }
+
 
     @Override
     protected void onResume() {
@@ -200,4 +245,23 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         see_RecordDetail_smt.autoRefresh();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);  //解除注册
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

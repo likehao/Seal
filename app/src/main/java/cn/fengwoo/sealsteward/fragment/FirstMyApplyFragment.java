@@ -106,7 +106,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
                                 String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
-                                        ,expireTime,app.getApplyCount(),applyTime,app.getId()));
+                                        ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()));
                             }
                             //请求数据
                             Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {

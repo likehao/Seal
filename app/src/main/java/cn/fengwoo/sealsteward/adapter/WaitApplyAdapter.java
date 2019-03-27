@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,7 +66,7 @@ public class WaitApplyAdapter extends BaseAdapter{
         return position;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         if (view == null){
@@ -80,6 +81,8 @@ public class WaitApplyAdapter extends BaseAdapter{
             viewHolder.failTime_tv.setText(waitApplyData.get(position).getFailTime());
             viewHolder.apply_count_tv.setText(waitApplyData.get(position).getApplyCount()+"");
             viewHolder.applyTime_tv.setText(waitApplyData.get(position).getApplyTime());
+            int status = waitApplyData.get(position).getApproveStatus();
+            String id =  waitApplyData.get(position).getId();
             if (code == 2){ //审批中
                 viewHolder.item2_tv.setText("审批进度");
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +95,7 @@ public class WaitApplyAdapter extends BaseAdapter{
             }else if (code == 3){  //已审批
                 viewHolder.item1_tv.setVisibility(View.VISIBLE);
                 viewHolder.item2_tv.setText("关闭单据");
+                statusView(status);
                 //查看记录
                 viewHolder.item1_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -104,7 +108,7 @@ public class WaitApplyAdapter extends BaseAdapter{
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        commonPostRequest(5);
+                        commonPostRequest(id);
                     }
                 });
             }else if (code == 4){  //已驳回
@@ -117,10 +121,11 @@ public class WaitApplyAdapter extends BaseAdapter{
                     }
                 });
             }else {
+                statusView(status);
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        commonPostRequest(4);  //撤销
+                        commonPostRequest(id);  //撤销
                     }
                 });
             }
@@ -129,11 +134,64 @@ public class WaitApplyAdapter extends BaseAdapter{
     }
 
     /**
+     * 根据状态值显示每条数据的状态
+     * @param status
+     */
+    @SuppressLint("ResourceAsColor")
+    private void statusView(int status){
+        switch (status){
+            case 5:
+                viewHolder.item2_tv.setText("已关闭");
+                viewHolder.item2_tv.setEnabled(false);
+                viewHolder.item2_tv.setTextColor(R.color.gray_text);
+                break;
+            case 4:
+                viewHolder.item2_tv.setText("已撤销");
+                viewHolder.item2_tv.setEnabled(false);
+                viewHolder.item2_tv.setTextColor(R.color.gray_text);
+                break;
+        }
+    }
+    /**
      * 共同方法（Param）
      * 关闭单据（5）,已撤销（4）
      */
-    private void commonPostRequest(int code){
-        ApplyListData applyListData = new ApplyListData();
+    private void commonPostRequest(String code){
+                //关闭单据
+        viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("applyId", code);
+                HttpUtil.sendDataAsync((Activity) context, HttpUrl.APPLICLOSE, 1, hashMap, null, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+
+                        String result = response.body().string();
+                        Gson gson = new Gson();
+                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                        }
+                                .getType());
+                        if (responseInfo.getCode() == 0) {
+                            if (responseInfo.getData()) {
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                       viewHolder.item2_tv.setText("已关闭");
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        /*ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(1);
         applyListData.setHasExportPdf(false);
         applyListData.setHasPage(true);
@@ -173,7 +231,7 @@ public class WaitApplyAdapter extends BaseAdapter{
 
             }
         });
-
+*/
     }
     public static class ViewHolder{
         private TextView tv_cause;

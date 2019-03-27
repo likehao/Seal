@@ -218,7 +218,9 @@
         <activity android:name=".activity.SelectPeopleActivity" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.SuggestionActivity" />
-        <activity android:name=".activity.FileActivity" />
+        <activity
+            android:name=".activity.FileActivity"
+            tools:replace="android:name" />
         <activity android:name=".activity.ApprovalActivity" />
         <activity android:name=".activity.UploadFileActivity" />
         <activity android:name=".activity.ApplyUseSealActivity" />
@@ -245,7 +247,7 @@
         <activity android:name=".activity.SelectSealRecodeActivity" />
         <activity android:name=".activity.PayActivity" />
         <activity android:name=".activity.SurePayActivity" />
-        <activity android:name=".activity.MessageListActivity"></activity>
+        <activity android:name=".activity.MessageListActivity" />
     </application>
 
 </manifest>

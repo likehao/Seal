@@ -53,10 +53,12 @@ public class StampRecordList implements Serializable {
     private Integer photoCount;
     private String sealId;
     private String sealName;
-    private Integer stampCountl;
+    private Integer stampCount;
     private String stampPdf;
     private List<String> stampRecordImgList;
     private String stampRecordPdf;
+
+
     public String getApplyCause() {
         return applyCause;
     }
@@ -202,11 +204,11 @@ public class StampRecordList implements Serializable {
     }
 
     public Integer getStampCountl() {
-        return stampCountl;
+        return stampCount;
     }
 
     public void setStampCountl(Integer stampCountl) {
-        this.stampCountl = stampCountl;
+        this.stampCount = stampCountl;
     }
 
     public String getStampPdf() {
@@ -254,7 +256,7 @@ public class StampRecordList implements Serializable {
                 ", photoCount=" + photoCount +
                 ", sealId='" + sealId + '\'' +
                 ", sealName='" + sealName + '\'' +
-                ", stampCountl=" + stampCountl +
+                ", stampCountl=" + stampCount +
                 ", stampPdf='" + stampPdf + '\'' +
                 ", stampRecordImgList=" + stampRecordImgList +
                 ", stampRecordPdf='" + stampRecordPdf + '\'' +
