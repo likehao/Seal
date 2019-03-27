@@ -336,11 +336,12 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     //判断是否需要同步用户数据
                     if(user.getNeedSync()){
                         dataSync();
+                    }else{
+                        //跳转首页
+                        intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                    //跳转首页
-                    intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
                 } else {
                     loadingView.cancel();
                     Looper.prepare();
@@ -392,11 +393,19 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
+                //跳转首页
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 loadingView.cancel();
+                //跳转首页
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
