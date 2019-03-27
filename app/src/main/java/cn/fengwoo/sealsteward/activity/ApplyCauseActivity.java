@@ -78,10 +78,6 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         causeDataList = new ArrayList<ApplyCauseData>();
         causeAdapter = new CauseAdapter(causeDataList,this);
 
-
-//        causeDataList.add(new ApplyCauseData("事由",10));
-//        causeDataList.add(new ApplyCauseData("事由",10));
-
         cause_lv.setAdapter(causeAdapter);
         cause_lv.setOnItemClickListener(this);
     }

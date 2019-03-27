@@ -34,7 +34,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
 
         //只启动一次引导页
         //getSharedPreferences参数（文件名,默认的模式为0或MODE_PRIVATE）为MODE_PRIVATE，则该配置文件只能被自己的应用程序访问
-        boolean isfirst = PrefUtils.getBoolean(WelcomeActivity.this,"ISFIRST",false);
+        boolean isfirst = PrefUtils.getBoolean(WelcomeActivity.this,"ISFIRST",true);
       //  sp = getSharedPreferences("Seal", Context.MODE_PRIVATE);
       //  boolean isfirst = sp.getBoolean("ISFIRST",false);
         if(isfirst){

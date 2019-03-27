@@ -29,6 +29,7 @@ import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.SerializableMap;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -54,6 +55,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
     private Intent intent;
     private String typeString;
 //    private Map<String, String> selectedUidsMap; // user id和类型的map
+    private LoadingView loadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
 
     private void getDate() {
         Utils.log("good");
+        loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("loadType", "0");
         HttpUtil.sendDataAsync(this, HttpUrl.ORGANIZATIONAL_STRUCTURE, 1, hashMap, null, new Callback() {
@@ -159,6 +162,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
                     public void run() {
                         mLinkedList.addAll(NodeHelper.sortNodes(data));
                         mAdapter.notifyDataSetChanged();
+                        loadingView.cancel();
                     }
                 });
             }
@@ -173,6 +177,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
         title_tv.setText("选择人员");
         set_back_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
+        loadingView = new LoadingView(this);
     }
 
     @Override
