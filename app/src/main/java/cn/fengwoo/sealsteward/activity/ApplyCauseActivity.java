@@ -89,7 +89,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     public void getData() {
         HashMap<String ,String> hashMap = new HashMap<>();
         hashMap.put("sealId", EasySP.init(this).getString("currentSealId"));
-        HttpUtil.sendDataAsync(this, HttpUrl.USESEALAPPLYLIST, 1, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this, HttpUrl.USE_SEAL_APPLYLIST, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG",e+"查看详情错误错误!!!!!!!!!!!!!!!!!!!");
