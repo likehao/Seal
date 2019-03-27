@@ -61,8 +61,8 @@ public class OptionsAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         final HistoryInfo historyInfo = list.get(position);
-        holder.textView.setText(historyInfo.getPhone());
-        holder.nickName.setText(historyInfo.getName());
+        holder.textView.setText(historyInfo.getName());
+        holder.nickName.setText(historyInfo.getPhone());
 
         //为下拉框选项删除图标部分设置事件，最终效果是点击将该选项删除
         holder.imageView.setOnClickListener(new View.OnClickListener() {
