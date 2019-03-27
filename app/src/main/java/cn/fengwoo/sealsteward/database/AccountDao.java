@@ -37,6 +37,7 @@ public class AccountDao {
         ContentValues contentValues = new ContentValues();
         contentValues.put("phone",info.getPhone());
         contentValues.put("name",info.getName());
+        contentValues.put("headPortrait",info.getHeadPortrait());
         contentValues.put("time",info.getTime());
         if (!TextUtils.isEmpty(phone)){
             database.update(TABLE_NAME,contentValues,"phone" + "=?",new String[]{phone});
@@ -64,6 +65,7 @@ public class AccountDao {
                 //返回列名对应的列索引值
                 historyInfo.setName(cursor.getString(cursor.getColumnIndex("name")));
                 historyInfo.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
+                historyInfo.setHeadPortrait(cursor.getString(cursor.getColumnIndex("headPortrait")));
                 historyInfo.setTime(cursor.getLong(cursor.getColumnIndex("time")));
                 list.add(historyInfo);
             }

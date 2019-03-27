@@ -3,6 +3,8 @@ package cn.fengwoo.sealsteward.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -16,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -56,13 +59,13 @@ public class HttpDownloader {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 byte[] imgData = response.body().bytes();
-                Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
-                //保存到本地
-                down(bitmap, fileName);
-
+                if(imgData!= null && imgData.length > 0){
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                    //保存到本地
+                    down(bitmap, fileName);
+                }
             }
         });
-
     }
 
     /**
@@ -100,21 +103,46 @@ public class HttpDownloader {
     /**
      * 读取本地文件
      */
-    public static Bitmap readFile(String url) {
-        //获取
-        FileInputStream fs = null;
-        try {
-            String str = path + url;
-
-            fs = new FileInputStream("file://"+ path +str);
-            Bitmap bitmap = BitmapFactory.decodeStream(fs);
-            String bitmap1 = String.valueOf(fs);
-            fs.close();
-            return bitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static Bitmap readFile(String fileName) {
+        File file = new File(path);
+        if (!file.exists()) {
             return null;
+        }
+        else{
+            String filePath = path + fileName;
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+            return bitmap;
         }
     }
 
+    /**
+     * 从SD卡中读取图片
+     * @param imgName
+     * @return
+     */
+    public static Bitmap getBitmapFromSDCard(String imgName) {
+        // 判断图片文件是否存在
+        String filePath = path + imgName;
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return null;
+        }
+        try{
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            // 设置为ture只获取图片大小
+            opts.inJustDecodeBounds = false;
+            opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            BitmapFactory.decodeFile(filePath, opts);
+            int width = opts.outWidth;
+            int height = opts.outHeight;
+            WeakReference<Bitmap> weak = new WeakReference<Bitmap>(BitmapFactory.decodeFile(filePath, opts));
+
+            return Bitmap.createScaledBitmap(weak.get(), width, height, true);
+        }catch (Exception ex){
+
+        }
+
+        return null;
+    }
 }

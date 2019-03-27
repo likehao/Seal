@@ -1,12 +1,13 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.text.TextUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +26,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
-import com.orhanobut.logger.Logger;
 import com.white.easysp.EasySP;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,16 +47,14 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SystemFuncListInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
-import cn.fengwoo.sealsteward.utils.FromToJson;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.utils.RequestHeaderUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -74,6 +69,8 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     EditText psd_et;
     @BindView(R.id.login_bt)
     Button login_bt;
+    @BindView(R.id.head_civ)
+    CircleImageView headImageView;
     private List<String> stringList;
     private CheckBox check_down_up;  //弹出账号列表上下箭头
     private AccountDao accountDao;
@@ -109,6 +106,23 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     }
 
     private void initData() {
+        //电话号码编辑事件
+        phone_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int a = 0;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int a = 0;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                loadUserHeadPortrait(s.toString());
+            }
+        });
 
         //是否显示历史登录列表
         check_down_up.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -237,6 +251,33 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         return isOk;
     }
 
+
+    /**
+     * 加载用户头像
+     * @param phoneNumber
+     */
+    private void loadUserHeadPortrait(String phoneNumber){
+        //加载用户头像
+        List<HistoryInfo> historyInfoList = accountDao.quaryAll();
+        if(historyInfoList != null){
+            for(HistoryInfo historyInfo : historyInfoList){
+                if(phoneNumber.equals(historyInfo.getPhone())){
+                    String head = historyInfo.getHeadPortrait();
+                    if(head != null && !head.isEmpty()){
+                        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(head);
+                        if(bitmap != null){
+                            headImageView.setImageBitmap(bitmap);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        //否则加载默认头像
+        headImageView.setImageResource(R.drawable.default_head_portrait);
+    }
+
+
     /**
      * 发送登录请求
      */
@@ -278,19 +319,25 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     } else {
                         targetPermissionJson = new Gson().toJson(user.getFuncIdList());
                     }
-
-                    JSONArray jsonArray = null;
-
-//                        jsonArray = new JSONArray(targetPermissionJson);
-                        List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
-
-
+                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
                     Utils.log(targetPermissionJson);
                     EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
-
-                    HistoryInfo historyInfo = new HistoryInfo(phone, user.getRealName(), new Date().getTime());
-                    //添加
+                    //存储用户的姓名，电话，头像
+                    HistoryInfo historyInfo = new HistoryInfo(phone, user.getRealName(), user.getHeadPortrait(), new Date().getTime());
                     accountDao.insert(historyInfo);
+                    //下载用户头像
+                    if(user.getHeadPortrait() != null && !user.getHeadPortrait().isEmpty()){
+                        //先从本地读取，没有则下载
+                        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(user.getHeadPortrait());
+                        if(bitmap == null){
+                            HttpDownloader.downLoadImg(LoginActivity.this,1,user.getHeadPortrait());
+                        }
+                    }
+                    //判断是否需要同步用户数据
+                    if(user.getNeedSync()){
+                        dataSync();
+                    }
+                    //跳转首页
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -336,4 +383,21 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         }
     }
 
+    /**
+     * 数据同步
+     */
+    public void dataSync(){
+        loadingView.showView("数据同步中,请稍后...");
+        HttpUtil.sendDataAsync(this, "", 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
+            }
+        });
+    }
 }

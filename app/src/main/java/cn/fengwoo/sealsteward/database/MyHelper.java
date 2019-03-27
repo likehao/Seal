@@ -11,7 +11,7 @@ public class MyHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE account(_id INTEGER primary key autoincrement,phone VARCHAR(20),name VARCHAR(20),time INTEGER(100),fullName VARCHAR(20))");
+        db.execSQL("CREATE TABLE account(_id INTEGER primary key autoincrement,phone VARCHAR(20),name VARCHAR(20),time INTEGER(100),headPortrait VARCHAR(50))");
     }
 
     @Override
