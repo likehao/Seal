@@ -20,12 +20,17 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.white.easysp.EasySP;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,6 +38,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddUserActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
+import cn.fengwoo.sealsteward.activity.EditOrganizationActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.OrganizationalStructureActivity;
@@ -49,6 +55,8 @@ import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DataProtocol;
 import cn.fengwoo.sealsteward.utils.DataTrans;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
@@ -56,6 +64,9 @@ import cn.qqtheme.framework.picker.SinglePicker;
 import cn.qqtheme.framework.widget.WheelView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 应用
@@ -267,7 +278,6 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                             // Handle an error here.
                         }
                 );
-
     }
 
     /**
@@ -478,6 +488,35 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 }
             });
             picker.show();
+
+        } else if (event.msgType.equals("ble_reset")) {
+            // 通知服务器，重置设备（seal）
+
+            Utils.log("reset seal");
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("userId", CommonUtil.getUserData(getActivity()).getId());
+            hashMap.put("sealId", EasySP.init(getActivity()).getString("currentSealId"));
+            hashMap.put("userType", "1");
+            HttpUtil.sendDataAsync(getActivity(), HttpUrl.RESET_SEAL, 4, hashMap, null, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Utils.log(e.toString());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String result = response.body().string();
+                    Utils.log(result);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+            });
+
 
         }
     }

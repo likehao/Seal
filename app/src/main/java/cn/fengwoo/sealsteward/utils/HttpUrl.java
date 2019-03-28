@@ -255,4 +255,10 @@ public class HttpUrl {
     public static final String DELETE_PWD_USER = "/seal/deleteofflineuser";
 
 
+    /**
+     * reset seal
+     */
+    public static final String RESET_SEAL = "/seal/resetofflineuser";
+
+
 }

@@ -367,6 +367,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 //                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
                                             EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count",  "success"));
 
+                                        }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B2 00 ")) {
+//                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
+//                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
+                                            EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user",  "success"));
+
+                                        }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
+//                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
+//                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
+                                            EventBus.getDefault().post(new MessageEvent("ble_reset",  "success"));
+
                                         }
                                     },
                                     throwable -> {

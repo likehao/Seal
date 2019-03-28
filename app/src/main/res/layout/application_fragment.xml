@@ -161,7 +161,8 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/reset_device"/>
+                                    android:layout_height="30dp"
+                                    android:background="@drawable/reset_device" />
 
                                 <TextView
                                     style="@style/application_text"

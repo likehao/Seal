@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -42,6 +43,7 @@ import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DataProtocol;
+import cn.fengwoo.sealsteward.utils.DataTrans;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -212,17 +214,19 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         deleteItem = pwdUserListItem;
                         // 发送命令到ble设备，delete数据
 
-//                        ((MyApp) getApplication()).getConnectionObservable()
-//                                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ADDPRESSPWD, startAllByte).getBytes()))
-//                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                                .subscribe(
-//                                        characteristicValue -> {
-//                                            // Characteristic value confirmed.
-//                                        },
-//                                        throwable -> {
-//                                            // Handle an error here.
-//                                        }
-//                                );
+
+                        byte[] pwdCodeBytes = DataTrans.intToBytesLittle(pwdUserListItem.getUserNumber());
+                        ((MyApp) getApplication()).getConnectionObservable()
+                                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.DELETEPRESSPWD, pwdCodeBytes).getBytes()))
+                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        characteristicValue -> {
+                                            // Characteristic value confirmed.
+                                        },
+                                        throwable -> {
+                                            // Handle an error here.
+                                        }
+                                );
 
                     }
                 });
@@ -250,8 +254,16 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        initData();
-        getDate();
+        Utils.log("onActivityResult");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initData();
+                getDate();
+            }
+        }, 2000);
+
     }
 
     private void delete(PwdUserListItem pwdUserListItem) {
@@ -299,8 +311,8 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) throws ParseException {
-        if (event.msgType.equals("adsf")) {
-
+        if (event.msgType.equals("ble_delete_pwd_user")) {
+            delete(deleteItem);
         }
     }
 }
