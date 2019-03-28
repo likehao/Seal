@@ -117,10 +117,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             file.getParentFile().mkdirs();
         }
         imageUri = Uri.fromFile(file);
-
-
-//        CompressConfig compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create();
-//        takePhoto.onEnableCompress(compressConfig,true);
     }
 
     @Override
@@ -130,8 +126,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 finish();
                 break;
             case R.id.iv:
-//                photoAndCamera();
-//                getTakePhoto();
                 permissions();
                 break;
         }
@@ -180,8 +174,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     }
 
     private void uploadPic(File file) {
-//        File file = new File(path);
-
         HashMap<String, Object> hashMap = new HashMap<>();
         Utils.log(file.length() + "");
         hashMap.put("category", 3);
@@ -202,12 +194,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                     sealPringString = responseInfo.getData().getFileName();
                     //添加印章
                     addSeal();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showToast(responseInfo.getMessage());
-                        }
-                    });
                 } else {
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
@@ -334,14 +320,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                     takePhoto.onPickFromGallery();
                     optionBottomDialog.dismiss();
                 } else if (position == 1) {
-//                    takePhoto.onPickFromCapture(imageUri);
-
-//                    ISCameraConfig config = new ISCameraConfig.Builder()
-//                            .needCrop(true) // 裁剪
-//                            .cropSize(1, 1, 200, 200)
-//                            .build();
-//
-//                    ISNav.getInstance().toCameraActivity(this, config, 123);
                     optionBottomDialog.dismiss();
                     takePhoto();
                 }
@@ -416,25 +394,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                         }
                     }
                 });
-
-
-//        Utils.log( "permission:"+ContextCompat.checkSelfPermission(AddSealSecStepActivity.this, android.Manifest.permission.CAMERA)+"");
-//        ActivityCompat.requestPermissions(AddSealSecStepActivity.this, new String[]{android.Manifest.permission.CAMERA}, 1);
-//
-//        if (Build.VERSION.SDK_INT > 22) {
-//            if (ContextCompat.checkSelfPermission(AddSealSecStepActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//                //先判断有没有权限 ，没有就在这里进行权限的申请
-//                ActivityCompat.requestPermissions(AddSealSecStepActivity.this, new String[]{android.Manifest.permission.CAMERA}, 1);
-//
-//            } else {
-//                //说明已经获取到摄像头权限了 想干嘛干嘛
-//            }
-//        } else {
-//                //这个说明系统版本在6.0之下，不需要动态获取权限。
-//
-//        }
-
-
     }
 
 
@@ -442,7 +401,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
      * 添加印章
      */
     private void addSeal() {
-//        loadingView.show();
         AddSealData addSealData = new AddSealData();
         addSealData.setDataProtocolVersion("2");
         addSealData.setMac(macString);
