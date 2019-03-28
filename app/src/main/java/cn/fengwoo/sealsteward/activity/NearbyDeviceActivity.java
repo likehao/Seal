@@ -3,13 +3,10 @@ package cn.fengwoo.sealsteward.activity;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Looper;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -18,7 +15,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,7 +27,6 @@ import com.polidea.rxandroidble2.RxBleConnection;
 import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
-import com.squareup.picasso.Picasso;
 import com.white.easysp.EasySP;
 
 import org.json.JSONException;
@@ -39,7 +34,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,9 +43,7 @@ import cn.fengwoo.sealsteward.adapter.SealAdapter;
 import cn.fengwoo.sealsteward.database.SealItemBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealData;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -101,7 +93,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private RxBleClient rxBleClient;
     private Disposable scanSubscription;
-    private Disposable disposable;
+    private Disposable connectDisposable;
     private boolean isAddNewSeal;
     private ResponseInfo<List<SealData>> responseInfo;
 
@@ -125,7 +117,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         }else{
             scanBle();
         }
-
 
         setListener();
 //        scanBle();
@@ -419,7 +410,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         ((MyApp)getApplication()).setConnectionObservable(connectionObservable);
 
-        disposable = connectionObservable // <-- autoConnect flag
+        connectDisposable = connectionObservable // <-- autoConnect flag
                 .subscribe(
                         rxBleConnection -> {
                             // All GATT operations are done through the rxBleConnection.
@@ -435,8 +426,11 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
                             // save mac & seal id
                             EasySP.init(this).putString("mac", scanResultsList.get(position).getBleDevice().getMacAddress());
-                            EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
-
+//                            EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
+                            if (!isAddNewSeal) {
+                                // 不是添加新的印章，就是连接原来的seal,保存sealId
+                                EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
+                            }
 
                             if (isAddNewSeal) {
                                 intent = new Intent(this, AddSealActivity.class);
@@ -450,8 +444,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         },
                         throwable -> {
                             // Handle an error here.
+                            Utils.log(throwable.getMessage());
                         }
                 );
+        ((MyApp) getApplication()).setConnectDisposable(connectDisposable);
     }
 
     @Override

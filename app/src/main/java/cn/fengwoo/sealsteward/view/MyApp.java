@@ -20,6 +20,7 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import cn.fengwoo.sealsteward.R;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * SmartRefreshLayout使用指定Header 和 Footer
@@ -32,15 +33,27 @@ public class MyApp extends MultiDexApplication {
     //蓝牙协定服务通知对象
     private BluetoothGattCharacteristic ntf_char = null;
 
+    private Observable<RxBleConnection> connectionObservable;
+    public Disposable connectDisposable;
+
+
+    public Disposable getConnectDisposable() {
+        return connectDisposable;
+    }
+
+    public void setConnectDisposable(Disposable connectDisposable) {
+        this.connectDisposable = connectDisposable;
+    }
+
+
     public Observable<RxBleConnection> getConnectionObservable() {
         return connectionObservable;
     }
 
+
     public void setConnectionObservable(Observable<RxBleConnection> connectionObservable) {
         this.connectionObservable = connectionObservable;
     }
-
-    private Observable<RxBleConnection> connectionObservable;
 
 
     public RxBleConnection getRxBleConnection() {

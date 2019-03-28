@@ -24,6 +24,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -173,6 +174,8 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                             }
                         });
                     } else {
+                        // 断开蓝牙
+                        ((MyApp) getApplication()).getConnectDisposable().dispose();
                         Looper.prepare();
                         showToast(msg);
                         Looper.loop();
