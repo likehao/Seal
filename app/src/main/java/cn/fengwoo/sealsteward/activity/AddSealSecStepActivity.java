@@ -53,6 +53,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -432,6 +433,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
 //                        loadingView.cancel();
                     finish();
+                    ((MyApp) getApplication()).getConnectDisposable().dispose();
                     Looper.prepare();
                     showToast("添加成功");
                     Looper.loop();

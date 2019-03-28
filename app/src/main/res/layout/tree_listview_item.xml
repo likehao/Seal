@@ -8,9 +8,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginRight="5dp"
         android:src="@drawable/expand" />
+
+
+    <ImageView
+        android:id="@+id/iv_mark"
+        android:visibility="gone"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/human_pic" />
 
     <!--保证整块区域可点，使用户好点击-->
     <LinearLayout

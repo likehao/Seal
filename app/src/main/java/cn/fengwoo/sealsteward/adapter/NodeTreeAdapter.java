@@ -1,6 +1,8 @@
 package cn.fengwoo.sealsteward.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.squareup.picasso.Picasso;
 import com.yuyh.library.imgsel.utils.LogUtils;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.Utils;
 
@@ -146,6 +151,7 @@ public class NodeTreeAdapter extends BaseAdapter {
             holder.checkBox = convertView.findViewById(R.id.cb);
             holder.iv_right = convertView.findViewById(R.id.iv_right);
 
+            holder.iv_mark = convertView.findViewById(R.id.iv_mark);
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder)convertView.getTag();
@@ -178,6 +184,37 @@ public class NodeTreeAdapter extends BaseAdapter {
         });
 
 
+        // 如果node.get_type()为3或者4，显示出iv_mark
+        if (node.get_type() == 3 || node.get_type() == 4) {
+            holder.iv_mark.setVisibility(View.VISIBLE);
+
+            int category = 0;
+            if (node.get_type() == 3) {
+                category = 1;
+            } else {
+                category = 3;
+            }
+
+            // 显示图片
+            String pic = node.get_portrait();
+            if(pic != null && !pic.isEmpty()){
+                //先从本地读取，没有则下载
+                Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(pic);
+                if(bitmap == null){
+                    HttpDownloader.downLoadImg((Activity)context,category,pic);
+                    if (node.get_type() == 3) {
+                        holder.iv_mark.setBackgroundResource(R.drawable.human_pic);
+                    } else if(node.get_type() == 4) {
+                        holder.iv_mark.setBackgroundResource(R.drawable.seal_pic);
+                    }
+                } else{
+                    String headPortraitPath = "file://" + HttpDownloader.path + pic;
+                    Picasso.with(context).load(headPortraitPath).into(holder.iv_mark);
+                }
+            }
+        }else{
+            holder.iv_mark.setVisibility(View.GONE);
+        }
 
         // check box
         if (isSingleSelection == 0) {
@@ -255,6 +292,7 @@ public class NodeTreeAdapter extends BaseAdapter {
         public LinearLayout confirm;
         public CheckBox checkBox;
         public ImageView iv_right;
+        public ImageView iv_mark;
     }
 
 

@@ -270,151 +270,26 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case Constants.TO_NEARBY_DEVICE:
-                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
-                    if (resultCode != Constants.TO_NEARBY_DEVICE) {
-                        return;
-                    }
-                    // 三期
-                    // 握手
-
-                    Utils.log("EasySP.init(getActivity()).getString(\"dataProtocolVersion\").equals(\"3\")");
-                    RxBleClient rxBleClient = RxBleClient.create(getActivity());
-                    rxBleClient.setLogLevel(RxBleLog.VERBOSE);
-                    RxBleDevice device = rxBleClient.getBleDevice(EasySP.init(getActivity()).getString("mac"));
-
-                    byte[] byteTime = CommonUtil.getDateTime();
-                    byte[] eleByte = new byte[]{0};
-
-                    device.establishConnection(false);
-                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
-                            .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
-//                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
-                            .doOnNext(notificationObservable -> {
-                                // Notification has been set up ，监听设置成功，然后握手
-                                ((MyApp) getActivity().getApplication()).getConnectionObservable()
-                                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
-                                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(
-                                                characteristicValue -> {
-                                                    // Characteristic value confirmed.
-//                                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                                },
-                                                throwable -> {
-                                                    // Handle an error here.
-                                                }
-                                        );
-                            })
-                            .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    bytes -> {
-                                        // Given characteristic has been changes, here is the value.
-                                        Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
-
-                                        if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
-                                            Utils.log("握手成功");
-                                            // 每隔1min定时获取电量
-                                            new RxTimerUtil().interval(60000, new RxTimerUtil.IRxNext() {
-                                                @Override
-                                                public void doNext(long number) {
-                                                    Utils.log("a loop");
-                                                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
-                                                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
-                                                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                                                            .subscribe(
-                                                                    characteristicValue -> {
-                                                                        // Characteristic value confirmed.
-                                                                        // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                                                    },
-                                                                    throwable -> {
-                                                                        // Handle an error here.
-                                                                    }
-                                                            );
-                                                }
-                                            });
-                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
-                                            String batteryString = Utils.bytesToHexString(bytes).substring(9, 11);
-                                            int batteryInt = Integer.parseInt(batteryString, 16);
-                                            Utils.log("batteryInt:" + batteryInt);
-                                            // 刷新ui,赋值电量
-                                            tv_battery.setText(String.valueOf(batteryInt));
-                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
-                                            // 印章主动上报消息通知手机发生盖章行为
-                                            // 盖章序号
-                                            String allString = Utils.bytesToHexString(bytes);
-                                            String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
-                                            int stampNumber = Integer.valueOf(stampNumberHexString, 16);
-                                            // 盖章时间
-                                            String timeHexString = allString.substring(15, 32);
-                                            String timeStamp = DateUtils.hexTimeToTimeStamp(timeHexString);
-                                            Utils.log(timeStamp);
-
-                                            uploadStampRecord(stampNumber, timeStamp);
-
-                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A1 00")) {
-                                            // 启动印章成功后，获取“启动序号”
-                                            byte[] restTime = DataTrans.subByte(bytes, 4, 4);
-                                            startNumber = DataTrans.bytesToInt(restTime, 0);
-                                            Utils.log("startNumber" + startNumber);
-                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A7 ")) {
-                                            int pressTime = bytes[3];
-                                            Utils.log(pressTime + "");
-                                            EventBus.getDefault().post(new MessageEvent("ble_time_press", pressTime + ""));
-
-                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B3 ")) {
-                                            int pressTime = bytes[3];
-                                            Utils.log(pressTime + "");
-                                            EventBus.getDefault().post(new MessageEvent("ble_time_delay", pressTime + ""));
-
-                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B6 ")) {
-                                            int voiceState = bytes[3];
-                                            Utils.log(voiceState + "");
-                                            EventBus.getDefault().post(new MessageEvent("ble_read_voice", voiceState + ""));
-
-                                        } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A4 00 ")) {
-                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
-                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
-                                            EventBus.getDefault().post(new MessageEvent("ble_add_pwd", pwdCode + ""));
-
-                                        }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B1 00 ")) {
-//                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
-//                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
-                                            EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count",  "success"));
-
-                                        }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B2 00 ")) {
-//                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
-//                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
-                                            EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user",  "success"));
-
-                                        }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
-//                                            byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
-//                                            String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
-                                            EventBus.getDefault().post(new MessageEvent("ble_reset",  "success"));
-
-                                        }
-                                    },
-                                    throwable -> {
-                                        // Handle an error here.
-                                        Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
-                                    }
-                            );
-                } else {
+                if (resultCode != Constants.TO_NEARBY_DEVICE) {
+                    return;
                 }
+
+                setNotification();
+
                 break;
 
 
             case Constants.TO_WANT_SEAL:
+                if (resultCode != Constants.TO_WANT_SEAL) {
+                    return;
+                }
+                String expireTime = data.getStringExtra("expireTime");
+                availableCount = data.getStringExtra("availableCount");
+                // 初始化首页的已盖次数和剩余次数
+                tv_times_done.setText(currentStampTimes + "");
+                tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
-                    if (resultCode != Constants.TO_WANT_SEAL) {
-                        return;
-                    }
-
-                    String expireTime = data.getStringExtra("expireTime");
-                    availableCount = data.getStringExtra("availableCount");
-
-                    // 初始化首页的已盖次数和剩余次数
-                    tv_times_done.setText(currentStampTimes + "");
-                    tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
 
                     // 三期
                     // 启动印章
@@ -468,6 +343,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     public void run() {
                         tv_times_done.setText(currentStampTimes + "");
                         tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+                        // 如果盖完了，次数为0时，断开蓝牙
+                        if (tv_times_left.getText().toString().trim().equals("0")) {
+                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+                        }
                     }
                 });
             }
@@ -477,5 +356,218 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void showToast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+    }
+
+
+    @SuppressLint("CheckResult")
+    private void setNotification() {
+        if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
+
+            // 三期
+            // 握手
+
+//            Utils.log("EasySP.init(getActivity()).getString(\"dataProtocolVersion\").equals(\"3\")");
+//            RxBleClient rxBleClient = RxBleClient.create(getActivity());
+//            rxBleClient.setLogLevel(RxBleLog.VERBOSE);
+//            RxBleDevice device = rxBleClient.getBleDevice(EasySP.init(getActivity()).getString("mac"));
+//            device.establishConnection(false);
+
+            byte[] byteTime = CommonUtil.getDateTime();
+            byte[] eleByte = new byte[]{0};
+
+            ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
+//                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
+                    .doOnNext(notificationObservable -> {
+                        // Notification has been set up ，监听设置成功，然后握手
+                        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
+                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        characteristicValue -> {
+                                            // Characteristic value confirmed.
+//                                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                        },
+                                        throwable -> {
+                                            // Handle an error here.
+                                        }
+                                );
+                    })
+                    .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            bytes -> {
+                                // Given characteristic has been changes, here is the value.
+                                Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
+
+                                if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
+                                    Utils.log("握手成功");
+                                    // 每隔1min定时获取电量
+                                    new RxTimerUtil().interval(60000, new RxTimerUtil.IRxNext() {
+                                        @Override
+                                        public void doNext(long number) {
+                                            Utils.log("a loop");
+                                            ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                                    .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
+                                                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribe(
+                                                            characteristicValue -> {
+                                                                // Characteristic value confirmed.
+                                                                // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                            },
+                                                            throwable -> {
+                                                                // Handle an error here.
+                                                            }
+                                                    );
+                                        }
+                                    });
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
+                                    String batteryString = Utils.bytesToHexString(bytes).substring(9, 11);
+                                    int batteryInt = Integer.parseInt(batteryString, 16);
+                                    Utils.log("batteryInt:" + batteryInt);
+                                    // 刷新ui,赋值电量
+                                    tv_battery.setText(String.valueOf(batteryInt));
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
+                                    // 印章主动上报消息通知手机发生盖章行为
+                                    // 盖章序号
+                                    String allString = Utils.bytesToHexString(bytes);
+                                    String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
+                                    int stampNumber = Integer.valueOf(stampNumberHexString, 16);
+                                    // 盖章时间
+                                    String timeHexString = allString.substring(15, 32);
+                                    String timeStamp = DateUtils.hexTimeToTimeStamp(timeHexString);
+                                    Utils.log(timeStamp);
+
+                                    uploadStampRecord(stampNumber, timeStamp);
+
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A1 00")) {
+                                    // 启动印章成功后，获取“启动序号”
+                                    byte[] restTime = DataTrans.subByte(bytes, 4, 4);
+                                    startNumber = DataTrans.bytesToInt(restTime, 0);
+                                    Utils.log("startNumber" + startNumber);
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A7 ")) {
+                                    int pressTime = bytes[3];
+                                    Utils.log(pressTime + "");
+                                    EventBus.getDefault().post(new MessageEvent("ble_time_press", pressTime + ""));
+
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B3 ")) {
+                                    int pressTime = bytes[3];
+                                    Utils.log(pressTime + "");
+                                    EventBus.getDefault().post(new MessageEvent("ble_time_delay", pressTime + ""));
+
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B6 ")) {
+                                    int voiceState = bytes[3];
+                                    Utils.log(voiceState + "");
+                                    EventBus.getDefault().post(new MessageEvent("ble_read_voice", voiceState + ""));
+
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A4 00 ")) {
+                                    byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
+                                    String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
+                                    EventBus.getDefault().post(new MessageEvent("ble_add_pwd", pwdCode + ""));
+                                }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B1 00 ")) {
+                                    EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count",  "success"));
+                                }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B2 00 ")) {
+                                    EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user",  "success"));
+                                }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
+                                    EventBus.getDefault().post(new MessageEvent("ble_reset",  "success"));
+
+                                }
+                            },
+                            throwable -> {
+                                // Handle an error here.
+                                Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
+                            }
+                    );
+        } else {
+
+            // 二期
+            // 握手
+
+            String shakeHandString = "HandShake/2yK39b";
+            byte[] shakeHandBytes = shakeHandString.getBytes();
+            ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
+//                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
+                    .doOnNext(notificationObservable -> {
+                        // Notification has been set up ，监听设置成功，然后握手
+                        Utils.log("Notification has been set up");
+                        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, shakeHandBytes))
+                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        characteristicValue -> {
+                                            // Characteristic value confirmed.
+//                                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                        },
+                                        throwable -> {
+                                            // Handle an error here.
+                                        }
+                                );
+                    })
+                    .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            bytes -> {
+                                // Given characteristic has been changes, here is the value.
+                                Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
+                                String strReturned = new String(bytes);
+                                Utils.log("str:" + strReturned);
+
+                                // 握手成功，然后发送“用户识别”命令，设置为超级管理员
+                                if (strReturned.equals("H1")) {
+                                    Utils.log("握手成功");
+
+                                    String superManager = "ADMIN1";
+                                    byte[] superManagerBytes = superManager.getBytes();
+                                            ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                                    .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, superManagerBytes))
+                                                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribe(
+                                                            characteristicValue -> {
+                                                                // Characteristic value confirmed.
+                                                                // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                            },
+                                                            throwable -> {
+                                                                // Handle an error here.
+                                                            }
+                                                    );
+                                } else if (strReturned.equals("A1")) {
+                                    // 已识别为超级管理员
+                                    Utils.log("已识别为超级管理员");
+                                }  else if (strReturned.equals("U1")) {
+                                    // 启动成功
+                                    Utils.log("启动成功");
+                                    // 二期设备中加入super，用来区别三期
+                                    EventBus.getDefault().post(new MessageEvent("super_ble_launch",  "success"));
+                                }
+                                else if (strReturned.equals("U0")) {
+                                    // 启动失败
+                                    Utils.log("启动失败");
+                                    // 二期设备中加入super，用来区别三期
+                                    EventBus.getDefault().post(new MessageEvent("super_ble_launch",  "failure"));
+                                }
+
+
+                                else if (strReturned.equals("C1")) {
+                                    // 盖章次数加一
+                                    Utils.log("盖章次数加一");
+//                                    currentStampTimes++;
+//                                    tv_times_done.setText(currentStampTimes + "");
+//                                    tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+                                    uploadStampRecord(0, null);
+                                }
+                            },
+                            throwable -> {
+                                // Handle an error here.
+                                Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
+                            }
+                    );
+
+
+        }
+
+
+
+
     }
 }

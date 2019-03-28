@@ -154,7 +154,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
 //                            isCheckInt = 0;
 //                            isGrayBoolean = false;
 //                        }
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),2,false));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),2,false,dataBean.getPortrait()));
                     }
                 }
                 runOnUiThread(new Runnable() {

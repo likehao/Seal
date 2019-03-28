@@ -109,7 +109,7 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
                 Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1 && dataBean.getType() != filterType2) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false,dataBean.getPortrait()));
                     }
                 }
                 runOnUiThread(new Runnable() {

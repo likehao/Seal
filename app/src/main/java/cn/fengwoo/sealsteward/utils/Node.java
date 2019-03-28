@@ -30,6 +30,9 @@ public abstract class Node<T> {
     public abstract int is_check();//是否选中
     public abstract boolean is_gray();//是否为灰
 
+    public abstract String get_portrait();//头像
+
+
 
 
     public abstract boolean parent(Node dest);//判断当前节点是否是dest的父亲节点

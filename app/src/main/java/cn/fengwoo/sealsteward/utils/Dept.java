@@ -16,6 +16,7 @@ public class Dept extends Node<Integer>{
     private int typeInt;// 1：公司，2：部门，3：人，4：章
     private int isCheck; // check box是否选中 0：没有选中 1：选中 2：不要考虑
     private boolean isGray; // check box是否为灰色
+    private String portrait;
 
     public int getTypeInt() {
         return typeInt;
@@ -29,13 +30,14 @@ public class Dept extends Node<Integer>{
     public Dept() {
     }
 
-    public Dept(String id, String parentId, String name,int typeInt,int isCheck,boolean isGray) {
+    public Dept(String id, String parentId, String name,int typeInt,int isCheck,boolean isGray,String portrait ) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
         this.typeInt = typeInt;
         this.isCheck = isCheck;
         this.isGray = isGray;
+        this.portrait = portrait;
     }
 
     /**
@@ -74,6 +76,11 @@ public class Dept extends Node<Integer>{
     @Override
     public boolean is_gray() {
         return isGray;
+    }
+
+    @Override
+    public String get_portrait() {
+        return portrait;
     }
 
     @Override

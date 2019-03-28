@@ -187,7 +187,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             // Handle an error here.
                         }
                 );
-
     }
 
     private void initView() {
@@ -253,32 +252,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-//    /**
-//     * 注册广播
-//     */
-//    private BroadcastReceiver registerReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, final Intent intent) {
-//
-//            String action = intent.getAction();
-//            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-//                showToast("正在扫描到列表...");
-//            } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//                        if (device != null) {
-//                            addBluetooth(device);
-//                        }
-//                    }
-//                });
-//            }
-//            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-//                showToast("扫描结束.");
-//            }
-//        }
-//    };
+
 
 
     //扫描到蓝牙添加到列表中
@@ -345,32 +319,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     //扫描到蓝牙添加到列表中
     private void addBluetooth(BluetoothDevice device) {
-//        //蓝牙设备名字和Mac地址
-//        String deviceName = device.getName();
-//        String deviceMac = device.getAddress();
-//        //过滤蓝牙
-//        if (deviceName != null && deviceName.equals("BLE-baihe")) {
-//            String itemName = "";
-//            if (!isAddNewSeal) {
-//                // 如果不是增加新设备的情况，如果seal list里存在这个seal，替换掉名字
-////                for (SealData sealData : responseInfo.getData()) {
-////                    if (sealData.getMac().equals(device.getAddress())) {
-////                        itemName = sealData.getName();
-////                    }
-////                }
-//                if (hasTheSeal(device.getAddress())) {
-//                    itemName = getNameFromList(device.getAddress());
-//                } else {
-//                    itemName = deviceName + "->" + deviceMac;
-//                }
-//            } else {
-//                itemName = deviceName + "->" + deviceMac;
-//            }
-//            if (!arrayList.contains(itemName)) {
-//                arrayList.add(itemName);
-//                arrayAdapter.notifyDataSetChanged();
-//            }
-//        }
     }
 
     @Override
@@ -401,7 +349,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
 
 
-
+        // 连接ble设备
 
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
         RxBleDevice device = rxBleClient.getBleDevice(macAddress);

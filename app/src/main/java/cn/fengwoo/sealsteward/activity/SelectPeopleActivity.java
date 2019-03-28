@@ -145,7 +145,7 @@ public class SelectPeopleActivity extends BaseActivity implements View.OnClickLi
                             isCheckInt = 0;
                             isGrayBoolean = false;
                         }
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),isCheckInt,isGrayBoolean));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),isCheckInt,isGrayBoolean,dataBean.getPortrait()));
                     }
                 }
                 runOnUiThread(new Runnable() {

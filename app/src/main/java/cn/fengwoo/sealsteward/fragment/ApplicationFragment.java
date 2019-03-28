@@ -308,21 +308,40 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             @SuppressLint("CheckResult")
             @Override
             public void onClick(View v) {
-                String reStr = DataTrans.hexString2binaryString("11100000");
-                byte[] resByte = DataTrans.toBytes(reStr);
-                ((MyApp) getActivity().getApplication()).getConnectionObservable()
-                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.RESET, resByte).getBytes()))
-                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                characteristicValue -> {
-                                    // Characteristic value confirmed.
-                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                },
-                                throwable -> {
-                                    // Handle an error here.
-                                }
-                        );
-                commonDialog.dialog.dismiss();
+
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
+                    String reStr = DataTrans.hexString2binaryString("11100000");
+                    byte[] resByte = DataTrans.toBytes(reStr);
+                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.RESET, resByte).getBytes()))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    characteristicValue -> {
+                                        // Characteristic value confirmed.
+                                        Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                    },
+                                    throwable -> {
+                                        // Handle an error here.
+                                    }
+                            );
+                    commonDialog.dialog.dismiss();
+                } else {
+                    String reset = "RESET";
+                    byte[] resetBytes = reset.getBytes();
+                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, resetBytes))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    characteristicValue -> {
+                                        // Characteristic value confirmed.
+                                        // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                    },
+                                    throwable -> {
+                                        // Handle an error here.
+                                    }
+                            );
+                    commonDialog.dialog.dismiss();
+                }
             }
         });
 

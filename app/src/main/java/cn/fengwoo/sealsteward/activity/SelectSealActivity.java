@@ -125,7 +125,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 assert organizationalStructureData != null;
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false,dataBean.getPortrait()));
                     }
                 }
                 runOnUiThread(new Runnable() {

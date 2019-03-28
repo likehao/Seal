@@ -59,6 +59,16 @@ public class OrganizationalStructureData {
         private Object parentId;
         private String name;
         private int type;
+        private String portrait;
+
+
+        public String getPortrait() {
+            return portrait;
+        }
+
+        public void setPortrait(String portrait) {
+            this.portrait = portrait;
+        }
 
         public String getId() {
             return id;
