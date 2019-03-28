@@ -47,6 +47,8 @@
                         android:id="@+id/phone_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textCursorDrawable="@drawable/login_edit_focus_color"
+                        android:background="@drawable/edittext_bg_selector"
                         android:inputType="phone"
                         android:digits="0123456789"
                         android:hint="@string/phone_et"/>
@@ -94,6 +96,8 @@
                         android:id="@+id/psd_et"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textCursorDrawable="@drawable/login_edit_focus_color"
+                        android:background="@drawable/edittext_bg_selector"
                         android:inputType="textPassword"
                         android:hint="@string/password_et"/>
                 </LinearLayout>

@@ -389,7 +389,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
      */
     public void dataSync(){
         loadingView.showView("数据同步中,请稍后...");
-        HttpUtil.sendDataAsync(this, "", 1, null, null, new Callback() {
+        HttpUtil.sendDataAsync(this, HttpUrl.SYNC, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();

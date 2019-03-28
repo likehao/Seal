@@ -18,6 +18,10 @@ public class HttpUrl {
      */
     public static final String REGISTER = "user/register";
     /**
+     * 数据同步
+     */
+    public static final String SYNC = "user/sync";
+    /**
      * 获取验证码
      */
     public static final String SENDVERIFICATIONCODE = "user/sendverificationcode";
