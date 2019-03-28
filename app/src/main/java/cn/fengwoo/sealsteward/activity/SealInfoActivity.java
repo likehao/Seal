@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
@@ -13,12 +14,14 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.suke.widget.SwitchButton;
 
 import org.json.JSONException;
@@ -38,6 +41,8 @@ import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.entity.SealInfoUpdateData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -83,6 +88,8 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     SwitchButton sbTransDepartment;
     @BindView(R.id.tv_time)
     TextView tvTime;
+    @BindView(R.id.sealPrint_cir)
+    ImageView sealPrint_cir;
 
     private String sealIdString = "";
     private String departmentName = "";
@@ -102,8 +109,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         ButterKnife.bind(this);
         initView();
         getData();
-
-
         getSealInfo(false);
     }
 
@@ -173,6 +178,23 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            //加载印模
+                            String sealPrint = responseInfo.getData().getSealPrint();
+                            Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
+                            if(bitmap == null){
+                                HttpDownloader.downloadImage(SealInfoActivity.this, 3, sealPrint, new DownloadImageCallback() {
+                                    @Override
+                                    public void onResult(final String fileName) {
+                                        if(fileName != null){
+                                            String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                            Picasso.with(SealInfoActivity.this).load(sealPrintPath).into(sealPrint_cir);
+                                        }
+                                    }
+                                });
+                            }else{
+                                String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
+                                Picasso.with(SealInfoActivity.this).load(sealPrintPath).into(sealPrint_cir);
+                            }
                             etSealName.setText(responseInfo.getData().getName());
                             tvMac.setText(responseInfo.getData().getMac());
                             etSealNumber.setText(responseInfo.getData().getSealNo());
