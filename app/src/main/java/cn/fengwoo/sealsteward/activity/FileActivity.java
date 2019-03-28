@@ -2,7 +2,10 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -11,10 +14,11 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mob.MobSDK;
-
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +27,10 @@ import cn.fengwoo.sealsteward.utils.BASE64Encoder;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 
 /**
  * 附件
@@ -38,6 +45,7 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
     ImageView pdf_share_iv;
     @BindView(R.id.webView)
     WebView webView;
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +53,8 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         setContentView(R.layout.activity_file);
 
         ButterKnife.bind(this);
-        MobSDK.init(this);
         initView();
+        MobSDK.init(this);
     }
 
     private void initView() {
@@ -57,15 +65,21 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         pdf_share_iv.setOnClickListener(this);
 
         Intent intent = getIntent();
+        //获取PDF文件拼接URL
         String fileName = intent.getStringExtra("fileName");
         if(fileName != null && !fileName.isEmpty()){
-            String url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + CommonUtil.getUserData(this).getCompanyId()
+            url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + CommonUtil.getUserData(this).getCompanyId()
                     + "&fileName=" + fileName;
             loadPdf(url);
         }
     }
 
-    private  void loadPdf(String pdfUrl){
+    /**
+     * 加载PDF
+     * @param pdfUrl
+     */
+    @SuppressLint("SetJavaScriptEnabled")
+    private void loadPdf(String pdfUrl){
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -106,25 +120,106 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
                 break;
         }
     }
+
+    /**
+     * 分享
+     */
     private void showShare(){
         OnekeyShare oks = new OnekeyShare();
+        /*oks.addHiddenPlatform(QQ.NAME);
+        oks.setImageData();
+        oks.setSilent(true);*/
+        oks.disableSSOWhenAuthorize();
+        oks.setShareContentCustomizeCallback(new ShareContentCustomizeCallback() {
+            @Override
+            public void onShare(Platform platform, cn.sharesdk.framework.Platform.ShareParams paramsToShare) {
+                if ("QZone".equals(platform.getName())) {
+                    paramsToShare.setTitle(getString(R.string.share_file));
+                    paramsToShare.setText("让每次盖章都有据可查");
+                    String imgPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/ic_launcher.png";
+                    paramsToShare.setImagePath(imgPath);
+                  //  paramsToShare.setImageUrl("https://hmls.hfbank.com.cn/hfapp-api/9.png");
+                    /*paramsToShare.setFilePath(ResourcesManager.getInstace(MobSDK.getContext()).getFilePath());*/
+                    paramsToShare.setUrl(url);
+                }
+                if ("Wechat".equals(platform.getName())) {
+                    paramsToShare.setTitle(getString(R.string.share_file));
+                    paramsToShare.setText("让每次盖章都有据可查");
+                    /*paramsToShare.setWxUserName("");
+                    paramsToShare.setW*/
+                    Bitmap imageData = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+                    paramsToShare.setImageData(imageData);
+             //       paramsToShare.setImageUrl("http://scene3d.4dage.com/images/imagesZrbrfZzI/thumbSmallImg.jpg?m=7");
+                    paramsToShare.setUrl(url);
+                    paramsToShare.setShareType(Platform.SHARE_WEBPAGE);
+                    Log.d("ShareSDK", paramsToShare.toMap().toString());
+                    //Toast.makeText(MainActivity.this, "点击微信分享啦", Toast.LENGTH_SHORT).show();
+                }
+                if ("WechatMoments".equals(platform.getName())) {
+                    paramsToShare.setTitle(getString(R.string.share_file));
+                    paramsToShare.setText("让每次盖章都有据可查");
+              //      paramsToShare.setImageUrl("https://hmls.hfbank.com.cn/hfapp-api/9.png");
+                    paramsToShare.setUrl(url);
+                    paramsToShare.setShareType(Platform.SHARE_WEBPAGE);
+                }
+                if ("QQ".equals(platform.getName())) {
+                    paramsToShare.setTitle(getString(R.string.share_file));
+                    paramsToShare.setTitleUrl(url);
+                    paramsToShare.setText("让每次盖章都有据可查");
+               //     paramsToShare.setImageUrl("https://hmls.hfbank.com.cn/hfapp-api/9.png");
+                }
+            }
+        });
+        oks.setCallback(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                Log.d("ShareLogin", "onComplete ---->  分享成功");
+                platform.getName();
+                Toast.makeText(FileActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                Log.d("ShareLogin", "onError ---->  失败" + throwable.getStackTrace());
+                Log.d("ShareLogin", "onError ---->  失败" + throwable.getMessage());
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+                Log.d("ShareLogin", "onCancel ---->  分享取消");
+            }
+        });
+
+// 启动分享GUI
+        oks.show(this);
+        /*OnekeyShare oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
 
-        // title标题，微信、QQ和QQ空间等平台使用
-        oks.setTitle(getString(R.string.share));
-        // titleUrl QQ和QQ空间跳转链接
-        oks.setTitleUrl("http://sharesdk.cn");
+        // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+        //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+        oks.setTitle(getString(R.string.share_file));
+        // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+        oks.setTitleUrl(url);
         // text是分享文本，所有平台都需要这个字段
-        oks.setText("我是分享文本");
+        oks.setText("让每次盖章都有据可查");
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-        oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
-        // url在微信、微博，Facebook等平台中使用
-        oks.setUrl("http://sharesdk.cn");
-        // comment是我对这条分享的评论，仅在人人网使用
+        oks.setImagePath(getApplicationContext().getFilesDir().getAbsolutePath() + "/ic_launcher.png");
+        oks.setImageData(BitmapFactory.decodeFile(getApplicationContext().getFilesDir().getAbsolutePath() + "/ic_launcher.png"));
+        // url仅在微信（包括好友和朋友圈）中使用
+        oks.setUrl(url);
+        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
         oks.setComment("我是测试评论文本");
+        // site是分享此内容的网站名称，仅在QQ空间使用
+        oks.setSite(getString(R.string.app_name));
+        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+        oks.setSiteUrl(url);
+
         // 启动分享GUI
-        oks.show(this);
+        oks.show(this);*/
+
     }
 
     @Override
