@@ -58,6 +58,7 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.GetJsonDataUtil;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
@@ -138,7 +139,6 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         ButterKnife.bind(this);
         setListener();
         initView();
-        //  initData();
     }
 
     private void initView() {
@@ -147,18 +147,6 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         loadingView = new LoadingView(this);
         loginData = new LoginData();
 
-    }
-
-    /**
-     * 初始化数据
-     */
-    private void initData() {
-        loginData = CommonUtil.getUserData(this);
-        realName_tv.setText(loginData.getRealName());
-        mobilePhone_tv.setText(loginData.getMobilePhone());
-        job_tv.setText(loginData.getJob());
-        companyName_tv.setText(loginData.getCompanyName());
-        department_tv.setText(loginData.getOrgStructureName());
     }
 
     private void setListener() {
@@ -175,13 +163,13 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        changeData();
+        refreshData();
     }
 
     /**
      * 发送请求刷新个人信息
      */
-    private void changeData() {
+    private void refreshData() {
         loadingView.show();
         //添加用户ID为参数
         HashMap<String, String> hashMap = new HashMap<>();
@@ -221,7 +209,15 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 if(headPortrait != null && !headPortrait.isEmpty()){
                                     Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
                                     if(bitmap == null){
-                                        HttpDownloader.downLoadImg(PersonCenterActivity.this,1,headPortrait);
+                                        HttpDownloader.downloadImage(PersonCenterActivity.this,1,headPortrait,new DownloadImageCallback(){
+                                            @Override
+                                            public void onResult(final String fileName){
+                                                if(fileName != null){
+                                                    String path = "file://" + HttpDownloader.path + fileName;
+                                                    Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
+                                                }
+                                            }
+                                        });
                                     } else{
                                         String path = "file://" + HttpDownloader.path + responseInfo.getData().getHeadPortrait();
                                         Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);

@@ -59,6 +59,7 @@ import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DataProtocol;
 import cn.fengwoo.sealsteward.utils.DataTrans;
 import cn.fengwoo.sealsteward.utils.DateUtils;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.GlideImageLoader;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -152,6 +153,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.BANNER, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                List<Integer> imgList = new ArrayList<Integer>();
+                imgList.add(R.drawable.default_banner);
+                loadBanner(imgList);
                 Looper.prepare();
                 Toast.makeText(getActivity(), "" + e, Toast.LENGTH_SHORT).show();
                 Looper.loop();
@@ -168,43 +172,53 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                     Log.e("ATG", "获取广告图成功!!!!!!!!!!!!!!");
                     loadingView.cancel();
-                    Bitmap bitmap = null;
-                    String imgName = null;
+                    imageViews.clear();
                     int count = responseInfo.getData().size();   //banner图片总数
                     //设置图片集合
                     for (int i = 0; i < count; i++) {
-                        imgName = responseInfo.getData().get(i).getImageFile();
-                        HttpDownloader.downLoadImg(getActivity(), 8, responseInfo.getData().get(i).getImageFile());
-                        bitmap = HttpDownloader.readFile(imgName);
-//                        if (bitmap == null) {
-//                            HttpDownloader.downLoadImg(getActivity(), 8, responseInfo.getData().get(i).getImageFile());
-//                        } else {
-//                            //设置图片加载器
-//                            banner.setImageLoader(new GlideImageLoader());
-//                            imageViews.add(bitmap);
-//                        }
-                        //设置图片加载器
-                        banner.setImageLoader(new GlideImageLoader());
-                        imageViews.add("file://" + "/sdcard/SealDownImage/" + imgName);
-                    }
-
-                    Integer integer = imageViews.size();
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            banner.setImages(imageViews);
-                            //banner设置方法全部调用完毕时最后调用
-                            banner.start();
+                        String imgName = responseInfo.getData().get(i).getImageFile();
+                        //先从本地缓存中读取
+                        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(imgName);
+                        if(bitmap != null){
+                            imageViews.add("file://" + HttpDownloader.path + imgName);
+                        } else{
+                            //没有则下载
+                            HttpDownloader.downloadImage(getActivity(), 8, imgName, new DownloadImageCallback(){
+                                @Override
+                                public void onResult(String fileName) {
+                                    if(fileName != null){
+                                        imageViews.add("file://" + HttpDownloader.path + fileName);
+                                        loadBanner(imageViews);
+                                    }
+                                }
+                            });
                         }
-                    });
+                    }
+                    loadBanner(imageViews);
                 } else {
+                    List<Integer> imgList = new ArrayList<Integer>();
+                    imgList.add(R.drawable.default_banner);
+                    loadBanner(imgList);
                     loadingView.cancel();
                     Log.e("ATG", "获取广告图失败!!!!!!!!!!!!!!");
                     Looper.prepare();
                     Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
                     Looper.loop();
+
                 }
 
+            }
+        });
+    }
+
+    private void loadBanner(List<?> list){
+        banner.setImageLoader(new GlideImageLoader());
+        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                banner.setImages(list);
+                //banner设置方法全部调用完毕时最后调用
+                banner.start();
             }
         });
     }

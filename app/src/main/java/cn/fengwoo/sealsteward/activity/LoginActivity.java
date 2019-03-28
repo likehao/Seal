@@ -47,6 +47,7 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SystemFuncListInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -330,7 +331,12 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                         //先从本地读取，没有则下载
                         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(user.getHeadPortrait());
                         if(bitmap == null){
-                            HttpDownloader.downLoadImg(LoginActivity.this,1,user.getHeadPortrait());
+                            HttpDownloader.downloadImage(LoginActivity.this, 1, user.getHeadPortrait(), new DownloadImageCallback() {
+                                @Override
+                                public void onResult(String fileName) {
+                                    super.onResult(fileName);
+                                }
+                            });
                         }
                     }
                     //判断是否需要同步用户数据

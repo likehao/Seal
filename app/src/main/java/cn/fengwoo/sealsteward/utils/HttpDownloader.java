@@ -38,22 +38,14 @@ public class HttpDownloader {
 
     public static final String path = "/sdcard/SealDownImage/";// sd路径
 
-    /**
-     * 下载图片
-     *
-     * @param activity
-     * @param category
-     * @param fileName
-     */
-    public static void downLoadImg(Activity activity, Integer category, final String fileName) {
-
+    public static void downloadImage(Activity activity, Integer category, final String fileName,final DownloadImageCallback callback){
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("category", category + "");
         hashMap.put("fileName", fileName);
         HttpUtil.sendDataAsync(activity, HttpUrl.DOWNLOADIMG, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                callback.onResult(null);
             }
 
             @Override
@@ -62,54 +54,16 @@ public class HttpDownloader {
                 if(imgData!= null && imgData.length > 0){
                     Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
                     //保存到本地
-                    down(bitmap, fileName);
+                    Boolean result = saveBitmapToSDCard(bitmap, fileName);
+                    if(result){
+                        callback.onResult(fileName);
+
+                        return;
+                    }
                 }
+                callback.onResult(null);
             }
         });
-    }
-
-    /**
-     * 保存到SD卡
-     *
-     * @param bitmap
-     */
-    public static void down(Bitmap bitmap, String fileName) {
-        //获取内部存储状态
-        String state = Environment.getExternalStorageState();
-        //如果状态不是mounted，无法读写
-        if (!state.equals(Environment.MEDIA_MOUNTED)) {  // 检测sd是否可用
-            return;
-        }
-        try {
-            File file = new File(path);
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            String picName = path + fileName;   //图片名字
-            FileOutputStream out = new FileOutputStream(picName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);  // 把数据写入文件
-            // 关闭流
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 读取本地文件
-     */
-    public static Bitmap readFile(String fileName) {
-        File file = new File(path);
-        if (!file.exists()) {
-            return null;
-        }
-        else{
-            String filePath = path + fileName;
-            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-
-            return bitmap;
-        }
     }
 
     /**
@@ -148,15 +102,15 @@ public class HttpDownloader {
      * @param bitmap
      * @param fileName
      */
-    public static void saveBitmapToSDCard(Bitmap bitmap, String fileName){
+    public static Boolean saveBitmapToSDCard(Bitmap bitmap, String fileName){
         //获取内部存储状态
         String state = Environment.getExternalStorageState();
         //如果状态不是mounted，无法读写
         if (!state.equals(Environment.MEDIA_MOUNTED)) {  // 检测sd是否可用
-            return;
+            return false;
         }
         if(bitmap == null || fileName == null){
-            return;
+            return false;
         }
         try {
             File file = new File(path);
@@ -169,8 +123,10 @@ public class HttpDownloader {
             // 关闭流
             out.flush();
             out.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

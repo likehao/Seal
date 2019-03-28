@@ -44,6 +44,7 @@ import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -102,7 +103,20 @@ public class MineFragment extends Fragment implements View.OnClickListener{
             //先从本地读取，没有则下载
             Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
             if(bitmap == null){
-                HttpDownloader.downLoadImg(getActivity(),1,headPortrait);
+                HttpDownloader.downloadImage(getActivity(), 1, headPortrait, new DownloadImageCallback() {
+                    @Override
+                    public void onResult(final String fileName) {
+                        if(fileName != null){
+                            getActivity().runOnUiThread(new Runnable(){
+                                @Override
+                                public void run() {
+                                    String headPortraitPath = "file://" + HttpDownloader.path + fileName;
+                                    Picasso.with(getActivity()).load(headPortraitPath).into(headImg_cir);
+                                }
+                            });
+                        }
+                    }
+                });
             } else{
                 String headPortraitPath = "file://" + HttpDownloader.path + headPortrait;
                 Picasso.with(getActivity()).load(headPortraitPath).into(headImg_cir);
