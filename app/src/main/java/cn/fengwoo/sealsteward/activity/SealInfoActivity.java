@@ -41,6 +41,7 @@ import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.entity.SealInfoUpdateData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -265,6 +266,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
                 break;
             case R.id.edit_tv:
+                if (!Utils.hasThePermission(this, Constants.permission2)) {
+                    return;
+                }
                 if (edit_tv.getText().equals("编辑")) {
                     edit_tv.setText("保存");
                     setEditable();

@@ -26,6 +26,7 @@ import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -201,7 +202,16 @@ public class NodeTreeAdapter extends BaseAdapter {
                 //先从本地读取，没有则下载
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(pic);
                 if(bitmap == null){
-                    HttpDownloader.downLoadImg((Activity)context,category,pic);
+                    HttpDownloader.downloadImage((Activity) context, category, pic, new DownloadImageCallback() {
+                        @Override
+                        public void onResult(String fileName) {
+                            super.onResult(fileName);
+                            if(fileName != null){
+                                String picPath = "file://" + HttpDownloader.path + fileName;
+                                Picasso.with(context).load(picPath).into(holder.iv_mark);
+                            }
+                        }
+                    });
                     if (node.get_type() == 3) {
                         holder.iv_mark.setBackgroundResource(R.drawable.human_pic);
                     } else if(node.get_type() == 4) {

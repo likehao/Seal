@@ -155,31 +155,73 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.start_psd_rl:   //修改启动密码
+                if (!Utils.hasThePermission(getActivity(), Constants.permission6)) {
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
                 intent = new Intent(getActivity(), StartPasswordActivity.class);
                 intent.putExtra("startPsd", "startPsd");
                 startActivity(intent);
                 break;
             case R.id.key_psd_rl:   //修改按键密码
+                if (!Utils.hasThePermission(getActivity(), Constants.permission7)) {
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
                 intent = new Intent(getActivity(), StartPasswordActivity.class);
                 startActivity(intent);
                 break;
             case R.id.reset_device_rl:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission9)) {
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
                 setDialog();
                 break;
             case R.id.press_time_rl:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission4)) {
+                    return;
+                }
+
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
+
+
 //                setPopSeekBar();
                 readPressTime();
                 break;
             case R.id.wait_time_rl:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission5)) {
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
                 readDelayTime();
                 break;
 
             case R.id.rl_voice:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission8)) {
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
                 intent = new Intent(getActivity(), VoiceActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.rl_pwd_user:
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
                 intent = new Intent(getActivity(), PwdUserActivity.class);
                 startActivity(intent);
                 break;
@@ -189,6 +231,9 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.add_seal_rl:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission1)) {
+                    return;
+                }
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 intent.putExtra("isAddNewSeal", true);
                 startActivity(intent);

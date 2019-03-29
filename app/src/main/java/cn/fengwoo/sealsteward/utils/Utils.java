@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.white.easysp.EasySP;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -17,6 +19,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import cn.fengwoo.sealsteward.view.MyApp;
+
+import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 public class Utils {
 
@@ -110,5 +116,32 @@ public class Utils {
         }
 
         return (str);
+    }
+    public static void showToast(Context context,String str) {
+        Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+    }
+
+    public static boolean isConnect(Context context) {
+        boolean connectState = false;
+        if (((MyApp) getApplication()).getConnectionObservable() == null) {
+            Utils.log("没有连接ble设备");
+            Utils.showToast(context,"没有连接印章");
+            connectState = false;
+        } else {
+            connectState = true;
+        }
+        return connectState;
+    }
+
+    public static boolean hasThePermission(Context context,String idString) {
+        boolean hasTheOne = false;
+        String allPermissionHaveGot = EasySP.init(context).getString("permission");
+        if (allPermissionHaveGot.contains(idString)) {
+            hasTheOne = true;
+        } else {
+            hasTheOne = false;
+            showToast(context,"没有权限！");
+        }
+        return hasTheOne;
     }
 }

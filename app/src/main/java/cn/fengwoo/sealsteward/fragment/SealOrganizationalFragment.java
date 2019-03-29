@@ -29,6 +29,7 @@ import cn.fengwoo.sealsteward.activity.UserInfoActivity;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -132,9 +133,12 @@ public class SealOrganizationalFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.log("position"+position);
                 if (position == 0) {
+                    if (!Utils.hasThePermission(getActivity(), Constants.permission3)) {
+                        return;
+                    }
+
                     // delete
                     String uID = CommonUtil.getUserData(getActivity()).getId();
-
                         // delete user
                         Utils.log("delete seal");
                         HashMap<String, String> hashMap = new HashMap<>();

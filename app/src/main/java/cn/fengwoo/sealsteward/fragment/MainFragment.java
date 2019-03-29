@@ -18,6 +18,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
@@ -47,6 +65,7 @@ import cn.fengwoo.sealsteward.activity.AddCompanyActivity;
 import cn.fengwoo.sealsteward.activity.AddSealActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
+import cn.fengwoo.sealsteward.activity.GeographicalFenceActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
@@ -79,6 +98,7 @@ import okhttp3.Response;
 import okhttp3.internal.Util;
 
 import static android.app.Activity.RESULT_OK;
+import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
@@ -112,18 +132,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private String availableCount = "0"; // 剩余次数
     private int startNumber; // 启动序号
     private int currentStampTimes = 0; // 现在盖章次数
+    /**
+     * 百度定位获取
+     */
+    public LocationClient mLocationClient = null;
+    public BDLocationListener myListener = new MyLocationListener();
+
+    private BDLocation currentLocation;
+    private String currentAddress="";
+    private OnGetGeoCoderResultListener listener;
 
 
     @Nullable
     @Override
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //初始化
+        SDKInitializer.initialize(getActivity().getApplicationContext());
         view = inflater.inflate(R.layout.activity_home_fragment, container, false);
 
         ButterKnife.bind(this, view);
         initView();
         initBanner();
         setListener();
-
+        startLocate();
 
         return view;
     }
@@ -179,14 +211,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         String imgName = responseInfo.getData().get(i).getImageFile();
                         //先从本地缓存中读取
                         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(imgName);
-                        if(bitmap != null){
+                        if (bitmap != null) {
                             imageViews.add("file://" + HttpDownloader.path + imgName);
-                        } else{
+                        } else {
                             //没有则下载
-                            HttpDownloader.downloadImage(getActivity(), 8, imgName, new DownloadImageCallback(){
+                            HttpDownloader.downloadImage(getActivity(), 8, imgName, new DownloadImageCallback() {
                                 @Override
                                 public void onResult(String fileName) {
-                                    if(fileName != null){
+                                    if (fileName != null) {
                                         imageViews.add("file://" + HttpDownloader.path + fileName);
                                         loadBanner(imageViews);
                                     }
@@ -211,7 +243,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void loadBanner(List<?> list){
+    private void loadBanner(List<?> list) {
         banner.setImageLoader(new GlideImageLoader());
         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
             @Override
@@ -233,6 +265,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
                 break;
             case R.id.needSeal_rl:
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
                 intent = new Intent(getActivity(), ApplyCauseActivity.class);
                 startActivityForResult(intent, Constants.TO_WANT_SEAL);
                 break;
@@ -246,6 +281,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+
 
     /**
      * 增加体验
@@ -315,10 +352,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private void uploadStampRecord(int stampNumber, String timeStamp) {
         StampUploadRecordData stampUploadRecordData = new StampUploadRecordData();
-        stampUploadRecordData.setAddress("asdf"); //
+        stampUploadRecordData.setAddress(currentAddress); //
         stampUploadRecordData.setApplyId(EasySP.init(getActivity()).getString("currentApplyId"));
-        stampUploadRecordData.setLatitude(22.222); //
-        stampUploadRecordData.setLongitude(22.222); //
+        stampUploadRecordData.setLatitude(currentLocation.getLatitude()); //
+        stampUploadRecordData.setLongitude(currentLocation.getLongitude()); //
         stampUploadRecordData.setSealId(EasySP.init(getActivity()).getString("currentSealId"));
         stampUploadRecordData.setStampSeqNumber(stampNumber);
         stampUploadRecordData.setStampTime(timeStamp); //
@@ -357,7 +394,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void showToast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }
-
 
     @SuppressLint("CheckResult")
     private void setNotification() {
@@ -464,12 +500,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                     byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
                                     String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
                                     EventBus.getDefault().post(new MessageEvent("ble_add_pwd", pwdCode + ""));
-                                }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B1 00 ")) {
-                                    EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count",  "success"));
-                                }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B2 00 ")) {
-                                    EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user",  "success"));
-                                }else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
-                                    EventBus.getDefault().post(new MessageEvent("ble_reset",  "success"));
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B1 00 ")) {
+                                    EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count", "success"));
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B2 00 ")) {
+                                    EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user", "success"));
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
+                                    EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
 
                                 }
                             },
@@ -519,36 +555,32 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
                                     String superManager = "ADMIN1";
                                     byte[] superManagerBytes = superManager.getBytes();
-                                            ((MyApp) getActivity().getApplication()).getConnectionObservable()
-                                                    .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, superManagerBytes))
-                                                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                                                    .subscribe(
-                                                            characteristicValue -> {
-                                                                // Characteristic value confirmed.
-                                                                // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                                            },
-                                                            throwable -> {
-                                                                // Handle an error here.
-                                                            }
-                                                    );
+                                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, superManagerBytes))
+                                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(
+                                                    characteristicValue -> {
+                                                        // Characteristic value confirmed.
+                                                        // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                    },
+                                                    throwable -> {
+                                                        // Handle an error here.
+                                                    }
+                                            );
                                 } else if (strReturned.equals("A1")) {
                                     // 已识别为超级管理员
                                     Utils.log("已识别为超级管理员");
-                                }  else if (strReturned.equals("U1")) {
+                                } else if (strReturned.equals("U1")) {
                                     // 启动成功
                                     Utils.log("启动成功");
                                     // 二期设备中加入super，用来区别三期
-                                    EventBus.getDefault().post(new MessageEvent("super_ble_launch",  "success"));
-                                }
-                                else if (strReturned.equals("U0")) {
+                                    EventBus.getDefault().post(new MessageEvent("super_ble_launch", "success"));
+                                } else if (strReturned.equals("U0")) {
                                     // 启动失败
                                     Utils.log("启动失败");
                                     // 二期设备中加入super，用来区别三期
-                                    EventBus.getDefault().post(new MessageEvent("super_ble_launch",  "failure"));
-                                }
-
-
-                                else if (strReturned.equals("C1")) {
+                                    EventBus.getDefault().post(new MessageEvent("super_ble_launch", "failure"));
+                                } else if (strReturned.equals("C1")) {
                                     // 盖章次数加一
                                     Utils.log("盖章次数加一");
 //                                    currentStampTimes++;
@@ -567,7 +599,105 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
 
 
-
-
     }
+
+
+    public class MyLocationListener implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            currentLocation = location;
+            // 获取currentAddress
+            getAddress(location.getLatitude(),location.getLongitude());
+            mLocationClient.stop();
+        }
+    }
+
+    /**
+     * 定位
+     */
+    private void startLocate() {
+        mLocationClient = new LocationClient(getActivity().getApplicationContext());     //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);    //注册监听函数
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving
+        );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
+        int span = 5000;
+        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
+        option.setOpenGps(true);//可选，默认false,设置是否使用gps
+        option.setLocationNotify(true);//可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
+        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+        option.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
+        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
+        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
+        mLocationClient.setLocOption(option);
+        //开启定位
+        mLocationClient.start();
+    }
+
+    /**
+     * 根据经纬度反编译定位更精准
+     *
+     * @param latitude
+     * @param longitude
+     */
+    public void getAddress(final double latitude, final double longitude) {
+        GeoCoder geoCoder = GeoCoder.newInstance();
+        final LatLng latLng = new LatLng(latitude, longitude);
+        listener = new OnGetGeoCoderResultListener() {
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+
+            }
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+                if (reverseGeoCodeResult == null || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                    //没有检索到结果
+//                    Toast.makeText(GeographicalFenceActivity.this, "定位失败", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                currentAddress = reverseGeoCodeResult.getAddress();
+                Utils.log(currentAddress);
+
+//                locationAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
+//                if (locationAddress != null && !"".equals(locationAddress) && !"null".equals(locationAddress)) {
+
+//
+//                    //设定中心坐标
+//                    LatLng latLng = new LatLng(latitude, longitude);
+//                    //地图状态
+//                    MapStatus mapStatus = new MapStatus.Builder()
+//                            .target(latLng)
+//                            .zoom(18)
+//                            .build();
+//                    //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+//                    MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mapStatus);
+//                    //改变地图状态
+//                    baiduMap.setMapStatus(mapStatusUpdate);
+//                    //构建marker图标
+//                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.location);
+//                    //创建标记marker
+//                    MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(bitmapDescriptor);
+//                    //添加marker到地图
+////                    baiduMap.addOverlay(markerOptions);
+//
+//                    mEtAddress.setText(currentAddr);
+//
+//                    Utils.log("currentAddr" + currentAddr);
+//                 /*   //关闭定位
+//                    locationClient.stop();
+//                    locationClient.unRegisterLocationListener(locationListener);*/
+//                } else {
+//                    showToast("获取定位地址失败");
+//                }
+            }
+        };
+        geoCoder.setOnGetGeoCodeResultListener(listener);
+        geoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
+        geoCoder.destroy();
+    }
+
 }

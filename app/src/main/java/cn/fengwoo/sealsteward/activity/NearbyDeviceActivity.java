@@ -362,7 +362,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 .subscribe(
                         rxBleConnection -> {
                             // All GATT operations are done through the rxBleConnection.
-                            application.setRxBleConnection(rxBleConnection);
 
                             // sava dataProtocolVersion
                             // 根据 ble 名字来判断 dataProtocolVersion

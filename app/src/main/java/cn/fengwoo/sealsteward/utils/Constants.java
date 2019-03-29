@@ -9,6 +9,8 @@ public class Constants {
     // mac  String  // mac地址
     //currentSealId  // 当前seal id
     //currentApplyId  // 当前 申请 id
+    // permission // permission json
+    // isAdmin   boolean // 权限是不是admin
 
     public static final int TO_NEARBY_DEVICE = 20;
     public static final int TO_WANT_SEAL = 21;

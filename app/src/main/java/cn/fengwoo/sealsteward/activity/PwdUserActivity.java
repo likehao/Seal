@@ -114,6 +114,9 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_ll:
+                if (!Utils.hasThePermission(this, Constants.permission10)) {
+                    return;
+                }
                 Intent intent = new Intent();
                 intent.setClass(this, AddPwdUserActivity.class);
                 startActivityForResult(intent,123);

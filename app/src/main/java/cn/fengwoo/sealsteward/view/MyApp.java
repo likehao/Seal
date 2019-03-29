@@ -1,8 +1,5 @@
 package cn.fengwoo.sealsteward.view;
 
-import android.app.Application;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
@@ -26,16 +23,8 @@ import io.reactivex.disposables.Disposable;
  * SmartRefreshLayout使用指定Header 和 Footer
  */
 public class MyApp extends MultiDexApplication {
-    //蓝牙协定服务对象
-    private BluetoothGattService service = null;
-    //蓝牙协定服务写入对象
-    private BluetoothGattCharacteristic wrt_char = null;
-    //蓝牙协定服务通知对象
-    private BluetoothGattCharacteristic ntf_char = null;
-
     private Observable<RxBleConnection> connectionObservable;
     public Disposable connectDisposable;
-
 
     public Disposable getConnectDisposable() {
         return connectDisposable;
@@ -45,27 +34,13 @@ public class MyApp extends MultiDexApplication {
         this.connectDisposable = connectDisposable;
     }
 
-
     public Observable<RxBleConnection> getConnectionObservable() {
         return connectionObservable;
     }
 
-
     public void setConnectionObservable(Observable<RxBleConnection> connectionObservable) {
         this.connectionObservable = connectionObservable;
     }
-
-
-    public RxBleConnection getRxBleConnection() {
-        return rxBleConnection;
-    }
-
-    public void setRxBleConnection(RxBleConnection rxBleConnection) {
-        this.rxBleConnection = rxBleConnection;
-    }
-
-    private RxBleConnection rxBleConnection;
-
 
     //static 代码段可以防止内存泄露
     static {
@@ -90,8 +65,6 @@ public class MyApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
         Logger.addLogAdapter(new AndroidLogAdapter());
-
     }
 }
