@@ -47,6 +47,7 @@ import cn.fengwoo.sealsteward.fragment.MessageFragment;
 import cn.fengwoo.sealsteward.fragment.MineFragment;
 import cn.fengwoo.sealsteward.fragment.RecordFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
@@ -136,7 +137,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initView() {
         title_tv = findViewById(R.id.title_tv);
         scan_ll = findViewById(R.id.scan_ll);
-//        scan_ll.setVisibility(View.VISIBLE);
         add_ll.setVisibility(View.VISIBLE);
         home_page = findViewById(R.id.home_page);
         record_page = findViewById(R.id.record_page);
@@ -157,6 +157,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         message_more_iv = findViewById(R.id.message_more_iv);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
+        title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
 
     }
 
@@ -177,8 +178,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_page:
-                title_tv.setText("首页");
-                //           scan_ll.setVisibility(View.VISIBLE);
+                title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
                 record_more_iv.setVisibility(View.GONE);
                 add_ll.setVisibility(View.VISIBLE);
                 changeView(0);
