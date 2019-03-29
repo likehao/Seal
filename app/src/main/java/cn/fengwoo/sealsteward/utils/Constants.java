@@ -34,7 +34,7 @@ public class Constants {
     public static final String permission17 = "78bdfb99421811e9af5a2cfda1ba8f68";//"添加用户权限"
     public static final String permission18 = "2697435e34e511e998a22cfda1ba8f68";//"设置用户权限"
     public static final String permission19 = "269a5ee034e511e998a22cfda1ba8f68";//"查询公司人员盖章记录"
-    public static final String permission20 = "f3371243418811e9af5a2cfda1ba8f68";//"添加组织架构"
+    public static final String permission20 = "f3371243418811e9af5a2cfda1ba8f68";//"添加组织架构" //
     public static final String permission21 = "b9f8b134421611e9af5a2cfda1ba8f68";//"编辑组织架构"
     public static final String permission22 = "f33d24bc418811e9af5a2cfda1ba8f68";//"删除组织架构"
 

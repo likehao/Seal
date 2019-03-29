@@ -59,12 +59,15 @@ public class NodeTreeAdapter extends BaseAdapter {
         selectArray = new SparseBooleanArray();
 
         nodeLinkedList = linkedList;
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                expandOrCollapse(position);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+////                expandOrCollapse(position);
+//            }
+//        });
+
+        listView.setOnItemClickListener(null);
+
         //缩进值，大家可以将它配置在资源文件中，从而实现适配
         retract = (int)(context.getResources().getDisplayMetrics().density*10+0.5f);
 
@@ -159,6 +162,13 @@ public class NodeTreeAdapter extends BaseAdapter {
         }
 
 
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandOrCollapse(position);
+            }
+        });
+
 
         holder.checkBox.setTag(position);
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -207,8 +217,13 @@ public class NodeTreeAdapter extends BaseAdapter {
                         public void onResult(String fileName) {
                             super.onResult(fileName);
                             if(fileName != null){
-                                String picPath = "file://" + HttpDownloader.path + fileName;
-                                Picasso.with(context).load(picPath).into(holder.iv_mark);
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String picPath = "file://" + HttpDownloader.path + fileName;
+                                        Picasso.with(context).load(picPath).into(holder.iv_mark);
+                                    }
+                                });
                             }
                         }
                     });
@@ -278,17 +293,25 @@ public class NodeTreeAdapter extends BaseAdapter {
 //        holder.confirm.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Toast.makeText(context,"选中:"+v.getTag(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context,"选中:" + v.getTag(), Toast.LENGTH_SHORT).show();
 //            }
 //        });
 
         holder.label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                if (node.get_parent() != null) {
+//                    Utils.log("*************************************************************************" + node.get_parent().get_label());
+//                    clickItemListener.clicked(node.get_id(),node.get_type(), node.get_parent().get_label());
+//                }
                 if (node.get_parent() != null) {
                     Utils.log("*************************************************************************" + node.get_parent().get_label());
                     clickItemListener.clicked(node.get_id(),node.get_type(), node.get_parent().get_label());
+                }else{
+                    clickItemListener.clicked(node.get_id(),node.get_type(), "10000");
                 }
+
+
             }
         });
 

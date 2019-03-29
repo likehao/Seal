@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.UserDetailData;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -52,6 +54,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.permission)
     RelativeLayout permission;
     private String uID;
+    private String targetPermissionJson = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +106,19 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 //                loadingView.cancel();
                 String result = response.body().string();
                 Gson gson = new Gson();
-                final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
+                final ResponseInfo<UserDetailData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserDetailData>>() {
                 }.getType());
                 try {
                     JSONObject object = new JSONObject(result);
                     if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+
+                        // 存入权限，准备传递到下级页面
+                        if (responseInfo.getData().isAdmin()) {
+                            targetPermissionJson = new Gson().toJson(responseInfo.getData().getSystemFuncList());
+                        } else {
+                            targetPermissionJson = new Gson().toJson(responseInfo.getData().getFuncIdList());
+                        }
+
                         Log.e("TAG", "获取个人信息数据成功........");
                         Utils.log(result);
                         //更新
@@ -144,6 +155,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.permission:
                 Utils.log("click permission");
+                Intent intent = new Intent();
+                intent.setClass(this, SetPowerActivity.class);
+                intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
+                intent.putExtra("permission", targetPermissionJson);
+                startActivity(intent);
                 break;
         }
     }

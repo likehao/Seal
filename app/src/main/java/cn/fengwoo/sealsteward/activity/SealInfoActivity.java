@@ -246,6 +246,10 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 startActivityForResult(intent, 123);
                 break;
             case R.id.rl_examine:
+                if (!Utils.hasThePermission(this, Constants.permission14)) {
+                    return;
+                }
+
                 intent = new Intent(this, ExamineActivity.class);
                 intent.putExtra("sealId", responseInfo.getData().getId());
                 intent.putExtra("sealApproveFlowList", new Gson().toJson(responseInfo.getData().getSealApproveFlowList()));
@@ -253,6 +257,10 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 startActivityForResult(intent, 88);
                 break;
             case R.id.rl_set_limit: // 地理围栏
+                if (!Utils.hasThePermission(this, Constants.permission13)) {
+                    return;
+                }
+
                 if (sbLimit.isChecked()) {
                     intent = new Intent(this, GeographicalFenceActivity.class);
                     intent.putExtra("sealId", responseInfo.getData().getId());

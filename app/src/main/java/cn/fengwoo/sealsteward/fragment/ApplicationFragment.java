@@ -249,6 +249,9 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.add_person_rl:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission15)) {
+                    return;
+                }
                 intent = new Intent(getActivity(), AddUserActivity.class);
                 startActivity(intent);
                 break;

@@ -38,6 +38,7 @@ import cn.fengwoo.sealsteward.entity.NearTime;
 import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -113,6 +114,9 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 finish();
                 break;
             case R.id.select_person_rl:
+                if (!Utils.hasThePermission(this, Constants.permission19)) {
+                    return;
+                }
                 intent = new Intent(this, SelectSinglePeopleActivity.class);
                 intent.putExtra("code", 1);
                 startActivityForResult(intent, SELECTPERSONREQUESTCODE);

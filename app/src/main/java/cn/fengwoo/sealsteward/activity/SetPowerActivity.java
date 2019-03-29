@@ -3,10 +3,13 @@ package cn.fengwoo.sealsteward.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.suke.widget.SwitchButton;
 
 import org.json.JSONException;
@@ -21,6 +24,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.AddUserInfo;
 import cn.fengwoo.sealsteward.entity.SetPermissionData;
+import cn.fengwoo.sealsteward.entity.SystemFuncListInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -90,6 +94,9 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
     private SetPermissionData setPermissionData;
     private String userId;
     private List<String> funcIdList;
+    private String last_activity = "";
+    private String targetPermissionJson = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +146,63 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
         Utils.log("userId:" + userId);
         setPermissionData.setUserId(userId);
         funcIdList = new ArrayList<>();
+        last_activity = getIntent().getStringExtra("last_activity");
+        targetPermissionJson = getIntent().getStringExtra("permission");
+        if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
+            // 假如是从用户详情跳过来的，要设置好具有的权限
+            setSwitchButtons();
+        }
     }
+
+    private void setSwitchButtons() {
+        if (targetPermissionJson.contains(Constants.permission1)) {
+            permission1.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission2)) {
+            permission2.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission3)) {
+            permission3.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission4)) {
+            permission4.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission5)) {
+            permission5.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission6)) {
+            permission6.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission7)) {
+            permission7.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission8)) {
+            permission8.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission9)) {
+            permission9.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission10)) {
+            permission10.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission11)) {
+            permission11.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission12)) {
+            permission12.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission13)) {
+            permission13.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission14)) {
+            permission14.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission15)) {
+            permission15.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission16)) {
+            permission16.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission17)) {
+            permission17.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission18)) {
+            permission18.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission19)) {
+            permission19.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission20)) {
+            permission20.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission21)) {
+            permission21.setChecked(true);
+        } else if (targetPermissionJson.contains(Constants.permission22)) {
+            permission22.setChecked(true);
+        }
+    }
+
+
     private void setListener() {
         set_back_ll.setOnClickListener(this);
     }
@@ -151,6 +214,9 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.edit_tv:
+                if (!Utils.hasThePermission(this, Constants.permission18)) {
+                    return;
+                }
                 setPermission();
                 break;
         }
@@ -160,156 +226,156 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
     public void onCheckedChanged(SwitchButton view, boolean isChecked) {
         switch (view.getId()) {
             case R.id.permission1:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission1);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission1);
                 }
                 break;
             case R.id.permission2:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission2);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission2);
                 }
                 break;
             case R.id.permission3:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission3);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission3);
                 }
                 break;
             case R.id.permission4:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission4);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission4);
                 }
                 break;
             case R.id.permission5:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission5);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission5);
                 }
                 break;
             case R.id.permission6:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission6);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission6);
                 }
                 break;
             case R.id.permission7:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission7);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission7);
                 }
                 break;
             case R.id.permission8:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission8);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission8);
                 }
                 break;
             case R.id.permission9:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission9);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission9);
                 }
                 break;
             case R.id.permission10:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission10);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission10);
                 }
                 break;
             case R.id.permission11:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission11);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission11);
                 }
                 break;
             case R.id.permission12:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission12);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission12);
                 }
                 break;
             case R.id.permission13:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission13);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission13);
                 }
                 break;
             case R.id.permission14:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission14);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission14);
                 }
                 break;
             case R.id.permission15:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission15);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission15);
                 }
                 break;
             case R.id.permission16:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission16);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission16);
                 }
                 break;
             case R.id.permission17:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission17);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission17);
                 }
                 break;
             case R.id.permission18:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission18);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission18);
                 }
                 break;
             case R.id.permission19:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission19);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission19);
                 }
                 break;
             case R.id.permission20:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission20);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission20);
                 }
                 break;
             case R.id.permission21:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission21);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission21);
                 }
                 break;
             case R.id.permission22:
-                if(isChecked){
+                if (isChecked) {
                     funcIdList.add(Constants.permission22);
-                }else{
+                } else {
                     funcIdList.remove(Constants.permission22);
                 }
                 break;
@@ -328,7 +394,7 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
                 Looper.prepare();
-                showToast(e+"");
+                showToast(e + "");
                 Looper.loop();
             }
 

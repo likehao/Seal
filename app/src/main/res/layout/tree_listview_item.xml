@@ -7,6 +7,7 @@
         android:id="@+id/id_treenode_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="5dp"
@@ -14,6 +15,7 @@
 
 
     <ImageView
+        android:scaleType="fitXY"
         android:id="@+id/iv_mark"
         android:visibility="gone"
         android:layout_width="25dp"

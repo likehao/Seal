@@ -39,6 +39,7 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SecondModel;
 import cn.fengwoo.sealsteward.entity.ThirdModel;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -137,6 +138,10 @@ public class UserOrganizationalFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.log("position"+position);
                 if (position == 0) {
+                    if (!Utils.hasThePermission(getActivity(), Constants.permission16)) {
+                        return;
+                    }
+
                   // delete
                     String uID = CommonUtil.getUserData(getActivity()).getId();
                     if (uID.equals(uid)) {

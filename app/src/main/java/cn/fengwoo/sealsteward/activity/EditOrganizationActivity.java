@@ -26,6 +26,7 @@ import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -68,18 +69,19 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
             public void clicked(String id, int type, String parentName) {
-                Utils.log("id:" + id);
+                Utils.log("****id:" + id + "*** type:" + type + "");
                 if (type == 2) {
                     idString = id;
                     selectDialog(id);
                     departmentName = parentName;
+                } else if (type == 1) {
+                    selectDialogAddDepartment();
                 }
             }
         });
         mListView.setAdapter(mAdapter);
         initData();
         getDate();
-
     }
 
     private void initData() {
@@ -109,7 +111,7 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
                 Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1 && dataBean.getType() != filterType2) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false,dataBean.getPortrait()));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false, dataBean.getPortrait()));
                     }
                 }
                 runOnUiThread(new Runnable() {
@@ -153,6 +155,10 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.log("position" + position);
                 if (position == 0) {
+                    if (!Utils.hasThePermission(EditOrganizationActivity.this, Constants.permission21)) {
+                        return;
+                    }
+
                     // delete
                     String uID = CommonUtil.getUserData(EditOrganizationActivity.this).getId();
 
@@ -197,20 +203,50 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
 
 
                 } else if (position == 1) {
-//                    loadingView.show();
-//                    deleteDialog(); //提示删除
-
+                    if (!Utils.hasThePermission(EditOrganizationActivity.this, Constants.permission21)) {
+                        return;
+                    }
+                    // edit
                     Intent intent = new Intent(EditOrganizationActivity.this, EditOrganizationNameActivity.class);
-
                     Utils.log("sealID:" + uid);
-
                     intent.putExtra("orgStrId", uid);
-                    startActivityForResult(intent,20);
+
+                    startActivityForResult(intent, 20);
                     optionBottomDialog.dismiss();
                 }
             }
         });
     }
+
+
+    private void selectDialogAddDepartment() {
+        Utils.log("**********" + CommonUtil.getUserData(EditOrganizationActivity.this).getId());
+
+        ArrayList strings = new ArrayList<String>();
+//        strings.add("切换");
+        strings.add("添加部门");
+
+        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(EditOrganizationActivity.this, strings);
+        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Utils.log("position" + position);
+                if (position == 1) {
+                } else if (position == 0) {
+                    if (!Utils.hasThePermission(EditOrganizationActivity.this, Constants.permission20)) {
+                        return;
+                    }
+                    // edit
+                    Intent intent = new Intent(EditOrganizationActivity.this, EditOrganizationNameActivity.class);
+                    Utils.log("last_activity:");
+                    intent.putExtra("add", "add");
+                    startActivityForResult(intent, 20);
+                    optionBottomDialog.dismiss();
+                }
+            }
+        });
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -219,7 +255,6 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
             // refresh
             mLinkedList.clear();
             getDate();
-
         }
     }
 }

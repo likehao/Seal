@@ -261,4 +261,10 @@ public class HttpUrl {
     public static final String RESET_SEAL = "/seal/resetofflineuser";
 
 
+    /**
+     *  添加部门
+     */
+    public static final String ADD_ORG = "/company/addorgstr";
+
+
 }

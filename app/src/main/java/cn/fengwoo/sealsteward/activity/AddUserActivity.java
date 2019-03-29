@@ -126,7 +126,9 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 addUser();
                 // 判断是不是有 添加用户权限
                 String permissionJson = EasySP.init(this).getString("permission");
-                if(permissionJson.contains(Constants.permission17)){
+                if (permissionJson.contains(Constants.permission17)) {
+                } else {
+                    add_user_next_Bt.setText("完成");
                 }
 
 //                intent = new Intent(this, SetPowerActivity.class);
@@ -173,11 +175,16 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Intent intent = new Intent();
-                                intent.putExtra("userId", userId);
-                                intent.setClass(AddUserActivity.this, SetPowerActivity.class);
-                                startActivity(intent);
-                                finish();
+                                if (Utils.hasThePermission(AddUserActivity.this, Constants.permission17)) {
+                                    Intent intent = new Intent();
+                                    intent.putExtra("userId", userId);
+                                    intent.setClass(AddUserActivity.this, SetPowerActivity.class);
+                                    intent.putExtra("last_activity", AddUserActivity.class.getSimpleName());
+                                    startActivity(intent);
+                                    finish();
+                                }else {
+                                    finish();
+                                }
                             }
                         });
                     }else {

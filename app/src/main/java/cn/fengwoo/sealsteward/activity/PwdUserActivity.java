@@ -214,6 +214,9 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     @SuppressLint("CheckResult")
                     @Override
                     public void onClick(View v) {
+                        if (!Utils.hasThePermission(PwdUserActivity.this, Constants.permission12)) {
+                            return;
+                        }
                         deleteItem = pwdUserListItem;
                         // 发送命令到ble设备，delete数据
 
@@ -239,6 +242,9 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                 viewHolder.setOnClickListener(R.id.btn_edit, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!Utils.hasThePermission(PwdUserActivity.this, Constants.permission11)) {
+                            return;
+                        }
                         Intent intent = new Intent();
                         intent.setClass(PwdUserActivity.this, AddPwdUserActivity.class);
                         intent.putExtra("pwdUserListItem", pwdUserListItem);
