@@ -102,6 +102,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         password_rl = findViewById(R.id.password_rl);
         login_bt.setOnClickListener(this);
         more_tv.setOnClickListener(this);
+        phone_et.setOnClickListener(this);
         accountDao = new AccountDao(this);
         loadingView = new LoadingView(this);
     }
@@ -212,6 +213,12 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                 break;
             case R.id.login_bt:
                 getLogin();
+                break;
+            case R.id.phone_et:
+                if (selectPopuwindow != null){
+                    selectPopuwindow.dismiss();
+                }
+                check_down_up.setChecked(false);
                 break;
         }
     }

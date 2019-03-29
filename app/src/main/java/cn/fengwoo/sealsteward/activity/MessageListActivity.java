@@ -170,7 +170,6 @@ public class MessageListActivity extends BaseActivity {
                 .getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
-//                        EventBus.getDefault().post(new MessageEvent("10","已读"));
 
                     }
                 }else {

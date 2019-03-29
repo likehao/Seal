@@ -156,26 +156,34 @@ public class MessageFragment extends Fragment implements View.OnClickListener {
                                         if (messageData.getType() == 1) {
                                             sysId = id;    //传递ID到消息列表
                                             if (msgNum != 0) {
-                                                systemMsgTv.setVisibility(View.VISIBLE);
+                                                systemMsgTv.setVisibility(View.VISIBLE);   //系统消息
                                                 systemMsgTv.setText(msgNum + "");
+                                            }else {
+                                                systemMsgTv.setVisibility(View.GONE);
                                             }
                                         } else if (messageData.getType() == 2) {
                                             applyId = id;
                                             if (msgNum != 0) {
-                                                applyMsgTv.setVisibility(View.VISIBLE);
+                                                applyMsgTv.setVisibility(View.VISIBLE);   //审批通知
                                                 applyMsgTv.setText(msgNum + "");
+                                            }else {
+                                                applyMsgTv.setVisibility(View.GONE);
                                             }
                                         } else if (messageData.getType() == 3) {
                                             alarmId = id;
                                             if (msgNum != 0) {
-                                                alarmMsgTv.setVisibility(View.VISIBLE);
+                                                alarmMsgTv.setVisibility(View.VISIBLE);   //告警消息
                                                 alarmMsgTv.setText(msgNum + "");
+                                            }else {
+                                                alarmMsgTv.setVisibility(View.GONE);
                                             }
                                         } else if (messageData.getType() == 4) {
                                             waitId = id;
                                             if (msgNum != 0) {
-                                                applyMsgTv.setVisibility(View.VISIBLE);
-                                                applyMsgTv.setText(msgNum + "");
+                                                waitApplyMsgTv.setVisibility(View.VISIBLE);    //待我审批
+                                                waitApplyMsgTv.setText(msgNum + "");
+                                            }else {
+                                                waitApplyMsgTv.setVisibility(View.GONE);
                                             }
                                         }
                                     }
@@ -204,39 +212,6 @@ public class MessageFragment extends Fragment implements View.OnClickListener {
                 refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
             }
         });
-    }
-
-    /**
-     * 处理注册事件
-     * @param messageEvent
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(MessageEvent messageEvent) {
-        String s = messageEvent.msgType;
-        if (s.equals("10")){
-            message_smt.autoRefresh();  //自动刷新
-        }
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);   //注册Eventbus
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);  //解除注册
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     @Override
