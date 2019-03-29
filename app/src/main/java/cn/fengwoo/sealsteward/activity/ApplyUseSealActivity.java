@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -34,6 +37,8 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DateUtils;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -67,6 +72,8 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     LinearLayout apply_sign_ll;
     @BindView(R.id.fail_time_tv)
     TextView fail_time_tv;
+    @BindView(R.id.apply_sign_iv)
+    ImageView apply_sign_iv;
 
     private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
     private String sealName,sealId;
@@ -91,6 +98,32 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         seal_name_rl.setOnClickListener(this);
         failTime_rl.setOnClickListener(this);
         apply_sign_ll.setOnClickListener(this);
+
+        String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+        //读取签名
+        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
+        if(bitmap == null){
+            //下载签名
+            HttpDownloader.downloadImage(ApplyUseSealActivity.this, 2, autoGraph, new DownloadImageCallback() {
+                @Override
+                public void onResult(final String fileName) {
+                    if (fileName != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                Picasso.with(ApplyUseSealActivity.this).load(sealPrintPath).into(apply_sign_iv);
+                            }
+                        });
+                    }
+                }
+            });
+
+        } else{
+            //不为空则直接显示
+            String sealPrintPath = "file://" + HttpDownloader.path + autoGraph;
+            Picasso.with(ApplyUseSealActivity.this).load(sealPrintPath).into(apply_sign_iv);
+        }
     }
 
     @Override

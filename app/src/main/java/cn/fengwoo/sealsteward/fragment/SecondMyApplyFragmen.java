@@ -171,5 +171,6 @@ public class SecondMyApplyFragmen extends Fragment implements AdapterView.OnItem
     @Override
     public void onResume() {
         super.onResume();
+//        approval_smartRL.autoRefresh();
     }
 }

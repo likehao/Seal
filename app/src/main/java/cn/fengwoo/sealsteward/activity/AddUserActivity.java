@@ -116,7 +116,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.select_organizational_rl:
                 intent = new Intent(this, OrganizationalManagementActivity.class);
-                startActivityForResult(intent,123);
+                startActivityForResult(intent, 123);
                 break;
             case R.id.edit_tv:
                 intent = new Intent(this, ScanActivity.class);
@@ -142,7 +142,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         AddUserInfo addUserInfo = new AddUserInfo();
         addUserInfo.setOrgStructureId(departmentId);
         addUserInfo.setOrgStructureName(departmentName);
-        addUserInfo.setMobilePhone(phone_number_et.getText().toString().replace(" ",""));
+        addUserInfo.setMobilePhone(phone_number_et.getText().toString().replace(" ", ""));
         addUserInfo.setJob(tv_job.getText().toString());
         addUserInfo.setCode(code_et.getText().toString());
 
@@ -151,7 +151,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
                 Looper.prepare();
-                showToast(e+"");
+                showToast(e + "");
                 Looper.loop();
             }
 
@@ -187,7 +187,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                                 }
                             }
                         });
-                    }else {
+                    } else {
                         loadingView.cancel();
                         Looper.prepare();
                         showToast(state);
@@ -212,13 +212,25 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == 123){
+        if (resultCode == 123) {
             departmentId = data.getExtras().getString("id");
             departmentName = data.getExtras().getString("name");
             Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
             tv_department.setText(departmentName);
         }
-
+      /*  switch (requestCode) {
+            case 0:
+                if (resultCode == RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor cursor = getContentResolver().query(contactData, null, null, null,
+                            null);
+                    assert cursor != null;
+                    cursor.moveToFirst();
+                    String num = this.getContactPhone(cursor);
+                    phone_number_et.setText(num);
+                }
+                break;
+        }*/
         if (resultCode == Activity.RESULT_OK) {
             //获取手机通讯录联系人
             ContentResolver cr = AddUserActivity.this.getContentResolver();
@@ -247,6 +259,49 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    /**
+     * 获取联系人电话
+     * @param cursor
+     * @return
+     */
+    private String getContactPhone(Cursor cursor) {
+        // TODO Auto-generated method stub
+        int phoneColumn = cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
+        int phoneNum = cursor.getInt(phoneColumn);
+        String result = "";
+        if (phoneNum > 0) {
+            // 获得联系人的ID号
+            int idColumn = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+            String contactId = cursor.getString(idColumn);
+            // 获得联系人电话的cursor
+            Cursor phone = getContentResolver().query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="
+                            + contactId, null, null);
+            assert phone != null;
+            if (phone.moveToFirst()) {
+                // 遍历所有的电话号码
+                for (; !phone.isAfterLast(); phone.moveToNext()) {
+                    int index = phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                    int typeindex = phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
+                    int phone_type = phone.getInt(typeindex);
+                    String phoneNumber = phone.getString(index);
+                    switch (phone_type){
+                        case 2:
+                            result = phoneNumber;
+                            break;
+                    }
+
+                }
+                if (!phone.isClosed()) {
+                    phone.close();
+                }
+            }
+        }
+        return result;
+    }
+
     @OnClick({R.id.jumpToAdrrList, R.id.sendSecurityCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -259,7 +314,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 OkHttpClient okHttpClient = new OkHttpClient();
                 //创建请求
                 Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + phone_number_et.getText().toString().trim().replace(" ","") + "&type=" + 5)
+                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + phone_number_et.getText().toString().trim().replace(" ", "") + "&type=" + 5)
                         .get()
                         .build();
                 //设置回调
@@ -275,17 +330,17 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
                         Gson gson = new Gson();
-                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
+                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
                         //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
-                        if (responseInfo.getCode() == 0){
-                            if (responseInfo.getData()){
+                        if (responseInfo.getCode() == 0) {
+                            if (responseInfo.getData()) {
                                 Looper.prepare();
                                 showToast("验证码已发送");
                                 Looper.loop();
-                                Log.e("TAG","获取验证码成功!!!!!!!!!!!!!!!!");
+                                Log.e("TAG", "获取验证码成功!!!!!!!!!!!!!!!!");
                             }
-                        }else {
+                        } else {
                             Looper.prepare();
                             showToast(responseInfo.getMessage());
                             Looper.loop();

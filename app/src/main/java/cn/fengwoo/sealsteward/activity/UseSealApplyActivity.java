@@ -2,17 +2,24 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 
 /**
  * 申请详情
@@ -35,6 +42,8 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     TextView detailFailTimeTv;
     @BindView(R.id.detail_cause_et)
     EditText detailCauseEt;
+    @BindView(R.id.use_apply_sign_iv)
+    ImageView use_apply_sign_iv;
     private Intent intent;
 
 
@@ -61,6 +70,32 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         }
         detailCauseEt.setEnabled(false);
         detailCauseEt.setCursorVisible(false);  //隐藏光标
+
+        String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+        //读取签名
+        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
+        if(bitmap == null){
+            //下载签名
+            HttpDownloader.downloadImage(UseSealApplyActivity.this, 2, autoGraph, new DownloadImageCallback() {
+                @Override
+                public void onResult(final String fileName) {
+                    if (fileName != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                Picasso.with(UseSealApplyActivity.this).load(sealPrintPath).into(use_apply_sign_iv);
+                            }
+                        });
+                    }
+                }
+            });
+
+        } else{
+            //不为空则直接显示
+            String sealPrintPath = "file://" + HttpDownloader.path + autoGraph;
+            Picasso.with(UseSealApplyActivity.this).load(sealPrintPath).into(use_apply_sign_iv);
+        }
     }
 
     @SuppressLint("SetTextI18n")

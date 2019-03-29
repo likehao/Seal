@@ -72,6 +72,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
     private void initData() {
         waitApplyDataList = new ArrayList<>();
         wait_apply_lv.setOnItemClickListener(this);
+        wait_apply_smartRL.autoRefresh();   //自动刷新
     }
 
     /**
@@ -181,9 +182,4 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-     //   wait_apply_smartRL.autoRefresh();   //自动刷新
-    }
 }

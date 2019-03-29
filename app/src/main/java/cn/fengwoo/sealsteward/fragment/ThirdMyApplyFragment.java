@@ -70,6 +70,7 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
     private void initData() {
         waitApplyDataList = new ArrayList<>();
         finish_apply_lv.setOnItemClickListener(this);
+        finish_apply_smartRL.autoRefresh();   //自动刷新
     }
     /**
      * 刷新加载
@@ -169,4 +170,5 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
             }
         });
     }
+
 }

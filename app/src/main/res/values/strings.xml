@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">印章管家</string>
     <string name="home_page">印章</string>
-    <string name="main_home_page">首页</string>
+    <string name="main_home_page">工作台</string>
     <string name="record">记录</string>
     <string name="application">应用</string>
     <string name="mine">我的</string>
@@ -290,4 +290,5 @@
     <string name="closing_documents">关闭单据</string>
     <string name="see_record_file">查看记录文件</string>
     <string name="seeSeal_file">查看盖章文件</string>
+    <string name="electric">电量:</string>
 </resources>

@@ -14,6 +14,7 @@ import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -116,16 +117,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.approval_record_rl)
     RelativeLayout approval_record_rl;
     private Intent intent;
-    @BindView(R.id.home_companyName_tv)
-    TextView home_companyName_tv;
+    /*   @BindView(R.id.home_companyName_tv)
+       TextView home_companyName_tv;*/
     @BindView(R.id.tv_battery)
     TextView tv_battery;
-
     @BindView(R.id.tv_times_done)
     TextView tv_times_done;
-
     @BindView(R.id.tv_times_left)
     TextView tv_times_left;
+    @BindView(R.id.electric_ll)
+    LinearLayout electric_ll;
 
     LoadingView loadingView;
     private RxBleConnection rxBleConnection;
@@ -139,7 +140,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public BDLocationListener myListener = new MyLocationListener();
 
     private BDLocation currentLocation;
-    private String currentAddress="";
+    private String currentAddress = "";
     private OnGetGeoCoderResultListener listener;
 
 
@@ -162,7 +163,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private void initView() {
         loadingView = new LoadingView(getActivity());
-        home_companyName_tv.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+        //  title_tv.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
     }
 
     private void setListener() {
@@ -281,8 +282,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
-
 
     /**
      * 增加体验
@@ -462,6 +461,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                     int batteryInt = Integer.parseInt(batteryString, 16);
                                     Utils.log("batteryInt:" + batteryInt);
                                     // 刷新ui,赋值电量
+                                    electric_ll.setVisibility(View.VISIBLE);
                                     tv_battery.setText(String.valueOf(batteryInt));
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
                                     // 印章主动上报消息通知手机发生盖章行为
@@ -607,7 +607,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         public void onReceiveLocation(BDLocation location) {
             currentLocation = location;
             // 获取currentAddress
-            getAddress(location.getLatitude(),location.getLongitude());
+            getAddress(location.getLatitude(), location.getLongitude());
             mLocationClient.stop();
         }
     }

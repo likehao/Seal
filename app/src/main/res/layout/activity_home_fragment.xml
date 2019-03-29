@@ -24,7 +24,7 @@
                 app:indicator_height="7dp"
                 app:indicator_margin="3dp"
                 app:indicator_width="7dp" />
-
+<!--
             <TextView
                 android:id="@+id/home_companyName_tv"
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:gravity="center"
                 android:text="@string/company_name"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="15sp" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -133,6 +133,7 @@
                 </RelativeLayout>
 
             </LinearLayout>
+<!--
 
             <TextView
                 android:layout_width="wrap_content"
@@ -141,15 +142,16 @@
                 android:layout_marginTop="5dp"
                 android:text="@string/connected_seal"
                 android:textSize="12sp" />
+-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
@@ -159,20 +161,43 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
+                        android:layout_centerVertical="true"
                         android:background="@drawable/seal_select" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="20dp"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:maxLines="1"
                         android:text="@string/seal"
                         android:textColor="@color/black" />
 
-                </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/electric_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="15dp"
+                        android:visibility="gone">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="@string/electric"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tv_battery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+                </RelativeLayout>
+<!--
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -198,7 +223,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/residual_electricity"
-                    android:textSize="12sp" />
+                    android:textSize="12sp" />-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -224,19 +249,19 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
+      <!--      <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:text="@string/seal_add"
-                android:textSize="12sp" />
+                android:textSize="12sp" />-->
 
             <!--最后一个模块开始！！！！！！！！！！！！！！！！！！！！！-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:orientation="vertical">
 

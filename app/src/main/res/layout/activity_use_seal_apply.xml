@@ -251,9 +251,9 @@
                     android:background="@color/background">
 
                     <ImageView
+                        android:id="@+id/use_apply_sign_iv"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/sign" />
+                        android:layout_height="match_parent"/>
                 </LinearLayout>
 
                 <!--         <RelativeLayout

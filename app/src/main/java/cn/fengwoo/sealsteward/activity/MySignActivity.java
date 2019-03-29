@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
@@ -108,7 +109,17 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.delete_tv:
-                sign_ll.setVisibility(View.GONE);
+                //删除之后更新为空
+                LoginData autoGraph = CommonUtil.getUserData(this);
+                if (autoGraph != null){
+                    autoGraph.setAutoGraph(null);
+                    CommonUtil.setUserData(this,autoGraph);
+                }
+                //清空图片显示
+            //    sign_iv.setImageDrawable(null);
+                sign_iv.setVisibility(View.GONE);
+                delete_write_ll.setVisibility(View.GONE);
+                add_sign_ll.setVisibility(View.VISIBLE);
                 break;
             case R.id.rewrite_tv:
                 intent = new Intent(this, AddAutographActivity.class);
@@ -122,8 +133,10 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
     protected void onResume() {
         super.onResume();
         String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+        //读取签名
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
         if(bitmap == null){
+            //下载签名
             HttpDownloader.downloadImage(MySignActivity.this, 2, autoGraph, new DownloadImageCallback() {
                 @Override
                 public void onResult(final String fileName) {
@@ -135,10 +148,15 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
                                 Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
                             }
                         });
+                    }else {
+                        add_sign_ll.setVisibility(View.VISIBLE);
+                        delete_write_ll.setVisibility(View.GONE);
                     }
                 }
             });
+
         } else {
+            //不为空则直接显示
             String sealPrintPath = "file://" + HttpDownloader.path + autoGraph;
             Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
             add_sign_ll.setVisibility(View.GONE);

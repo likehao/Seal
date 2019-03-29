@@ -237,12 +237,10 @@ public class HttpUrl {
      */
     public static final String DOWNLOADPDF = "file/downloadpdf";
 
-
     /**
      * update 密码用户
      */
     public static final String UPDATE_PWD_USER = "/seal/updateofflineuser";
-
 
     /**
      * 获取密码用户列表
@@ -254,11 +252,14 @@ public class HttpUrl {
      */
     public static final String DELETE_PWD_USER = "/seal/deleteofflineuser";
 
-
     /**
      * reset seal
      */
     public static final String RESET_SEAL = "/seal/resetofflineuser";
+    /**
+     * 使用说明书
+     */
+    public static final String USEINSTRUCTIONS = "http://www.baiheyz.com/directions/index.html";
 
 
     /**

@@ -168,4 +168,5 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
             }
         });
     }
+
 }

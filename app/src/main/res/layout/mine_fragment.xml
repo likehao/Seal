@@ -266,6 +266,7 @@
                     style="@style/line_left"/>
 
                 <RelativeLayout
+                    android:id="@+id/use_Instructions_rl"
                     style="@style/pressed_effect">
 
                     <TextView

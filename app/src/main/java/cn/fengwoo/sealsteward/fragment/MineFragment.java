@@ -40,6 +40,7 @@ import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
+import cn.fengwoo.sealsteward.activity.UseInstructionsActivity;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
@@ -82,6 +83,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     TextView companyName;
     @BindView(R.id.phone)
     TextView phone;
+    @BindView(R.id.use_Instructions_rl)
+    RelativeLayout use_Instructions_rl;
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
@@ -137,6 +140,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         suggestion_rl.setOnClickListener(this);
         logout_bt.setOnClickListener(this);
     //    nearby_device_rl.setOnClickListener(this);
+        use_Instructions_rl.setOnClickListener(this);
     }
 
     @Override
@@ -182,6 +186,10 @@ public class MineFragment extends Fragment implements View.OnClickListener{
             case R.id.logout_bt:
                 logoutDialog();
                 LoginData.logout(Objects.requireNonNull(getActivity())); //移除退出标记
+                break;
+            case R.id.use_Instructions_rl:
+                intent = new Intent(getActivity(), UseInstructionsActivity.class);
+                startActivity(intent);
                 break;
 
         }
