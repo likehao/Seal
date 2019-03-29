@@ -81,7 +81,29 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-    /*    //关闭单据
+        viewHolder.couse.setText(recordData.get(position).getCouse());
+        viewHolder.sealName.setText(recordData.get(position).getSealName());
+        viewHolder.sealPeople.setText(recordData.get(position).getSealPeople());
+        viewHolder.sealCount.setText(recordData.get(position).getSealCount() + "");
+        viewHolder.restCount.setText(recordData.get(position).getRestCount() + "");
+        viewHolder.uploadPhotoNum.setText(recordData.get(position).getUploadPhotoNum() + "");
+        viewHolder.failTime.setText(recordData.get(position).getFailTime());
+        viewHolder.sealTime.setText(recordData.get(position).getSealTime());
+        viewHolder.sealAddress.setText(recordData.get(position).getSealAddress());
+        int i = recordData.get(position).getApproveStatus();
+        if (i == 5) {
+            viewHolder.close.setText("已关闭");
+            viewHolder.close.setEnabled(false);
+            viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
+            viewHolder.close.setBackgroundResource(R.drawable.record_off);
+        } else {
+            viewHolder.close.setText("关闭单据");
+            viewHolder.close.setEnabled(true);
+            viewHolder.close.setTextColor(context.getResources().getColor(R.color.black));
+            viewHolder.close.setBackgroundResource(R.drawable.suggestion_gray);
+        }
+
+        //关闭单据
         viewHolder.close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +129,9 @@ public class RecordAdapter extends BaseAdapter {
                                 ((Activity) context).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                       viewHolder.close.setText("已关闭");
+                                        viewHolder.close.setText("已关闭");
+                                        viewHolder.close.setEnabled(false);
+                                        viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
                                     }
                                 });
                             }
@@ -115,22 +139,7 @@ public class RecordAdapter extends BaseAdapter {
                     }
                 });
             }
-        });*/
-        viewHolder.couse.setText(recordData.get(position).getCouse());
-        viewHolder.sealName.setText(recordData.get(position).getSealName());
-        viewHolder.sealPeople.setText(recordData.get(position).getSealPeople());
-        viewHolder.sealCount.setText(recordData.get(position).getSealCount() + "");
-        viewHolder.restCount.setText(recordData.get(position).getRestCount() + "");
-        viewHolder.uploadPhotoNum.setText(recordData.get(position).getUploadPhotoNum() + "");
-        viewHolder.failTime.setText(recordData.get(position).getFailTime());
-        viewHolder.sealTime.setText(recordData.get(position).getSealTime());
-        viewHolder.sealAddress.setText(recordData.get(position).getSealAddress());
-        int i = recordData.get(position).getApproveStatus();
-        if (i == 5){
-            viewHolder.close.setText("已关闭");
-            viewHolder.close.setEnabled(false);
-            viewHolder.close.setTextColor(R.color.gray_text);
-        }
+        });
         return view;
     }
 

@@ -9,6 +9,9 @@
         android:background="@color/white"
         android:orientation="vertical">
 
+        <View
+            style="@style/line"/>
+
         <LinearLayout style="@style/details">
 
             <TextView
@@ -71,7 +74,7 @@
         </LinearLayout>
 
         <View
-            style="@style/line_left"
+            style="@style/line"
             android:layout_marginTop="15dp"/>
     </LinearLayout>
 </LinearLayout>

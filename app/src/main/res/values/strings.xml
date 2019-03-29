@@ -58,6 +58,7 @@
     <string name="query">查询</string>
     <string name="share">分享</string>
     <string name="share_file">用印申请文件</string>
+    <string name="every_stamp_have_evidence">让每次盖章都有据可查</string>
     <string name="export_PDF">导出PDF</string>
     <string name="mark_read">标记为已读</string>
     <string name="Approval_for_printing">用印审批</string>

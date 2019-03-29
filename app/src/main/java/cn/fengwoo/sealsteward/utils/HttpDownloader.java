@@ -51,10 +51,10 @@ public class HttpDownloader {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 byte[] imgData = response.body().bytes();
-                if(imgData!= null && imgData.length > 0){
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                if(imgData.length > 0){
+                    //Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
                     //保存到本地
-                    Boolean result = saveBitmapToSDCard(bitmap, fileName);
+                    Boolean result = saveBitmapToSDCard(imgData, fileName);
                     if(result){
                         callback.onResult(fileName);
 
@@ -96,20 +96,20 @@ public class HttpDownloader {
 
         return null;
     }
-
     /**
      * 保存bitmap到SD卡中
-     * @param bitmap
+     * @param imgData
      * @param fileName
+     * @return
      */
-    public static Boolean saveBitmapToSDCard(Bitmap bitmap, String fileName){
+    public static Boolean saveBitmapToSDCard(byte[] imgData, String fileName){
         //获取内部存储状态
         String state = Environment.getExternalStorageState();
         //如果状态不是mounted，无法读写
         if (!state.equals(Environment.MEDIA_MOUNTED)) {  // 检测sd是否可用
             return false;
         }
-        if(bitmap == null || fileName == null){
+        if(imgData == null || fileName == null){
             return false;
         }
         try {
@@ -119,7 +119,8 @@ public class HttpDownloader {
             }
             String picName = path + fileName;   //图片名字
             FileOutputStream out = new FileOutputStream(picName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);  // 把数据写入文件
+            //写入图片数据
+            out.write(imgData);
             // 关闭流
             out.flush();
             out.close();

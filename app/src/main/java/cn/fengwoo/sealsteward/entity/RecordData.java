@@ -16,11 +16,13 @@ public class RecordData {
     private String applyPdf;
     private String stampPdf;
     private String stampRecordPdf;
+    private String headPortrait;
+    private String orgStructureName;
 
-    public RecordData(String id,String couse, String sealName, String sealPeople,
+    public RecordData(String id, String couse, String sealName, String sealPeople,
                       Integer sealCount, Integer restCount, Integer uploadPhotoNum,
-                      String failTime, String sealTime, String sealAddress,Integer approveStatus
-    ,String applyPdf ,String stampPdf ,String stampRecordPdf) {
+                      String failTime, String sealTime, String sealAddress, Integer approveStatus
+    , String applyPdf , String stampPdf , String stampRecordPdf, String headPortrait, String orgStructureName) {
         this.id = id;
         this.couse = couse;
         this.sealName = sealName;
@@ -35,6 +37,8 @@ public class RecordData {
         this.applyPdf = applyPdf;
         this.stampPdf = stampPdf;
         this.stampRecordPdf = stampRecordPdf;
+        this.headPortrait = headPortrait;
+        this.orgStructureName = orgStructureName;
 
     }
 
@@ -149,5 +153,20 @@ public class RecordData {
         this.stampRecordPdf = stampRecordPdf;
     }
 
+    public String getHeadPortrait() {
+        return headPortrait;
+    }
+
+    public void setHeadPortrait(String headPortrait) {
+        this.headPortrait = headPortrait;
+    }
+
+    public String getOrgStructureName() {
+        return orgStructureName;
+    }
+
+    public void setOrgStructureName(String orgStructureName) {
+        this.orgStructureName = orgStructureName;
+    }
 
 }

@@ -21,8 +21,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.venusic.handwrite.view.HandWriteView;
 import com.zhihu.matisse.Matisse;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,14 +40,21 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
@@ -94,7 +104,7 @@ public class AddAutographActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.complete_tv:
                 if (mHandWriteView.isSign()) {
-                    uploadAutograph();  //上传签名
+                    uploadAutographImage();  //上传签名
                 } else {
                     Toast.makeText(AddAutographActivity.this, "您没有签名~", Toast.LENGTH_SHORT).show();
                 }
@@ -109,7 +119,7 @@ public class AddAutographActivity extends AppCompatActivity implements View.OnCl
      * 发送上传签名请求
      */
     @SuppressLint("CommitPrefEdits")
-    private void uploadAutograph() {
+    private void uploadAutographImage() {
         String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath()
                 + new Date().getTime() + ".jpg";
         //路径,是否清除边缘空白,边缘保留多少像素空白,是否加密存储 如果加密存储会自动在路径后面追加后缀.sign
@@ -132,26 +142,65 @@ public class AddAutographActivity extends AppCompatActivity implements View.OnCl
                 }.getType());
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     Log.e("ATG", "发送图片至服务器成功..........");
-                    //获取SharedPreferences对象
-                    SharedPreferences sharedPreferences = AddAutographActivity.this.getSharedPreferences("sign",MODE_PRIVATE);
-                    //获取Editor对象
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("signImg",responseInfo.getData().getFileName());
-                    editor.commit();
-                    finish();
-
+                    String imgName = responseInfo.getData().getFileName();//图片名称
+                    //下载图片并保存
+                    HttpDownloader.downloadImage(AddAutographActivity.this, 2, imgName, new DownloadImageCallback() {
+                        @Override
+                        public void onResult(String fileName) {
+                            finish();
+                        }
+                    });
+                    //更新用户签名
+                    updateAutograph(imgName);
                 } else {
-                    Toast.makeText(AddAutographActivity.this,responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
+                    Looper.prepare();
+                    Toast.makeText(AddAutographActivity.this, responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
+                    Looper.loop();
                 }
             }
 
             @Override
             public void onReqFailed(String errorMsg) {
-                Toast.makeText(AddAutographActivity.this,errorMsg,Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddAutographActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 Log.e("TAG", "发送图片至服务器失败........");
             }
         });
 
+    }
+
+    /**
+     * 更新签名
+     * @param fileName
+     */
+    private void updateAutograph(String fileName){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("autoGraph", fileName);
+        HttpUtil.sendDataAsync(this, HttpUrl.AUTOGRAPH, 3, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"");
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                final ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        //更新存储签名
+                        LoginData data = CommonUtil.getUserData(AddAutographActivity.this);
+                        if(data != null){
+                            data.setAutoGraph(fileName);
+                            CommonUtil.setUserData(AddAutographActivity.this,data);
+                        }
+                    }
+                }else {
+                    Toast.makeText(AddAutographActivity.this,responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 }

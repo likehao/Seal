@@ -19,6 +19,10 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.venusic.handwrite.view.HandWriteView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,10 +33,13 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -63,6 +70,8 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
     LoadImageData loadImageData;
     @BindView(R.id.add_sign_ll)
     LinearLayout add_sign_ll;
+    @BindView(R.id.delete_write_ll)
+    LinearLayout delete_write_ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,44 +121,29 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-
-        //获取SharedPreferences对象
-        SharedPreferences sharedPreferences = MySignActivity.this.getSharedPreferences("sign", MODE_PRIVATE);
-        final String fileName = sharedPreferences.getString("signImg", "");
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("autoGraph", fileName);
-        HttpUtil.sendDataAsync(this, HttpUrl.AUTOGRAPH, 3, hashMap, null, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Looper.prepare();
-                showToast("" + e);
-                Looper.loop();
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                String result = response.body().string();
-                Gson gson = new Gson();
-                final ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
-                }.getType());
-                if (responseInfo.getCode() == 0) {
-                    if (responseInfo.getData()) {
+        String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
+        if(bitmap == null){
+            HttpDownloader.downloadImage(MySignActivity.this, 2, autoGraph, new DownloadImageCallback() {
+                @Override
+                public void onResult(final String fileName) {
+                    if(fileName != null){
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                String path = "file://"+ fileName;
-                                File file = new File(fileName);
-
-                                Picasso.with(MySignActivity.this).load(file).into(sign_iv);
+                                String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
                             }
                         });
                     }
-                } else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
                 }
-            }
-        });
+            });
+        } else {
+            String sealPrintPath = "file://" + HttpDownloader.path + autoGraph;
+            Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
+            add_sign_ll.setVisibility(View.GONE);
+            delete_write_ll.setVisibility(View.VISIBLE);
+        }
     }
+
 }

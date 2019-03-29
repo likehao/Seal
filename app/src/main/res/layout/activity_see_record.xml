@@ -9,7 +9,6 @@
     tools:context=".activity.SeeRecordActivity">
 
     <include layout="@layout/head" />
-
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/see_RecordDetail_smt"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
         <com.scwang.smartrefresh.layout.header.ClassicsHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,12 +24,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="130dp"
                 android:background="@color/style">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:id="@+id/record_detail_circle"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="15dp"
                     android:background="@drawable/photo_03" />
@@ -52,6 +51,7 @@
                         android:textColor="@color/white" />
 
                     <TextView
+                        android:id="@+id/record_detail_department_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/seal"
@@ -141,16 +141,13 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <View
-                style="@style/line"
-                android:layout_marginTop="10dp" />
-
             <ListView
                 android:id="@+id/see_record_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="#00000000"
                 android:dividerHeight="10dp"
+                android:layout_marginTop="10dp"
                 android:scrollbars="none" />
         </LinearLayout>
 

@@ -40,6 +40,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -396,15 +399,42 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                     }.getType());
                                     if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                                         Log.e("ATG", "发送图片至服务器成功..........");
-                                        //保存到本地
+                                        //另存为本地SD卡中
                                         String imgName = responseInfo.getData().getFileName();//图片名称
-                                        String filePath = file.getPath();
-                                        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                                        if(bitmap != null){
-                                            HttpDownloader.saveBitmapToSDCard(bitmap,imgName);
+//                                        String filePath = file.getPath();
+//                                        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+//                                        if(bitmap != null){
+//                                            HttpDownloader.saveBitmapToSDCard(bitmap,imgName);
+//                                        }
+
+                                        try {
+                                            FileInputStream fis = new FileInputStream(file.getPath());
+                                            int b = -1;
+                                            List<Byte> byteList = new ArrayList<Byte>();
+                                            while((b = fis.read()) != -1){
+                                                byteList.add((byte)b);
+                                            }
+                                            //关闭流
+                                            fis.close();
+                                            //转换数组
+                                            int size = byteList.size();
+                                            byte[] buffer = new byte[size];
+                                            for(int i=0;i< size;i++){
+                                                buffer[i] = byteList.get(i);
+                                            }
+                                            //保存到SD卡中
+                                            Boolean flag =HttpDownloader.saveBitmapToSDCard(buffer,imgName);
+                                            if(flag){
+                                                //更新头像
+                                                updateHeadPortrait(imgName);
+                                            }
+                                            else{
+                                                showToast("保存图片失败....");
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-                                        //更新头像
-                                        updateHeadPortrait(imgName);
+
 
                                     } else {
                                         Looper.prepare();

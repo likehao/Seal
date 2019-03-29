@@ -14,6 +14,12 @@ public class GlideImageLoader extends ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
         //图片加载器不限制，使用Object接收和返回，强转成传输的类型
-        Picasso.with(context).load((String) path).into(imageView);
+        if(path.getClass().equals(String.class)){
+            Picasso.with(context).load(path.toString()).into(imageView);
+        }
+        else{
+            Picasso.with(context).load((int)path).into(imageView);
+        }
+
     }
 }

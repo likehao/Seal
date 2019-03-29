@@ -129,7 +129,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 list.add(new RecordData(app.getId(),app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                         , app.getApplyCount(), app.getAvailableCount(), photoCount
                                         , failTime, sealTime, app.getLastStampAddress(),app.getApproveStatus(),
-                                       app.getApplyPdf() ,app.getStampPdf(),app.getStampRecordPdf()));
+                                       app.getApplyPdf() ,app.getStampPdf(),app.getStampRecordPdf(),app.getHeadPortrait(),app.getOrgStructureName()));
 
                             }
                             //请求数据
@@ -216,6 +216,9 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         intent.putExtra("applyPdf",list.get(position).getApplyPdf());
         intent.putExtra("stampPdf",list.get(position).getStampPdf());
         intent.putExtra("stampRecordPdf",list.get(position).getStampRecordPdf());
+        intent.putExtra("headPortrait",list.get(position).getHeadPortrait());
+        intent.putExtra("orgStructureName",list.get(position).getOrgStructureName());
+
         startActivity(intent);
     }
 

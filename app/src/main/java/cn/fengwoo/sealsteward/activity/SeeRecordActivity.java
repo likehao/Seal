@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,10 +52,13 @@ import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.DateUtils;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -82,6 +87,10 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     TextView detail_photoNum_tv;
     @BindView(R.id.detail_sealPerson_tv)
     TextView detail_sealPerson_tv;
+    @BindView(R.id.record_detail_circle)
+    CircleImageView record_detail_circle;
+    @BindView(R.id.record_detail_department_tv)
+    TextView department_tv;
     private SeeRecordAdapter seeRecordAdapter;
     private List<SeeRecordBean> list;
     String id;
@@ -115,7 +124,24 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         int photoNum = intent.getIntExtra("photoNum",0);
         String sealName = intent.getStringExtra("sealName");
         String sealPerson = intent.getStringExtra("sealPerson");
-
+        String headPortrait = intent.getStringExtra("headPortrait");
+        String orgStructureName = intent.getStringExtra("orgStructureName");
+        //加载详情头像
+        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
+        if(bitmap == null){
+            HttpDownloader.downloadImage(SeeRecordActivity.this, 3, headPortrait, new DownloadImageCallback() {
+                @Override
+                public void onResult(final String fileName) {
+                    if(fileName != null){
+                        String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                        Picasso.with(SeeRecordActivity.this).load(sealPrintPath).into(record_detail_circle);
+                    }
+                }
+            });
+        }else{
+            String sealPrintPath = "file://" + HttpDownloader.path + headPortrait;
+            Picasso.with(SeeRecordActivity.this).load(sealPrintPath).into(record_detail_circle);
+        }
         applyPdf = intent.getStringExtra("applyPdf");
         stampPdf = intent.getStringExtra("stampPdf");
         stampRecordPdf = intent.getStringExtra("stampRecordPdf");
@@ -126,6 +152,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         detail_restCount_tv.setText(restCount+"");
         detail_photoNum_tv.setText(photoNum+"");
         title_tv.setText(sealName);
+        department_tv.setText(orgStructureName);
         list = new ArrayList<>();
         setSmartDetail();
     }
@@ -219,7 +246,10 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent) {
         String s = messageEvent.msgType;
-        if (s.equals("申请文件")){
+        if (s.equals("上传照片")){
+            Intent intent = new Intent(this,UploadFileActivity.class);
+            startActivity(intent);
+        } else if (s.equals("申请文件")){
             Intent intent = new Intent(this, FileActivity.class);
             intent.putExtra("fileName",applyPdf);
             startActivity(intent);

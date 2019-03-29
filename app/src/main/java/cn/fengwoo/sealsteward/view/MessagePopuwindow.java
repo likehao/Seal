@@ -29,9 +29,7 @@ import cn.fengwoo.sealsteward.bean.MessageEvent;
 public class MessagePopuwindow extends PopupWindow implements View.OnClickListener{
     private ListView listView;
     public View mview;
-    private TextView add_user_tv,add_seal_tv;
     private Intent intent;
-    private TextView see_apply_file_tv,see_seal_file_tv,see_record_file_tv;
 
     public MessagePopuwindow(Activity context,int code){
         final Activity activity = context;
@@ -93,17 +91,22 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
 
     private void initView(int i){
         if (i == 1){
-            add_user_tv = mview.findViewById(R.id.add_user_tv);
+            TextView add_user_tv = mview.findViewById(R.id.add_user_tv);
+            TextView add_seal_tv = mview.findViewById(R.id.add_seal_tv);
             add_user_tv.setOnClickListener(this);
-            add_seal_tv = mview.findViewById(R.id.add_seal_tv);
             add_seal_tv.setOnClickListener(this);
         }else if (i == 3){
-            see_apply_file_tv = mview.findViewById(R.id.see_apply_file_tv);
+            TextView see_apply_file_tv = mview.findViewById(R.id.see_apply_file_tv);
+            TextView see_seal_file_tv = mview.findViewById(R.id.see_seal_file_tv);
+            TextView see_record_file_tv = mview.findViewById(R.id.see_record_file_tv);
             see_apply_file_tv.setOnClickListener(this);
-            see_seal_file_tv = mview.findViewById(R.id.see_seal_file_tv);
             see_seal_file_tv.setOnClickListener(this);
-            see_record_file_tv = mview.findViewById(R.id.see_record_file_tv);
             see_record_file_tv.setOnClickListener(this);
+        }else {
+            TextView apply_file_tv = mview.findViewById(R.id.apply_file_tv);
+            TextView upload_photo_tv = mview.findViewById(R.id.upload_photo_tv);
+            apply_file_tv.setOnClickListener(this);
+            upload_photo_tv.setOnClickListener(this);
         }
 
 
@@ -155,6 +158,14 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
                 break;
             case R.id.see_record_file_tv:   //查看记录文件
                 EventBus.getDefault().post(new MessageEvent("记录文件","记录文件"));
+                this.dismiss();
+                break;
+            case R.id.apply_file_tv:
+                EventBus.getDefault().post(new MessageEvent("申请文件","申请文件"));
+                this.dismiss();
+                break;
+            case R.id.upload_photo_tv:
+                EventBus.getDefault().post(new MessageEvent("上传照片","上传照片"));
                 this.dismiss();
                 break;
 

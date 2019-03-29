@@ -24,8 +24,10 @@
             android:layout_marginBottom="10dp"/>
 
         <LinearLayout
+            android:id="@+id/delete_write_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:gravity="center">
 
             <TextView
@@ -62,7 +64,7 @@
             android:text="@string/autograph_null"
             android:textSize="12sp"
             android:textColor="@color/black"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="30dp"/>
 
         <TextView
             android:id="@+id/add_autograph_tv"

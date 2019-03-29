@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/apply_file_tv"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -21,6 +22,7 @@
             style="@style/line" />
 
         <TextView
+            android:id="@+id/upload_photo_tv"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"

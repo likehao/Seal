@@ -85,6 +85,7 @@ public class WaitApplyAdapter extends BaseAdapter{
             String id =  waitApplyData.get(position).getId();
             if (code == 2){ //审批中
                 viewHolder.item2_tv.setText("审批进度");
+                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -95,12 +96,16 @@ public class WaitApplyAdapter extends BaseAdapter{
             }else if (code == 3){  //已审批
                 viewHolder.item1_tv.setVisibility(View.VISIBLE);
                 viewHolder.item2_tv.setText("关闭单据");
+                viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
+                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
                 statusView(status);
                 //查看记录
                 viewHolder.item1_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Integer status = waitApplyData.get(position).getApproveStatus();
                         intent = new Intent(context, SeeRecordActivity.class);
+                        intent.putExtra("status",status);    //传递状态值弹出不同的popuwindow
                         context.startActivity(intent);
                     }
                 });
@@ -108,16 +113,18 @@ public class WaitApplyAdapter extends BaseAdapter{
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        commonPostRequest(id);
+                        commonPostRequest(id,1);
                     }
                 });
             }else if (code == 4){  //已驳回
                 viewHolder.item2_tv.setText("重提");
+                viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
+                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        intent = new Intent(context, ApprovalActivity.class);
-                        context.startActivity(intent);
+//                        intent = new Intent(context, ApprovalActivity.class);
+//                        context.startActivity(intent);
                     }
                 });
             }else {
@@ -125,7 +132,7 @@ public class WaitApplyAdapter extends BaseAdapter{
                 viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        commonPostRequest(id);  //撤销
+                        commonPostRequest(id,2);  //撤销
                     }
                 });
             }
@@ -143,12 +150,14 @@ public class WaitApplyAdapter extends BaseAdapter{
             case 5:
                 viewHolder.item2_tv.setText("已关闭");
                 viewHolder.item2_tv.setEnabled(false);
-                viewHolder.item2_tv.setTextColor(R.color.gray_text);
+                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                 break;
             case 4:
                 viewHolder.item2_tv.setText("已撤销");
                 viewHolder.item2_tv.setEnabled(false);
-                viewHolder.item2_tv.setTextColor(R.color.gray_text);
+                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                 break;
         }
     }
@@ -156,13 +165,13 @@ public class WaitApplyAdapter extends BaseAdapter{
      * 共同方法（Param）
      * 关闭单据（5）,已撤销（4）
      */
-    private void commonPostRequest(String code){
+    private void commonPostRequest(String id,int code){
                 //关闭单据
         viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("applyId", code);
+                hashMap.put("applyId", id);
                 HttpUtil.sendDataAsync((Activity) context, HttpUrl.APPLICLOSE, 1, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -182,7 +191,17 @@ public class WaitApplyAdapter extends BaseAdapter{
                                 ((Activity) context).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                       viewHolder.item2_tv.setText("已关闭");
+                                        if (code == 1){
+                                            viewHolder.item2_tv.setText("已关闭");
+                                            viewHolder.item2_tv.setEnabled(false);
+                                            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                            viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                                        }else {
+                                            viewHolder.item2_tv.setText("已撤销");
+                                            viewHolder.item2_tv.setEnabled(false);
+                                            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                            viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                                        }
                                     }
                                 });
                             }
@@ -191,47 +210,7 @@ public class WaitApplyAdapter extends BaseAdapter{
                 });
             }
         });
-        /*ApplyListData applyListData = new ApplyListData();
-        applyListData.setCurPage(1);
-        applyListData.setHasExportPdf(false);
-        applyListData.setHasPage(true);
-        applyListData.setPageSize(10);
-        applyListData.setParam(code);
-        HttpUtil.sendDataAsync((Activity) context, HttpUrl.APPLYLIST, 2, null, applyListData, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("TAG",e+"错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-            }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Gson gson = new Gson();
-                ResponseInfo<List<GetApplyListBean>> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<List<GetApplyListBean>>>(){}
-                        .getType());
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0){
-                    ((Activity) context).runOnUiThread(new Runnable() {
-                        @SuppressLint("ResourceAsColor")
-                        @Override
-                        public void run() {
-                            if (code == 4){
-                                viewHolder.item2_tv.setText("已撤销");
-                            }else {
-                                viewHolder.item2_tv.setText("已关闭");
-                            }
-                            viewHolder.item2_tv.setEnabled(false);
-                            viewHolder.item2_tv.setTextColor(R.color.gray_text);
-                        }
-                    });
-                }else {
-                    Looper.prepare();
-                    Toast.makeText(context,responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-                }
-
-            }
-        });
-*/
     }
     public static class ViewHolder{
         private TextView tv_cause;
