@@ -170,7 +170,7 @@ public class MessageListActivity extends BaseActivity {
                 .getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
-
+                        Log.e("TAG","消息已被阅读成功!!!!!!!!!");
                     }
                 }else {
                     Looper.prepare();

@@ -171,7 +171,7 @@
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:maxLines="1"
-                        android:text="@string/seal"
+                        android:text="@string/not_select_seal"
                         android:textColor="@color/black" />
 
                     <LinearLayout
@@ -282,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:gravity="center_vertical"
-                        android:text="@string/please_apply"
+                        android:text="@string/not_useSeal_apply_couse"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
@@ -434,6 +434,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
+                        android:text="@string/not"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>

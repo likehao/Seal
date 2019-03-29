@@ -232,6 +232,7 @@
     <string name="revoke">撤销</string>
     <string name="see_record">查看记录</string>
     <string name="please_apply">请审批</string>
+    <string name="not_useSeal_apply_couse">暂无用印申请事由</string>
     <string name="serial_number">流水号</string>
     <string name="see_seal_information">查看印章信息</string>
     <string name="edit_seal">编辑印章</string>
@@ -272,6 +273,8 @@
     <string name="seal_add">—— 盖章统计 ——</string>
     <string name="connected_seal">—— 已连印章 ——</string>
     <string name="not_location">暂无定位信息</string>
+    <string name="not_select_seal">暂无连接印章</string>
+    <string name="not">暂无</string>
     <string name="not_electric">无电量信息</string>
     <string name="use">已用:</string>
     <string name="surplus">剩余:</string>
