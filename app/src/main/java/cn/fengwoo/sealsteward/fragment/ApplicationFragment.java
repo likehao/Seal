@@ -161,6 +161,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 if (!Utils.isConnect(getActivity())) {
                     return;
                 }
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
+                    Utils.showToast(getActivity(),"三期印章无此功能");
+                    return;
+                }
                 intent = new Intent(getActivity(), StartPasswordActivity.class);
                 intent.putExtra("startPsd", "startPsd");
                 startActivity(intent);
@@ -170,6 +174,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
+                    Utils.showToast(getActivity(),"三期印章无此功能");
                     return;
                 }
                 intent = new Intent(getActivity(), StartPasswordActivity.class);
@@ -194,6 +202,12 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 }
 
 
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+                    Utils.showToast(getActivity(),"二期印章无此功能");
+                    return;
+                }
+
+
 //                setPopSeekBar();
                 readPressTime();
                 break;
@@ -202,6 +216,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+                    Utils.showToast(getActivity(),"二期印章无此功能");
                     return;
                 }
                 readDelayTime();
@@ -220,6 +238,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
 
             case R.id.rl_pwd_user:
                 if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+                    Utils.showToast(getActivity(),"二期印章无此功能");
                     return;
                 }
                 intent = new Intent(getActivity(), PwdUserActivity.class);
