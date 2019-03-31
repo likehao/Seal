@@ -26,6 +26,17 @@ public class AddUseSealApplyBean implements Serializable {
     private String sealId;
     private List<String> imgList;
 
+    //上传盖章详情图片
+    private String applyId;
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId;
+    }
+
     public List<String> getImgList() {
         return imgList;
     }
@@ -83,6 +94,7 @@ public class AddUseSealApplyBean implements Serializable {
                 ", expireTime='" + expireTime + '\'' +
                 ", sealId='" + sealId + '\'' +
                 ", imgList=" + imgList +
+                ", applyId=" + applyId +
                 '}';
     }
 

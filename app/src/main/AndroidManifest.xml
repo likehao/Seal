@@ -248,7 +248,7 @@
         <activity android:name=".activity.PayActivity" />
         <activity android:name=".activity.SurePayActivity" />
         <activity android:name=".activity.MessageListActivity" />
-        <activity android:name=".activity.UseInstructionsActivity"></activity>
+        <activity android:name=".activity.UseInstructionsActivity"/>
     </application>
 
 </manifest>

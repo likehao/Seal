@@ -94,7 +94,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     private SeeRecordAdapter seeRecordAdapter;
     private List<SeeRecordBean> list;
     String id;
-    private Integer status;
+    private Integer status,count;
     private String applyPdf,stampPdf,stampRecordPdf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +119,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     private void initData(){
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
-        int count = intent.getIntExtra("count",0);
+        count = intent.getIntExtra("count",0);
         int restCount = intent.getIntExtra("restCount",0);
         int photoNum = intent.getIntExtra("photoNum",0);
         String sealName = intent.getStringExtra("sealName");
@@ -248,6 +248,9 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         String s = messageEvent.msgType;
         if (s.equals("上传照片")){
             Intent intent = new Intent(this,UploadFileActivity.class);
+            intent.putExtra("code",1);
+            intent.putExtra("id",id);
+            intent.putExtra("count",count);
             startActivity(intent);
         } else if (s.equals("申请文件")){
             Intent intent = new Intent(this, FileActivity.class);

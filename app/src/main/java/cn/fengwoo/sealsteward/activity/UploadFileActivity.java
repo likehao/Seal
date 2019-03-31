@@ -7,7 +7,6 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -25,13 +23,14 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
-
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +39,6 @@ import cn.fengwoo.sealsteward.adapter.RecycleviewAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
@@ -61,7 +59,7 @@ import top.zibin.luban.OnCompressListener;
 /**
  * 上传用印申请附件图片
  */
-public class UploadFileActivity extends BaseActivity implements View.OnClickListener{
+public class UploadFileActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
     @BindView(R.id.title_tv)
@@ -76,6 +74,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     private static final int REQUEST_CODE_CHOOSE = 1;
     private Boolean success = false;
     LoadingView loadingView;
+    List<String> fileName = new ArrayList<>();
+    int code,count;
+    String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,17 +89,25 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("用印申请");
         set_back_ll.setOnClickListener(this);
         edit_tv.setVisibility(View.VISIBLE);
         edit_tv.setText("提交");
         edit_tv.setOnClickListener(this);
         useSealApply_iv.setOnClickListener(this);
         //设置布局,列数
-        useSealApply_Rcv.setLayoutManager(new GridLayoutManager(this,4));
+        useSealApply_Rcv.setLayoutManager(new GridLayoutManager(this, 4));
         recycleviewAdapter = new RecycleviewAdapter();
         useSealApply_Rcv.setAdapter(recycleviewAdapter);
         loadingView = new LoadingView(this);
+        Intent intent = getIntent();
+        code = intent.getIntExtra("code",0);   //记录详情上传照片传递过来
+        id = intent.getStringExtra("id");
+        count = intent.getIntExtra("count",0);
+        if (code == 1){
+            title_tv.setText("上传照片");
+        }else {
+            title_tv.setText("用印申请");
+        }
     }
 
     @Override
@@ -110,11 +120,47 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 permissions();
                 break;
             case R.id.edit_tv:
-                if (success){
-                    addUserSealApply();
+                if (success) {
+                    if (code != 0){
+                        //上传照片提交
+                        uploadPhoto();
+                    }else {
+                        //用印申请提交
+                        addUserSealApply();
+                    }
+                }else {
+                    showToast("请上传图片");
                 }
                 break;
         }
+    }
+
+    /**
+     * 上传照片
+     */
+    private void uploadPhoto(){
+        AddUseSealApplyBean bean = new AddUseSealApplyBean();
+        bean.setApplyId(id);
+        bean.setImgList(fileName);
+        HttpUtil.sendDataAsync(this, HttpUrl.UPDATESTAMPIMAGE, 2, null, bean, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e +"错误错误错误!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
+                .getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+
+                    }
+                }
+            }
+        });
     }
     /**
      * 申请权限
@@ -142,46 +188,52 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                         }
                     }
                 });
+
     }
 
     /**
      * 上传用印申请图片
      */
-    private void uploadImgFile(){
+    private void uploadImgFile() {
         selectPhone();
     }
 
     /**
      * 选择照片
      */
-    private void selectPhone(){
+    private void selectPhone() {
         Matisse.from(UploadFileActivity.this)
-                .choose(MimeType.ofImage(),false)  //图片类型
+                .choose(MimeType.ofImage(), false)  //图片类型
                 .countable(true)    //选中后显示数字;false:选中后显示对号
-                .capture(false)  //是否提供拍照功能
+                .capture(true)  //是否提供拍照功能
                 .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))//存储到哪里
                 .maxSelectable(4)   //可选最大数
                 .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)   //图像选择和预览活动所需的方向。
                 .thumbnailScale(0.85f)  //缩略图的清晰程度(与内存占用有关)
-                .imageEngine(new GlideEngineImage())   //图片加载引擎  原本使用的是GlideEngine
+                .imageEngine(new GlideEngineImage())   // for glide-V4  图片加载引擎  原本使用的是GlideEngine
+                .originalEnable(true)
+                .maxOriginalSize(10)
+               // .autoHideToolbarOnSingleTap(true)
                 .forResult(REQUEST_CODE_CHOOSE);
     }
 
     List<Uri> mSelected;
     List<String> path;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             mSelected = Matisse.obtainResult(data);
-         //   path =  Matisse.obtainPathResult(data);
+            //   path =  Matisse.obtainPathResult(data);
             //加载图片数据
-            recycleviewAdapter.setData(mSelected,UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
-            for (int i = 0; i < mSelected.size(); i++){
+            recycleviewAdapter.setData(mSelected, UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
+            for (int i = 0; i < mSelected.size(); i++) {
                 //将uri转为file
-                File fileByUri = FileUtil.getFileByUri(mSelected.get(i), this);
+            //    File fileByUri = FileUtil.getFileByUri(mSelected.get(i), this);   //拍照转会报错
+                File fileByUri = new File(FileUtil.getRealFilePath(UploadFileActivity.this, mSelected.get(i)));
                 Luban.with(this)
                         .load(fileByUri)
                         .ignoreBy(100)
@@ -207,7 +259,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                             @Override
                             public void onError(Throwable e) {
                                 // TODO 当压缩过程出现问题时调用
-                                Log.e("TAG",e+"");
+                                Log.e("TAG", e + "");
                             }
                         }).launch();
             }
@@ -216,10 +268,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     /**
      * 上传图片
+     *
      * @param file
      */
-    List<String> fileName = new ArrayList<>();
-    private void uploadPic(File file){
+    private void uploadPic(File file) {
         loadingView.show();
         HashMap<String, Object> hashMap = new HashMap<>();
         Utils.log(file.length() + "");
@@ -250,6 +302,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onReqFailed(String errorMsg) {
+                loadingView.cancel();
                 success = false;
                 showToast(errorMsg);
                 Utils.log(errorMsg);
@@ -261,7 +314,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     /**
      * 用印申请
      */
-    private void addUserSealApply(){
+    private void addUserSealApply() {
         loadingView.show();
         Intent intent = getIntent();
         String cause = intent.getStringExtra("cause");
@@ -279,17 +332,18 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         HttpUtil.sendDataAsync(UploadFileActivity.this, HttpUrl.ADDUSESEAL, 2, null, addUseSealApplyBean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("TAG",e+"用印申请错误错误!!!!!!!!!!!!!!!!!");
+                Log.e("TAG", e + "用印申请错误错误!!!!!!!!!!!!!!!!!");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
-                .getType());
-                if (responseInfo.getCode() == 0){
-                    if (responseInfo.getData()){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
                         loadingView.cancel();
                         Intent intent = new Intent(UploadFileActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -298,7 +352,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                         showToast("申请成功");
                         Looper.loop();
                     }
-                }else {
+                } else {
                     loadingView.cancel();
                     Looper.prepare();
                     showToast(responseInfo.getMessage());

@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/useSealApply_iv"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/add_img" />
     </LinearLayout>
 

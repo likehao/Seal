@@ -38,8 +38,7 @@ public class GifSizeFilter extends Filter {
     @Override
     public Set<MimeType> constraintTypes() {
         return new HashSet<MimeType>() {{
-            add(MimeType.PNG);
-            add(MimeType.JPEG);
+            add(MimeType.GIF);
         }};
     }
 

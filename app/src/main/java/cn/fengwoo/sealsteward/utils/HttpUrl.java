@@ -240,32 +240,35 @@ public class HttpUrl {
     /**
      * update 密码用户
      */
-    public static final String UPDATE_PWD_USER = "/seal/updateofflineuser";
+    public static final String UPDATE_PWD_USER = "seal/updateofflineuser";
 
     /**
      * 获取密码用户列表
      */
-    public static final String PWD_USER_LIST = "/seal/offlineuserlist";
+    public static final String PWD_USER_LIST = "seal/offlineuserlist";
 
     /**
      * delete 密码用户
      */
-    public static final String DELETE_PWD_USER = "/seal/deleteofflineuser";
+    public static final String DELETE_PWD_USER = "seal/deleteofflineuser";
 
     /**
      * reset seal
      */
-    public static final String RESET_SEAL = "/seal/resetofflineuser";
+    public static final String RESET_SEAL = "seal/resetofflineuser";
     /**
      * 使用说明书
      */
     public static final String USEINSTRUCTIONS = "http://www.baiheyz.com/directions/index.html";
 
-
     /**
      *  添加部门
      */
-    public static final String ADD_ORG = "/company/addorgstr";
+    public static final String ADD_ORG = "company/addorgstr";
+    /**
+     * 上传记录图片
+     */
+    public static final String UPDATESTAMPIMAGE = "stamp/updatestampimage";
 
 
 }

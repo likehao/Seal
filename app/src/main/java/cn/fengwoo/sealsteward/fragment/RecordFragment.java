@@ -218,7 +218,6 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         intent.putExtra("stampRecordPdf",list.get(position).getStampRecordPdf());
         intent.putExtra("headPortrait",list.get(position).getHeadPortrait());
         intent.putExtra("orgStructureName",list.get(position).getOrgStructureName());
-
         startActivity(intent);
     }
 
