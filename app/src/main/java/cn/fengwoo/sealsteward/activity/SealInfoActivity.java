@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -33,15 +34,21 @@ import com.squareup.picasso.Picasso;
 import com.suke.widget.SwitchButton;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.filter.Filter;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import org.devio.takephoto.compress.CompressConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,7 +64,10 @@ import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.FileUtils;
+import cn.fengwoo.sealsteward.utils.GifSizeFilter;
+import cn.fengwoo.sealsteward.utils.GlideEngineImage;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -74,7 +84,7 @@ import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 /**
- * 关于
+ *
  */
 public class SealInfoActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)
@@ -130,6 +140,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     private static final String IMAGE_FILE_NAME = "seal.jpg";
 
     private String sealPring = "";
+    private static final int REQUEST_CODE_CHOOSE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -396,54 +407,52 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         }
 
 
-    }
 
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            //获取选择的文件返回的uri
+            assert data != null;
+            List<Uri> mSelected = Matisse.obtainResult(data);
+            //将uri转为file
+            File fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
+            //压缩文件
+            Luban.with(this)
+                    .load(fileByUri)   //传入原图
+                    .ignoreBy(100)     //不压缩的阈值，单位为K
+                    //  .setTargetDir(getPath())   //缓存压缩图片路径
+                    .filter(new CompressionPredicate() {
+                        @Override
+                        public boolean apply(String path) {
+                            return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                        }
+                    })
+                    .setCompressListener(new OnCompressListener() {
+                        @Override
+                        public void onStart() {
+                            // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                        }
 
-    /**
-     * upload 图片数据
-     *
-     * @param
-     */
-    private void setPicToView(Uri uri) {
+                        @Override
+                        public void onSuccess(final File file) {
+                            // TODO 压缩成功后调用，返回压缩后的图片文件
 
+                            Utils.log("aaaaaaaaaaaaaa");
+                            String filePath = file.getPath();
+                            Picasso.with(SealInfoActivity.this).load(file).into(sealPrint_cir);
+                            uploadPic(file);
+                        }
 
-        //压缩文件
-        Luban.with(this)
-                .load(uri)   //传入原图
-                .ignoreBy(100)     //不压缩的阈值，单位为K
-                //  .setTargetDir(getPath())   //缓存压缩图片路径
-                .filter(new CompressionPredicate() {
-                    @Override
-                    public boolean apply(String path) {
-                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                    }
-                })
-                .setCompressListener(new OnCompressListener() {
-                    @Override
-                    public void onStart() {
-                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
-                    }
-
-                    @Override
-                    public void onSuccess(final File file) {
-                        // TODO 压缩成功后调用，返回压缩后的图片文件
-                        //上传图片
-                        Utils.log(file.length() + " uploadPic(file);");
-                        uploadPic(file);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        // TODO 当压缩过程出现问题时调用
-                    }
-                }).launch();
-
-
-
-
+                        @Override
+                        public void onError(Throwable e) {
+                            // TODO 当压缩过程出现问题时调用
+                        }
+                    }).launch();
+        }
 
 
     }
+
+
+
 
 
 
@@ -490,32 +499,32 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
 
 
-    private void selectDialog() {
-//        Utils.log("**********"+ CommonUtil.getUserData(this).getId());
-        ArrayList<String> strings = new ArrayList<String>();
-        strings.add("从相册选");
-        strings.add("拍照");
-        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(this, strings);
-        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //设置压缩规则，最大500kb
-//                takePhoto.onEnableCompress(new CompressConfig.Builder().setMaxSize(500 * 1024).create(), true);
-                if (position == 0) {
-                    // 从相册选
-
-
-                    optionBottomDialog.dismiss();
-
-                } else if (position == 1) {
-                    // 拍照
-
-                    optionBottomDialog.dismiss();
-
-                }
-            }
-        });
-    }
+//    private void selectDialog() {
+////        Utils.log("**********"+ CommonUtil.getUserData(this).getId());
+//        ArrayList<String> strings = new ArrayList<String>();
+//        strings.add("从相册选");
+//        strings.add("拍照");
+//        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(this, strings);
+//        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                //设置压缩规则，最大500kb
+////                takePhoto.onEnableCompress(new CompressConfig.Builder().setMaxSize(500 * 1024).create(), true);
+//                if (position == 0) {
+//                    // 从相册选
+//
+//
+//                    optionBottomDialog.dismiss();
+//
+//                } else if (position == 1) {
+//                    // 拍照
+//
+//                    optionBottomDialog.dismiss();
+//
+//                }
+//            }
+//        });
+//    }
 
 
     /**
@@ -536,7 +545,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             //开启图片选择器
 //                            takePhoto.onPickFromCapture(imageUri);
                             Utils.log("accept");
-                            selectDialog();
+                            openPicture();
                         } else if (permission.shouldShowRequestPermissionRationale) {
                             showToast("您已拒绝权限申请");
                         } else {
@@ -546,4 +555,25 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 });
     }
 
+
+
+
+    /**
+     * 图片选择器
+     */
+    private void openPicture() {
+        Matisse.from(this)
+                .choose(MimeType.ofImage())  //图片类型
+                .countable(true)    //选中后显示数字;false:选中后显示对号
+                .capture(true)  //是否提供拍照功能
+                //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
+                .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))
+                .maxSelectable(1)   //可选最大数
+                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
+                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)  //缩略图的清晰程度(与内存占用有关)
+                .imageEngine(new GlideEngineImage())   //图片加载引擎  原本使用的是GlideEngine
+                .forResult(REQUEST_CODE_CHOOSE);
+    }
 }
