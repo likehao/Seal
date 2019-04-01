@@ -97,7 +97,7 @@ public class StartPasswordActivity extends BaseActivity {
         String pwd = str;
         Utils.log(str);
         byte[] pwdBytes = pwd.getBytes();
-        ((MyApp) getApplication()).getConnectionObservable()
+        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, pwdBytes))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -108,6 +108,6 @@ public class StartPasswordActivity extends BaseActivity {
                         throwable -> {
                             // Handle an error here.
                         }
-                );
+                ));
     }
 }

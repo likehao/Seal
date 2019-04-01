@@ -222,7 +222,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
 
                         byte[] pwdCodeBytes = DataTrans.intToBytesLittle(pwdUserListItem.getUserNumber());
-                        ((MyApp) getApplication()).getConnectionObservable()
+                        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.DELETEPRESSPWD, pwdCodeBytes).getBytes()))
                                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
@@ -232,7 +232,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                                         throwable -> {
                                             // Handle an error here.
                                         }
-                                );
+                                ));
 
                     }
                 });

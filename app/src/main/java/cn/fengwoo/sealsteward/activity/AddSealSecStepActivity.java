@@ -233,7 +233,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             Utils.log(imgPath);
 
             File file = new File(imgPath);
-            file.mkdirs();
+//            file.mkdirs();
 
             //压缩文件
             Luban.with(this)
@@ -433,7 +433,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
 //                        loadingView.cancel();
                     finish();
-                    ((MyApp) getApplication()).getConnectDisposable().dispose();
+//                    ((MyApp) getApplication()).getConnectDisposable().dispose();
+                    ((MyApp) getApplication()).removeAllDisposable();
+                    ((MyApp) getApplication()).setConnectionObservable(null);
                     Looper.prepare();
                     showToast("添加成功");
                     Looper.loop();

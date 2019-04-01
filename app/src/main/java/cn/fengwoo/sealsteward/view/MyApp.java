@@ -15,6 +15,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.fengwoo.sealsteward.R;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -25,6 +28,16 @@ import io.reactivex.disposables.Disposable;
 public class MyApp extends MultiDexApplication {
     private Observable<RxBleConnection> connectionObservable;
     public Disposable connectDisposable;
+    public List<Disposable> disposableList;
+
+
+    public List<Disposable> getDisposableList() {
+        return disposableList;
+    }
+
+    public void setDisposableList(List<Disposable> disposableList) {
+        this.disposableList = disposableList;
+    }
 
     public Disposable getConnectDisposable() {
         return connectDisposable;
@@ -66,5 +79,12 @@ public class MyApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         Logger.addLogAdapter(new AndroidLogAdapter());
+        disposableList = new ArrayList<>();
+    }
+
+    public void removeAllDisposable() {
+        for (Disposable disposable : disposableList) {
+            disposable.dispose();
+        }
     }
 }

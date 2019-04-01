@@ -128,9 +128,19 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.electric_ll)
     LinearLayout electric_ll;
 
+    @BindView(R.id.tv_stamp_reason)
+    TextView tv_stamp_reason;
+    @BindView(R.id.tv_expired_time)
+    TextView tv_expired_time;
+    @BindView(R.id.tv_address)
+    TextView tv_address;
+   @BindView(R.id.tv_ble_name)
+    TextView tv_ble_name;
+
     LoadingView loadingView;
     private RxBleConnection rxBleConnection;
     private String availableCount = "0"; // 剩余次数
+    private String stampReason = ""; // 盖章事由
     private int startNumber; // 启动序号
     private int currentStampTimes = 0; // 现在盖章次数
     /**
@@ -310,6 +320,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
 
+                // 显示ble设备名字
+                String bleName = data.getStringExtra("bleName");
+                tv_ble_name.setText(bleName);
+
                 setNotification();
 
                 break;
@@ -321,6 +335,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 }
                 String expireTime = data.getStringExtra("expireTime");
                 availableCount = data.getStringExtra("availableCount");
+                stampReason = data.getStringExtra("stampReason");
+                tv_stamp_reason.setText(stampReason);
+                tv_expired_time.setText(DateUtils.getDateString(Long.parseLong(expireTime)));
+
                 // 初始化首页的已盖次数和剩余次数
                 tv_times_done.setText(currentStampTimes + "");
                 tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
@@ -331,19 +349,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     // 启动印章
                     Utils.log("case Constants.TO_WANT_SEAL:");
                     byte[] startAllByte = CommonUtil.startData(Integer.valueOf(availableCount), expireTime);
-                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.START, startAllByte).getBytes()))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     characteristicValue -> {
                                         // Characteristic value confirmed.
                                         Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-
                                     },
                                     throwable -> {
                                         // Handle an error here.
                                     }
-                            );
+                            ));
                 }
                 break;
         }
@@ -381,7 +398,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
                         // 如果盖完了，次数为0时，断开蓝牙
                         if (tv_times_left.getText().toString().trim().equals("0")) {
-                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+//                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                            ((MyApp) getApplication()).setConnectionObservable(null);
                         }
                     }
                 });
@@ -410,12 +429,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             byte[] byteTime = CommonUtil.getDateTime();
             byte[] eleByte = new byte[]{0};
 
-            ((MyApp) getActivity().getApplication()).getConnectionObservable()
+            ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                     .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
 //                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
                     .doOnNext(notificationObservable -> {
                         // Notification has been set up ，监听设置成功，然后握手
-                        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
                                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
@@ -426,7 +445,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         throwable -> {
                                             // Handle an error here.
                                         }
-                                );
+                                ));
                     })
                     .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
                     .observeOn(AndroidSchedulers.mainThread())
@@ -442,7 +461,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void doNext(long number) {
                                             Utils.log("a loop");
-                                            ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                            ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                                                     .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
                                                     .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                                                     .subscribe(
@@ -453,7 +472,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                                             throwable -> {
                                                                 // Handle an error here.
                                                             }
-                                                    );
+                                                    ));
                                         }
                                     });
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
@@ -513,7 +532,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                 // Handle an error here.
                                 Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
                             }
-                    );
+                    ));
         } else {
 
             // 二期
@@ -521,13 +540,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             String shakeHandString = "HandShake/2yK39b";
             byte[] shakeHandBytes = shakeHandString.getBytes();
-            ((MyApp) getActivity().getApplication()).getConnectionObservable()
+            ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                     .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
 //                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
                     .doOnNext(notificationObservable -> {
                         // Notification has been set up ，监听设置成功，然后握手
                         Utils.log("Notification has been set up");
-                        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, shakeHandBytes))
                                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
@@ -538,7 +557,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         throwable -> {
                                             // Handle an error here.
                                         }
-                                );
+                                ));
                     })
                     .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
                     .observeOn(AndroidSchedulers.mainThread())
@@ -555,7 +574,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
                                     String superManager = "ADMIN1";
                                     byte[] superManagerBytes = superManager.getBytes();
-                                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                    ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, superManagerBytes))
                                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                                             .subscribe(
@@ -566,7 +585,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                                     throwable -> {
                                                         // Handle an error here.
                                                     }
-                                            );
+                                            ));
                                 } else if (strReturned.equals("A1")) {
                                     // 已识别为超级管理员
                                     Utils.log("已识别为超级管理员");
@@ -593,7 +612,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                 // Handle an error here.
                                 Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
                             }
-                    );
+                    ));
 
 
         }
@@ -661,6 +680,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 }
                 currentAddress = reverseGeoCodeResult.getAddress();
                 Utils.log(currentAddress);
+                tv_address.setText(currentAddress);
+
 
 //                locationAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
 //                if (locationAddress != null && !"".equals(locationAddress) && !"null".equals(locationAddress)) {

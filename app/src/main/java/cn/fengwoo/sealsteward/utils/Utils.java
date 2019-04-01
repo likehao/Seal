@@ -4,6 +4,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -144,4 +149,34 @@ public class Utils {
         }
         return hasTheOne;
     }
+
+
+
+    private String getPath(Context context,Uri uri) {
+        String[] projection = {MediaStore.Video.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+
+    public final static Bitmap lessenUriImage(String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options); //此时返回 bm 为空
+        options.inJustDecodeBounds = false; //缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+        int be = (int) (options.outHeight / (float) 320);
+        if (be <= 0)
+            be = 1;
+        options.inSampleSize = be; //重新读入图片，注意此时已经把 options.inJustDecodeBounds 设回 false 了
+        bitmap = BitmapFactory.decodeFile(path, options);
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        System.out.println(w + " " + h); //after zoom
+        return bitmap;
+    }
+
+
 }

@@ -115,7 +115,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                         // 启动密码（盖章密码）验证
                         String changeLaunchPwd = "UPASSWD=" + password;
                         byte[] changeLaunchPwdBytes = changeLaunchPwd.getBytes();
-                        ((MyApp) getApplication()).getConnectionObservable()
+                        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, changeLaunchPwdBytes))
                                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
@@ -126,7 +126,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                                         throwable -> {
                                             // Handle an error here.
                                         }
-                                );
+                                ));
 
 
 //                        if (state) {
@@ -210,6 +210,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         Intent intent = new Intent();
         intent.putExtra("expireTime", responseInfo.getData().get(i).getExpireTime() + "");
         intent.putExtra("availableCount", responseInfo.getData().get(i).getAvailableCount() + "");
+        intent.putExtra("stampReason", responseInfo.getData().get(i).getApplyCause() + "");
         setResult(Constants.TO_WANT_SEAL, intent);
         finish();
     }

@@ -147,7 +147,8 @@ dependencies {
     implementation 'com.longsh:OptionFrame:1.0.0'
 
     //Picasso
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+//    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.4.0'
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'

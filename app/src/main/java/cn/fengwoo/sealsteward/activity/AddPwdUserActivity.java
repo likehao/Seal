@@ -155,7 +155,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                         e.printStackTrace();
                     }
 
-                    ((MyApp) getApplication()).getConnectionObservable()
+                    ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.CHANGEPWDPOWER, updateCountByte).getBytes()))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -165,7 +165,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                                     throwable -> {
                                         // Handle an error here.
                                     }
-                            );
+                            ));
                 }
 
                 break;
@@ -221,7 +221,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                ((MyApp) getApplication()).getConnectionObservable()
+                                ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                                         .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ADDPRESSPWD, startAllByte).getBytes()))
                                         .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(
@@ -231,7 +231,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                                                 throwable -> {
                                                     // Handle an error here.
                                                 }
-                                        );
+                                        ));
                             }
                         });
                         Looper.prepare();

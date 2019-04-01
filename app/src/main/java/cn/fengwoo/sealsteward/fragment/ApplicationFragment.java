@@ -336,7 +336,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     private void readPressTime() {
         // 发送查询：长按时间
         byte[] select_press_time = new byte[]{0};
-        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+        ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SELECTPRESSTIME, select_press_time).getBytes()))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -347,7 +347,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                         throwable -> {
                             // Handle an error here.
                         }
-                );
+                ));
     }
 
     /**
@@ -356,7 +356,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     @SuppressLint("CheckResult")
     private void readDelayTime() {
         byte[] select_seal_delay = new byte[]{0};
-        ((MyApp) getActivity().getApplication()).getConnectionObservable()
+        ((MyApp) getActivity().getApplication()).getDisposableList().add( ((MyApp) getActivity().getApplication()).getConnectionObservable()
                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SELECTSEALDELAY, select_seal_delay).getBytes()))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -367,7 +367,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                         throwable -> {
                             // Handle an error here.
                         }
-                );
+                ));
 
     }
 
@@ -382,7 +382,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
                     String reStr = DataTrans.hexString2binaryString("11100000");
                     byte[] resByte = DataTrans.toBytes(reStr);
-                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.RESET, resByte).getBytes()))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -393,12 +393,12 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                                     throwable -> {
                                         // Handle an error here.
                                     }
-                            );
+                            ));
                     commonDialog.dialog.dismiss();
                 } else {
                     String reset = "RESET";
                     byte[] resetBytes = reset.getBytes();
-                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    ((MyApp)getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, resetBytes))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -409,7 +409,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                                     throwable -> {
                                         // Handle an error here.
                                     }
-                            );
+                            ));
                     commonDialog.dialog.dismiss();
                 }
             }
@@ -512,7 +512,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 public void onItemPicked(int index, String item) {
                     Utils.log(item);
                     byte[] select_press_time = new byte[]{(byte) (index + 1)};
-                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.PRESSTIME, select_press_time).getBytes()))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -523,7 +523,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                                     throwable -> {
                                         // Handle an error here.
                                     }
-                            );
+                            ));
                 }
             });
             picker.show();
@@ -562,7 +562,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 public void onItemPicked(int index, String item) {
                     Utils.log(item);
                     byte[] select_seal_delay = new byte[]{(byte) (index + 1)};
-                    ((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SETSEALDELAY, select_seal_delay).getBytes()))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -573,7 +573,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                                     throwable -> {
                                         // Handle an error here.
                                     }
-                            );
+                            ));
                 }
             });
             picker.show();

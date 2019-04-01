@@ -56,7 +56,7 @@ public class VoiceActivity extends BaseActivity implements View.OnClickListener,
     @SuppressLint("CheckResult")
     private void getData() {
         byte[] select_seal_delay = new byte[]{0};
-        ((MyApp) getApplication()).getConnectionObservable()
+        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.READ_VOICE, select_seal_delay).getBytes()))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -67,7 +67,7 @@ public class VoiceActivity extends BaseActivity implements View.OnClickListener,
                         throwable -> {
                             // Handle an error here.
                         }
-                );
+                ));
 
     }
 
@@ -122,7 +122,7 @@ public class VoiceActivity extends BaseActivity implements View.OnClickListener,
         } else {
             select_seal_delay = new byte[]{0};
         }
-        ((MyApp) this.getApplication()).getConnectionObservable()
+        ((MyApp) getApplication()).getDisposableList().add(((MyApp) this.getApplication()).getConnectionObservable()
                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.WRITE_VOICE, select_seal_delay).getBytes()))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -133,6 +133,6 @@ public class VoiceActivity extends BaseActivity implements View.OnClickListener,
                         throwable -> {
                             // Handle an error here.
                         }
-                );
+                ));
     }
 }

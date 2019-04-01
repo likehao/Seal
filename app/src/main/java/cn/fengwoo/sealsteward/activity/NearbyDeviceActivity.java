@@ -385,7 +385,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 startActivity(intent);
                                 finish();
                             } else {
-                                setResult(Constants.TO_NEARBY_DEVICE);
+                                Intent intent = new Intent();
+                                intent.putExtra("bleName", getNameFromList(macAddress));
+                                setResult(Constants.TO_NEARBY_DEVICE,intent);
                                 finish();
                             }
                         },
@@ -394,7 +396,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             Utils.log(throwable.getMessage());
                         }
                 );
-        ((MyApp) getApplication()).setConnectDisposable(connectDisposable);
+        ((MyApp) getApplication()).getDisposableList().add(connectDisposable);
+
+//        ((MyApp) getApplication()).setConnectDisposable(connectDisposable);
     }
 
     @Override

@@ -175,7 +175,10 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                         });
                     } else {
                         // 断开蓝牙
-                        ((MyApp) getApplication()).getConnectDisposable().dispose();
+//                        ((MyApp) getApplication()).getConnectDisposable().dispose();
+                        ((MyApp) getApplication()).removeAllDisposable();
+                        ((MyApp) getApplication()).setConnectionObservable(null);
+
                         Looper.prepare();
                         showToast(msg);
                         Looper.loop();
