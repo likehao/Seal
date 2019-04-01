@@ -29,6 +29,10 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageData;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.fragment.MainFragment;
@@ -93,7 +98,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.msgSum_tv)
     TextView msgSum_tv;  //消息总数
     private Timer timer;
-    int sum = 0;
+    int sum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +125,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
- //               getMessageNum();
+                getMessageNum();
             }
             super.handleMessage(msg);
         }
@@ -402,8 +407,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 assert responseInfo != null;
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
 
-//                    //关闭定时器
-//                    stopTimer();
+                    //关闭定时器
+               //     stopTimer();
                     for (MessageData messageData : responseInfo.getData()) {
                         int msgNum = messageData.getUnreadCount();
                         sum += msgNum;
@@ -415,7 +420,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             if (sum != 0) {
                                 msgSum_tv.setVisibility(View.VISIBLE);
                                 msgSum_tv.setText(sum + "");
-
+                                sum = 0;
+                            }else {
+                                msgSum_tv.setVisibility(View.GONE);
+                                msgSum_tv.setText(sum + "");
                             }
                         }
                     });
@@ -456,7 +464,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
        // getMessageNum();
 
@@ -472,4 +480,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             timerTask = null;
         }
     }
+
 }

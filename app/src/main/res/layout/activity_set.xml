@@ -43,6 +43,7 @@
             android:background="@color/line" />
 
         <RelativeLayout
+            android:id="@+id/recommend_seal_rl"
             style="@style/pressed_effect">
 
             <TextView
@@ -64,6 +65,7 @@
             android:background="@color/line" />
 
         <RelativeLayout
+            android:id="@+id/clear_cache_rl"
             style="@style/pressed_effect">
 
             <TextView
@@ -75,12 +77,12 @@
                 android:textColor="@color/black" />
 
             <TextView
+                android:id="@+id/cache_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="5dp"
-                android:text="0.01M"
+                android:layout_marginEnd="10dp"
                 android:textColor="@color/red" />
         </RelativeLayout>
 

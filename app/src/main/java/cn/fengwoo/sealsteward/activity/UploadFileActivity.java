@@ -23,6 +23,9 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -37,6 +40,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RecycleviewAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
@@ -136,9 +140,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     }
 
     /**
-     * 上传照片
+     * 上传记录照片
      */
     private void uploadPhoto(){
+        loadingView.show();
         AddUseSealApplyBean bean = new AddUseSealApplyBean();
         bean.setApplyId(id);
         bean.setImgList(fileName);
@@ -156,8 +161,18 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 .getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
-
+                        Intent intent = new Intent(UploadFileActivity.this,MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        loadingView.cancel();
+                        Looper.prepare();
+                        showToast("上传成功");
+                        Looper.loop();
                     }
+                }else {
+                    Looper.prepare();
+                    responseInfo.getMessage();
+                    Looper.loop();
                 }
             }
         });
@@ -267,7 +282,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     }
 
     /**
-     * 上传图片
+     * 上传图片至服务器
      *
      * @param file
      */
@@ -289,7 +304,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     String str = responseInfo.getData().getFileName();
                     fileName.add(str);
                     loadingView.cancel();
-                    showToast("上传图片成功");
+                    Log.e("TAG","上传图片成功!!!!!!!!!!!!!!!!!!!!");
                     success = true;
                 } else {
                     loadingView.cancel();

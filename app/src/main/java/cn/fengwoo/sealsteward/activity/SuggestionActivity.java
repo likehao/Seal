@@ -236,7 +236,7 @@ public class SuggestionActivity extends BaseActivity implements View.OnClickList
             List<Uri> mSelected = Matisse.obtainResult(data);
             File fileByUri = null;
             //将uri转为file
-                fileByUri = FileUtil.getFileByUri(mSelected.get(0), this);
+                fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
 
          /*   Glide.with(SuggestionActivity.this).load(fileByUri).into(imgOne);
             if (imgOne != null){

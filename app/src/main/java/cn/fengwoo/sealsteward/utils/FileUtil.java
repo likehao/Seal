@@ -18,7 +18,7 @@ import java.io.File;
  * 将Uri转为File工具类
  */
 public class FileUtil {
-    //拍照转会报错,用下面getRealFilePath方法
+    //拍照转file会报错,用下面getRealFilePath方法
     public static File getFileByUri(Uri uri, Context context) {
         String path = null;
         if ("file".equals(uri.getScheme())) {

@@ -363,7 +363,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
             assert data != null;
             List<Uri> mSelected = Matisse.obtainResult(data);
             //将uri转为file
-            File fileByUri = FileUtil.getFileByUri(mSelected.get(0), this);
+            File fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
             //压缩文件
             Luban.with(this)
                     .load(fileByUri)   //传入原图
@@ -499,15 +499,17 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
 
     }
     private void updateHeadPortrait(final String fileName) {
+        loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("headPortraitId", fileName);
         HttpUtil.sendDataAsync(PersonCenterActivity.this, HttpUrl.UPDATEHEADPORTRAIT, 3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Log.e("TAG", "更换头像失败........");
                 Looper.prepare();
                 showToast(e + "");
                 Looper.loop();
-                Log.e("TAG", "更换头像失败........");
             }
 
             @Override
@@ -536,10 +538,14 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                             String filePath = "file://"+HttpDownloader.path + fileName;
                             Picasso.with(PersonCenterActivity.this).load(filePath).into(headImg_iv);
                             Log.e("ATG", "成功加载头像........");
+                            loadingView.cancel();
                         }
                     });
                 } else{
+                    loadingView.cancel();
+                    Looper.prepare();
                     showToast(responseInfo.getMessage());
+                    Looper.loop();
                 }
             }
         });

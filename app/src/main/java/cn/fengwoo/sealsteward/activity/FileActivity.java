@@ -164,8 +164,7 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
                     paramsToShare.setTitle(getString(R.string.share_file));
                     paramsToShare.setTitleUrl(url);
                     paramsToShare.setText(getString(R.string.every_stamp_have_evidence));
-                    paramsToShare.setImagePath(getApplicationContext().getFilesDir().getAbsolutePath() + "/ic_launcher.png");
-                  //  paramsToShare.setImageUrl("https://hmls.hfbank.com.cn/hfapp-api/9.png");
+                    paramsToShare.setImageUrl("https://hmls.hfbank.com.cn/hfapp-api/9.png");
                 }
             }
         });
