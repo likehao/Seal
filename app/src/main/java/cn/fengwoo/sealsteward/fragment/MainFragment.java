@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -48,6 +49,8 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.squareup.picasso.Picasso;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
 
@@ -91,6 +94,7 @@ import cn.fengwoo.sealsteward.view.MyApp;
 import cn.qqtheme.framework.util.LogUtils;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -166,8 +170,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         initView();
         initBanner();
         setListener();
-        startLocate();
-
+        permissions();
         return view;
     }
 
@@ -461,18 +464,20 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void doNext(long number) {
                                             Utils.log("a loop");
-                                            ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
-                                                    .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
-                                                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                                                    .subscribe(
-                                                            characteristicValue -> {
-                                                                // Characteristic value confirmed.
-                                                                // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                                            },
-                                                            throwable -> {
-                                                                // Handle an error here.
-                                                            }
-                                                    ));
+                                            if(((MyApp) getActivity().getApplication()).getConnectionObservable() !=null){
+                                                ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
+                                                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                                        .subscribe(
+                                                                characteristicValue -> {
+                                                                    // Characteristic value confirmed.
+                                                                    // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                                },
+                                                                throwable -> {
+                                                                    // Handle an error here.
+                                                                }
+                                                        ));
+                                            }
                                         }
                                     });
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
@@ -720,5 +725,34 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
         geoCoder.destroy();
     }
+
+
+    /**
+     * 申请权限
+     */
+    @SuppressLint("CheckResult")
+    private void permissions() {
+        RxPermissions rxPermissions = new RxPermissions(this);
+        //添加需要的权限
+        rxPermissions.requestEachCombined(Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe(new Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) throws Exception {
+                        if (permission.granted) {
+                            Utils.log("accept");
+                            startLocate();
+
+                        } else if (permission.shouldShowRequestPermissionRationale) {
+                            showToast("您已拒绝权限申请");
+                        } else {
+                            showToast("您已拒绝权限申请，请前往设置>应用管理>权限管理打开权限");
+                        }
+                    }
+                });
+    }
+
+
 
 }

@@ -2,7 +2,7 @@
 <com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="155dp"
     android:clickable="true"
     android:paddingBottom="1dp"
     app:ios="false"
@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="33dp"
             android:layout_margin="8dp"
             android:orientation="horizontal">
 
@@ -42,8 +42,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_margin="8dp"
+            android:layout_height="33dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+
             android:orientation="horizontal">
 
             <TextView
@@ -72,8 +74,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_margin="8dp"
+            android:layout_height="33dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:orientation="horizontal">
 
             <TextView
@@ -98,9 +101,9 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_margin="8dp"
-            android:orientation="horizontal">
+            android:layout_height="33dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="120dp"
@@ -126,16 +129,16 @@
     <!-- 以下都是侧滑菜单的内容依序排列 -->
     <Button
         android:id="@+id/btn_edit"
-        android:layout_width="60dp"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:background="@color/lightCoral"
+        android:background="@android:color/holo_orange_light"
         android:text="编辑"
         android:textColor="@android:color/white" />
 
 
     <Button
         android:id="@+id/btn_delete"
-        android:layout_width="60dp"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
         android:background="@color/red"
         android:text="删除"

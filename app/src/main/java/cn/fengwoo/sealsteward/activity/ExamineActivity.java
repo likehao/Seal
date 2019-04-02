@@ -96,8 +96,10 @@ public class ExamineActivity extends BaseActivity {
 
     private String getAllUids() {
         String str = "";
-        for (SealInfoData.SealApproveFlowListBean bean : systemFuncListInfo) {
-            str = str + bean.getApproveUser() + " ";
+        if (systemFuncListInfo != null) {
+            for (SealInfoData.SealApproveFlowListBean bean : systemFuncListInfo) {
+                str = str + bean.getApproveUser() + " ";
+            }
         }
         return str;
     }
@@ -108,19 +110,20 @@ public class ExamineActivity extends BaseActivity {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("设置审批流");
 
-        // tvOne 赋值
-        String tvOneString = getPeopleNumber(systemFuncListInfo, 1) + "人";
-        tvOne.setText(tvOneString);
-        // tvTwo 赋值
-        String tvTwoString = getPeopleNumber(systemFuncListInfo, 2) + "人";
-        tvTwo.setText(tvTwoString);
-        // tvThree 赋值
-        String tvThreeString = getPeopleNumber(systemFuncListInfo, 3) + "人";
-        tvThree.setText(tvThreeString);
-        // tvFour 赋值
-        String tvFourString = getPeopleNumber(systemFuncListInfo, 4) + "人";
-        tvFour.setText(tvFourString);
-
+        if (systemFuncListInfo != null) {
+            // tvOne 赋值
+            String tvOneString = getPeopleNumber(systemFuncListInfo, 1) + "人";
+            tvOne.setText(tvOneString);
+            // tvTwo 赋值
+            String tvTwoString = getPeopleNumber(systemFuncListInfo, 2) + "人";
+            tvTwo.setText(tvTwoString);
+            // tvThree 赋值
+            String tvThreeString = getPeopleNumber(systemFuncListInfo, 3) + "人";
+            tvThree.setText(tvThreeString);
+            // tvFour 赋值
+            String tvFourString = getPeopleNumber(systemFuncListInfo, 4) + "人";
+            tvFour.setText(tvFourString);
+        }
     }
 
     private int getPeopleNumber(List<SealInfoData.SealApproveFlowListBean> list, int type) {
@@ -130,25 +133,25 @@ public class ExamineActivity extends BaseActivity {
                 case 1:
                     if (bean.getApproveType() == 0 && bean.getApproveLevel() == 1) {
                         times++;
-                        selectedUidsMap.put(bean.getApproveUser(),"1");
+                        selectedUidsMap.put(bean.getApproveUser(), "1");
                     }
                     break;
                 case 2:
                     if (bean.getApproveType() == 0 && bean.getApproveLevel() == 2) {
                         times++;
-                        selectedUidsMap.put(bean.getApproveUser(),"2");
+                        selectedUidsMap.put(bean.getApproveUser(), "2");
                     }
                     break;
                 case 3:
                     if (bean.getApproveType() == 0 && bean.getApproveLevel() == 3) {
                         times++;
-                        selectedUidsMap.put( bean.getApproveUser(),"3");
+                        selectedUidsMap.put(bean.getApproveUser(), "3");
                     }
                     break;
                 case 4:
                     if (bean.getApproveType() == 1 && bean.getApproveLevel() == 0) {
                         times++;
-                        selectedUidsMap.put(bean.getApproveUser(),"4");
+                        selectedUidsMap.put(bean.getApproveUser(), "4");
                     }
                     break;
             }
@@ -156,14 +159,14 @@ public class ExamineActivity extends BaseActivity {
         return times;
     }
 
-    @OnClick({R.id.rl_one, R.id.rl_two, R.id.rl_three, R.id.rl_four, R.id.set_back_ll,R.id.btn_add})
+    @OnClick({R.id.rl_one, R.id.rl_two, R.id.rl_three, R.id.rl_four, R.id.set_back_ll, R.id.btn_add})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         intent.setClass(ExamineActivity.this, SelectPeopleActivity.class);
         //传递数据
-        final SerializableMap myMap=new SerializableMap();
+        final SerializableMap myMap = new SerializableMap();
         myMap.setMap(selectedUidsMap);//将map数据添加到封装的myMap中
-        Bundle bundle=new Bundle();
+        Bundle bundle = new Bundle();
         bundle.putSerializable("map", myMap);
         intent.putExtras(bundle);
 
@@ -234,7 +237,7 @@ public class ExamineActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
                 Looper.prepare();
-                showToast(e+"");
+                showToast(e + "");
                 Looper.loop();
             }
 
@@ -266,7 +269,7 @@ public class ExamineActivity extends BaseActivity {
                                 finish();
                             }
                         });
-                    }else {
+                    } else {
                         loadingView.cancel();
                         Looper.prepare();
                         showToast(state);
@@ -286,13 +289,13 @@ public class ExamineActivity extends BaseActivity {
         if (requestCode == 125 && resultCode == 125) {
             Bundle bundle = data.getExtras();
             SerializableMap serializableMap = (SerializableMap) bundle.get("map");
-            Utils.log(serializableMap.getMap().size()+"");
+            Utils.log(serializableMap.getMap().size() + "");
             selectedUidsMap = serializableMap.getMap();
             // refresh the number of ppl
-            Utils.log("****************"+ Utils.getNumberOfPeople(selectedUidsMap,"1"));
-            Utils.log("****************"+ Utils.getNumberOfPeople(selectedUidsMap,"2"));
-            Utils.log("****************"+ Utils.getNumberOfPeople(selectedUidsMap,"3"));
-            Utils.log("****************"+ Utils.getNumberOfPeople(selectedUidsMap,"4"));
+            Utils.log("****************" + Utils.getNumberOfPeople(selectedUidsMap, "1"));
+            Utils.log("****************" + Utils.getNumberOfPeople(selectedUidsMap, "2"));
+            Utils.log("****************" + Utils.getNumberOfPeople(selectedUidsMap, "3"));
+            Utils.log("****************" + Utils.getNumberOfPeople(selectedUidsMap, "4"));
             tvOne.setText(Utils.getNumberOfPeople(selectedUidsMap, "1") + "人");
             tvTwo.setText(Utils.getNumberOfPeople(selectedUidsMap, "2") + "人");
             tvThree.setText(Utils.getNumberOfPeople(selectedUidsMap, "3") + "人");
