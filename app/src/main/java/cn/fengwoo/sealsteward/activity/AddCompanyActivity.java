@@ -37,10 +37,10 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
     Button addCompany_bt;
     @BindView(R.id.company_name_et)
     EditText company_name_et;
-    @BindView(R.id.social_credit_code_et)
+/*    @BindView(R.id.social_credit_code_et)
     EditText social_credit_code_et;
     @BindView(R.id.legal_person_et)
-    EditText legal_person_et;
+    EditText legal_person_et;*/
     private String companyName,socialCode,legalPerson;   //公司名,社会信用代码,法人
     LoadingView loadingView;
 
@@ -83,20 +83,20 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
      */
     private boolean checkData(){
         companyName = company_name_et.getText().toString();
-        socialCode = social_credit_code_et.getText().toString();
-        legalPerson = legal_person_et.getText().toString();
+ /*       socialCode = social_credit_code_et.getText().toString();
+        legalPerson = legal_person_et.getText().toString();*/
         if (companyName.length() == 0) {
             showToast("公司名称不能为空");
             return false;
         }
-        if (socialCode.length() == 0) {
+/*        if (socialCode.length() == 0) {
             showToast("社会信用代码不能为空");
             return false;
         }
         if (legalPerson.length() == 0) {
             showToast("法人不能为空");
             return false;
-        }
+        }*/
         return true;
     }
 
@@ -107,8 +107,8 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
         loadingView.show();
         AddCompanyInfo addCompanyInfo = new AddCompanyInfo();
         addCompanyInfo.setCompanyName(companyName);
-        addCompanyInfo.setSocialCreditCode(socialCode);
-        addCompanyInfo.setLegalPersonName(legalPerson);
+/*        addCompanyInfo.setSocialCreditCode(socialCode);
+        addCompanyInfo.setLegalPersonName(legalPerson);*/
         HttpUtil.sendDataAsync(AddCompanyActivity.this, HttpUrl.ADDCOMPANY, 2, null, addCompanyInfo, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

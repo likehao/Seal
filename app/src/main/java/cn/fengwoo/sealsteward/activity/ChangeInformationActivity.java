@@ -20,6 +20,8 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
@@ -54,6 +56,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     EditText information_et;
     LoadingView loadingView;
     private int tag;
+    String companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
         cancel_ll.setOnClickListener(this);
         delete_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
-   //     information_et.setCursorVisible(false);  //隐藏光标
+        //     information_et.setCursorVisible(false);  //隐藏光标
         loadingView = new LoadingView(this);
 
     }
@@ -89,9 +92,10 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
         String companyName = intent.getStringExtra("companyName");   //公司名字
         String socialCode = intent.getStringExtra("socialCode");    //社会信用代码
         String legalPerson = intent.getStringExtra("legalPerson");   //法人
+        companyId = intent.getStringExtra("companyId");   //法人
         tag = intent.getIntExtra("TAG", 0);
         //判断点击的是哪个
-        switch (tag){
+        switch (tag) {
             case 1:
                 information_et.setText(realName);
                 information_et.setSelection(realName.length());  //将光标移至文字末尾
@@ -138,27 +142,30 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     /**
      * 判断修改类型
      */
-    private void typeChangeInfomation(){
-        if (information_et.getText().length() != 0){
+    private void typeChangeInfomation() {
+        if (information_et.getText().length() != 0) {
             loadingView.show();
-            if (tag == 1){  //修改姓名
+            if (tag == 1) {  //修改姓名
                 changeNameInfomation();
-            }else if (tag == 2){
+            } else if (tag == 2) {  //修改电话
                 changePhoneInfomation();
-            }else {
-                changeEmailInfomation();
+            } else if (tag == 3) {
+                changeEmailInfomation();   //修改邮箱
+            } else {
+                changeCompanyName();   //修改公司
             }
-        }else {
+        } else {
             showToast("信息不能为空");
         }
     }
+
     /**
      * 更改姓名
      */
     private void changeNameInfomation() {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("realName", information_et.getText().toString());
-        HttpUtil.sendDataAsync(this,HttpUrl.UPDATEREALNAME,3, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this, HttpUrl.UPDATEREALNAME, 3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -176,16 +183,22 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
                     if (responseInfo.getData()) {
                         loadingView.cancel();
                         String newName = information_et.getText().toString().trim();
+                        //更新存储姓名
+                        LoginData data = CommonUtil.getUserData(ChangeInformationActivity.this);
+                        if (data != null) {
+                            data.setRealName(newName);
+                            CommonUtil.setUserData(ChangeInformationActivity.this, data);
+                        }
                         Intent intent = new Intent(ChangeInformationActivity.this, PersonCenterActivity.class);
-                 //       intent.putExtra("changeRealName", newName);
+                        //       intent.putExtra("changeRealName", newName);
                         startActivity(intent);
                         finish();
                         showMsg("修改成功");
-                    }else {
+                    } else {
                         loadingView.cancel();
                         showMsg(responseInfo.getMessage());
                     }
-                }else {
+                } else {
                     loadingView.cancel();
                     showMsg(responseInfo.getMessage());
                 }
@@ -196,14 +209,14 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     /**
      * 更改电话
      */
-    private void changePhoneInfomation(){
+    private void changePhoneInfomation() {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mobilePhone", information_et.getText().toString());
-        HttpUtil.sendDataAsync(this,HttpUrl.UPDATEMOBILEPHONE,3, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this, HttpUrl.UPDATEMOBILEPHONE, 3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
-                showMsg(e +"");
+                showMsg(e + "");
                 Log.e("TAG", "更改电话失败........");
             }
 
@@ -216,28 +229,35 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
                 if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         loadingView.cancel();
+                        String newPhone = information_et.getText().toString().trim();
+                        //更新存储电话
+                        LoginData data = CommonUtil.getUserData(ChangeInformationActivity.this);
+                        if (data != null) {
+                            data.setMobilePhone(newPhone);
+                            CommonUtil.setUserData(ChangeInformationActivity.this, data);
+                        }
                         Intent intent = new Intent(ChangeInformationActivity.this, PersonCenterActivity.class);
                         startActivity(intent);
                         finish();
-                    }else {
+                    } else {
                         loadingView.cancel();
                         showMsg(responseInfo.getMessage());
                     }
-                }
-                else {
+                } else {
                     loadingView.cancel();
                     showMsg(responseInfo.getMessage());
                 }
             }
         });
     }
+
     /**
      * 更改邮箱
      */
     private void changeEmailInfomation() {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userEmail", information_et.getText().toString());
-        HttpUtil.sendDataAsync(this,HttpUrl.UPDATEUSEREMAIL,3, hashMap, null, new Callback() {
+        HttpUtil.sendDataAsync(this, HttpUrl.UPDATEUSEREMAIL, 3, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -258,11 +278,11 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
                         startActivity(intent);
                         finish();
                         showMsg("修改成功");
-                    }else {
+                    } else {
                         loadingView.cancel();
                         showMsg(responseInfo.getMessage());
                     }
-                }else {
+                } else {
                     loadingView.cancel();
                     showMsg(responseInfo.getMessage());
                 }
@@ -270,7 +290,49 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
         });
     }
 
-    private void showMsg(String str){
+    /**
+     * 更改公司名称
+     */
+    private void changeCompanyName() {
+        AddCompanyInfo companyInfo = new AddCompanyInfo();
+        companyInfo.setCompanyName(information_et.getText().toString().trim());
+        companyInfo.setId(companyId);
+        HttpUtil.sendDataAsync(this, HttpUrl.UPDATECOMPANY, 5, null, companyInfo, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Log.e("TAG",e+"更改公司名称错误错误错误!!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
+                .getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        loadingView.cancel();
+                        //更新存储公司名
+                        String newCompanyName = information_et.getText().toString().trim();
+                        LoginData data = CommonUtil.getUserData(ChangeInformationActivity.this);
+                        if (data != null) {
+                            data.setCompanyName(newCompanyName);
+                            CommonUtil.setUserData(ChangeInformationActivity.this, data);
+                        }
+                        finish();
+                        showMsg("修改成功");
+                    }
+                }else {
+                    loadingView.cancel();
+                    showMsg(responseInfo.getMessage());
+                }
+            }
+        });
+
+    }
+
+    private void showMsg(String str) {
         Looper.prepare();
         showToast(str);
         Looper.loop();

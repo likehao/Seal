@@ -96,9 +96,8 @@ public class AddPopuwindow extends PopupWindow {
         scree_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventBus.getDefault().post(new MessageEvent("筛选","筛选"));
                 dismiss();
-                Intent intent = new Intent(mview.getContext(),SelectSealRecodeActivity.class);
-                mview.getContext().startActivity(intent);
             }
         });
         //最新

@@ -42,27 +42,30 @@ public class CompanyDetailActivity extends BaseActivity implements View.OnClickL
     CheckBox check;
     @BindView(R.id.detail_companyName)
     TextView detail_companyName;
-    @BindView(R.id.detail_companyCode)
+/*    @BindView(R.id.detail_companyCode)
     TextView detail_companyCode;
     @BindView(R.id.detail_companyLegalPerson)
-    TextView detail_companyLegalPerson;
+    TextView detail_companyLegalPerson;*/
     CompanyInfo companyInfo;
     LoadingView loadingView;
     @BindView(R.id.arrowIv1)
     ImageView arrowIv1;
+/*
     @BindView(R.id.arrowIv2)
     ImageView arrowIv2;
     @BindView(R.id.arrowIv3)
     ImageView arrowIv3;
     @BindView(R.id.arrowIv4)
     ImageView arrowIv4;
+*/
     @BindView(R.id.company_name_rl)
     RelativeLayout company_name_rl;
-    @BindView(R.id.social_code_rl)
+/*    @BindView(R.id.social_code_rl)
     RelativeLayout social_code_rl;
     @BindView(R.id.legal_person_rl)
-    RelativeLayout legal_person_rl;
+    RelativeLayout legal_person_rl;*/
     private Intent intent;
+    private String selectCompanyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +96,11 @@ public class CompanyDetailActivity extends BaseActivity implements View.OnClickL
             case R.id.company_name_rl:
                 intent = new Intent(this,ChangeInformationActivity.class);
                 intent.putExtra("companyName",detail_companyName.getText().toString());
+                intent.putExtra("companyId",selectCompanyId);
                 intent.putExtra("TAG",4);
                 startActivity(intent);
                 break;
-            case R.id.social_code_rl:
+/*            case R.id.social_code_rl:
                 intent = new Intent(this,ChangeInformationActivity.class);
                 intent.putExtra("socialCode",detail_companyCode.getText().toString());
                 intent.putExtra("TAG",5);
@@ -107,7 +111,7 @@ public class CompanyDetailActivity extends BaseActivity implements View.OnClickL
                 intent.putExtra("legalPerson",detail_companyLegalPerson.getText().toString());
                 intent.putExtra("TAG",6);
                 startActivity(intent);
-                break;
+                break;*/
 
         }
     }
@@ -121,7 +125,7 @@ public class CompanyDetailActivity extends BaseActivity implements View.OnClickL
         loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         Intent intent = getIntent();  //获取选中的公司ID
-        String selectCompanyId = intent.getStringExtra("companyId");
+        selectCompanyId = intent.getStringExtra("companyId");
         hashMap.put("companyId", selectCompanyId);
         HttpUtil.sendDataAsync(CompanyDetailActivity.this, HttpUrl.COMPANYINFO, 1, hashMap, null, new Callback() {
             @Override
@@ -141,8 +145,8 @@ public class CompanyDetailActivity extends BaseActivity implements View.OnClickL
                         @Override
                         public void run() {
                             detail_companyName.setText(responseInfo.getData().getCompanyName());
-                            detail_companyCode.setText(responseInfo.getData().getSocialCreditCode());
-                            detail_companyLegalPerson.setText(responseInfo.getData().getLegalPersonName());
+//                            detail_companyCode.setText(responseInfo.getData().getSocialCreditCode());
+//                            detail_companyLegalPerson.setText(responseInfo.getData().getLegalPersonName());
                         }
                     });
                     loadingView.cancel();
@@ -166,12 +170,15 @@ public class CompanyDetailActivity extends BaseActivity implements View.OnClickL
                 if (isChecked) {
                     check.setText("保存");
                     arrowIv1.setVisibility(View.VISIBLE);
-                    arrowIv2.setVisibility(View.VISIBLE);
-                    arrowIv3.setVisibility(View.VISIBLE);
-                    arrowIv4.setVisibility(View.VISIBLE);
+//                    arrowIv2.setVisibility(View.VISIBLE);
+//                    arrowIv3.setVisibility(View.VISIBLE);
+//                    arrowIv4.setVisibility(View.VISIBLE);
                     company_name_rl.setOnClickListener(this);
-                    social_code_rl.setOnClickListener(this);
-                    legal_person_rl.setOnClickListener(this);
+//                    social_code_rl.setOnClickListener(this);
+//                    legal_person_rl.setOnClickListener(this);
+                }else {
+                    check.setText("编辑");
+                    arrowIv1.setVisibility(View.GONE);
                 }
                 break;
         }

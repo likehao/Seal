@@ -79,8 +79,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     Button logout_bt;
     @BindView(R.id.headImg_cir)
     ImageView headImg_cir;
-    @BindView(R.id.companyName)
-    TextView companyName;
+    @BindView(R.id.realName)
+    TextView realName;
     @BindView(R.id.phone)
     TextView phone;
     @BindView(R.id.use_Instructions_rl)
@@ -125,8 +125,6 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 Picasso.with(getActivity()).load(headPortraitPath).into(headImg_cir);
             }
         }
-        companyName.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
-        phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
     }
 
     private void setListener() {
@@ -239,4 +237,10 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        realName.setText(CommonUtil.getUserData(Objects.requireNonNull(getActivity())).getRealName());
+        phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
+    }
 }

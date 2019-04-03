@@ -20,6 +20,8 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.StampRecordData;
 import cn.fengwoo.sealsteward.bean.StampRecordList;
 import cn.fengwoo.sealsteward.entity.NearTime;
@@ -146,46 +149,13 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
      * 查询盖章记录请求
      */
     private void selectRecord(){
-        StampRecordData stampRecordData = new StampRecordData();
-        StampRecordData.Parem parem = new StampRecordData.Parem();
-        stampRecordData.setCurPage(1);
-        stampRecordData.setHasExportPdf(false);
-        stampRecordData.setHasPage(true);
-        stampRecordData.setPageSize(10);
-        try {
-            //时间转为时间戳
-            if (end != null && begin != null){
-                String endTime = DateUtils.dateToStamp2(end);
-                String startTime = DateUtils.dateToStamp2(begin);
-                parem.Parem(personId,endTime,sealId,startTime);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        stampRecordData.setParam(parem);
-
-        HttpUtil.sendDataAsync(SelectSealRecodeActivity.this, HttpUrl.STAMPRECORDAPPLYLIST, 2, null, stampRecordData, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Gson gson = new Gson();
-                ResponseInfo<List<StampRecordList>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<StampRecordList>>>() {
-                }.getType());
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-
-                } else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
-                }
-            }
-        });
-
+        intent = new Intent();
+        intent.putExtra("end",end);
+        intent.putExtra("begin",begin);
+        intent.putExtra("personId",personId);
+        intent.putExtra("sealId",sealId);
+        setResult(100,intent);
+        finish();
     }
     /**
      * 获取最近时间选择器

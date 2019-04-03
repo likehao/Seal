@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,8 +30,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.CompanyListAdapter;
+import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.CompanyInfo;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -59,8 +63,9 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private LoadingView loadingView;
     private CompanyListAdapter companyListAdapter;
     private ArrayList<CompanyInfo> arrayList;
-    private int pos = 0;   //初始选择
-    private String selectCompanyId;
+    private String pos;   //初始选择
+    private String userId;
+    private String selectCompanyId,selectCompanyName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,9 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         title_tv.setText("公司");
         add_ll.setVisibility(View.VISIBLE);
         loadingView = new LoadingView(this);
+        LoginData data = CommonUtil.getUserData(this);
+        pos = data.getCompanyId();
+        userId = data.getId();
     }
 
     private void setListener() {
@@ -117,7 +125,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     arrayList = new ArrayList<>();
                     for (int i = 0; i < responseInfo.getData().size(); i++) {
                         arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
-                                responseInfo.getData().get(i).getId()));
+                                responseInfo.getData().get(i).getId(),responseInfo.getData().get(i).getBelongUser()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -156,7 +164,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     /**
      * 选择切换或者查看公司详情dialog
      */
-    private void selectDialog(final int select) {
+    private void selectDialog(final String select,int selectPosition) {
         strings = new ArrayList<String>();
         strings.add("切换");
         strings.add("删除");
@@ -167,17 +175,64 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
                     //切换选中item
-                    companyListAdapter.changeSelected(select);
                     optionBottomDialog.dismiss();
-                    pos = select;
+                    //切换公司
+                    switchCompany(select);
+
                 } else if (position == 1) {
-                    deleteDialog(select); //提示删除
+                    deleteDialog(selectPosition); //提示删除
                     optionBottomDialog.dismiss();
                 } else {
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
-                    intent.putExtra("companyId",selectCompanyId);
+                    intent.putExtra("companyId", selectCompanyId);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    /**
+     * 切换公司
+     */
+    private void switchCompany(String select) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("newCompanyId",selectCompanyId);
+        HttpUtil.sendDataAsync(this, HttpUrl.SWITCHCOMPANY, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"切换公司错误错误错误错误!!!!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
+                .getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        //更新存储公司名称,ID
+                        LoginData data = CommonUtil.getUserData(MyCompanyActivity.this);
+                        if(data != null){
+                            data.setCompanyName(selectCompanyName);
+                            data.setCompanyId(selectCompanyId);
+                            CommonUtil.setUserData(MyCompanyActivity.this,data);
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                companyListAdapter.changeSelected(select);
+                                pos = select;
+                            }
+                        });
+                        Log.e("TAG","切换公司成功!!!!!!!!!!!!!");
+                    }
+                }else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
                 }
             }
         });
@@ -196,7 +251,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                 if (position == 0) {
 
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
-                    intent.putExtra("companyId",selectCompanyId);  //选中的公司ID
+                    intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
                     startActivity(intent);
                     optionBottomDialog.dismiss();
 
@@ -205,13 +260,46 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * 选择切换或者查看公司详情dialog
+     */
+    private void selectDialog(final String select) {
+        strings = new ArrayList<String>();
+        strings.add("切换");
+        strings.add("查看详情");
+        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(MyCompanyActivity.this, strings);
+        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    //切换选中item
+                    optionBottomDialog.dismiss();
+                    //切换公司
+                    switchCompany(select);
+
+                }else {
+                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent.putExtra("companyId", selectCompanyId);
+                    startActivity(intent);
+                    optionBottomDialog.dismiss();
+                }
+            }
+        });
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //赋值选择的那一条数据获取它的id
         selectCompanyId = arrayList.get(position).getId();
+        selectCompanyName = arrayList.get(position).getCompanyName();
+
         //判断点击的是被选中的还是未选中的公司
-        if (position != pos) {
-            selectDialog(position);
+        if (!selectCompanyId.equals(pos)) {
+            //判断此公司是否有属于哪个用户公司名下,相同则可删除
+            if (arrayList.get(position).getBelongUser().equals(userId)){
+                selectDialog(selectCompanyId,position);
+            }else {
+                selectDialog(selectCompanyId);
+            }
         } else {
             selectDialog();
         }

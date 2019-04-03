@@ -19,6 +19,7 @@ public class LoginData implements Serializable {
      "admin": true,
      "authStatus": true,
      "autoGraph": "string",
+     "code": "string",
      "companyId": "string",
      "companyName": "string",
      "funcIdList": [
@@ -48,6 +49,7 @@ public class LoginData implements Serializable {
     private Boolean admin;
     private Boolean authStatus;
     private String autoGraph;
+    private String code;
     private String companyId;
     private String companyName;
     private List<SystemFuncListInfo> funcIdList;
@@ -62,6 +64,9 @@ public class LoginData implements Serializable {
     private String token;
     private String userEmail;
 
+    public LoginData(){
+
+    }
     public List<SystemFuncListInfo> getFuncIdList() {
         return funcIdList;
     }
@@ -108,6 +113,14 @@ public class LoginData implements Serializable {
 
     public void setAutoGraph(String autoGraph) {
         this.autoGraph = autoGraph;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getCompanyId() {
@@ -205,6 +218,7 @@ public class LoginData implements Serializable {
                 ", admin=" + admin +
                 ", authStatus=" + authStatus +
                 ", autoGraph='" + autoGraph + '\'' +
+                ", code='" + code + '\'' +
                 ", companyId='" + companyId + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", funcIdList=" + funcIdList +

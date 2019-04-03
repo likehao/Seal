@@ -269,6 +269,14 @@ public class HttpUrl {
      * 上传记录图片
      */
     public static final String UPDATESTAMPIMAGE = "stamp/updatestampimage";
+    /**
+     * 切换公司
+     */
+    public static final String SWITCHCOMPANY = "company/switch";
+    /**
+     * 更新公司
+     */
+    public static final String UPDATECOMPANY = "company/updatecompany";
 
    /**
      * 上传历史记录

@@ -112,8 +112,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         changeView(0);  //启动默认显示主页面
         setListener();
 
-        timer = new Timer();
-        timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法
+      /*  timer = new Timer();
+        timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法*/
 
     }
 

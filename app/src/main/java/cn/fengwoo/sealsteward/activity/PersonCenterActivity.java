@@ -204,10 +204,16 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                             public void run() {
                                 realName_tv.setText(responseInfo.getData().getRealName());
                                 mobilePhone_tv.setText(responseInfo.getData().getMobilePhone());
-                                companyName_tv.setText(responseInfo.getData().getCompanyName());
+                             //   companyName_tv.setText(responseInfo.getData().getCompanyName());
+                                companyName_tv.setText(CommonUtil.getUserData(PersonCenterActivity.this).getCompanyName());
                                 department_tv.setText(responseInfo.getData().getOrgStructureName());
                                 job_tv.setText(responseInfo.getData().getJob());
-                                email_tv.setText(responseInfo.getData().getUserEmail());
+                                String email = responseInfo.getData().getUserEmail();
+                                if (email == null || email.equals("")){
+                                    email_tv.setText("未设置");
+                                }else {
+                                    email_tv.setText(responseInfo.getData().getUserEmail());
+                                }
                                 String headPortrait = responseInfo.getData().getHeadPortrait();
                                 if(headPortrait != null && !headPortrait.isEmpty()){
                                     Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
@@ -385,6 +391,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                         public void onSuccess(final File file) {
                             // TODO 压缩成功后调用，返回压缩后的图片文件
                             //上传图片
+                            loadingView.show();
                             HashMap<String, Object> hashMap = new HashMap<>();
                             Utils.log(file.length() + "");
                             hashMap.put("category", 1);
@@ -499,7 +506,6 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
 
     }
     private void updateHeadPortrait(final String fileName) {
-        loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("headPortraitId", fileName);
         HttpUtil.sendDataAsync(PersonCenterActivity.this, HttpUrl.UPDATEHEADPORTRAIT, 3, hashMap, null, new Callback() {

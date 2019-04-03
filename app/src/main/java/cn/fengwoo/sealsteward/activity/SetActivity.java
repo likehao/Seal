@@ -1,5 +1,7 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +22,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CleanMessageUtil;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -159,7 +162,17 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
      * 清除缓存
      */
     private void clearCache(){
-        CleanMessageUtil.clearAllCache(this);
-        showToast("缓存已清除");
+        CommonDialog commonDialog = new CommonDialog(this,"提示","缓存"+ cache_tv.getText().toString()+",清除后缓存记录将消失,继续清除？"
+        ,"确定");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CleanMessageUtil.clearAllCache(SetActivity.this);
+                showToast("缓存已清除");
+                cache_tv.setText("0k");
+                commonDialog.dialog.dismiss();
+            }
+        });
     }
 }
