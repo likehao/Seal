@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +25,6 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -41,15 +34,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.polidea.rxandroidble2.RxBleClient;
 import com.polidea.rxandroidble2.RxBleConnection;
-import com.polidea.rxandroidble2.RxBleDevice;
-import com.polidea.rxandroidble2.internal.RxBleLog;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
-import com.squareup.picasso.Picasso;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.white.easysp.EasySP;
@@ -61,23 +46,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.activity.AddCompanyActivity;
-import cn.fengwoo.sealsteward.activity.AddSealActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
-import cn.fengwoo.sealsteward.activity.GeographicalFenceActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
-import cn.fengwoo.sealsteward.activity.UseSealApplyActivity;
-import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
-import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.BannerData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.StampUploadRecordData;
@@ -95,18 +73,13 @@ import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
-import cn.qqtheme.framework.util.LogUtils;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Connection;
 import okhttp3.Response;
-import okhttp3.internal.Util;
 
-import static android.app.Activity.RESULT_OK;
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
@@ -410,9 +383,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 tv_stamp_reason.setText(stampReason);
                 tv_expired_time.setText(DateUtils.getDateString(Long.parseLong(expireTime)));
 
+
                 // 初始化首页的已盖次数和剩余次数
+                currentStampTimes = 0;
                 tv_times_done.setText(currentStampTimes + "");
                 tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+
+                Utils.log(tv_times_done.getText().toString());
 
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
 
@@ -463,20 +440,21 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Utils.log(result);
                 currentStampTimes++;
                 Utils.log(String.valueOf(currentStampTimes));
-                handler.sendEmptyMessage(66);
+//                handler.sendEmptyMessage(66);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        tv_times_done.setText(currentStampTimes + "");
-//                        Utils.log(String.valueOf("******************************************"));
-//                        tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
-//                        // 如果盖完了，次数为0时，断开蓝牙
-//                        if (tv_times_left.getText().toString().trim().equals("0")) {
-////                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
-//                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
-//                            ((MyApp) getApplication()).setConnectionObservable(null);
-//                            currentStampTimes = 0;
-//                        }
+                        tv_times_done.setText(currentStampTimes + "");
+                        Utils.log(String.valueOf("******************************************" + tv_times_done.getText()));
+//                        showToast("asdf");
+                        tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+                        // 如果盖完了，次数为0时，断开蓝牙
+                        if (tv_times_left.getText().toString().trim().equals("0")) {
+//                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                            ((MyApp) getApplication()).setConnectionObservable(null);
+                            currentStampTimes = 0;
+                        }
                     }
                 });
             }
@@ -859,7 +837,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 //                    Toast.makeText(GeographicalFenceActivity.this, "定位失败", Toast.LENGTH_LONG).show();
                     return;
                 }
-                currentAddress = reverseGeoCodeResult.getAddress();
+                currentAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
+
                 Utils.log(currentAddress);
                 tv_address.setText(currentAddress);
             }

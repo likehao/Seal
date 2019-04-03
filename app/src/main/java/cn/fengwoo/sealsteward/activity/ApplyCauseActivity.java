@@ -142,7 +142,9 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
 
             @Override
             public void onPasswordCorrectly() {
-                mKeypad.dismiss();
+                if (mKeypad != null) {
+                    mKeypad.dismiss();
+                }
             }
 
             @Override

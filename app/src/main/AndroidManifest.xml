@@ -105,6 +105,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" /> <!-- 点击edittext搜索防止键盘将底部导航顶上来 -->
 
         <activity
