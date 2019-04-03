@@ -480,5 +480,4 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             timerTask = null;
         }
     }
-
 }

@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "cn.fengwoo.sealsteward"
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 26
         versionCode 300
         versionName "3.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -230,6 +230,8 @@ dependencies {
 
     //adapter
     implementation 'com.github.mcxtzhang:all-base-adapter:V1.5.2'
+
+    implementation 'com.github.tianma8023:NetDetector:v0.2.0'
 
 //    implementation project(':alipay')
 }

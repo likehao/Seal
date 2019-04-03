@@ -37,6 +37,9 @@ import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleConnection;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.tianma.netdetector.lib.NetStateChangeObserver;
+import com.tianma.netdetector.lib.NetStateChangeReceiver;
+import com.tianma.netdetector.lib.NetworkType;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
 
@@ -69,6 +72,7 @@ import cn.fengwoo.sealsteward.utils.GlideImageLoader;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.NetUtil;
 import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -82,7 +86,7 @@ import okhttp3.Response;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class MainFragment extends Fragment implements View.OnClickListener ,NetStateChangeObserver {
 
     private View view;
     //设置图片集合
@@ -178,7 +182,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         initView();
         initBanner();
         setListener();
-        permissions();
+//        permissions();
         return view;
     }
 
@@ -312,6 +316,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         //开始轮播
         banner.startAutoPlay();
+        NetUtil.registerNetConnChangedReceiver(getActivity());
+        NetUtil.addNetConnChangedListener(netConnChangedListener);
+        NetStateChangeReceiver.registerObserver(this);
     }
 
     @Override
@@ -319,6 +326,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onStop();
         //结束轮播
         banner.stopAutoPlay();
+        NetUtil.unregisterNetConnChangedReceiver(getActivity());
+        NetUtil.removeNetConnChangedListener(netConnChangedListener);
     }
 
     private void getSystemTime() {
@@ -358,6 +367,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 // 显示ble设备名字
                 String bleName = data.getStringExtra("bleName");
                 tv_ble_name.setText(bleName);
+
+                // 开启定位
+                permissions();
 
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -779,6 +791,28 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onNetDisconnected() {
+        Utils.log("onNetDisconnected");
+        ((MyApp) getActivity().getApplication()).removeAllDisposable();
+        ((MyApp) getApplication()).setConnectionObservable(null);
+
+        currentStampTimes = 0;
+        tv_times_done.setText("0");
+        tv_times_left.setText("0");
+        electric_ll.setVisibility(View.GONE);
+        tv_ble_name.setText("暂无连接印章");
+        tv_stamp_reason.setText("暂无用印申请事由");
+        tv_expired_time.setText("暂无");
+        tv_address.setText("暂无定位信息");
+
+    }
+
+    @Override
+    public void onNetConnected(NetworkType networkType) {
+        Utils.log("onNetConnected");
+    }
+
 
     public class MyLocationListener implements BDLocationListener {
         @Override
@@ -875,4 +909,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 });
     }
 
+    private NetUtil.NetConnChangedListener netConnChangedListener = new NetUtil.NetConnChangedListener() {
+        @Override
+        public void onNetConnChanged(NetUtil.ConnectStatus connectStatus) {
+            Utils.log("connectStatus:" + connectStatus.toString());
+        }
+    };
 }

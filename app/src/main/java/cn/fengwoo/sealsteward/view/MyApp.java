@@ -14,6 +14,7 @@ import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.tianma.netdetector.lib.NetStateChangeReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,7 @@ public class MyApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        NetStateChangeReceiver.registerReceiver(this);
         Logger.addLogAdapter(new AndroidLogAdapter());
         disposableList = new ArrayList<>();
     }
@@ -86,5 +88,11 @@ public class MyApp extends MultiDexApplication {
         for (Disposable disposable : disposableList) {
             disposable.dispose();
         }
+    }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        // 取消BroadcastReceiver注册
+        NetStateChangeReceiver.unregisterReceiver(this);
     }
 }
