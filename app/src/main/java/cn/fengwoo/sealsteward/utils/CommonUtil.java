@@ -172,7 +172,7 @@ public class CommonUtil {
      */
     public static final byte SELECT = (byte) 0xAD;
     /**
-     * 盖章历史记录上传
+     * 擦除历史记录
      */
     public static final byte UPLOAD = (byte) 0xAE;
 
@@ -203,8 +203,8 @@ public class CommonUtil {
         return bytes;
     }
 
-    public static byte[] getDateTime() {
-        return getDateTime(new Date());
+    public static byte[] getDateTime(long timeStamp) {
+        return getDateTime(new Date(timeStamp));
     }
 
     /**

@@ -270,5 +270,15 @@ public class HttpUrl {
      */
     public static final String UPDATESTAMPIMAGE = "stamp/updatestampimage";
 
+   /**
+     * 上传历史记录
+     */
+    public static final String UPLOAD_HISTORY_RECORD = "stamp/uploadhistoryrecord";
+
+    /**
+     *  获取系统时间
+     */
+    public static final String SYSTEM_TIME = "user/systemtime";
+
 
 }

@@ -157,7 +157,6 @@ public class HttpUtil {
         if (request != null) {
             final Call call = client.newCall(request);
             call.enqueue(callback);
-
         }
     }
 

@@ -51,6 +51,7 @@ import cn.fengwoo.sealsteward.utils.ReplayingShare;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -337,7 +338,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        showLoadingView();
         Utils.log(scanResultsList.get(position).getBleDevice().getMacAddress());
 
         String thisMac = scanResultsList.get(position).getBleDevice().getMacAddress();
@@ -359,10 +360,14 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         ((MyApp)getApplication()).setConnectionObservable(connectionObservable);
 
         connectDisposable = connectionObservable // <-- autoConnect flag
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         rxBleConnection -> {
                             // All GATT operations are done through the rxBleConnection.
 
+                            cancelLoadingView();
+
+                            Utils.log("connected");
                             // sava dataProtocolVersion
                             // 根据 ble 名字来判断 dataProtocolVersion
                             if(scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")){
@@ -416,7 +421,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private Observable<RxBleConnection> prepareConnectionObservable( RxBleDevice bleDevice) {
         return bleDevice
-                .establishConnection(false)
+                .establishConnection(true)
                 .takeUntil(disconnectTriggerSubject)
                 .compose(ReplayingShare.instance());
     }

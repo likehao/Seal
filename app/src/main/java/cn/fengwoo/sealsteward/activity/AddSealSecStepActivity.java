@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.white.easysp.EasySP;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.filter.Filter;
@@ -250,7 +251,13 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
      */
     private void addSeal() {
         AddSealData addSealData = new AddSealData();
-        addSealData.setDataProtocolVersion("2");
+
+        if (EasySP.init(this).getString("dataProtocolVersion").equals("3")) {
+            addSealData.setDataProtocolVersion("3.0");
+        }else{
+            addSealData.setDataProtocolVersion("2.0");
+        }
+
         addSealData.setMac(macString);
         Utils.log(macString);
         addSealData.setName(nameString);

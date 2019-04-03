@@ -117,12 +117,12 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 if (!Utils.hasThePermission(this, Constants.permission19)) {
                     return;
                 }
-                intent = new Intent(this, SelectSinglePeopleActivity.class);
+                intent = new Intent(this, SelectSinglePeopleTypeOneActivity.class);
                 intent.putExtra("code", 1);
                 startActivityForResult(intent, SELECTPERSONREQUESTCODE);
                 break;
             case R.id.select_seal_rl:
-                intent = new Intent(this, SelectSealActivity.class);
+                intent = new Intent(this, SelectSealTypeOneActivity.class);
                 intent.putExtra("code", 1);
                 startActivityForResult(intent, SELECTSEALREQUESTCODE);
                 break;

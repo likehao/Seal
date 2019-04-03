@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -72,7 +73,10 @@ import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.GeographicalFenceActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
+import cn.fengwoo.sealsteward.activity.UseSealApplyActivity;
+import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
 import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.BannerData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
@@ -138,7 +142,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     TextView tv_expired_time;
     @BindView(R.id.tv_address)
     TextView tv_address;
-   @BindView(R.id.tv_ble_name)
+    @BindView(R.id.tv_ble_name)
     TextView tv_ble_name;
 
     LoadingView loadingView;
@@ -157,6 +161,37 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private String currentAddress = "";
     private OnGetGeoCoderResultListener listener;
 
+    private int unuploadedQuantity; // 未上传的盖章记录数量
+
+    private UploadHistoryRecord mUploadHistoryRecord = new UploadHistoryRecord();
+    private List<UploadHistoryRecord.RecordListBean> recordListBeanList = new ArrayList<>();
+
+    private String stampTime; // 盖章时间
+    private int stampSeqNumber; // 盖章序号
+    private int stampType; // 启动类型
+    private int userNumber; // 启动序号(密码代码）
+    private String systemTimeStampString;
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 66:
+                    tv_times_done.setText(currentStampTimes + "");
+                    Utils.log(String.valueOf("******************************************"));
+                    tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+                    // 如果盖完了，次数为0时，断开蓝牙
+                    if (tv_times_left.getText().toString().trim().equals("0")) {
+//                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+                        ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                        ((MyApp) getApplication()).setConnectionObservable(null);
+                        currentStampTimes = 0;
+                    }
+                    break;
+            }
+            return false;
+        }
+    });
 
     @Nullable
     @Override
@@ -313,6 +348,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         banner.stopAutoPlay();
     }
 
+    private void getSystemTime() {
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.SYSTEM_TIME, 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误!!!!!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<String> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<String>>() {
+                }
+                        .getType());
+                systemTimeStampString = responseInfo.getData();
+                Utils.log("timeStampString" + systemTimeStampString);
+                setNotification();
+            }
+        });
+
+
+    }
+
+
     @SuppressLint("CheckResult")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -327,7 +386,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 String bleName = data.getStringExtra("bleName");
                 tv_ble_name.setText(bleName);
 
-                setNotification();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        // 获取系统时间
+                        // 获取成功后setNotification();
+                        getSystemTime();
+
+                    }
+                }, 3000);
 
                 break;
 
@@ -394,17 +462,21 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 String result = response.body().string();
                 Utils.log(result);
                 currentStampTimes++;
+                Utils.log(String.valueOf(currentStampTimes));
+                handler.sendEmptyMessage(66);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tv_times_done.setText(currentStampTimes + "");
-                        tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
-                        // 如果盖完了，次数为0时，断开蓝牙
-                        if (tv_times_left.getText().toString().trim().equals("0")) {
-//                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
-                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
-                            ((MyApp) getApplication()).setConnectionObservable(null);
-                        }
+//                        tv_times_done.setText(currentStampTimes + "");
+//                        Utils.log(String.valueOf("******************************************"));
+//                        tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+//                        // 如果盖完了，次数为0时，断开蓝牙
+//                        if (tv_times_left.getText().toString().trim().equals("0")) {
+////                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+//                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
+//                            ((MyApp) getApplication()).setConnectionObservable(null);
+//                            currentStampTimes = 0;
+//                        }
                     }
                 });
             }
@@ -412,8 +484,61 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    private void uploadHistoryStampRecord() {
+        mUploadHistoryRecord.setSealId(EasySP.init(getActivity()).getString("currentSealId"));
+        mUploadHistoryRecord.setRecordList(recordListBeanList);
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.UPLOAD_HISTORY_RECORD, 2, null, mUploadHistoryRecord, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log(result);
+            }
+        });
+    }
+
+
     public void showToast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+    }
+
+    private void readRecord() {
+        byte[] targetNumber = new byte[]{1}; // 一条
+        ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.NOTIFYHISTORYUPLOAD, targetNumber).getBytes()))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                ));
+    }
+
+    // 擦除一条历史记录
+    private void deleteRecord() {
+        byte[] targetNumber = new byte[]{1}; // 一条
+        ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.UPLOAD, targetNumber).getBytes()))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                ));
     }
 
     @SuppressLint("CheckResult")
@@ -429,7 +554,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 //            RxBleDevice device = rxBleClient.getBleDevice(EasySP.init(getActivity()).getString("mac"));
 //            device.establishConnection(false);
 
-            byte[] byteTime = CommonUtil.getDateTime();
+            byte[] byteTime = CommonUtil.getDateTime(Long.parseLong(systemTimeStampString));
             byte[] eleByte = new byte[]{0};
 
             ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
@@ -443,7 +568,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                 .subscribe(
                                         characteristicValue -> {
                                             // Characteristic value confirmed.
-//                                                    Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                            Utils.log("shake hands:" + characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
                                         },
                                         throwable -> {
                                             // Handle an error here.
@@ -464,7 +589,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void doNext(long number) {
                                             Utils.log("a loop");
-                                            if(((MyApp) getActivity().getApplication()).getConnectionObservable() !=null){
+                                            if (((MyApp) getActivity().getApplication()).getConnectionObservable() != null) {
                                                 ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                                                         .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
                                                         .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -480,6 +605,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                             }
                                         }
                                     });
+
+                                    // 未上传的盖章记录数量
+                                    byte[] unuploaded = DataTrans.subByte(bytes, 6, 2);
+                                    unuploadedQuantity = DataTrans.bytesToInt(unuploaded, 0);
+                                    // 未上传的盖章记录数量不为0，开始读记录
+                                    if (unuploadedQuantity != 0) {
+                                        readRecord();
+                                    }
+
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
                                     String batteryString = Utils.bytesToHexString(bytes).substring(9, 11);
                                     int batteryInt = Integer.parseInt(batteryString, 16);
@@ -530,7 +664,53 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                     EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user", "success"));
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
                                     EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
+                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 0E A3")) {
+                                    // 成功读到一条记录
+                                    unuploadedQuantity--; // 未上传的盖章记录数量减一
+                                    // 解析数据，存入对象
 
+                                    // byte[3] 记录序号 暂时没用
+                                    byte[] recordSeq = DataTrans.subByte(bytes, 3, 1);
+                                    int recordSeqInt = DataTrans.bytesToInt(recordSeq, 0);
+                                    Utils.log("recordSeqInt" + recordSeqInt);
+
+                                    // byte[4] 启动类型（stampType）
+                                    byte[] stampTypeBytes = DataTrans.subByte(bytes, 4, 1);
+                                    stampType = DataTrans.bytesToInt(stampTypeBytes, 0);
+
+                                    // byte[5] - byte[8] 启动序号（userNumber）
+                                    byte[] userNumberBytes = DataTrans.subByte(bytes, 5, 4);
+                                    userNumber = DataTrans.bytesToInt(userNumberBytes, 0);
+
+                                    // byte[9] - byte[10] 盖章序号（stampSeqNumber）
+                                    byte[] stampSeqNumberBytes = DataTrans.subByte(bytes, 9, 2);
+                                    stampSeqNumber = DataTrans.bytesToInt(stampSeqNumberBytes, 0);
+
+                                    // byte[11] - byte[16] 盖章时间（stampTime）
+                                    byte[] stampTimeBytes = DataTrans.subByte(bytes, 11, 16);
+                                    String stampTimeHex = Utils.bytesToHexString(bytes).substring(33, 50);
+                                    stampTime = DateUtils.hexTimeToTimeStamp(stampTimeHex);
+
+                                    // 创建一次盖章记录
+                                    UploadHistoryRecord.RecordListBean recordListBean = new UploadHistoryRecord.RecordListBean();
+                                    recordListBean.setStampType(stampType);
+                                    recordListBean.setUserNumber(userNumber);
+                                    recordListBean.setStampSeqNumber(stampSeqNumber);
+                                    recordListBean.setStampTime(stampTime);
+                                    recordListBeanList.add(recordListBean);
+
+                                    // 准备抹掉一条
+                                    deleteRecord();
+
+                                    if (unuploadedQuantity != 0) {
+                                        // 还有未上传的记录
+                                        // 继续读记录
+                                        readRecord();
+                                    } else {
+                                        // unuploadedQuantity == 0; 此时没有未上传的记录
+                                        // 数据上传服务器
+                                        uploadHistoryStampRecord();
+                                    }
                                 }
                             },
                             throwable -> {
@@ -618,11 +798,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                                 Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
                             }
                     ));
-
-
         }
-
-
     }
 
 
@@ -686,39 +862,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 currentAddress = reverseGeoCodeResult.getAddress();
                 Utils.log(currentAddress);
                 tv_address.setText(currentAddress);
-
-
-//                locationAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
-//                if (locationAddress != null && !"".equals(locationAddress) && !"null".equals(locationAddress)) {
-
-//
-//                    //设定中心坐标
-//                    LatLng latLng = new LatLng(latitude, longitude);
-//                    //地图状态
-//                    MapStatus mapStatus = new MapStatus.Builder()
-//                            .target(latLng)
-//                            .zoom(18)
-//                            .build();
-//                    //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-//                    MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mapStatus);
-//                    //改变地图状态
-//                    baiduMap.setMapStatus(mapStatusUpdate);
-//                    //构建marker图标
-//                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.location);
-//                    //创建标记marker
-//                    MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(bitmapDescriptor);
-//                    //添加marker到地图
-////                    baiduMap.addOverlay(markerOptions);
-//
-//                    mEtAddress.setText(currentAddr);
-//
-//                    Utils.log("currentAddr" + currentAddr);
-//                 /*   //关闭定位
-//                    locationClient.stop();
-//                    locationClient.unRegisterLocationListener(locationListener);*/
-//                } else {
-//                    showToast("获取定位地址失败");
-//                }
             }
         };
         geoCoder.setOnGetGeoCodeResultListener(listener);
@@ -752,7 +895,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     }
                 });
     }
-
 
 
 }
