@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -188,7 +190,8 @@ public class WaitApplyAdapter extends BaseAdapter{
                                 .getType());
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
-                                ((Activity) context).runOnUiThread(new Runnable() {
+                                handler.sendEmptyMessage(code);
+                          /*      ((Activity) context).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         if (code == 1){
@@ -203,7 +206,7 @@ public class WaitApplyAdapter extends BaseAdapter{
                                             viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                                         }
                                     }
-                                });
+                                });*/
                             }
                         }
                     }
@@ -212,6 +215,28 @@ public class WaitApplyAdapter extends BaseAdapter{
         });
 
     }
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    viewHolder.item2_tv.setText("已关闭");
+                    viewHolder.item2_tv.setEnabled(false);
+                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                    break;
+                case 2:
+                    viewHolder.item2_tv.setText("已撤销");
+                    viewHolder.item2_tv.setEnabled(false);
+                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                    break;
+            }
+            return false;
+        }
+    });
+
     public static class ViewHolder{
         private TextView tv_cause;
         private TextView sealName_tv;

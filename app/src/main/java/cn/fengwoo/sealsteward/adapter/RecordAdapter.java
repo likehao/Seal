@@ -3,11 +3,14 @@ package cn.fengwoo.sealsteward.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -126,10 +129,13 @@ public class RecordAdapter extends BaseAdapter {
                                 .getType());
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
+                            //    handler.sendEmptyMessage(1);
                                 ((Activity) context).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         viewHolder.close.setText("已关闭");
+                                        notifyDataSetChanged();
+                                        Log.e("TAG","111111111111111111111111111111111111111");
                                         viewHolder.close.setEnabled(false);
                                         viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
                                     }
@@ -142,7 +148,21 @@ public class RecordAdapter extends BaseAdapter {
         });
         return view;
     }
-
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    viewHolder.close.setText("已关闭");
+                    notifyDataSetChanged();
+                    Log.e("TAG","111111111111111111111111111111111111111");
+                    viewHolder.close.setEnabled(false);
+                    viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
+                    break;
+            }
+            return false;
+        }
+    });
     class ViewHolder {
         private TextView couse;
         private TextView sealName;

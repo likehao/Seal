@@ -94,8 +94,8 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("添加用户");
-        edit_tv.setVisibility(View.VISIBLE);
-        edit_tv.setText("扫一扫");
+//        edit_tv.setVisibility(View.VISIBLE);
+//        edit_tv.setText("扫一扫");
         edit_tv.setOnClickListener(this);
         set_back_ll.setOnClickListener(this);
         mail_list_rl.setOnClickListener(this);

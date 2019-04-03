@@ -18,8 +18,7 @@ public class CompanyListAdapter extends BaseAdapter {
 
     private List<CompanyInfo> list;
     private Context context;
-    String companyId;
-    int mSelect;   //选中项
+    String companyId;  //选中项
 
     public CompanyListAdapter(List<CompanyInfo> list, Context context) {
         this.list = list;

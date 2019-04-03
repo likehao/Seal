@@ -268,14 +268,6 @@ public class NodeTreeAdapter extends BaseAdapter {
             }
         }
 
-
-
-
-
-
-
-
-
         if (isSingleSelection != 2) {  // 非多选状态时
             holder.checkBox.setChecked(selectArray.get(position));
         }

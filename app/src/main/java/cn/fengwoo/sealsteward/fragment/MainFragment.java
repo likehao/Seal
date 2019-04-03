@@ -42,14 +42,11 @@ import com.tianma.netdetector.lib.NetStateChangeReceiver;
 import com.tianma.netdetector.lib.NetworkType;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -872,7 +869,6 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
                     return;
                 }
                 currentAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
-
                 Utils.log(currentAddress);
                 tv_address.setText(currentAddress);
             }

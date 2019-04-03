@@ -16,27 +16,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageData;
-import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.fragment.MainFragment;
@@ -112,8 +102,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         changeView(0);  //启动默认显示主页面
         setListener();
 
-      /*  timer = new Timer();
-        timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法*/
+        timer = new Timer();
+        timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法
 
     }
 
@@ -405,10 +395,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                         .getType());
                 assert responseInfo != null;
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
 
+                if (responseInfo.getCode() == 1002 || responseInfo.getCode() == 1003 || responseInfo.getCode() == 1004){
                     //关闭定时器
-               //     stopTimer();
+                    int i = responseInfo.getCode();
+                    stopTimer();
+                    //清除用户信息
+                    LoginData.logout(MainActivity.this);
+                    //下线直接跳转登录界面
+                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                    intent.putExtra("loginstatus","timeout");
+                    intent.putExtra("info",responseInfo.getMessage());
+                    startActivity(intent);
+              //      MainActivity.this.onBackPressed();// 销毁所有activity退出主程序
+
+                }
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     for (MessageData messageData : responseInfo.getData()) {
                         int msgNum = messageData.getUnreadCount();
                         sum += msgNum;
@@ -421,7 +423,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 msgSum_tv.setVisibility(View.VISIBLE);
                                 msgSum_tv.setText(sum + "");
                                 sum = 0;
-                            }else {
+                            } else {
                                 msgSum_tv.setVisibility(View.GONE);
                                 msgSum_tv.setText(sum + "");
                             }
@@ -466,11 +468,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-       // getMessageNum();
+        // getMessageNum();
 
     }
 
-    private void  stopTimer(){
+    private void stopTimer() {
         if (timer != null) {
             timer.cancel();
             timer = null;

@@ -191,6 +191,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("failTime",time);
                         intent.putExtra("sealId",sealId);
                         startActivity(intent);
+                        finish();
                         Log.e("ATG","用印申请check成功!!!!!!!");
                     }
                 }else {
