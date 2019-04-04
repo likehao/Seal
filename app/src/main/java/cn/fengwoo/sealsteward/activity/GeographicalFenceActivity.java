@@ -1,5 +1,7 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
@@ -38,6 +40,9 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.hjq.toast.ToastUtils;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +58,7 @@ import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -90,7 +96,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
     private String currentAddr;
     private String selectAddress;
     private LatLng selectPoint;
-    private int radioInt = 50;
+    private int radioInt = 1000;
     private String scopeString, sealIdString,longitudeString,latitudeString,addressString;
     private OnGetGeoCoderResultListener listener;
 
@@ -124,7 +130,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                 selectPoint = point;
                 baiduMap.clear();
                 // 添加圆
-                OverlayOptions ooCircle = new CircleOptions().fillColor(0xAAFFFF00)
+                OverlayOptions ooCircle = new CircleOptions().fillColor(0xAA6495ED)
                         .center(point).stroke(new Stroke(5, 0xAA00FF00))
                         .radius(radioInt);
                 baiduMap.addOverlay(ooCircle);
@@ -137,25 +143,34 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
             }
         });
 
-         latLng = new LatLng(Double.parseDouble(latitudeString), Double.parseDouble(longitudeString));
+        if(longitudeString!=null){
+            latLng = new LatLng(Double.parseDouble(latitudeString), Double.parseDouble(longitudeString));
 
-        OverlayOptions ooCircle1 = new CircleOptions().fillColor(0xAAFFFF00)
-                .center(latLng).stroke(new Stroke(5, 0xAA00FF00))
-                .radius(Integer.parseInt(scopeString));
-        baiduMap.addOverlay(ooCircle1);
-
+            OverlayOptions ooCircle1 = new CircleOptions().fillColor(0xAA6495ED)
+                    .center(latLng).stroke(new Stroke(5, 0xAA00FF00))
+                    .radius(Integer.parseInt(scopeString));
+            baiduMap.addOverlay(ooCircle1);
+        }
     }
 
     private void initData() {
-        mWidthSeekBar.setProgress(50);
+        mWidthSeekBar.setProgress(1);
         scopeString = getIntent().getStringExtra("scope");
         sealIdString = getIntent().getStringExtra("sealId");
 
         longitudeString = getIntent().getStringExtra("longitude");
         latitudeString = getIntent().getStringExtra("latitude");
         addressString = getIntent().getStringExtra("address");
-        if (addressString.length() > 1) {
+
+
+
+
+        if (addressString != null && addressString.length() > 1) {
             currentAddr = addressString;
+            mEtAddress.setText(currentAddr);
+
+            mWidthSeekBar.setProgress(Integer.parseInt(scopeString)/1000);
+            tv_radius.setText(Integer.parseInt(scopeString)/1000 + "km");
         }
     }
 
@@ -237,18 +252,47 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         locationOption.setOpenAutoNotifyMode(3000, 1, LocationClientOption.LOC_SENSITIVITY_HIGHT);
 
         locationClient.setLocOption(locationOption);
-
-        if (addressString.length() > 1) {
+//        ToastUtils.show("点击地图设置初始位置");
+        if (addressString != null && addressString.length() > 1) {
             MapStatus.Builder builder = new MapStatus.Builder();
             LatLng latLng = new LatLng(Double.parseDouble(latitudeString), Double.parseDouble(longitudeString));
-            builder.target(latLng).zoom(18.0f);
+            builder.target(latLng).zoom(14.0f);
             baiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         } else {
             //开始定位
-            locationClient.start();
+            ToastUtils.show("点击地图设置初始位置");
+            ToastUtils.show("点击地图设置初始位置");
+            // 开启定位
+            permissions();
         }
-
     }
+
+
+    /**
+     * 申请权限
+     */
+    @SuppressLint("CheckResult")
+    private void permissions() {
+        RxPermissions rxPermissions = new RxPermissions(this);
+        //添加需要的权限
+        rxPermissions.requestEachCombined(Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe(new Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) throws Exception {
+                        if (permission.granted) {
+                            Utils.log("accept");
+                            locationClient.start();
+                        } else if (permission.shouldShowRequestPermissionRationale) {
+                            showToast("您已拒绝权限申请");
+                        } else {
+                            showToast("您已拒绝权限申请，请前往设置>应用管理>权限管理打开权限");
+                        }
+                    }
+                });
+    }
+
 
     /**
      * 定位回调
@@ -285,6 +329,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
             //获取经纬度信息
             latitude = bdLocation.getLatitude();
             longitude = bdLocation.getLongitude();
+            latLng = new LatLng(latitude, longitude);
             getAddress(latitude, longitude);
         }
 
@@ -373,7 +418,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                     //地图状态
                     MapStatus mapStatus = new MapStatus.Builder()
                             .target(latLng)
-                            .zoom(18)
+                            .zoom(14)
                             .build();
                     //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
                     MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mapStatus);
@@ -425,8 +470,8 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        radioInt = progress;
-        tv_radius.setText(progress + "m");
+        radioInt = progress*1000;
+        tv_radius.setText(progress + "km");
 
         // init
         baiduMap.clear();
@@ -435,11 +480,11 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
             selectPoint = latLng;
         }
 
+        Utils.log(progress +"");
         // 添加圆
-        OverlayOptions ooCircle = new CircleOptions().fillColor(0xAAFFFF00)
+        OverlayOptions ooCircle = new CircleOptions().fillColor(0xAA6495ED)
                 .center(selectPoint).stroke(new Stroke(5, 0xAA00FF00))
-                .radius(progress);
-
+                .radius(radioInt);
 
         baiduMap.addOverlay(ooCircle);
     }

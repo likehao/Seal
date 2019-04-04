@@ -218,14 +218,26 @@
                     android:text="@string/Position"
                     android:textColor="@color/black" />
 
+                <com.weiwangcn.betterspinner.library.BetterSpinner
+                    android:id="@+id/spinner_job"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="190dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:hint=""
+                    android:textSize="12sp" />
+
                 <EditText
-                    android:id="@+id/tv_job"
+                    android:id="@+id/et_job"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="90dp"
+                    android:layout_marginEnd="90dp"
                     android:background="@null"
                     android:hint="@string/please_input_position"
                     android:textSize="12sp" />
+
 
             </RelativeLayout>
         </LinearLayout>

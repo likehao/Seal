@@ -10,7 +10,7 @@
         android:padding="10dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="0dp"
         android:src="@drawable/expand" />
 
 

@@ -11,6 +11,8 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.weiwangcn.betterspinner.library.BetterSpinner;
 import com.white.easysp.EasySP;
 
 import org.json.JSONException;
@@ -72,14 +75,20 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     private Intent intent;
     @BindView(R.id.edit_tv)
     TextView edit_tv;
-    @BindView(R.id.tv_job)
-    TextView tv_job;
+    @BindView(R.id.spinner_job)
+    BetterSpinner spinner_job;
+    @BindView(R.id.et_job)
+    EditText et_job;
     @BindView(R.id.add_user_next_Bt)
     Button add_user_next_Bt;
 
     private String departmentId;
     private String departmentName;
     private LoadingView loadingView;
+
+    private static final String[] COUNTRIES = new String[]{
+            "经理", "普通员工"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +111,16 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         select_organizational_rl.setOnClickListener(this);
         add_user_next_Bt.setOnClickListener(this);
         loadingView = new LoadingView(this);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+        spinner_job.setAdapter(adapter);
+        spinner_job.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                et_job.setText(COUNTRIES[position]);
+                spinner_job.setText("");
+            }
+        });
     }
 
     @Override
@@ -143,7 +162,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         addUserInfo.setOrgStructureId(departmentId);
         addUserInfo.setOrgStructureName(departmentName);
         addUserInfo.setMobilePhone(phone_number_et.getText().toString().replace(" ", ""));
-        addUserInfo.setJob(tv_job.getText().toString());
+        addUserInfo.setJob(spinner_job.getText().toString());
         addUserInfo.setCode(code_et.getText().toString());
 
         HttpUtil.sendDataAsync(AddUserActivity.this, HttpUrl.ADD_USER, 2, null, addUserInfo, new Callback() {
@@ -182,7 +201,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                                     intent.putExtra("last_activity", AddUserActivity.class.getSimpleName());
                                     startActivity(intent);
                                     finish();
-                                }else {
+                                } else {
                                     finish();
                                 }
                             }
@@ -261,6 +280,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
 
     /**
      * 获取联系人电话
+     *
      * @param cursor
      * @return
      */
@@ -287,7 +307,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                     int typeindex = phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
                     int phone_type = phone.getInt(typeindex);
                     String phoneNumber = phone.getString(index);
-                    switch (phone_type){
+                    switch (phone_type) {
                         case 2:
                             result = phoneNumber;
                             break;

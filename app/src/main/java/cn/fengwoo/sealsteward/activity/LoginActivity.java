@@ -336,8 +336,8 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     } else {
                         targetPermissionJson = new Gson().toJson(user.getFuncIdList());
                     }
-                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
-                    Utils.log(targetPermissionJson);
+//                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
+//                    Utils.log(targetPermissionJson);
 
                     EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
                     EasySP.init(LoginActivity.this).putBoolean("isAdmin", loginResponseInfo.getData().getAdmin());

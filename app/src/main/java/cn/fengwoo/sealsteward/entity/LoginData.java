@@ -52,7 +52,7 @@ public class LoginData implements Serializable {
     private String code;
     private String companyId;
     private String companyName;
-    private List<SystemFuncListInfo> funcIdList;
+    private List<String> funcIdList;
     private String headPortrait;
     private String id;
     private String job;
@@ -67,11 +67,11 @@ public class LoginData implements Serializable {
     public LoginData(){
 
     }
-    public List<SystemFuncListInfo> getFuncIdList() {
+    public List<String> getFuncIdList() {
         return funcIdList;
     }
 
-    public void setFuncIdList(List<SystemFuncListInfo> funcIdList) {
+    public void setFuncIdList(List<String> funcIdList) {
         this.funcIdList = funcIdList;
     }
 

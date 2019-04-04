@@ -233,5 +233,10 @@ dependencies {
 
     implementation 'com.github.tianma8023:NetDetector:v0.2.0'
 
+    // spinner
+    implementation 'com.weiwangcn.betterspinner:library:1.1.0'
+
+    implementation 'com.hjq:toast:5.8'
+
 //    implementation project(':alipay')
 }

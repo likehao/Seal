@@ -1,8 +1,11 @@
 package cn.fengwoo.sealsteward.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.multidex.MultiDexApplication;
 
+import com.hjq.toast.ToastUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.polidea.rxandroidble2.RxBleConnection;
@@ -81,6 +84,7 @@ public class MyApp extends MultiDexApplication {
         super.onCreate();
         NetStateChangeReceiver.registerReceiver(this);
         Logger.addLogAdapter(new AndroidLogAdapter());
+        ToastUtils.init(this);
         disposableList = new ArrayList<>();
     }
 
@@ -89,10 +93,28 @@ public class MyApp extends MultiDexApplication {
             disposable.dispose();
         }
     }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
         // 取消BroadcastReceiver注册
         NetStateChangeReceiver.unregisterReceiver(this);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.fontScale != 1)//非默认值
+            getResources();
+        super.onConfigurationChanged(newConfig);
+    }
+
+    public Resources getResources() {
+        Resources res = super.getResources();
+        if (res.getConfiguration().fontScale != 1) {//非默认值
+            Configuration newConfig = new Configuration();
+            newConfig.setToDefaults();//设置默认
+            res.updateConfiguration(newConfig, res.getDisplayMetrics());
+        }
+        return res;
     }
 }

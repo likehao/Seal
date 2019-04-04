@@ -307,6 +307,11 @@ public class NodeTreeAdapter extends BaseAdapter {
             }
         });
 
+        // 展开
+        if (node.get_type() == 1 || node.get_type() == 2) {
+            expandOrCollapse(position);
+        }
+
         convertView.setPadding(node.get_level()*retract,5,5,5);
         return convertView;
     }

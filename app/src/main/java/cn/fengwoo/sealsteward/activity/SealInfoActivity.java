@@ -107,8 +107,8 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     TextView tvCompany;
     @BindView(R.id.tv_department)
     TextView tvDepartment;
-    @BindView(R.id.rl_choose_department)
-    RelativeLayout rlChooseDepartment;
+//    @BindView(R.id.rl_choose_department)
+//    RelativeLayout rlChooseDepartment;
     @BindView(R.id.rl_examine)
     RelativeLayout rlExamine;
     @BindView(R.id.sb_limit)
@@ -170,7 +170,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         Utils.setUneditable(etSealName);
         Utils.setUneditable(etSealNumber);
         Utils.setUneditable(etUseRange);
-        rlChooseDepartment.setClickable(false);
+//        rlChooseDepartment.setClickable(false);
         rlSetLimit.setClickable(false);
         sbLimit.setEnabled(false);
         sbTransDepartment.setEnabled(false);
@@ -181,7 +181,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         Utils.setEditable(etSealName);
         Utils.setEditable(etSealNumber);
         Utils.setEditable(etUseRange);
-        rlChooseDepartment.setClickable(true);
+//        rlChooseDepartment.setClickable(true);
         rlSetLimit.setClickable(true);
         sbLimit.setEnabled(true);
         sbTransDepartment.setEnabled(true);
@@ -282,17 +282,17 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @OnClick({R.id.rl_pic, R.id.rl_choose_department, R.id.rl_examine, R.id.rl_set_limit, R.id.edit_tv})
+    @OnClick({R.id.rl_pic, R.id.rl_examine, R.id.rl_set_limit, R.id.edit_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_pic:
 //                selectDialog();
                 permissions();
                 break;
-            case R.id.rl_choose_department:
-                intent = new Intent(this, OrganizationalManagementActivity.class);
-                startActivityForResult(intent, 123);
-                break;
+//            case R.id.rl_choose_department:
+//                intent = new Intent(this, OrganizationalManagementActivity.class);
+//                startActivityForResult(intent, 123);
+//                break;
             case R.id.rl_examine:
                 if (!Utils.hasThePermission(this, Constants.permission14)) {
                     return;
@@ -312,12 +312,13 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 if (sbLimit.isChecked()) {
                     intent = new Intent(this, GeographicalFenceActivity.class);
                     intent.putExtra("sealId", responseInfo.getData().getId());
-                    intent.putExtra("scope", responseInfo.getData().getSealEnclosure().getScope() + "");
-
-                    intent.putExtra("longitude", responseInfo.getData().getSealEnclosure().getLongitude() + "");
-                    intent.putExtra("latitude", responseInfo.getData().getSealEnclosure().getLatitude() + "");
-                    intent.putExtra("address", responseInfo.getData().getSealEnclosure().getAddress());
-                    startActivity(intent);
+                    if (responseInfo.getData().getSealEnclosure() != null) {
+                        intent.putExtra("scope", responseInfo.getData().getSealEnclosure().getScope() + "");
+                        intent.putExtra("longitude", responseInfo.getData().getSealEnclosure().getLongitude() + "");
+                        intent.putExtra("latitude", responseInfo.getData().getSealEnclosure().getLatitude() + "");
+                        intent.putExtra("address", responseInfo.getData().getSealEnclosure().getAddress());
+                    }
+                      startActivity(intent);
                 }
 
                 break;

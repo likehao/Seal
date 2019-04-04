@@ -134,10 +134,11 @@ public class RecordAdapter extends BaseAdapter {
                                     @Override
                                     public void run() {
                                         viewHolder.close.setText("已关闭");
-                                        notifyDataSetChanged();
                                         Log.e("TAG","111111111111111111111111111111111111111");
                                         viewHolder.close.setEnabled(false);
                                         viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                        recordData.get(position).setApproveStatus(5);
+                                        notifyDataSetChanged();
                                     }
                                 });
                             }

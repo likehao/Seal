@@ -42,11 +42,14 @@ import com.tianma.netdetector.lib.NetStateChangeReceiver;
 import com.tianma.netdetector.lib.NetworkType;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -69,7 +72,7 @@ import cn.fengwoo.sealsteward.utils.GlideImageLoader;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.utils.NetUtil;
+//import cn.fengwoo.sealsteward.utils.NetUtil;
 import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -83,7 +86,7 @@ import okhttp3.Response;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
-public class MainFragment extends Fragment implements View.OnClickListener ,NetStateChangeObserver {
+public class MainFragment extends Fragment implements View.OnClickListener, NetStateChangeObserver {
 
     private View view;
     //设置图片集合
@@ -146,21 +149,23 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
     private int userNumber; // 启动序号(密码代码）
     private String systemTimeStampString;
 
+    private boolean stampTag = false;
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 66:
-                    tv_times_done.setText(currentStampTimes + "");
-                    Utils.log(String.valueOf("******************************************"));
-                    tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
-                    // 如果盖完了，次数为0时，断开蓝牙
-                    if (tv_times_left.getText().toString().trim().equals("0")) {
-//                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
-                        ((MyApp) getActivity().getApplication()).removeAllDisposable();
-                        ((MyApp) getApplication()).setConnectionObservable(null);
-                        currentStampTimes = 0;
-                    }
+//                    tv_times_done.setText(currentStampTimes + "");
+//                    Utils.log(String.valueOf("******************************************"));
+//                    tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+//                    // 如果盖完了，次数为0时，断开蓝牙
+//                    if (tv_times_left.getText().toString().trim().equals("0")) {
+////                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+//                        ((MyApp) getActivity().getApplication()).removeAllDisposable();
+//                        ((MyApp) getApplication()).setConnectionObservable(null);
+//                        currentStampTimes = 0;
+//                    }
                     break;
             }
             return false;
@@ -313,8 +318,8 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
         super.onStart();
         //开始轮播
         banner.startAutoPlay();
-        NetUtil.registerNetConnChangedReceiver(getActivity());
-        NetUtil.addNetConnChangedListener(netConnChangedListener);
+//        NetUtil.registerNetConnChangedReceiver(getActivity());
+//        NetUtil.addNetConnChangedListener(netConnChangedListener);
         NetStateChangeReceiver.registerObserver(this);
     }
 
@@ -323,8 +328,8 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
         super.onStop();
         //结束轮播
         banner.stopAutoPlay();
-        NetUtil.unregisterNetConnChangedReceiver(getActivity());
-        NetUtil.removeNetConnChangedListener(netConnChangedListener);
+//        NetUtil.unregisterNetConnChangedReceiver(getActivity());
+//        NetUtil.removeNetConnChangedListener(netConnChangedListener);
     }
 
     private void getSystemTime() {
@@ -386,6 +391,19 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
                 if (resultCode != Constants.TO_WANT_SEAL) {
                     return;
                 }
+
+                stampTag = true;
+
+                // 再次开启定位
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+//                        permissions();
+                        mLocationClient.start();
+                        handler.postDelayed(this, 3000);
+                    }
+                }, 3000);
+
                 String expireTime = data.getStringExtra("expireTime");
                 availableCount = data.getStringExtra("availableCount");
                 stampReason = data.getStringExtra("stampReason");
@@ -462,6 +480,7 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
 //                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
                             ((MyApp) getActivity().getApplication()).removeAllDisposable();
                             ((MyApp) getApplication()).setConnectionObservable(null);
+                            stampTag = false;
                             currentStampTimes = 0;
                         }
                     }
@@ -793,7 +812,13 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
         Utils.log("onNetDisconnected");
         ((MyApp) getActivity().getApplication()).removeAllDisposable();
         ((MyApp) getApplication()).setConnectionObservable(null);
+        stampTag = false;
 
+        initWhenDisconnectBle();
+
+    }
+
+    private void initWhenDisconnectBle() {
         currentStampTimes = 0;
         tv_times_done.setText("0");
         tv_times_left.setText("0");
@@ -802,7 +827,6 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
         tv_stamp_reason.setText("暂无用印申请事由");
         tv_expired_time.setText("暂无");
         tv_address.setText("暂无定位信息");
-
     }
 
     @Override
@@ -815,8 +839,32 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
         @Override
         public void onReceiveLocation(BDLocation location) {
             currentLocation = location;
-            // 获取currentAddress
-            getAddress(location.getLatitude(), location.getLongitude());
+
+
+            if (stampTag) {
+                // 正在盖章，计算距离
+                double distance = Utils.distanceOfTwoPoints(location.getLatitude(), location.getLongitude(), Double.parseDouble(EasySP.init(getActivity()).getString("latitude")), Double.parseDouble(EasySP.init(getActivity()).getString("longitude")));
+                Utils.log(distance +"");
+                double scope = Double.parseDouble(EasySP.init(getActivity()).getString("scope"));
+
+                if (distance*1000 > scope) {
+                    // 大于半径，断开
+
+                    Utils.log("distance > scope");
+                    ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                    ((MyApp) getApplication()).setConnectionObservable(null);
+                    stampTag = false;
+
+                    initWhenDisconnectBle();
+                    handler.removeCallbacksAndMessages(null);
+                    showToast("超出地理围栏，设备已断开");
+                }
+            }else{
+                // 获取currentAddress
+                getAddress(location.getLatitude(), location.getLongitude());
+                Utils.log(location.getLatitude() + "");
+            }
+
             mLocationClient.stop();
         }
     }
@@ -905,10 +953,10 @@ public class MainFragment extends Fragment implements View.OnClickListener ,NetS
                 });
     }
 
-    private NetUtil.NetConnChangedListener netConnChangedListener = new NetUtil.NetConnChangedListener() {
-        @Override
-        public void onNetConnChanged(NetUtil.ConnectStatus connectStatus) {
-            Utils.log("connectStatus:" + connectStatus.toString());
-        }
-    };
+//    private NetUtil.NetConnChangedListener netConnChangedListener = new NetUtil.NetConnChangedListener() {
+//        @Override
+//        public void onNetConnChanged(NetUtil.ConnectStatus connectStatus) {
+//            Utils.log("connectStatus:" + connectStatus.toString());
+//        }
+//    };
 }
