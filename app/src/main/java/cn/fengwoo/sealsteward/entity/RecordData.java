@@ -2,7 +2,7 @@ package cn.fengwoo.sealsteward.entity;
 
 public class RecordData {
 
-    private String couse;
+    private String cause;
     private String sealName;
     private String sealPeople;
     private Integer sealCount;
@@ -19,12 +19,12 @@ public class RecordData {
     private String headPortrait;
     private String orgStructureName;
 
-    public RecordData(String id, String couse, String sealName, String sealPeople,
+    public RecordData(String id, String cause, String sealName, String sealPeople,
                       Integer sealCount, Integer restCount, Integer uploadPhotoNum,
                       String failTime, String sealTime, String sealAddress, Integer approveStatus
     , String applyPdf , String stampPdf , String stampRecordPdf, String headPortrait, String orgStructureName) {
         this.id = id;
-        this.couse = couse;
+        this.cause = cause;
         this.sealName = sealName;
         this.sealPeople = sealPeople;
         this.sealCount = sealCount;
@@ -42,12 +42,12 @@ public class RecordData {
 
     }
 
-    public String getCouse() {
-        return couse;
+    public String getCause() {
+        return cause;
     }
 
-    public void setCouse(String couse) {
-        this.couse = couse;
+    public void setCause(String cause) {
+        this.cause = cause;
     }
     public Integer getSealCount() {
         return sealCount;

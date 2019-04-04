@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +41,7 @@ import okhttp3.Response;
 /**
  * 我的申请adapter
  */
-public class WaitApplyAdapter extends BaseAdapter{
+public class WaitApplyAdapter extends BaseAdapter {
 
     private Context context;
     private List<WaitApplyData> waitApplyData;
@@ -48,11 +49,12 @@ public class WaitApplyAdapter extends BaseAdapter{
     private Intent intent;
     ViewHolder viewHolder;
 
-    public WaitApplyAdapter(Context context, List<WaitApplyData> waitApplyData,int code) {
+    public WaitApplyAdapter(Context context, List<WaitApplyData> waitApplyData, int code) {
         this.context = context;
         this.waitApplyData = waitApplyData;
         this.code = code;
     }
+
     @Override
     public int getCount() {
         return waitApplyData.size();
@@ -71,84 +73,123 @@ public class WaitApplyAdapter extends BaseAdapter{
     @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        if (view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.wait_apply,null);
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.wait_apply, null);
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
-        }else {
+        } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-            viewHolder.tv_cause.setText(waitApplyData.get(position).getCause());
-            viewHolder.sealName_tv.setText(waitApplyData.get(position).getSealName());
-            viewHolder.failTime_tv.setText(waitApplyData.get(position).getFailTime());
-            viewHolder.apply_count_tv.setText(waitApplyData.get(position).getApplyCount()+"");
-            viewHolder.applyTime_tv.setText(waitApplyData.get(position).getApplyTime());
-            int status = waitApplyData.get(position).getApproveStatus();
-            String id =  waitApplyData.get(position).getId();
-            if (code == 2){ //审批中
-                viewHolder.item2_tv.setText("审批进度");
-                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
-                viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent = new Intent(context, ApprovalActivity.class);
-                        context.startActivity(intent);
-                    }
-                });
-            }else if (code == 3){  //已审批
-                viewHolder.item1_tv.setVisibility(View.VISIBLE);
-                viewHolder.item2_tv.setText("关闭单据");
-                viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
-                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
-                statusView(status);
-                //查看记录
-                viewHolder.item1_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Integer status = waitApplyData.get(position).getApproveStatus();
-                        intent = new Intent(context, SeeRecordActivity.class);
-                        intent.putExtra("status",status);    //传递状态值弹出不同的popuwindow
-                        context.startActivity(intent);
-                    }
-                });
-                //关闭单据
-                viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        commonPostRequest(id,1);
-                    }
-                });
-            }else if (code == 4){  //已驳回
-                viewHolder.item2_tv.setText("重提");
-                viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
-                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
-                viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        viewHolder.tv_cause.setText(waitApplyData.get(position).getCause());
+        viewHolder.sealName_tv.setText(waitApplyData.get(position).getSealName());
+        viewHolder.failTime_tv.setText(waitApplyData.get(position).getFailTime());
+        viewHolder.apply_count_tv.setText(waitApplyData.get(position).getApplyCount() + "");
+        viewHolder.applyTime_tv.setText(waitApplyData.get(position).getApplyTime());
+        viewHolder.apply_person_tv.setText(waitApplyData.get(position).getApplyUserName());
+        viewHolder.apply_department_tv.setText(waitApplyData.get(position).getOrgStructureName());
+        int status = waitApplyData.get(position).getApproveStatus();
+        String id = waitApplyData.get(position).getId();
+        if (code == 2) { //审批中
+            viewHolder.item2_tv.setText("审批进度");
+            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
+            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    intent = new Intent(context, ApprovalActivity.class);
+                    context.startActivity(intent);
+                }
+            });
+        } else if (code == 3) {  //已审批(用印申请)
+
+            seeRecordCloseBill(status, position, id);
+
+        } else if (code == 4) {  //已驳回
+
+            viewHolder.item2_tv.setText("重提");
+            viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
+            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
+            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 //                        intent = new Intent(context, ApprovalActivity.class);
 //                        context.startActivity(intent);
-                    }
-                });
-            }else {
-                statusView(status);
-                viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        commonPostRequest(id,2);  //撤销
-                    }
-                });
+                }
+            });
+        } else if (code == 5) {  //已审批(审批记录)
+            viewHolder.apply_person_ll.setVisibility(View.VISIBLE);
+            viewHolder.apply_department_ll.setVisibility(View.VISIBLE);
+            seeRecordCloseBill(status, position, id);
+
+        } else {
+            statusView(status);
+            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    commonPostRequest(id, 2, position);  //撤销
+                }
+            });
+        }
+
+        //关闭单据
+        viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonPostRequest(id, 1, position);
+
             }
+        });
         return view;
 
     }
 
     /**
+     * 查看记录关闭单据（已审批,已驳回）
+     */
+    private void seeRecordCloseBill(int status, int position, String id) {
+
+        viewHolder.item1_tv.setVisibility(View.VISIBLE);
+        viewHolder.item2_tv.setText("关闭单据");
+        viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
+        viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
+        statusView(status);
+        //查看记录
+        viewHolder.item1_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer status = waitApplyData.get(position).getApproveStatus();
+                intent = new Intent(context, SeeRecordActivity.class);
+                intent.putExtra("status", status);    //传递状态值弹出不同的popuwindow
+                intent.putExtra("id", id);
+                intent.putExtra("count", waitApplyData.get(position).getSealCount());
+                intent.putExtra("restCount", waitApplyData.get(position).getRestCount());
+                intent.putExtra("photoNum", waitApplyData.get(position).getUploadPhotoNum());
+                intent.putExtra("headPortrait", waitApplyData.get(position).getHeadPortrait());
+                intent.putExtra("sealName", waitApplyData.get(position).getSealName());
+                intent.putExtra("orgStructureName", waitApplyData.get(position).getOrgStructureName());
+                intent.putExtra("sealPerson", waitApplyData.get(position).getSealPeople());
+                context.startActivity(intent);
+            }
+        });
+/*
+        //关闭单据
+        viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonPostRequest(id, 1, position);
+
+            }
+        });*/
+
+    }
+
+    /**
      * 根据状态值显示每条数据的状态
+     *
      * @param status
      */
     @SuppressLint("ResourceAsColor")
-    private void statusView(int status){
-        switch (status){
+    private void statusView(int status) {
+        switch (status) {
             case 5:
                 viewHolder.item2_tv.setText("已关闭");
                 viewHolder.item2_tv.setEnabled(false);
@@ -163,81 +204,86 @@ public class WaitApplyAdapter extends BaseAdapter{
                 break;
         }
     }
+
     /**
      * 共同方法（Param）
      * 关闭单据（5）,已撤销（4）
      */
-    private void commonPostRequest(String id,int code){
-                //关闭单据
-        viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+    private void commonPostRequest(String id, int code, int position) {
+        //关闭单据
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("applyId", id);
+        HttpUtil.sendDataAsync((Activity) context, HttpUrl.APPLICLOSE, 1, hashMap, null, new Callback() {
             @Override
-            public void onClick(View v) {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("applyId", id);
-                HttpUtil.sendDataAsync((Activity) context, HttpUrl.APPLICLOSE, 1, hashMap, null, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-                    }
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
 
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
-                        }
-                                .getType());
-                        if (responseInfo.getCode() == 0) {
-                            if (responseInfo.getData()) {
-                                handler.sendEmptyMessage(code);
-                          /*      ((Activity) context).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (code == 1){
-                                            viewHolder.item2_tv.setText("已关闭");
-                                            viewHolder.item2_tv.setEnabled(false);
-                                            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
-                                            viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
-                                        }else {
-                                            viewHolder.item2_tv.setText("已撤销");
-                                            viewHolder.item2_tv.setEnabled(false);
-                                            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
-                                            viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
-                                        }
-                                    }
-                                });*/
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        // handler.sendEmptyMessage(code);
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == 1) {
+                                    viewHolder.item2_tv.setText("已关闭");
+                                    viewHolder.item2_tv.setEnabled(false);
+                                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                                    waitApplyData.get(position).setApproveStatus(5);
+                                    notifyDataSetChanged();
+                                } else {
+                                    viewHolder.item2_tv.setText("已撤销");
+                                    viewHolder.item2_tv.setEnabled(false);
+                                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                                    waitApplyData.get(position).setApproveStatus(4);
+                                    notifyDataSetChanged();
+                                }
                             }
-                        }
+                        });
                     }
-                });
+                }
             }
         });
+
 
     }
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     viewHolder.item2_tv.setText("已关闭");
                     viewHolder.item2_tv.setEnabled(false);
                     viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+
+                    notifyDataSetChanged();
                     break;
                 case 2:
                     viewHolder.item2_tv.setText("已撤销");
                     viewHolder.item2_tv.setEnabled(false);
                     viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+
+                    notifyDataSetChanged();
                     break;
             }
             return false;
         }
     });
 
-    public static class ViewHolder{
+    public static class ViewHolder {
         private TextView tv_cause;
         private TextView sealName_tv;
         private TextView failTime_tv;
@@ -245,8 +291,12 @@ public class WaitApplyAdapter extends BaseAdapter{
         private TextView applyTime_tv;
         private TextView item1_tv;
         private TextView item2_tv;
+        private LinearLayout apply_person_ll;
+        private LinearLayout apply_department_ll;
+        private TextView apply_person_tv;
+        private TextView apply_department_tv;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             tv_cause = view.findViewById(R.id.tv_cause);
             sealName_tv = view.findViewById(R.id.sealName_tv);
             failTime_tv = view.findViewById(R.id.failTime_tv);
@@ -254,6 +304,10 @@ public class WaitApplyAdapter extends BaseAdapter{
             applyTime_tv = view.findViewById(R.id.applyTime_tv);
             item1_tv = view.findViewById(R.id.item1_tv);
             item2_tv = view.findViewById(R.id.item2_tv);
+            apply_person_ll = view.findViewById(R.id.apply_person_ll);
+            apply_department_ll = view.findViewById(R.id.apply_department_ll);
+            apply_person_tv = view.findViewById(R.id.apply_person_tv);
+            apply_department_tv = view.findViewById(R.id.apply_department_tv);
         }
     }
 }

@@ -122,9 +122,6 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
-                            Looper.loop();
                         }
 
                     }

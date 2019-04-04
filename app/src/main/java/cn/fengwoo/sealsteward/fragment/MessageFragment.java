@@ -195,9 +195,7 @@ public class MessageFragment extends Fragment implements View.OnClickListener {
 
                         } else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            Log.e("TAG",responseInfo.getMessage());
                         }
 
                     }

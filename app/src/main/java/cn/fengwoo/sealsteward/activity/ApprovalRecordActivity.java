@@ -16,6 +16,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.TabFragmentAdapter;
+import cn.fengwoo.sealsteward.fragment.ApplyRecordOneFragment;
+import cn.fengwoo.sealsteward.fragment.ApplyRecordTwoFragment;
 import cn.fengwoo.sealsteward.fragment.FourthMyApplyFragment;
 import cn.fengwoo.sealsteward.fragment.ThirdMyApplyFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
@@ -55,8 +57,8 @@ public class ApprovalRecordActivity extends BaseActivity implements View.OnClick
         fragmentList = new ArrayList<Fragment>();
         titleList.add("已审批");
         titleList.add("已驳回");
-        fragmentList.add(new ThirdMyApplyFragment());
-        fragmentList.add(new FourthMyApplyFragment());
+        fragmentList.add(new ApplyRecordOneFragment());
+        fragmentList.add(new ApplyRecordTwoFragment());
         approval_viewPager.setAdapter(new TabFragmentAdapter(fragmentManager,ApprovalRecordActivity.this,fragmentList,titleList));
         approval_tabLayout.setupWithViewPager(approval_viewPager);//此方法就是让tablayout和ViewPager联动
     }

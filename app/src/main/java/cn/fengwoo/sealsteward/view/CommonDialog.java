@@ -13,7 +13,7 @@ import cn.fengwoo.sealsteward.R;
 public class CommonDialog {
 
     public AlertDialog dialog;
-    private TextView title,msg,cancel,ok;
+    public TextView title,msg,cancel,ok;
     public CommonDialog(Context context, String titleMsg, String message,String sure){
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.dialog));
         View view = View.inflate(context,R.layout.common_dialog,null);

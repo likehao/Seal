@@ -9,13 +9,17 @@ public class WaitMeAgreeData implements Serializable {
     private String department;
     private String applyTime;
     private String sealName;
+    private Integer applyCount;
+    private String failTime;
 
-    public WaitMeAgreeData(String cause, String applyPerson, String department, String applyTime, String sealName) {
+    public WaitMeAgreeData(String cause, String applyPerson, String department, String applyTime, String sealName,Integer applyCount,String failTime) {
         this.cause = cause;
         this.applyPerson = applyPerson;
         this.department = department;
         this.applyTime = applyTime;
         this.sealName = sealName;
+        this.applyCount = applyCount;
+        this.failTime = failTime;
     }
 
     public String getCause() {
@@ -56,6 +60,23 @@ public class WaitMeAgreeData implements Serializable {
 
     public void setSealName(String sealName) {
         this.sealName = sealName;
+    }
+
+
+    public Integer getApplyCount() {
+        return applyCount;
+    }
+
+    public void setApplyCount(Integer applyCount) {
+        this.applyCount = applyCount;
+    }
+
+    public String getFailTime() {
+        return failTime;
+    }
+
+    public void setFailTime(String failTime) {
+        this.failTime = failTime;
     }
 
 }

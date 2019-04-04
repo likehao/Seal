@@ -84,7 +84,7 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.couse.setText(recordData.get(position).getCouse());
+        viewHolder.couse.setText(recordData.get(position).getCause());
         viewHolder.sealName.setText(recordData.get(position).getSealName());
         viewHolder.sealPeople.setText(recordData.get(position).getSealPeople());
         viewHolder.sealCount.setText(recordData.get(position).getSealCount() + "");
@@ -129,7 +129,7 @@ public class RecordAdapter extends BaseAdapter {
                                 .getType());
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
-                            //    handler.sendEmptyMessage(1);
+
                                 ((Activity) context).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -149,21 +149,7 @@ public class RecordAdapter extends BaseAdapter {
         });
         return view;
     }
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    viewHolder.close.setText("已关闭");
-                    notifyDataSetChanged();
-                    Log.e("TAG","111111111111111111111111111111111111111");
-                    viewHolder.close.setEnabled(false);
-                    viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
-                    break;
-            }
-            return false;
-        }
-    });
+
     class ViewHolder {
         private TextView couse;
         private TextView sealName;

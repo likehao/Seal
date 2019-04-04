@@ -76,6 +76,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         });
         waitMeAgreeDataList = new ArrayList<>();
         wait_me_agree_lv.setOnItemClickListener(this);
+        wait_me_agree_apply_smartRL.autoRefresh();
     }
 
     /**
@@ -109,7 +110,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                                 //时间戳转为时间
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitMeAgreeDataList.add(new WaitMeAgreeData(app.getApplyCause(),app.getApplyUserName()
-                                        ,app.getOrgStructureName(),applyTime,app.getSealName()));
+                                        ,app.getOrgStructureName(),applyTime,app.getSealName(),app.getApplyCount(),app.getExpireTime()));
                             }
                             //请求数据
                             runOnUiThread(new Runnable() {
@@ -147,6 +148,12 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this,UseSealApplyActivity.class);
         intent.putExtra("waitAgree",1);
+        intent.putExtra("sealName",waitMeAgreeDataList.get(position).getSealName());
+        intent.putExtra("count",waitMeAgreeDataList.get(position).getApplyCount());
+        //时间戳转时间
+        String failTime = DateUtils.getDateString(Long.parseLong(waitMeAgreeDataList.get(position).getFailTime()));
+        intent.putExtra("failTime",failTime);
+        intent.putExtra("cause",waitMeAgreeDataList.get(position).getCause());
         startActivity(intent);
     }
 }

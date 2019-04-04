@@ -48,9 +48,12 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
 import cn.fengwoo.sealsteward.view.AddPopuwindow;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
+import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -102,8 +105,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         changeView(0);  //启动默认显示主页面
         setListener();
 
-//        timer = new Timer();
-//        timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法
+        timer = new Timer();
+        timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法
 
     }
 
@@ -402,13 +405,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     stopTimer();
                     //清除用户信息
                     LoginData.logout(MainActivity.this);
+                    //断开蓝牙
+                    ((MyApp)getApplication()).removeAllDisposable();
+                    ((MyApp) getApplication()).setConnectionObservable(null);
                     //下线直接跳转登录界面
                     Intent intent = new Intent(MainActivity.this,LoginActivity.class);
                     intent.putExtra("loginstatus","timeout");
                     intent.putExtra("info",responseInfo.getMessage());
                     startActivity(intent);
-              //      MainActivity.this.onBackPressed();// 销毁所有activity退出主程序
-
+                    System.exit(0);
+                 //   onBackPressed();// 销毁所有activity退出主程序
+                    Log.e("ATG","下线成功!!!!!!!!!!!!!!!");
                 }
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     for (MessageData messageData : responseInfo.getData()) {
@@ -432,9 +439,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Log.e("TAG", "获取消息成功!!!!!!!!!!!!!!!!");
 
                 } else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
+                    Log.e("TAG",responseInfo.getMessage());
                 }
 
             }
@@ -458,6 +463,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         long backPressed = System.currentTimeMillis();
         if (backPressed - lastBackPressed > QUIT_INTERVAL) {
             lastBackPressed = backPressed;
+
             showToast("再按一次退出");
         } else {
             finish();

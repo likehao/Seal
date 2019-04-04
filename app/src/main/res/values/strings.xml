@@ -107,6 +107,7 @@
     <string name="see_seal_address">查看盖章位置</string>
     <string name="apply_type">申请类型</string>
     <string name="apply_time">申请次数</string>
+    <string name="apply_person">申请人</string>
     <string name="Next_step">下一步</string>
     <string name="file_number">文件份数</string>
     <string name="Application_reason">申请事由</string>

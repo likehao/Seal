@@ -58,6 +58,7 @@ import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.functions.Consumer;
@@ -103,7 +104,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         initView();
         readPermissions();
         initData();
-    //    dialogOut();
+        dialogOut();
     }
 
     private void initView() {
@@ -437,34 +438,22 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     /**
      * 弹出下线通知提示框
      */
-    private void dialogOut(){
+    private void dialogOut() {
         Intent intent = this.getIntent();
         String timeoutStr = intent.getStringExtra("loginstatus");
         String infoStr = intent.getStringExtra("info");
         if ("timeout".equals(timeoutStr)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.Theme_Transparent));
-            View v = View.inflate(this, R.layout.common_dialog, null);
-            TextView ok = v.findViewById(R.id.ok);
-            TextView msg = v.findViewById(R.id.tv_msg);
-            TextView cancel = v.findViewById(R.id.cancel);
-            TextView title = v.findViewById(R.id.tv_dialog_title);
-            title.setVisibility(View.VISIBLE);
-            title.setText("下线通知");
-            cancel.setVisibility(View.GONE);
-            msg.setText(infoStr);
-            AlertDialog dialog = builder.create();  //创建下线通知的提示框
-            //  dialog.setTitle("下线通知");
-            dialog.setView(v, 0, 0, 0, 0);
-            dialog.show();
-            ok.setOnClickListener(new View.OnClickListener() {
+            CommonDialog commonDialog = new CommonDialog(this, "下线通知", infoStr, "确定");
+            commonDialog.cancel.setVisibility(View.GONE);
+            commonDialog.showDialog();
+            commonDialog.setClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
+                    commonDialog.dialog.dismiss();
                 }
             });
         }
     }
-
     /**
      * 申请权限
      */

@@ -41,6 +41,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -65,7 +66,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<CompanyInfo> arrayList;
     private String pos;   //初始选择
     private String userId;
-    private String selectCompanyId,selectCompanyName;
+    private String selectCompanyId, selectCompanyName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +126,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     arrayList = new ArrayList<>();
                     for (int i = 0; i < responseInfo.getData().size(); i++) {
                         arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
-                                responseInfo.getData().get(i).getId(),responseInfo.getData().get(i).getBelongUser()));
+                                responseInfo.getData().get(i).getId(), responseInfo.getData().get(i).getBelongUser()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -164,7 +165,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     /**
      * 选择切换或者查看公司详情dialog
      */
-    private void selectDialog(final String select,int selectPosition) {
+    private void selectDialog(final String select, int selectPosition) {
         strings = new ArrayList<String>();
         strings.add("切换");
         strings.add("删除");
@@ -196,28 +197,29 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
      * 切换公司
      */
     private void switchCompany(String select) {
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("newCompanyId",selectCompanyId);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("newCompanyId", selectCompanyId);
         HttpUtil.sendDataAsync(this, HttpUrl.SWITCHCOMPANY, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("TAG",e+"切换公司错误错误错误错误!!!!!!!!!!!!!!!!!!");
+                Log.e("TAG", e + "切换公司错误错误错误错误!!!!!!!!!!!!!!!!!!");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
-                .getType());
-                if (responseInfo.getCode() == 0){
-                    if (responseInfo.getData()){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
                         //更新存储公司名称,ID
                         LoginData data = CommonUtil.getUserData(MyCompanyActivity.this);
-                        if(data != null){
+                        if (data != null) {
                             data.setCompanyName(selectCompanyName);
                             data.setCompanyId(selectCompanyId);
-                            CommonUtil.setUserData(MyCompanyActivity.this,data);
+                            CommonUtil.setUserData(MyCompanyActivity.this, data);
                         }
 
                         runOnUiThread(new Runnable() {
@@ -227,12 +229,14 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                                 pos = select;
                             }
                         });
-                        Log.e("TAG","切换公司成功!!!!!!!!!!!!!");
+                        //断开蓝牙
+                        ((MyApp) getApplication()).removeAllDisposable();
+                        ((MyApp) getApplication()).setConnectionObservable(null);
+
+                        Log.e("TAG", "切换公司成功!!!!!!!!!!!!!");
                     }
-                }else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
+                } else {
+                    Log.e("ATG", responseInfo.getMessage());
                 }
             }
         });
@@ -277,7 +281,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     //切换公司
                     switchCompany(select);
 
-                }else {
+                } else {
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
                     startActivity(intent);
@@ -286,6 +290,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             }
         });
     }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //赋值选择的那一条数据获取它的id
@@ -295,9 +300,9 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         //判断点击的是被选中的还是未选中的公司
         if (!selectCompanyId.equals(pos)) {
             //判断此公司是否有属于哪个用户公司名下,相同则可删除
-            if (arrayList.get(position).getBelongUser().equals(userId)){
-                selectDialog(selectCompanyId,position);
-            }else {
+            if (arrayList.get(position).getBelongUser().equals(userId)) {
+                selectDialog(selectCompanyId, position);
+            } else {
                 selectDialog(selectCompanyId);
             }
         } else {

@@ -51,6 +51,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CircleImageView;
 import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -227,7 +228,11 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                             startActivity(intent);
                             commonDialog.dialog.dismiss();
                             Objects.requireNonNull(getActivity()).finish();
+                            //断开蓝牙
+                            ((MyApp)getActivity().getApplication()).removeAllDisposable();
+                            ((MyApp) getActivity().getApplication()).setConnectionObservable(null);
                             Log.e("TAG","退出成功.........");
+
                         }else {
                             Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
                         }

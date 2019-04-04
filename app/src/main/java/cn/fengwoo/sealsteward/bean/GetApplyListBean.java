@@ -58,6 +58,7 @@ public class GetApplyListBean implements Serializable {
     private String stampPdf;
     private List<String> stampRecordImgList;
     private String stampRecordPdf;
+
     public String getApplyCause() {
         return applyCause;
     }
