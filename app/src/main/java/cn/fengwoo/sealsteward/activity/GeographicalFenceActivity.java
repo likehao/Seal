@@ -33,6 +33,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Stroke;
+import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -118,12 +119,14 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         //初始化地图
         baiduMap = mapView.getMap();
 
+        UiSettings settings=baiduMap.getUiSettings();
+        settings.setAllGesturesEnabled(true);   // false 关闭一切手势操作
+        settings.setOverlookingGesturesEnabled(false);//屏蔽双指下拉时变成3D地图
+        settings.setRotateGesturesEnabled(false);//屏蔽旋转
+
         title_tv.setText("设置地理围栏");
         initLocationOption();
         mWidthSeekBar.setOnSeekBarChangeListener(this);
-
-
-
 
         baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             public void onMapClick(LatLng point) {
@@ -261,7 +264,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         } else {
             //开始定位
             ToastUtils.show("点击地图设置初始位置");
-            ToastUtils.show("点击地图设置初始位置");
+//            ToastUtils.show("点击地图设置初始位置");
             // 开启定位
             permissions();
         }
