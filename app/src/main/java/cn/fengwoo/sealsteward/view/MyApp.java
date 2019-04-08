@@ -9,6 +9,7 @@ import com.hjq.toast.ToastUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.polidea.rxandroidble2.RxBleConnection;
+import com.polidea.rxandroidble2.RxBleDevice;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -33,6 +34,16 @@ public class MyApp extends MultiDexApplication {
     private Observable<RxBleConnection> connectionObservable;
     public Disposable connectDisposable;
     public List<Disposable> disposableList;
+    public RxBleDevice rxBleDevice;
+
+
+    public RxBleDevice getRxBleDevice() {
+        return rxBleDevice;
+    }
+
+    public void setRxBleDevice(RxBleDevice rxBleDevice) {
+        this.rxBleDevice = rxBleDevice;
+    }
 
 
     public List<Disposable> getDisposableList() {

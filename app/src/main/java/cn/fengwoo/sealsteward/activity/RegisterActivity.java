@@ -23,6 +23,7 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.FromToJson;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -110,6 +111,7 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
+                        Utils.log(result);
                         Gson gson = new Gson();
                         ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
                         }.getType());

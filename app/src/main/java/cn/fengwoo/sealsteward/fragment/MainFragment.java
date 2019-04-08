@@ -34,6 +34,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.polidea.rxandroidble2.RxBleClient;
 import com.polidea.rxandroidble2.RxBleConnection;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -53,6 +54,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.AddSealActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
@@ -77,12 +79,14 @@ import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import rx.Scheduler;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
@@ -150,6 +154,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private String systemTimeStampString;
 
     private boolean stampTag = false;
+
+    private boolean isConnect = false; // 是否连接蓝牙
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -370,8 +376,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 String bleName = data.getStringExtra("bleName");
                 tv_ble_name.setText(bleName);
 
-                // 开启定位
-                permissions();
+//                // 开启定位
+//                permissions();
 
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -399,8 +405,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     @Override
                     public void run() {
 //                        permissions();
-                        mLocationClient.start();
-                        handler.postDelayed(this, 3000);
+                        if (stampTag) {
+                            mLocationClient.start();
+                            handler.postDelayed(this, 3000);
+                        }
                     }
                 }, 3000);
 
@@ -465,24 +473,24 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Utils.log(result);
-                currentStampTimes++;
-                Utils.log(String.valueOf(currentStampTimes));
+//                currentStampTimes++;
+//                Utils.log(String.valueOf(currentStampTimes));
 //                handler.sendEmptyMessage(66);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tv_times_done.setText(currentStampTimes + "");
-                        Utils.log(String.valueOf("******************************************" + tv_times_done.getText()));
-//                        showToast("asdf");
-                        tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
-                        // 如果盖完了，次数为0时，断开蓝牙
-                        if (tv_times_left.getText().toString().trim().equals("0")) {
-//                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
-                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
-                            ((MyApp) getApplication()).setConnectionObservable(null);
-                            stampTag = false;
-                            currentStampTimes = 0;
-                        }
+//                        tv_times_done.setText(currentStampTimes + "");
+//                        Utils.log(String.valueOf("******************************************" + tv_times_done.getText()));
+////                        showToast("asdf");
+//                        tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+//                        // 如果盖完了，次数为0时，断开蓝牙
+//                        if (tv_times_left.getText().toString().trim().equals("0")) {
+////                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+//                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
+//                            ((MyApp) getApplication()).setConnectionObservable(null);
+//                            stampTag = false;
+//                            currentStampTimes = 0;
+//                        }
                     }
                 });
             }
@@ -547,8 +555,63 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 ));
     }
 
+    private void refreshTimes() {
+        currentStampTimes++;
+        Utils.log(String.valueOf(currentStampTimes));
+
+        tv_times_done.setText(currentStampTimes + "");
+        Utils.log(String.valueOf("******************************************" + tv_times_done.getText()));
+//                        showToast("asdf");
+        tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+        // 如果盖完了，次数为0时，断开蓝牙
+        if (tv_times_left.getText().toString().trim().equals("0")) {
+//                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
+            ((MyApp) getActivity().getApplication()).removeAllDisposable();
+            ((MyApp) getApplication()).setConnectionObservable(null);
+            stampTag = false;
+            currentStampTimes = 0;
+        }
+        if (tv_times_left.getText().toString().trim().equals("1")) {
+            setAdmin0();
+        }
+    }
+
     @SuppressLint("CheckResult")
     private void setNotification() {
+        isConnect = true;
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // 开启定位
+                permissions();
+            }
+        });
+
+        ((MyApp) getActivity().getApplication()).getRxBleDevice().observeConnectionStateChanges()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        connectionState -> {
+                            // Process your way.
+                            isConnect = false;
+
+                            Utils.log("connectionState:" + connectionState);
+                            showToast("蓝牙已断开");
+
+                            ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                            ((MyApp) getApplication()).setConnectionObservable(null);
+                            stampTag = false;
+
+                            initWhenDisconnectBle();
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                );
+
+
+
         if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
 
             // 三期
@@ -637,7 +700,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     String timeHexString = allString.substring(15, 32);
                                     String timeStamp = DateUtils.hexTimeToTimeStamp(timeHexString);
                                     Utils.log(timeStamp);
-
+                                    refreshTimes();
                                     uploadStampRecord(stampNumber, timeStamp);
 
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A1 00")) {
@@ -792,10 +855,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     EventBus.getDefault().post(new MessageEvent("super_ble_launch", "failure"));
                                 } else if (strReturned.equals("C1")) {
                                     // 盖章次数加一
-                                    Utils.log("盖章次数加一");
+//                                    Utils.log("盖章次数加一");
 //                                    currentStampTimes++;
 //                                    tv_times_done.setText(currentStampTimes + "");
 //                                    tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+
+                                    refreshTimes();
                                     uploadStampRecord(0, null);
                                 }
                             },
@@ -805,6 +870,26 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             }
                     ));
         }
+    }
+
+    /***
+     * 已识别为普通用户
+     */
+    private void setAdmin0() {
+        String superManager = "ADMIN0";
+        byte[] superManagerBytes = superManager.getBytes();
+        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, superManagerBytes))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                ));
     }
 
     @Override
@@ -918,7 +1003,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
                 currentAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
                 Utils.log(currentAddress);
-                tv_address.setText(currentAddress);
+                if (isConnect) {
+                    tv_address.setText(currentAddress);
+                }
             }
         };
         geoCoder.setOnGetGeoCodeResultListener(listener);

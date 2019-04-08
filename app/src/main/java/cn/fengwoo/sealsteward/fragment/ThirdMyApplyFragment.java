@@ -109,7 +109,7 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
                                         ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()));
                             }
                             //请求数据
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            (getActivity()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,3);

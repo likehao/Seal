@@ -232,6 +232,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 if (!Utils.isConnect(getActivity())) {
                     return;
                 }
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+                    Utils.showToast(getActivity(),"二期印章无此功能");
+                    return;
+                }
                 intent = new Intent(getActivity(), VoiceActivity.class);
                 startActivity(intent);
                 break;

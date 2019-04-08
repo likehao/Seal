@@ -370,6 +370,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
         RxBleDevice device = rxBleClient.getBleDevice(macAddress);
+        ((MyApp)getApplication()).setRxBleDevice(device);
 
         connectionObservable = prepareConnectionObservable(device);
 
