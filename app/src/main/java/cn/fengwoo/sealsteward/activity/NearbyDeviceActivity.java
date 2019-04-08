@@ -322,7 +322,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         SealData.SealEnclosureBean sealEnclosureBean = new SealData.SealEnclosureBean();
         for (SealData sealData : responseInfo.getData()) {
             if (sealData.getMac().equals(thisMac)) {
-                sealEnclosureBean = sealData.getSealEnclosure();
+                if (sealData != null) {
+                    sealEnclosureBean = sealData.getSealEnclosure();
+                }
             }
         }
         return sealEnclosureBean;
@@ -391,11 +393,11 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             if (!isAddNewSeal) {
                                 // 不是添加新的印章，就是连接原来的seal,保存sealId
                                 EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
-
-                                EasySP.init(this).putString("scope", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getScope()+"");
-                                EasySP.init(this).putString("latitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLatitude() +"");
-                                EasySP.init(this).putString("longitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLongitude()+"");
-
+                                if (getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()) != null) {
+                                    EasySP.init(this).putString("scope", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getScope()+"");
+                                    EasySP.init(this).putString("latitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLatitude() +"");
+                                    EasySP.init(this).putString("longitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLongitude()+"");
+                                }
                             }
 
                             if (isAddNewSeal) {

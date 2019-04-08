@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +74,15 @@ public class NodeTreeAdapter extends BaseAdapter {
 
         this.isSingleSelection = isSingleSelection;
         this.typeWillShowCB = typeWillShowCB;
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for(int i =0;i<linkedList.size();i++) {
+                    expandOrCollapse(i);
+                }
+            }
+        },400);
     }
 
     /**
@@ -307,10 +317,11 @@ public class NodeTreeAdapter extends BaseAdapter {
             }
         });
 
-//        // 展开
-//        if (node.get_type() == 1 || node.get_type() == 2) {
+        // 展开
+        if (node.get_type() == 1 || node.get_type() == 2) {
 //            expandOrCollapse(position);
-//        }
+//            holder.imageView.performClick();
+        }
 
         convertView.setPadding(node.get_level()*retract,5,5,5);
         return convertView;
