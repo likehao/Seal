@@ -18,6 +18,7 @@
         android:background="@color/white">
 
         <RelativeLayout
+            android:id="@+id/apply_result_rl"
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
@@ -30,6 +31,7 @@
                 android:textColor="@color/black"/>
 
             <TextView
+                android:id="@+id/result_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="同意"
@@ -67,11 +69,14 @@
             android:background="@color/background">
 
             <EditText
+                android:id="@+id/apply_option_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="top|start"
-                android:hint="@string/please_input_suggestion"
+                android:text="同意"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -90,10 +95,12 @@
             android:layout_marginTop="15dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:background="@color/background"
             android:layout_marginBottom="10dp"/>
     </LinearLayout>
 
         <Button
+            android:id="@+id/apply_confirm_bt"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"

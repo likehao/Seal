@@ -45,6 +45,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.use_apply_sign_iv)
     ImageView use_apply_sign_iv;
     private Intent intent;
+    String applyId;
 
 
     @Override
@@ -104,6 +105,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         Integer count = intent.getIntExtra("count",0);
         String failTime = intent.getStringExtra("failTime");
         String cause = intent.getStringExtra("cause");
+        applyId = intent.getStringExtra("applyId");
         detailSealNameTv.setText(sealName);
         detailCountTv.setText(count+"");
         detailFailTimeTv.setText(failTime);
@@ -122,7 +124,9 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.go_approval_tv:
                 intent = new Intent(UseSealApplyActivity.this, ApprovalConfirmActivity.class);
+                intent.putExtra("applyId",applyId);
                 startActivity(intent);
+                finish();
                 break;
 
         }

@@ -110,7 +110,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                                 //时间戳转为时间
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitMeAgreeDataList.add(new WaitMeAgreeData(app.getApplyCause(),app.getApplyUserName()
-                                        ,app.getOrgStructureName(),applyTime,app.getSealName(),app.getApplyCount(),app.getExpireTime()));
+                                        ,app.getOrgStructureName(),applyTime,app.getSealName(),app.getApplyCount(),app.getExpireTime(),app.getId()));
                             }
                             //请求数据
                             runOnUiThread(new Runnable() {
@@ -154,6 +154,13 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         String failTime = DateUtils.getDateString(Long.parseLong(waitMeAgreeDataList.get(position).getFailTime()));
         intent.putExtra("failTime",failTime);
         intent.putExtra("cause",waitMeAgreeDataList.get(position).getCause());
+        intent.putExtra("applyId",waitMeAgreeDataList.get(position).getApplyId());
         startActivity(intent);
     }
+
+  /*  @Override
+    protected void onResume() {
+        super.onResume();
+        wait_me_agree_apply_smartRL.autoRefresh();
+    }*/
 }

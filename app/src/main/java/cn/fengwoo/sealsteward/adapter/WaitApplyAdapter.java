@@ -122,12 +122,12 @@ public class WaitApplyAdapter extends BaseAdapter {
 
         } else {
             statusView(status);
-            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+          /*  viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     commonPostRequest(id, 2, position);  //撤销
                 }
-            });
+            });*/
         }
 
         //关闭单据
@@ -229,7 +229,6 @@ public class WaitApplyAdapter extends BaseAdapter {
                         .getType());
                 if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
-                        // handler.sendEmptyMessage(code);
                         ((Activity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -255,33 +254,7 @@ public class WaitApplyAdapter extends BaseAdapter {
             }
         });
 
-
     }
-
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    viewHolder.item2_tv.setText("已关闭");
-                    viewHolder.item2_tv.setEnabled(false);
-                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
-                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
-
-                    notifyDataSetChanged();
-                    break;
-                case 2:
-                    viewHolder.item2_tv.setText("已撤销");
-                    viewHolder.item2_tv.setEnabled(false);
-                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
-                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
-
-                    notifyDataSetChanged();
-                    break;
-            }
-            return false;
-        }
-    });
 
     public static class ViewHolder {
         private TextView tv_cause;

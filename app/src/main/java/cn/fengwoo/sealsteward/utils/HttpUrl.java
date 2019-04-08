@@ -290,5 +290,10 @@ public class HttpUrl {
      */
     public static final String SYSTEM_TIME = "user/systemtime";
 
+    /**
+     * 用印审批
+     */
+    public static final String APPROVE = "apply/approve";
+
 
 }

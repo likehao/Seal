@@ -161,7 +161,6 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:layout_height="30dp"
                                     android:background="@drawable/reset_device" />
 
                                 <TextView
@@ -329,7 +328,6 @@
 
                         <LinearLayout
                             android:visibility="gone"
-
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"

@@ -132,7 +132,9 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
 
             @Override
             public void afterTextChanged(Editable s) {
-                loadUserHeadPortrait(s.toString());
+                if (s.length() > 0) {
+                    loadUserHeadPortrait(s.toString());
+                }
             }
         });
 

@@ -30,8 +30,8 @@
                     android:layout_gravity="center_vertical">
 
                     <cn.fengwoo.sealsteward.view.CircleImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/system_msg" />
 
@@ -62,8 +62,8 @@
                     android:layout_gravity="center_vertical">
 
                     <cn.fengwoo.sealsteward.view.CircleImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/apply_msg" />
 
@@ -94,8 +94,8 @@
                     android:layout_gravity="center_vertical">
 
                     <cn.fengwoo.sealsteward.view.CircleImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/police_msg" />
 
@@ -125,8 +125,8 @@
                     android:layout_gravity="center_vertical">
 
                     <cn.fengwoo.sealsteward.view.CircleImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginStart="10dp"
                         android:src="@drawable/wait_me_apply" />
 

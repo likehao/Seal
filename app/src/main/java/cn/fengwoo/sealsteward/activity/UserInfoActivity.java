@@ -87,14 +87,12 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
      * 发送请求刷新个人信息
      */
     private void getUserInfoData(String uID) {
-//        loadingView.show();
         //添加用户ID为参数
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userId", uID);
         HttpUtil.sendDataAsync(this, HttpUrl.USERINFO, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-//                loadingView.cancel();
                 Looper.prepare();
                 Toast.makeText(UserInfoActivity.this, e + "", Toast.LENGTH_SHORT).show();
                 Looper.loop();
@@ -103,45 +101,38 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                loadingView.cancel();
                 String result = response.body().string();
                 Gson gson = new Gson();
                 final ResponseInfo<UserDetailData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserDetailData>>() {
                 }.getType());
-                try {
-                    JSONObject object = new JSONObject(result);
-                    if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
 
-                        // 存入权限，准备传递到下级页面
-                        if (responseInfo.getData().isAdmin()) {
-                            targetPermissionJson = new Gson().toJson(responseInfo.getData().getSystemFuncList());
-                        } else {
-                            targetPermissionJson = new Gson().toJson(responseInfo.getData().getFuncIdList());
-                        }
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
 
-                        Log.e("TAG", "获取个人信息数据成功........");
-                        Utils.log(result);
-                        //更新
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                realNameTv.setText(responseInfo.getData().getRealName());
-                                mobilePhoneTv.setText(responseInfo.getData().getMobilePhone());
-                                departmentTv.setText(responseInfo.getData().getOrgStructureName());
-                                jobTv.setText(responseInfo.getData().getJob());
-                            }
-                        });
-//                        loadingView.cancel();
-                        //      setData(object);
+                    // 存入权限，准备传递到下级页面
+                    if (responseInfo.getData().isAdmin()) {
+                        targetPermissionJson = new Gson().toJson(responseInfo.getData().getSystemFuncList());
                     } else {
-//                        loadingView.cancel();
-                        Looper.prepare();
-                        showToast(responseInfo.getMessage());
-                        Looper.loop();
-                        Log.e("TAG", "获取个人信息数据失败........");
+                        targetPermissionJson = new Gson().toJson(responseInfo.getData().getFuncIdList());
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                    Log.e("TAG", "获取个人信息数据成功........");
+                    Utils.log(result);
+                    //更新
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            realNameTv.setText(responseInfo.getData().getRealName());
+                            mobilePhoneTv.setText(responseInfo.getData().getMobilePhone());
+                            departmentTv.setText(responseInfo.getData().getOrgStructureName());
+                            jobTv.setText(responseInfo.getData().getJob());
+                        }
+                    });
+
+                } else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                    Log.e("TAG", "获取个人信息数据失败........");
                 }
             }
         });
