@@ -63,6 +63,16 @@ public class LoginData implements Serializable {
     private List<SystemFuncListInfo> systemFuncList;
     private String token;
     private String userEmail;
+    private String orgStructureId;
+
+
+    public String getOrgStructureId() {
+        return orgStructureId;
+    }
+
+    public void setOrgStructureId(String orgStructureId) {
+        this.orgStructureId = orgStructureId;
+    }
 
     public LoginData(){
 

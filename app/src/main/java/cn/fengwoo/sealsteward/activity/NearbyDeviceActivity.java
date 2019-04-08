@@ -60,6 +60,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 
 /**
@@ -349,6 +350,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // 断开蓝牙
+        ((MyApp) getApplication()).removeAllDisposable();
+        ((MyApp) getApplication()).setConnectionObservable(null);
+
         showLoadingView();
         Utils.log(scanResultsList.get(position).getBleDevice().getMacAddress());
 

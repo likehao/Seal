@@ -70,6 +70,7 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
             @Override
             public void clicked(String id, int type, String parentName) {
                 Utils.log("****id:" + id + "*** type:" + type + "");
+//                Utils.log("orgStructureId:" + CommonUtil.getUserData(EditOrganizationActivity.this).getOrgStructureId());
                 if (type == 2) {
                     idString = id;
                     selectDialog(id);
@@ -160,46 +161,51 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
                     }
 
                     // delete
-                    String uID = CommonUtil.getUserData(EditOrganizationActivity.this).getId();
+                    String orgID =  CommonUtil.getUserData(EditOrganizationActivity.this).getOrgStructureId();
 
-                    // delete user
-                    Utils.log("delete seal");
-                    HashMap<String, String> hashMap = new HashMap<>();
-                    hashMap.put("orgStrId", idString);
-                    HttpUtil.sendDataAsync(EditOrganizationActivity.this, HttpUrl.DELETE_ORG, 4, hashMap, null, new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Utils.log(e.toString());
-                        }
+                   if(orgID.equals(uid)){
+                       Toast.makeText(EditOrganizationActivity.this,"不能删除自己",Toast.LENGTH_SHORT).show();
+                   }else{
+                       // delete user
+                       Utils.log("delete seal");
+                       HashMap<String, String> hashMap = new HashMap<>();
+                       hashMap.put("orgStrId", idString);
+                       HttpUtil.sendDataAsync(EditOrganizationActivity.this, HttpUrl.DELETE_ORG, 4, hashMap, null, new Callback() {
+                           @Override
+                           public void onFailure(Call call, IOException e) {
+                               Utils.log(e.toString());
+                           }
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String result = response.body().string();
-                            Utils.log(result);
-                            EditOrganizationActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(EditOrganizationActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                           @Override
+                           public void onResponse(Call call, Response response) throws IOException {
+                               String result = response.body().string();
+                               Utils.log(result);
+                               EditOrganizationActivity.this.runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       Toast.makeText(EditOrganizationActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                   }
+                               });
 
-                                }
-                            });
+                               // init
+                               data.clear();
 
-                            // init
-                            data.clear();
+                               mLinkedList.clear();
 
-                            mLinkedList.clear();
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                               runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
 //                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
 
-                                    optionBottomDialog.dismiss();
-                                    getDate();
-                                }
-                            });
-                        }
-                    });
+                                       optionBottomDialog.dismiss();
+                                       getDate();
+                                   }
+                               });
+                           }
+                       });
+                   }
+
+
 
 
                 } else if (position == 1) {

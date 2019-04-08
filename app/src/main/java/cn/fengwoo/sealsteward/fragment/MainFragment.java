@@ -844,7 +844,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             if (stampTag) {
                 // 正在盖章，计算距离
                 double distance = Utils.distanceOfTwoPoints(location.getLatitude(), location.getLongitude(), Double.parseDouble(EasySP.init(getActivity()).getString("latitude")), Double.parseDouble(EasySP.init(getActivity()).getString("longitude")));
-                Utils.log(distance +"");
+                Utils.log("distance:" + distance +"");
                 double scope = Double.parseDouble(EasySP.init(getActivity()).getString("scope"));
 
                 if (distance*1000 > scope) {

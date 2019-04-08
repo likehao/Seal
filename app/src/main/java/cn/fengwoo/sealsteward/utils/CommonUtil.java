@@ -37,6 +37,7 @@ public class CommonUtil {
         boolean authStatus = sharedPreferences.getBoolean("authStatus", false);
         String companyName = sharedPreferences.getString("companyName", "");
         String orgStructureName = sharedPreferences.getString("orgStructureName", "");
+        String orgStructureId = sharedPreferences.getString("orgStructureId", "");
         String job = sharedPreferences.getString("job", "");
         boolean needSync = sharedPreferences.getBoolean("needSync", false);
 
@@ -54,6 +55,7 @@ public class CommonUtil {
         user.setAuthStatus(authStatus);
         user.setCompanyName(companyName);
         user.setOrgStructureName(orgStructureName);
+        user.setOrgStructureId(orgStructureId);
         user.setJob(job);
         user.setNeedSync(needSync);
 
@@ -79,6 +81,7 @@ public class CommonUtil {
         editor.putBoolean("authStatus", user.getAuthStatus());
         editor.putString("companyName", user.getCompanyName());
         editor.putString("orgStructureName", user.getOrgStructureName());
+        editor.putString("orgStructureId", user.getOrgStructureId());
         editor.putString("job", user.getJob());
         editor.putBoolean("needSync", user.getNeedSync());
         //   editor.putString("systemFuncList", String.valueOf(user.getSystemFuncList()));

@@ -48,13 +48,13 @@ public class NodeTreeAdapter extends BaseAdapter {
     private int retract;//缩进值
     private Context context;
     private ClickItemListener clickItemListener;
-    private  CheckBoxCheckedlistener checkBoxCheckedlistener;
+    private CheckBoxCheckedlistener checkBoxCheckedlistener;
     private int isSingleSelection; // 是否单选,0表示没有选择，1表示单选，2表示多选
     private int typeWillShowCB; // 要显示check box的类型，0代表都不要显示
     private SparseBooleanArray selectArray;
 
 
-    public NodeTreeAdapter(Context context, ListView listView, LinkedList<Node> linkedList,int isSingleSelection,int typeWillShowCB){
+    public NodeTreeAdapter(Context context, ListView listView, LinkedList<Node> linkedList, int isSingleSelection, int typeWillShowCB) {
         inflater = LayoutInflater.from(context);
         this.context = context;
         selectArray = new SparseBooleanArray();
@@ -70,7 +70,7 @@ public class NodeTreeAdapter extends BaseAdapter {
         listView.setOnItemClickListener(null);
 
         //缩进值，大家可以将它配置在资源文件中，从而实现适配
-        retract = (int)(context.getResources().getDisplayMetrics().density*10+0.5f);
+        retract = (int) (context.getResources().getDisplayMetrics().density * 10 + 0.5f);
 
         this.isSingleSelection = isSingleSelection;
         this.typeWillShowCB = typeWillShowCB;
@@ -78,42 +78,55 @@ public class NodeTreeAdapter extends BaseAdapter {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                for(int i =0;i<linkedList.size();i++) {
+                for (int i = 0; i < linkedList.size(); i++) {
                     expandOrCollapse(i);
                 }
             }
-        },400);
+        }, 400);
+    }
+
+    public void expandAll() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < nodeLinkedList.size(); i++) {
+                    expandOrCollapse(i);
+                }
+            }
+        }, 400);
     }
 
     /**
      * 展开或收缩用户点击的条目
+     *
      * @param position
      */
-    private void expandOrCollapse(int position){
+    private void expandOrCollapse(int position) {
         Node node = nodeLinkedList.get(position);
-        if (node != null && !node.isLeaf()){
+        if (node != null && !node.isLeaf()) {
             boolean old = node.isExpand();
-            if (old){
+            if (old) {
                 List<Node> nodeList = node.get_childrenList();
                 int size = nodeList.size();
                 Node tmp = null;
-                for (int i = 0;i < size;i++){
+                for (int i = 0; i < size; i++) {
                     tmp = nodeList.get(i);
-                    if (tmp.isExpand()){
-                        collapse(tmp,position+1);
+                    if (tmp.isExpand()) {
+                        collapse(tmp, position + 1);
                     }
-                    nodeLinkedList.remove(position+1);
+                    nodeLinkedList.remove(position + 1);
                 }
-            }else{
+            } else {
                 nodeLinkedList.addAll(position + 1, node.get_childrenList());
             }
             node.setIsExpand(!old);
             notifyDataSetChanged();
-        }else{
+        } else {
             Utils.log("else");
 
         }
     }
+
     /**
      * 递归收缩用户点击的条目
      * 因为此中实现思路是：当用户展开某一条时，就将该条对应的所有子节点加入到nodeLinkedList
@@ -121,19 +134,20 @@ public class NodeTreeAdapter extends BaseAdapter {
      * ，就需要递归缩进其所有的孩子节点，这样才能保持整个nodeLinkedList的正确性，同时这种实
      * 现方式避免了每次对所有数据进行处理然后插入到一个list，最后显示出来，当数据量一大，就会卡顿，
      * 所以这种只改变局部数据的方式性能大大提高。
+     *
      * @param position
      */
-    private void collapse(Node node,int position){
+    private void collapse(Node node, int position) {
         node.setIsExpand(false);
         List<Node> nodes = node.get_childrenList();
         int size = nodes.size();
         Node tmp = null;
-        for (int i = 0;i < size;i++){
+        for (int i = 0; i < size; i++) {
             tmp = nodes.get(i);
-            if (tmp.isExpand()){
-                collapse(tmp,position+1);
+            if (tmp.isExpand()) {
+                collapse(tmp, position + 1);
             }
-            nodeLinkedList.remove(position+1);
+            nodeLinkedList.remove(position + 1);
         }
     }
 
@@ -156,8 +170,8 @@ public class NodeTreeAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         Node node = nodeLinkedList.get(position);
-        if (convertView == null){
-            convertView = inflater.inflate(R.layout.tree_listview_item,null);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.tree_listview_item, null);
             holder = new ViewHolder();
             holder.imageView = convertView.findViewById(R.id.id_treenode_icon);
             holder.label = convertView.findViewById(R.id.id_treenode_label);
@@ -167,8 +181,8 @@ public class NodeTreeAdapter extends BaseAdapter {
 
             holder.iv_mark = convertView.findViewById(R.id.iv_mark);
             convertView.setTag(holder);
-        }else{
-            holder = (ViewHolder)convertView.getTag();
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
 
@@ -186,16 +200,16 @@ public class NodeTreeAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int tag = Integer.parseInt(buttonView.getTag().toString());
                 if (isChecked) {
-                    checkBoxCheckedlistener.checked(node.get_id(),node.get_label());
+                    checkBoxCheckedlistener.checked(node.get_id(), node.get_label());
                     for (int i = 0; i < getCount(); i++) {
                         if (tag == i) {
                             selectArray.put(i, true);
-                        }else {
+                        } else {
                             selectArray.put(i, false);
                         }
                     }
                 } else {
-                    checkBoxCheckedlistener.unchecked(node.get_id(),node.get_label());
+                    checkBoxCheckedlistener.unchecked(node.get_id(), node.get_label());
                     selectArray.put(tag, false);
                 }
                 if (isSingleSelection != 2) {  // 非多选状态时
@@ -218,15 +232,15 @@ public class NodeTreeAdapter extends BaseAdapter {
 
             // 显示图片
             String pic = node.get_portrait();
-            if(pic != null && !pic.isEmpty()){
+            if (pic != null && !pic.isEmpty()) {
                 //先从本地读取，没有则下载
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(pic);
-                if(bitmap == null){
+                if (bitmap == null) {
                     HttpDownloader.downloadImage((Activity) context, category, pic, new DownloadImageCallback() {
                         @Override
                         public void onResult(String fileName) {
                             super.onResult(fileName);
-                            if(fileName != null){
+                            if (fileName != null) {
                                 ((Activity) context).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -239,27 +253,27 @@ public class NodeTreeAdapter extends BaseAdapter {
                     });
                     if (node.get_type() == 3) {
                         holder.iv_mark.setBackgroundResource(R.drawable.human_pic);
-                    } else if(node.get_type() == 4) {
+                    } else if (node.get_type() == 4) {
                         holder.iv_mark.setBackgroundResource(R.drawable.seal_pic);
                     }
-                } else{
+                } else {
                     String headPortraitPath = "file://" + HttpDownloader.path + pic;
                     Picasso.with(context).load(headPortraitPath).into(holder.iv_mark);
                 }
             }
-        }else{
+        } else {
             holder.iv_mark.setVisibility(View.GONE);
         }
 
         // check box
         if (isSingleSelection == 0) {
             holder.checkBox.setVisibility(View.GONE);
-        }else{
-            if(node.get_type() == typeWillShowCB){
+        } else {
+            if (node.get_type() == typeWillShowCB) {
                 holder.checkBox.setVisibility(View.VISIBLE);
-                if (node.is_check()==1) {
+                if (node.is_check() == 1) {
                     holder.checkBox.setChecked(true);
-                } else if(node.is_check() == 0) {
+                } else if (node.is_check() == 0) {
                     holder.checkBox.setChecked(false);
                 }
 
@@ -268,12 +282,12 @@ public class NodeTreeAdapter extends BaseAdapter {
                     holder.checkBox.setEnabled(false);
                     holder.checkBox.setVisibility(View.GONE);
                     holder.iv_right.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     holder.checkBox.setEnabled(true);
                     holder.checkBox.setVisibility(View.VISIBLE);
                     holder.iv_right.setVisibility(View.GONE);
                 }
-            }else {
+            } else {
                 holder.checkBox.setVisibility(View.GONE);
             }
         }
@@ -283,11 +297,10 @@ public class NodeTreeAdapter extends BaseAdapter {
         }
 
 
-
         holder.label.setText(node.get_label());
-        if(node.get_icon() == -1){
+        if (node.get_icon() == -1) {
             holder.imageView.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             holder.imageView.setVisibility(View.VISIBLE);
             holder.imageView.setImageResource(node.get_icon());
         }
@@ -308,9 +321,9 @@ public class NodeTreeAdapter extends BaseAdapter {
 //                }
                 if (node.get_parent() != null) {
                     Utils.log("*************************************************************************" + node.get_parent().get_label());
-                    clickItemListener.clicked(node.get_id(),node.get_type(), node.get_parent().get_label());
-                }else{
-                    clickItemListener.clicked(node.get_id(),node.get_type(), "10000");
+                    clickItemListener.clicked(node.get_id(), node.get_type(), node.get_parent().get_label());
+                } else {
+                    clickItemListener.clicked(node.get_id(), node.get_type(), "10000");
                 }
 
 
@@ -323,11 +336,11 @@ public class NodeTreeAdapter extends BaseAdapter {
 //            holder.imageView.performClick();
         }
 
-        convertView.setPadding(node.get_level()*retract,5,5,5);
+        convertView.setPadding(node.get_level() * retract, 5, 5, 5);
         return convertView;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         public ImageView imageView;
         public TextView label;
         public LinearLayout confirm;
@@ -337,20 +350,21 @@ public class NodeTreeAdapter extends BaseAdapter {
     }
 
 
-    public interface ClickItemListener{
-        void clicked(String id,int typeInt,String parentName);
+    public interface ClickItemListener {
+        void clicked(String id, int typeInt, String parentName);
     }
 
-    public interface CheckBoxCheckedlistener{
-        void checked(String id,String name);
+    public interface CheckBoxCheckedlistener {
+        void checked(String id, String name);
+
         void unchecked(String id, String name);
     }
 
-    public void setClickItemListener(ClickItemListener clickItemListener){
+    public void setClickItemListener(ClickItemListener clickItemListener) {
         this.clickItemListener = clickItemListener;
     }
 
-    public void setCheckBoxCheckedlistener(CheckBoxCheckedlistener checkBoxCheckedlistener){
+    public void setCheckBoxCheckedlistener(CheckBoxCheckedlistener checkBoxCheckedlistener) {
         this.checkBoxCheckedlistener = checkBoxCheckedlistener;
     }
 }
