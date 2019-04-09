@@ -10,9 +10,11 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -194,6 +196,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                                 public void run() {
                                     seeRecordAdapter = new SeeRecordAdapter(SeeRecordActivity.this,list);
                                     see_record_lv.setAdapter(seeRecordAdapter);
+                                    setListViewHeightBasedOnChildren(see_record_lv);
                                     seeRecordAdapter.notifyDataSetChanged(); //刷新数据
                                     refreshLayout.finishRefresh(); //刷新完成
                                 }
@@ -268,6 +271,33 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
 
     }
 
+    /**
+     * 解决ScrollView嵌套ListView只显示一个item的问题
+     * @param listView
+     */
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        // 获取ListView对应的Adapter
+        ListAdapter listadapter = listView.getAdapter();
+        if (listadapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0, len = listadapter.getCount(); i < len; i++) {
+            // listAdapter.getCount()返回数据项的数目
+            View listItem = listadapter.getView(i, null, listView);
+            // 计算子项View 的宽高
+            listItem.measure(0, 0);
+            // 统计所有子项的总高度
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight+ (listView.getDividerHeight() * (listadapter.getCount() - 1));
+        // listView.getDividerHeight()获取子项间分隔符占用的高度
+        // params.height最后得到整个ListView完整显示需要的高度
+        listView.setLayoutParams(params);
+    }
 
     @Override
     protected void onResume() {

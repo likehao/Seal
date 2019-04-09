@@ -33,7 +33,7 @@ public class BaseActivity extends AppCompatActivity{
         immersionBar.init();
         loadingView = new LoadingView(this);
 
-        Utils.log(this.toString());
+  //      Utils.log(this.toString());
     }
 
     @Override

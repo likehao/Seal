@@ -59,6 +59,10 @@ public class ApprovalConfirmActivity extends BaseActivity implements View.OnClic
     TextView result_tv;
     @BindView(R.id.apply_option_et)
     EditText apply_option_et;
+    @BindView(R.id.pleaseSign_tv)
+            TextView pleaseSign_tv;
+    @BindView(R.id.apply_sign_rl)
+            RelativeLayout apply_sign_rl;
     LoadingView loadingView;
 
     @Override
@@ -93,6 +97,8 @@ public class ApprovalConfirmActivity extends BaseActivity implements View.OnClic
                             public void run() {
                                 String sealPrintPath = "file://" + HttpDownloader.path + fileName;
                                 Picasso.with(ApprovalConfirmActivity.this).load(sealPrintPath).into(approval_sign_iv);
+                                pleaseSign_tv.setVisibility(View.GONE);
+                                apply_sign_rl.setBackgroundResource(R.color.white);
                             }
                         });
                     }
@@ -103,6 +109,8 @@ public class ApprovalConfirmActivity extends BaseActivity implements View.OnClic
             //不为空则直接显示
             String sealPrintPath = "file://" + HttpDownloader.path + autoGraph;
             Picasso.with(ApprovalConfirmActivity.this).load(sealPrintPath).into(approval_sign_iv);
+            pleaseSign_tv.setVisibility(View.GONE);
+            apply_sign_rl.setBackgroundResource(R.color.white);
         }
 
     }

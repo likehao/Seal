@@ -294,6 +294,10 @@ public class HttpUrl {
      * 用印审批
      */
     public static final String APPROVE = "apply/approve";
+    /**
+     * 删除签名
+     */
+    public static final String DELETEAUTOGRAPH = "user/deleteautograph";
 
 
 }

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,7 +51,7 @@ import okhttp3.Response;
 /**
  * 消息列表
  */
-public class MessageListActivity extends BaseActivity {
+public class MessageListActivity extends BaseActivity{
 
     @BindView(R.id.title_tv)
     TextView title_tv;
@@ -180,8 +181,5 @@ public class MessageListActivity extends BaseActivity {
             }
         });
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+
 }

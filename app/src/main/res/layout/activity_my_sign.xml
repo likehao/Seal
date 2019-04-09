@@ -21,7 +21,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:background="@color/white"/>
 
         <LinearLayout
             android:id="@+id/delete_write_ll"

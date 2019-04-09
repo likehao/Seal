@@ -1,43 +1,26 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
-import com.venusic.handwrite.view.HandWriteView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
@@ -109,17 +92,7 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.delete_tv:
-                //删除之后更新为空
-                LoginData autoGraph = CommonUtil.getUserData(this);
-                if (autoGraph != null){
-                    autoGraph.setAutoGraph(null);
-                    CommonUtil.setUserData(this,autoGraph);
-                }
-                //清空图片显示
-            //    sign_iv.setImageDrawable(null);
-                sign_iv.setVisibility(View.GONE);
-                delete_write_ll.setVisibility(View.GONE);
-                add_sign_ll.setVisibility(View.VISIBLE);
+                deleteAutoGraph();
                 break;
             case R.id.rewrite_tv:
                 intent = new Intent(this, AddAutographActivity.class);
@@ -135,20 +108,23 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
         String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
         //读取签名
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
-        if(bitmap == null){
+        if (bitmap == null) {
             //下载签名
             HttpDownloader.downloadImage(MySignActivity.this, 2, autoGraph, new DownloadImageCallback() {
                 @Override
                 public void onResult(final String fileName) {
-                    if(fileName != null){
+                    if (fileName != null) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 String sealPrintPath = "file://" + HttpDownloader.path + fileName;
                                 Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
+                                add_sign_ll.setVisibility(View.GONE);
+                                delete_write_ll.setVisibility(View.VISIBLE);
+                                sign_iv.setVisibility(View.VISIBLE);
                             }
                         });
-                    }else {
+                    } else {
                         add_sign_ll.setVisibility(View.VISIBLE);
                         delete_write_ll.setVisibility(View.GONE);
                     }
@@ -161,7 +137,50 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
             Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
             add_sign_ll.setVisibility(View.GONE);
             delete_write_ll.setVisibility(View.VISIBLE);
+            sign_iv.setVisibility(View.VISIBLE);
         }
+
     }
 
+    /**
+     * 删除签名
+     */
+
+    private void deleteAutoGraph() {
+        HttpUtil.sendDataAsync(this, HttpUrl.DELETEAUTOGRAPH, 4, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "删除错误错误错误");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+
+                        //删除之后更新为空
+                        LoginData autoGraph = CommonUtil.getUserData(MySignActivity.this);
+                        if (autoGraph != null) {
+                            autoGraph.setAutoGraph(null);
+                            CommonUtil.setUserData(MySignActivity.this, autoGraph);
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sign_iv.setVisibility(View.GONE);
+                                delete_write_ll.setVisibility(View.GONE);
+                                add_sign_ll.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
 }

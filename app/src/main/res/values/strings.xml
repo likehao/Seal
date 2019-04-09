@@ -111,7 +111,7 @@
     <string name="Next_step">下一步</string>
     <string name="file_number">文件份数</string>
     <string name="Application_reason">申请事由</string>
-    <string name="please_input_reason">请输入申请事由</string>
+    <string name="please_input_reason">请输入申请事由（例如:XXX招标合同）</string>
     <string name="seal_information">印章信息</string>
     <string name="operation_seal">操作印章</string>
     <string name="use_seal">用印</string>
@@ -182,6 +182,7 @@
     <string name="bluetooth">蓝牙</string>
     <string name="copyright">版权所有</string>
     <string name="seal_device">附近设备</string>
+    <string name="connect_seal">连接印章</string>
     <string name="residual_electricity">剩余电量</string>
     <string name="start_time">启动次数</string>
     <string name="finish_time">已盖次数</string>
@@ -195,6 +196,7 @@
     <string name="please_write_phone">请写下你的联系方式便于联系</string>
     <string name="look_file">查看附件</string>
     <string name="sign">签名</string>
+    <string name="please_sign">请签名</string>
     <string name="wait_me_agree">待我审批</string>
     <string name="apply_notify">审批通知</string>
     <string name="alarm_message">告警消息</string>

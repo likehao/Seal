@@ -195,7 +195,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("附近的设备");
+        title_tv.setText("连接印章");
     /*    switchButton = findViewById(R.id.switch_bt);
         switchButton.setChecked(true);*/
 

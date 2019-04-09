@@ -83,8 +83,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private List<String> dialogList;
     /*    @BindView(R.id.circle_useSeal_apply_ll)
         LinearLayout circle_useSeal_apply_ll;*/
-    private int REQUEST_CODE = 1;
-    private int REQUEST_IMAGE = 2;
     /**
      * 上次点击返回键的时间
      */

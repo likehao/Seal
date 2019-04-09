@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -51,6 +52,7 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HideKeyBroadUtils;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -479,5 +481,20 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                         }
                     }
                 });
+    }
+
+    /**
+     *隐藏软键盘
+     * @param ev
+     * @return
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        HideKeyBroadUtils.hide(this,ev);
+        if (selectPopuwindow != null){
+            selectPopuwindow.dismiss();
+        }
+        check_down_up.setChecked(false);
+        return super.dispatchTouchEvent(ev);
     }
 }

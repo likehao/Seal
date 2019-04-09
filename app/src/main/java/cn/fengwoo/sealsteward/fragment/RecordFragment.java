@@ -140,7 +140,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                     photoCount = app.getPhotoCount();
                                 }
                                 list.add(new RecordData(app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
-                                        , app.getApplyCount(), app.getAvailableCount(), photoCount
+                                        , app.getStampCount(), app.getAvailableCount(), photoCount
                                         , failTime, sealTime, app.getLastStampAddress(), app.getApproveStatus(),
                                         app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()));
 
@@ -201,6 +201,12 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             Intent intent = new Intent(getActivity(), SelectSealRecodeActivity.class);
             startActivityForResult(intent, 100);
         }
+/*
+        if (s.equals("上传图片成功")){
+            record_refreshLayout.autoRefresh();
+
+        }
+*/
 
     }
 

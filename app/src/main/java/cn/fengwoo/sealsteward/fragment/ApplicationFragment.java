@@ -135,7 +135,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         recharge_record_rl.setOnClickListener(this);
         use_seal_apply_rl.setOnClickListener(this);
         approvalRecord_rl.setOnClickListener(this);
-        wait_me_agree_rl.setOnClickListener(this);
+  //      wait_me_agree_rl.setOnClickListener(this);
  //       wait_handle_rl.setOnClickListener(this);
         wait_time_rl.setOnClickListener(this);
         rl_voice.setOnClickListener(this);

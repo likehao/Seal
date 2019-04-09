@@ -150,7 +150,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         HttpUtil.sendDataAsync(this, HttpUrl.UPDATESTAMPIMAGE, 2, null, bean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("TAG",e +"错误错误错误!!!!!!!!!!!!!!");
+                loadingView.cancel();
+                Log.e("TAG",e +"上传记录照片错误错误错误!!!!!!!!!!!!!!");
             }
 
             @Override
@@ -161,6 +162,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 .getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
+            //            EventBus.getDefault().post(new MessageEvent("上传图片成功","刷新"));
                         Intent intent = new Intent(UploadFileActivity.this,MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -170,6 +172,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                         Looper.loop();
                     }
                 }else {
+                    loadingView.cancel();
                     Looper.prepare();
                     responseInfo.getMessage();
                     Looper.loop();
@@ -282,7 +285,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     }
 
     /**
-     * 上传图片至服务器
+     * 上传图片至服务器 (category -> 5:上传记录图片  4:申请用印上传图片)
      *
      * @param file
      */
@@ -290,7 +293,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         loadingView.show();
         HashMap<String, Object> hashMap = new HashMap<>();
         Utils.log(file.length() + "");
-        hashMap.put("category", 4);
+        hashMap.put("category", code == 1 ? 5 : 4);
         hashMap.put("file", file);
         HttpUtil httpUtil = new HttpUtil(UploadFileActivity.this);
         httpUtil.upLoadFile(this, HttpUrl.UPLOADIMAGE, hashMap, new ReqCallBack<Object>() {

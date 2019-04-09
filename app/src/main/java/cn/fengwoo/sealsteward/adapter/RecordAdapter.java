@@ -28,6 +28,7 @@ import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -110,44 +111,65 @@ public class RecordAdapter extends BaseAdapter {
         viewHolder.close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String applyId = recordData.get(position).getId();
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("applyId", applyId);
-                HttpUtil.sendDataAsync((Activity) context, HttpUrl.APPLICLOSE, 1, hashMap, null, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                if (recordData.get(position).getUploadPhotoNum() == 0){
+                    CommonDialog commonDialog = new CommonDialog(context,"提示",
+                            "此单据还未上传盖章后牌照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
+                    commonDialog.showDialog();
+                    commonDialog.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            applyClose(position);
+                            commonDialog.dialog.dismiss();
                         }
-                                .getType());
-                        if (responseInfo.getCode() == 0) {
-                            if (responseInfo.getData()) {
+                    });
+                }else {
+                    applyClose(position);
+                }
 
-                                ((Activity) context).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        viewHolder.close.setText("已关闭");
-                                        Log.e("TAG","111111111111111111111111111111111111111");
-                                        viewHolder.close.setEnabled(false);
-                                        viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
-                                        recordData.get(position).setApproveStatus(5);
-                                        notifyDataSetChanged();
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
             }
         });
         return view;
+    }
+
+    /**
+     * 关闭单据
+     */
+    private void applyClose(int position){
+        String applyId = recordData.get(position).getId();
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("applyId", applyId);
+        HttpUtil.sendDataAsync((Activity) context, HttpUrl.APPLICLOSE, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewHolder.close.setText("已关闭");
+                                Log.e("TAG","111111111111111111111111111111111111111");
+                                viewHolder.close.setEnabled(false);
+                                viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                recordData.get(position).setApproveStatus(5);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     class ViewHolder {
