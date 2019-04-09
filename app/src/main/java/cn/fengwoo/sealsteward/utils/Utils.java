@@ -8,7 +8,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.orhanobut.logger.Logger;
 import com.white.easysp.EasySP;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -194,5 +197,24 @@ public class Utils {
     }
     private static double rad(double d) {
         return d * Math.PI / 180.0;
+    }
+
+
+    public static String getExternalDCIM(String subDir) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+            if (file == null) {
+                return null;
+            }
+            String dir = "";
+            if (!TextUtils.isEmpty(subDir)) {
+                dir = subDir;
+            }
+            String result = file.getAbsolutePath() + dir;
+//            BoxingLog.d("external DCIM is: " + result);
+            return result;
+        }
+//        BoxingLog.d("external DCIM do not exist.");
+        return null;
     }
 }

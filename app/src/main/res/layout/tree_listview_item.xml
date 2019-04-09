@@ -41,15 +41,19 @@
 
         <CheckBox
             android:id="@+id/cb"
+            app:theme="@style/cb_test"
+
             android:layout_width="25dp"
-            android:layout_height="20dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
-            android:focusable="false" />
+            android:focusable="false"
+            tools:ignore="MissingPrefix" />
 
         <ImageView
             android:id="@+id/iv_right"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
             android:scaleType="centerInside"
             android:src="@drawable/right"
             android:visibility="gone" />

@@ -7,6 +7,8 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -30,13 +32,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.fengwoo.sealsteward.BuildConfig;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RecycleviewAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
@@ -81,6 +86,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     List<String> fileName = new ArrayList<>();
     int code,count;
     String id;
+
+    private Uri photoURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,6 +220,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
      * 上传用印申请图片
      */
     private void uploadImgFile() {
+
+//        dispatchTakePictureIntent(123);
         selectPhone();
     }
 
@@ -378,5 +387,46 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 }
             }
         });
+    }
+
+
+    private void dispatchTakePictureIntent(int requestCode) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Utils.log(ex.getMessage());
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                photoURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".file.provider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, requestCode);
+            }
+        }
+    }
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        final String cameraOutDir = Utils.getExternalDCIM(null);
+        //// Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp;
+        File storageDir = new File(cameraOutDir);
+        File image = null;
+        if(storageDir.exists()){
+            image = File.createTempFile(imageFileName,  /* prefix */".jpg",  /* suffix */ storageDir  /* directory */);
+        }
+
+        // Save a file: path for use with ACTION_VIEW intents
+        //mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }

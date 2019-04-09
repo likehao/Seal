@@ -1,11 +1,13 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -355,6 +357,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                         //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
+                                timer.start();
                                 Looper.prepare();
                                 showToast("验证码已发送");
                                 Looper.loop();
@@ -371,4 +374,21 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 break;
         }
     }
+    /**
+     * 验证码倒计时
+     */
+    CountDownTimer timer = new CountDownTimer(60000, 1000) {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onTick(long millisUntilFinished) {
+            sendSecurityCode.setEnabled(false);
+            sendSecurityCode.setText(millisUntilFinished / 1000 + "秒");
+        }
+
+        @Override
+        public void onFinish() {
+            sendSecurityCode.setEnabled(true);
+            sendSecurityCode.setText("重新获取验证码");
+        }
+    };
 }
