@@ -279,14 +279,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     private void loadBanner(List<?> list) {
         banner.setImageLoader(new GlideImageLoader());
-        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                banner.setImages(list);
-                //banner设置方法全部调用完毕时最后调用
-                banner.start();
-            }
-        });
+        if(null != getActivity()){
+            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    banner.setImages(list);
+                    //banner设置方法全部调用完毕时最后调用
+                    banner.start();
+                }
+            });
+        }
     }
 
     @Override
@@ -584,7 +586,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             @Override
             public void run() {
                 // 开启定位
-                permissions();
+//                permissions();
+                startLocate();
             }
         });
 

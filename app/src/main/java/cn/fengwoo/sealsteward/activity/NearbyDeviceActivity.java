@@ -156,6 +156,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         });
                         loadingView.cancel();
                     } else {
+                        scanBle();
                         loadingView.cancel();
                         Looper.prepare();
                         showToast(responseInfo.getMessage());
@@ -184,6 +185,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 .subscribe(
                         scanResult -> {
                             addScanResult(scanResult);
+                            Utils.log("mac:" + scanResult.getBleDevice().getMacAddress());
                         },
                         throwable -> {
                             // Handle an error here.
@@ -361,6 +363,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         if (!hasTheSeal(thisMac)) {
             showToast("你没有权限操作这个印章。");
+            cancelLoadingView();
             return;
         }
 

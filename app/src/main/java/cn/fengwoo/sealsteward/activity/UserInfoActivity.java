@@ -13,9 +13,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -25,11 +22,11 @@ import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserDetailData;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.qqtheme.framework.util.LogUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -102,6 +99,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
+                Utils.log("result:" + result);
                 Gson gson = new Gson();
                 final ResponseInfo<UserDetailData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserDetailData>>() {
                 }.getType());

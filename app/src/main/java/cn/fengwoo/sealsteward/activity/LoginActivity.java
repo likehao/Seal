@@ -2,7 +2,6 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +48,6 @@ import cn.fengwoo.sealsteward.database.AccountDao;
 import cn.fengwoo.sealsteward.entity.HistoryInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.SystemFuncListInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
@@ -227,7 +224,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                 getLogin();
                 break;
             case R.id.phone_et:
-                if (selectPopuwindow != null){
+                if (selectPopuwindow != null) {
                     selectPopuwindow.dismiss();
                 }
                 check_down_up.setChecked(false);
@@ -274,18 +271,19 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
 
     /**
      * 加载用户头像
+     *
      * @param phoneNumber
      */
-    private void loadUserHeadPortrait(String phoneNumber){
+    private void loadUserHeadPortrait(String phoneNumber) {
         //加载用户头像
         List<HistoryInfo> historyInfoList = accountDao.quaryAll();
-        if(historyInfoList != null){
-            for(HistoryInfo historyInfo : historyInfoList){
-                if(phoneNumber.equals(historyInfo.getPhone())){
+        if (historyInfoList != null) {
+            for (HistoryInfo historyInfo : historyInfoList) {
+                if (phoneNumber.equals(historyInfo.getPhone())) {
                     String head = historyInfo.getHeadPortrait();
-                    if(head != null && !head.isEmpty()){
+                    if (head != null && !head.isEmpty()) {
                         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(head);
-                        if(bitmap != null){
+                        if (bitmap != null) {
                             headImageView.setImageBitmap(bitmap);
                             return;
                         }
@@ -348,10 +346,10 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     HistoryInfo historyInfo = new HistoryInfo(phone, user.getRealName(), user.getHeadPortrait(), new Date().getTime());
                     accountDao.insert(historyInfo);
                     //下载用户头像
-                    if(user.getHeadPortrait() != null && !user.getHeadPortrait().isEmpty()){
+                    if (user.getHeadPortrait() != null && !user.getHeadPortrait().isEmpty()) {
                         //先从本地读取，没有则下载
                         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(user.getHeadPortrait());
-                        if(bitmap == null){
+                        if (bitmap == null) {
                             HttpDownloader.downloadImage(LoginActivity.this, 1, user.getHeadPortrait(), new DownloadImageCallback() {
                                 @Override
                                 public void onResult(String fileName) {
@@ -361,9 +359,9 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                         }
                     }
                     //判断是否需要同步用户数据
-                    if(user.getNeedSync()){
+                    if (user.getNeedSync()) {
                         dataSync();
-                    }else{
+                    } else {
                         //跳转首页
                         intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -414,7 +412,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     /**
      * 数据同步
      */
-    public void dataSync(){
+    public void dataSync() {
         loadingView.showView("数据同步中,请稍后...");
         HttpUtil.sendDataAsync(this, HttpUrl.SYNC, 1, null, null, new Callback() {
             @Override
@@ -456,6 +454,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
             });
         }
     }
+
     /**
      * 申请权限
      */
@@ -465,7 +464,9 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         //添加需要的权限
         rxPermissions.requestEachCombined(Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe(new Consumer<Permission>() {
                     @Override
                     public void accept(Permission permission) throws Exception {

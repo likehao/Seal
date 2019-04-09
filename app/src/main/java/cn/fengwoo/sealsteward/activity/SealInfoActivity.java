@@ -111,6 +111,10 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 //    RelativeLayout rlChooseDepartment;
     @BindView(R.id.rl_examine)
     RelativeLayout rlExamine;
+
+    @BindView(R.id.rl_pwd_user)
+    RelativeLayout rl_pwd_user;
+
     @BindView(R.id.sb_limit)
     SwitchButton sbLimit;
     @BindView(R.id.rl_set_limit)
@@ -171,8 +175,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         Utils.setUneditable(etSealNumber);
         Utils.setUneditable(etUseRange);
 //        rlChooseDepartment.setClickable(false);
-        rlSetLimit.setClickable(false);
+//        rlSetLimit.setClickable(false);
         sbLimit.setEnabled(false);
+        rl_pwd_user.setEnabled(false);
         sbTransDepartment.setEnabled(false);
         rlPic.setEnabled(false);
     }
@@ -182,7 +187,8 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         Utils.setEditable(etSealNumber);
         Utils.setEditable(etUseRange);
 //        rlChooseDepartment.setClickable(true);
-        rlSetLimit.setClickable(true);
+//        rlSetLimit.setClickable(true);
+        rl_pwd_user.setEnabled(true);
         sbLimit.setEnabled(true);
         sbTransDepartment.setEnabled(true);
         rlPic.setEnabled(true);
@@ -282,9 +288,15 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @OnClick({R.id.rl_pic, R.id.rl_examine, R.id.rl_set_limit, R.id.edit_tv})
+    @OnClick({R.id.rl_pic, R.id.rl_examine, R.id.rl_set_limit, R.id.edit_tv,R.id.rl_pwd_user})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.rl_pwd_user:
+                Intent intent = new Intent();
+                intent.setClass(this, PwdUserActivity.class);
+                intent.putExtra("isOnlyRead", "isOnlyRead");
+                startActivity(intent);
+                break;
             case R.id.rl_pic:
 //                selectDialog();
                 permissions();

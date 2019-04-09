@@ -241,10 +241,11 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECTPERSONREQUESTCODE) {
             if (data != null) {
-                person = Objects.requireNonNull(data.getExtras()).getString("name");
-                personId = data.getExtras().getString("id");
-                selectPersonTv.setText(person);
-
+                if(null != data.getExtras().getString("name")){
+                    person = Objects.requireNonNull(data.getExtras()).getString("name");
+                    personId = data.getExtras().getString("id");
+                    selectPersonTv.setText(person);
+                }
             }
         }
         if (requestCode == SELECTSEALREQUESTCODE){

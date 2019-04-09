@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -75,6 +76,8 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
     private boolean isEyeOpen = false;
     private CommonAdapter commonAdapter;
     private PwdUserListItem deleteItem;
+    private boolean isOnlyRead = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
         initView();
         initData();
         getDate();
+
 
 
 //        setListAdapter();
@@ -98,6 +102,12 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
     private void initData() {
         items = new ArrayList<>();
+        if(!TextUtils.isEmpty(getIntent().getStringExtra("isOnlyRead"))){
+            isOnlyRead = true;
+        }
+        if(isOnlyRead){
+            add_ll.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -255,6 +265,10 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         startActivityForResult(intent, 123);
                     }
                 });
+                if (isOnlyRead) {
+                    viewHolder.getView(R.id.btn_edit).setVisibility(View.GONE);
+                    viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
+                }
             }
         };
         list.setAdapter(commonAdapter);

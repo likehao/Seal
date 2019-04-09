@@ -105,15 +105,17 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                                         ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()));
                             }
                             //请求数据
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,5);
-                                    apply_record_one_lv.setAdapter(waitApplyAdapter);
-                                    waitApplyAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                }
-                            });
+                            if(null != getActivity()){
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        waitApplyAdapter = new WaitApplyAdapter(getActivity(), waitApplyDataList, 5);
+                                        apply_record_one_lv.setAdapter(waitApplyAdapter);
+                                        waitApplyAdapter.notifyDataSetChanged(); //刷新数据
+                                        refreshLayout.finishRefresh(); //刷新完成
+                                    }
+                                });
+                            }
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成

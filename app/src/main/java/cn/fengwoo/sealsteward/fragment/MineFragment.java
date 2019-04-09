@@ -184,7 +184,9 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.logout_bt:
                 logoutDialog();
-                LoginData.logout(Objects.requireNonNull(getActivity())); //移除退出标记
+                if(null != getActivity()){
+                    LoginData.logout(Objects.requireNonNull(getActivity())); //移除退出标记
+                }
                 break;
             case R.id.use_Instructions_rl:
                 intent = new Intent(getActivity(), UseInstructionsActivity.class);
@@ -227,7 +229,9 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                             intent = new Intent(getActivity(), LoginActivity.class);
                             startActivity(intent);
                             commonDialog.dialog.dismiss();
-                            Objects.requireNonNull(getActivity()).finish();
+                            if(null != getActivity()){
+                                Objects.requireNonNull(getActivity()).finish();
+                            }
                             //断开蓝牙
                             ((MyApp)getActivity().getApplication()).removeAllDisposable();
                             ((MyApp) getActivity().getApplication()).setConnectionObservable(null);
@@ -245,7 +249,9 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        realName.setText(CommonUtil.getUserData(Objects.requireNonNull(getActivity())).getRealName());
-        phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
+        if(null != getActivity()){
+            realName.setText(CommonUtil.getUserData(Objects.requireNonNull(getActivity())).getRealName());
+            phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
+        }
     }
 }

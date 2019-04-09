@@ -108,13 +108,16 @@ public class SealOrganizationalFragment extends Fragment {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType(),2,false,dataBean.getPortrait()));
                     }
                 }
-                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLinkedList.addAll(NodeHelper.sortNodes(data));
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                if(null != getActivity()){
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mLinkedList.addAll(NodeHelper.sortNodes(data));
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+
             }
         });
     }
@@ -166,15 +169,17 @@ public class SealOrganizationalFragment extends Fragment {
 
                                 mLinkedList.clear();
 
-                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                if(null != getActivity()){
+                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
 //                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
 
-                                        optionBottomDialog.dismiss();
-                                        getDate();
-                                    }
-                                });
+                                            optionBottomDialog.dismiss();
+                                            getDate();
+                                        }
+                                    });
+                                }
                             }
                         });
 

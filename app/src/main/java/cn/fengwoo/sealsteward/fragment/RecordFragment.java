@@ -146,15 +146,17 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
                             }
                             //请求数据
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    recordAdapter = new RecordAdapter(list, getActivity());
-                                    record_lv.setAdapter(recordAdapter);
-                                    recordAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                }
-                            });
+                            if(null != getActivity()){
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        recordAdapter = new RecordAdapter(list, getActivity());
+                                        record_lv.setAdapter(recordAdapter);
+                                        recordAdapter.notifyDataSetChanged(); //刷新数据
+                                        refreshLayout.finishRefresh(); //刷新完成
+                                    }
+                                });
+                            }
 
                         } else {
                             refreshLayout.finishRefresh(); //刷新完成
@@ -261,15 +263,17 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
                             }
                             //请求数据
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    recordAdapter = new RecordAdapter(list, getActivity());
-                                    select_record_lv.setAdapter(recordAdapter);
-                                    recordAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                }
-                            });
+                            if(null != getActivity()){
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        recordAdapter = new RecordAdapter(list, getActivity());
+                                        select_record_lv.setAdapter(recordAdapter);
+                                        recordAdapter.notifyDataSetChanged(); //刷新数据
+                                        refreshLayout.finishRefresh(); //刷新完成
+                                    }
+                                });
+                            }
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
                             Looper.prepare();

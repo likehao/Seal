@@ -106,16 +106,17 @@ public class ApplyRecordTwoFragment extends Fragment implements AdapterView.OnIt
                                         ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()));
                             }
                             //请求数据
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,6);
-                                    apply_record_two_lv.setAdapter(waitApplyAdapter);
-                                    waitApplyAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                }
-                            });
-
+                            if(null != getActivity()){
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,6);
+                                        apply_record_two_lv.setAdapter(waitApplyAdapter);
+                                        waitApplyAdapter.notifyDataSetChanged(); //刷新数据
+                                        refreshLayout.finishRefresh(); //刷新完成
+                                    }
+                                });
+                            }
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
                             Looper.prepare();

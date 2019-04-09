@@ -113,14 +113,16 @@ public class UserOrganizationalFragment extends Fragment {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType(),2,false,dataBean.getPortrait()));
                     }
                 }
-                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLinkedList.addAll(NodeHelper.sortNodes(data));
-                        mAdapter.notifyDataSetChanged();
-                        Utils.log("mAdapter.notifyDataSetChanged();");
-                    }
-                });
+                if(null != getActivity()){
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mLinkedList.addAll(NodeHelper.sortNodes(data));
+                            mAdapter.notifyDataSetChanged();
+                            Utils.log("mAdapter.notifyDataSetChanged();");
+                        }
+                    });
+                }
             }
         });
     }
@@ -174,15 +176,17 @@ public class UserOrganizationalFragment extends Fragment {
 
                                 mLinkedList.clear();
 
-                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                if(null != getActivity()){
+                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
 //                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
 
-                                        optionBottomDialog.dismiss();
-                                        getDate();
-                                    }
-                                });
+                                            optionBottomDialog.dismiss();
+                                            getDate();
+                                        }
+                                    });
+                                }
                             }
                         });
                     }
@@ -194,12 +198,14 @@ public class UserOrganizationalFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                     intent.putExtra("uid", uid);
                     startActivity(intent);
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            optionBottomDialog.dismiss();
-                        }
-                    });
+                    if(null != getActivity()){
+                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                optionBottomDialog.dismiss();
+                            }
+                        });
+                    }
                 }
             }
         });

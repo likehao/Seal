@@ -8,29 +8,27 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.squareup.picasso.Picasso;
-import com.yuyh.library.imgsel.utils.LogUtils;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.Utils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by HQOCSHheqing on 2016/8/3.
@@ -336,6 +334,13 @@ public class NodeTreeAdapter extends BaseAdapter {
 //            holder.imageView.performClick();
         }
 
+        if (holder.iv_mark.getVisibility() == View.VISIBLE) {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.label.getLayoutParams();
+            layoutParams.setMargins(123, 0, 0, 0);
+            holder.label.setLayoutParams(layoutParams);
+        }
+
+
         convertView.setPadding(node.get_level() * retract, 5, 5, 5);
         return convertView;
     }
@@ -346,7 +351,7 @@ public class NodeTreeAdapter extends BaseAdapter {
         public LinearLayout confirm;
         public CheckBox checkBox;
         public ImageView iv_right;
-        public ImageView iv_mark;
+        public CircleImageView iv_mark;
     }
 
 

@@ -146,48 +146,50 @@ public class MessageFragment extends Fragment implements View.OnClickListener {
                         assert responseInfo != null;
                         if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                             for (MessageData messageData : responseInfo.getData()) {
-                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //显示消息数
-                                        int type = messageData.getType();
-                                        int msgNum = messageData.getUnreadCount();
-                                        String id = messageData.getId();
-                                        if (messageData.getType() == 1) {
-                                            sysId = id;    //传递ID到消息列表
-                                            if (msgNum != 0) {
-                                                systemMsgTv.setVisibility(View.VISIBLE);   //系统消息
-                                                systemMsgTv.setText(msgNum + "");
-                                            }else {
-                                                systemMsgTv.setVisibility(View.GONE);
-                                            }
-                                        } else if (messageData.getType() == 2) {
-                                            applyId = id;
-                                            if (msgNum != 0) {
-                                                applyMsgTv.setVisibility(View.VISIBLE);   //审批通知
-                                                applyMsgTv.setText(msgNum + "");
-                                            }else {
-                                                applyMsgTv.setVisibility(View.GONE);
-                                            }
-                                        } else if (messageData.getType() == 3) {
-                                            alarmId = id;
-                                            if (msgNum != 0) {
-                                                alarmMsgTv.setVisibility(View.VISIBLE);   //告警消息
-                                                alarmMsgTv.setText(msgNum + "");
-                                            }else {
-                                                alarmMsgTv.setVisibility(View.GONE);
-                                            }
-                                        } else if (messageData.getType() == 4) {
-                                            waitId = id;
-                                            if (msgNum != 0) {
-                                                waitApplyMsgTv.setVisibility(View.VISIBLE);    //待我审批
-                                                waitApplyMsgTv.setText(msgNum + "");
-                                            }else {
-                                                waitApplyMsgTv.setVisibility(View.GONE);
+                                if(null != getActivity()){
+                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //显示消息数
+                                            int type = messageData.getType();
+                                            int msgNum = messageData.getUnreadCount();
+                                            String id = messageData.getId();
+                                            if (messageData.getType() == 1) {
+                                                sysId = id;    //传递ID到消息列表
+                                                if (msgNum != 0) {
+                                                    systemMsgTv.setVisibility(View.VISIBLE);   //系统消息
+                                                    systemMsgTv.setText(msgNum + "");
+                                                }else {
+                                                    systemMsgTv.setVisibility(View.GONE);
+                                                }
+                                            } else if (messageData.getType() == 2) {
+                                                applyId = id;
+                                                if (msgNum != 0) {
+                                                    applyMsgTv.setVisibility(View.VISIBLE);   //审批通知
+                                                    applyMsgTv.setText(msgNum + "");
+                                                }else {
+                                                    applyMsgTv.setVisibility(View.GONE);
+                                                }
+                                            } else if (messageData.getType() == 3) {
+                                                alarmId = id;
+                                                if (msgNum != 0) {
+                                                    alarmMsgTv.setVisibility(View.VISIBLE);   //告警消息
+                                                    alarmMsgTv.setText(msgNum + "");
+                                                }else {
+                                                    alarmMsgTv.setVisibility(View.GONE);
+                                                }
+                                            } else if (messageData.getType() == 4) {
+                                                waitId = id;
+                                                if (msgNum != 0) {
+                                                    waitApplyMsgTv.setVisibility(View.VISIBLE);    //待我审批
+                                                    waitApplyMsgTv.setText(msgNum + "");
+                                                }else {
+                                                    waitApplyMsgTv.setVisibility(View.GONE);
+                                                }
                                             }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
 
                             refreshLayout.finishRefresh(); //刷新完成

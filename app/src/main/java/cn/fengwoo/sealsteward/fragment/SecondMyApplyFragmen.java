@@ -105,15 +105,17 @@ public class SecondMyApplyFragmen extends Fragment implements AdapterView.OnItem
                                         ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()));
                             }
                             //请求数据
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,2);
-                                    approval_lv.setAdapter(waitApplyAdapter);
-                                    waitApplyAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                }
-                            });
+                            if(null != getActivity()){
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,2);
+                                        approval_lv.setAdapter(waitApplyAdapter);
+                                        waitApplyAdapter.notifyDataSetChanged(); //刷新数据
+                                        refreshLayout.finishRefresh(); //刷新完成
+                                    }
+                                });
+                            }
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
                             Looper.prepare();

@@ -3,12 +3,14 @@ package cn.fengwoo.sealsteward.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,8 +29,10 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Supplier;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +50,7 @@ import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.AddPopuwindow;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
 import cn.fengwoo.sealsteward.view.MyApp;
@@ -93,6 +98,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Timer timer;
     int sum;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
