@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -80,7 +81,12 @@ public class SelectPeopleActivity extends BaseActivity implements View.OnClickLi
                 Utils.log("checked ***id:" + id + "  ***name:" + name);
 //                m_id = id;
 //                m_name = name;
-                selectedUidsMap.put(id, typeString);
+
+                // 如果
+
+                if (TextUtils.isEmpty(selectedUidsMap.get(id))) {
+                    selectedUidsMap.put(id, typeString);
+                }
             }
 
             @Override

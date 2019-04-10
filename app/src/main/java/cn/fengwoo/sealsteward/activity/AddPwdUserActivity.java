@@ -161,6 +161,8 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                             .subscribe(
                                     characteristicValue -> {
                                         // Characteristic value confirmed.
+                                         Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+
                                     },
                                     throwable -> {
                                         // Handle an error here.
