@@ -108,6 +108,7 @@ allprojects {
             url "https://jitpack.io"
         }
         maven { url 'https://maven.google.com' }
+        flatDir { dirs 'libs' }
     }
 }
 
@@ -133,7 +134,7 @@ dependencies {
     implementation(name: 'alipaySdk-15.6.0-20190226104053', ext: 'aar')
 
     // 知乎选图片
-    implementation(name: 'matisse-debug', ext: 'aar')
+//    implementation(name: 'matisse-debug', ext: 'aar')
 
     //pwd
     implementation(name: 'alipay-release', ext: 'aar')
@@ -241,7 +242,7 @@ dependencies {
 
     implementation 'com.hjq:toast:5.8'
 
-//    implementation project(':matisse')
+    implementation project(':matisse')
 
 
 
