@@ -140,12 +140,19 @@ public class UserOrganizationalFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.log("position"+position);
                 if (position == 0) {
+                    String uID = CommonUtil.getUserData(getActivity()).getId();
+                    // 判断自己在判断权限之前
+                    if (uID.equals(uid)) {
+                        Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // 判断权限
                     if (!Utils.hasThePermission(getActivity(), Constants.permission16)) {
                         return;
                     }
 
                   // delete
-                    String uID = CommonUtil.getUserData(getActivity()).getId();
+
                     if (uID.equals(uid)) {
                         Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
                     }else {

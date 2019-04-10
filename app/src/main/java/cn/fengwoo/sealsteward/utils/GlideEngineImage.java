@@ -7,14 +7,15 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
-import com.zhihu.matisse.engine.ImageEngine;
+import com.lxj.matisse.engine.ImageEngine;
+//import com.zhihu.matisse.engine.ImageEngine;
 
 import cn.fengwoo.sealsteward.R;
 
 /**
  * Glide加载图片类,重写此类防止Glide4.0之后api调用方式更改会导致出错
  */
-public class GlideEngineImage implements ImageEngine{
+public class GlideEngineImage implements ImageEngine {
     /**
      * 加载缩列图
      */

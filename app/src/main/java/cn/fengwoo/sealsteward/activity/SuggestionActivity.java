@@ -21,10 +21,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.filter.Filter;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
+import com.lxj.matisse.Matisse;
+import com.lxj.matisse.MimeType;
+import com.lxj.matisse.filter.Filter;
+import com.lxj.matisse.internal.entity.CaptureStrategy;
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.filter.Filter;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -233,10 +237,14 @@ public class SuggestionActivity extends BaseActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK){
             //获取选择的文件返回的uri
-            List<Uri> mSelected = Matisse.obtainResult(data);
-            File fileByUri = null;
-            //将uri转为file
+            List<Uri> mSelected = Matisse.obtainSelectUriResult(data);
+            File fileByUri;
+            if (mSelected != null) {
+                //将uri转为file
                 fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
+            } else {
+                fileByUri = new File(Matisse.obtainCaptureImageResult(data));
+            }
 
          /*   Glide.with(SuggestionActivity.this).load(fileByUri).into(imgOne);
             if (imgOne != null){

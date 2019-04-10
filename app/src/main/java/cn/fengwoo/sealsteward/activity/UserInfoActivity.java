@@ -145,6 +145,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.permission:
                 Utils.log("click permission");
                 Intent intent = new Intent();
+                intent.putExtra("userId", uID);
                 intent.setClass(this, SetPowerActivity.class);
                 intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
                 intent.putExtra("permission", targetPermissionJson);

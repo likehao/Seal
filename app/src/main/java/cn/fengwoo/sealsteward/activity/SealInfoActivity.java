@@ -30,14 +30,18 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
+import com.lxj.matisse.Matisse;
+import com.lxj.matisse.MimeType;
+import com.lxj.matisse.filter.Filter;
+import com.lxj.matisse.internal.entity.CaptureStrategy;
 import com.squareup.picasso.Picasso;
 import com.suke.widget.SwitchButton;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.filter.Filter;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.filter.Filter;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import org.devio.takephoto.compress.CompressConfig;
 import org.json.JSONException;
@@ -424,9 +428,14 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             //获取选择的文件返回的uri
             assert data != null;
-            List<Uri> mSelected = Matisse.obtainResult(data);
-            //将uri转为file
-            File fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
+            List<Uri> mSelected = Matisse.obtainSelectUriResult(data);
+            File fileByUri;
+            if (mSelected != null) {
+                //将uri转为file
+                fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
+            } else {
+                fileByUri = new File(Matisse.obtainCaptureImageResult(data));
+            }
             //压缩文件
             Luban.with(this)
                     .load(fileByUri)   //传入原图

@@ -19,12 +19,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lxj.matisse.Matisse;
+import com.lxj.matisse.MimeType;
+import com.lxj.matisse.filter.Filter;
+import com.lxj.matisse.internal.entity.CaptureStrategy;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.filter.Filter;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.filter.Filter;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -229,38 +233,52 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
      * 选择照片
      */
     private void selectPhone() {
+//        Matisse.from(UploadFileActivity.this)
+//                .choose(MimeType.ofImage(), false)  //图片类型
+//                .countable(true)    //选中后显示数字;false:选中后显示对号
+//                .capture(true)  //是否提供拍照功能
+//                .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))//存储到哪里
+//                .maxSelectable(4)   //可选最大数
+//                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
+//                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
+//                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)   //图像选择和预览活动所需的方向。
+//                .thumbnailScale(0.85f)  //缩略图的清晰程度(与内存占用有关)
+//                .imageEngine(new GlideEngineImage())   // for glide-V4  图片加载引擎  原本使用的是GlideEngine
+//                .originalEnable(true)
+//                .maxOriginalSize(10)
+//               // .autoHideToolbarOnSingleTap(true)
+//                .forResult(REQUEST_CODE_CHOOSE);
+
         Matisse.from(UploadFileActivity.this)
-                .choose(MimeType.ofImage(), false)  //图片类型
-                .countable(true)    //选中后显示数字;false:选中后显示对号
-                .capture(true)  //是否提供拍照功能
-                .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))//存储到哪里
-                .maxSelectable(4)   //可选最大数
-                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
-                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)   //图像选择和预览活动所需的方向。
-                .thumbnailScale(0.85f)  //缩略图的清晰程度(与内存占用有关)
-                .imageEngine(new GlideEngineImage())   // for glide-V4  图片加载引擎  原本使用的是GlideEngine
-                .originalEnable(true)
-                .maxOriginalSize(10)
-               // .autoHideToolbarOnSingleTap(true)
+                .capture()
+                .isCrop(false)
                 .forResult(REQUEST_CODE_CHOOSE);
+
     }
 
-    List<Uri> mSelected;
+    List<Uri> mSelected = new ArrayList<>();
     List<String> path;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
-            mSelected = Matisse.obtainResult(data);
-            //   path =  Matisse.obtainPathResult(data);
-            //加载图片数据
+
+            // 先上传每次拍的照片
+            File fileByUri = new File(Matisse.obtainCaptureImageResult(data));
+
+            // 显示在本地
+            mSelected.add(FileUtil.getImageContentUri(this,fileByUri));
             recycleviewAdapter.setData(mSelected, UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
-            for (int i = 0; i < mSelected.size(); i++) {
+
+//            mSelected = Matisse.obtainSelectUriResult(data);
+//            //   path =  Matisse.obtainPathResult(data);
+//            //加载图片数据
+//            recycleviewAdapter.setData(mSelected, UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
+//            for (int i = 0; i < mSelected.size(); i++) {
                 //将uri转为file
             //    File fileByUri = FileUtil.getFileByUri(mSelected.get(i), this);   //拍照转会报错
-                File fileByUri = new File(FileUtil.getRealFilePath(UploadFileActivity.this, mSelected.get(i)));
+//                File fileByUri = new File(FileUtil.getRealFilePath(UploadFileActivity.this, mSelected.get(i)));
                 Luban.with(this)
                         .load(fileByUri)
                         .ignoreBy(100)
@@ -289,7 +307,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                                 Log.e("TAG", e + "");
                             }
                         }).launch();
-            }
+//            }
         }
     }
 
@@ -404,7 +422,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                photoURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".file.provider",
+                photoURI = FileProvider.getUriForFile(this, "cn.fengwoo.sealsteward.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, requestCode);

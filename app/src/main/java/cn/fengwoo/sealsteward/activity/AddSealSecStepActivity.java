@@ -15,21 +15,28 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lxj.matisse.Matisse;
+import com.lxj.matisse.MimeType;
+import com.lxj.matisse.filter.Filter;
+import com.lxj.matisse.internal.entity.CaptureStrategy;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.white.easysp.EasySP;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.filter.Filter;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.filter.Filter;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.model.InvokeParam;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -172,9 +179,14 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             //获取选择的文件返回的uri
             assert data != null;
-            List<Uri> mSelected = Matisse.obtainResult(data);
-            //将uri转为file
-            File fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
+            List<Uri> mSelected = Matisse.obtainSelectUriResult(data);
+            File fileByUri;
+            if (mSelected != null) {
+                //将uri转为file
+                fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
+            } else {
+                fileByUri = new File(Matisse.obtainCaptureImageResult(data));
+            }
             //压缩文件
             Luban.with(this)
                     .load(fileByUri)   //传入原图
@@ -209,12 +221,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                     }).launch();
         }
     }
-
-
-
-
-
-
 
 
     /**
@@ -254,7 +260,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
         if (EasySP.init(this).getString("dataProtocolVersion").equals("3")) {
             addSealData.setDataProtocolVersion("3.0");
-        }else{
+        } else {
             addSealData.setDataProtocolVersion("2.0");
         }
 
@@ -302,6 +308,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             }
         });
     }
+
     /**
      * 图片选择器
      */

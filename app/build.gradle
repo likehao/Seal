@@ -52,7 +52,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 }
 //分享
 MobSDK {
@@ -132,6 +132,9 @@ dependencies {
     //支付宝支付
     implementation(name: 'alipaySdk-15.6.0-20190226104053', ext: 'aar')
 
+    // 知乎选图片
+    implementation(name: 'matisse-debug', ext: 'aar')
+
     //pwd
     implementation(name: 'alipay-release', ext: 'aar')
 
@@ -192,8 +195,8 @@ dependencies {
     //侧滑删除
     implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
 
-    //知乎图片选择器
-    implementation 'com.zhihu.android:matisse:0.5.1'
+//    //知乎图片选择器
+//    implementation 'com.zhihu.android:matisse:0.5.1'
 
     //权限申请
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
@@ -237,6 +240,10 @@ dependencies {
     implementation 'com.weiwangcn.betterspinner:library:1.1.0'
 
     implementation 'com.hjq:toast:5.8'
+
+//    implementation project(':matisse')
+
+
 
 //    implementation project(':alipay')
 }

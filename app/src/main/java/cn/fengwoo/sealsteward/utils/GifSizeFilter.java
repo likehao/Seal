@@ -5,11 +5,16 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.filter.Filter;
-import com.zhihu.matisse.internal.entity.IncapableCause;
-import com.zhihu.matisse.internal.entity.Item;
-import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
+import com.lxj.matisse.MimeType;
+import com.lxj.matisse.filter.Filter;
+import com.lxj.matisse.internal.entity.IncapableCause;
+import com.lxj.matisse.internal.entity.Item;
+import com.lxj.matisse.internal.utils.PhotoMetadataUtils;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.filter.Filter;
+//import com.zhihu.matisse.internal.entity.IncapableCause;
+//import com.zhihu.matisse.internal.entity.Item;
+//import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 
 import java.io.InputStream;
 import java.util.HashSet;
