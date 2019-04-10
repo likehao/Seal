@@ -332,6 +332,19 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         }
         return sealEnclosureBean;
     }
+
+    private boolean getTargetSealEnableEnclosure(String thisMac) {
+        boolean enableEnclosure = false;
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(thisMac)) {
+                if (sealData != null) {
+                    enableEnclosure = sealData.isEnableEnclosure();
+                }
+            }
+        }
+        return enableEnclosure;
+    }
+
     //扫描到蓝牙添加到列表中
     private void addBluetooth(BluetoothDevice device) {
     }
@@ -403,6 +416,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 // 不是添加新的印章，就是连接原来的seal,保存sealId
                                 EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
                                 if (getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()) != null) {
+
+                                    EasySP.init(this).putBoolean("enableEnclosure", getTargetSealEnableEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()));
+
                                     EasySP.init(this).putString("scope", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getScope()+"");
                                     EasySP.init(this).putString("latitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLatitude() +"");
                                     EasySP.init(this).putString("longitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLongitude()+"");

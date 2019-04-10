@@ -335,9 +335,9 @@ public class NodeTreeAdapter extends BaseAdapter {
         }
 
         if (holder.iv_mark.getVisibility() == View.VISIBLE) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.label.getLayoutParams();
-            layoutParams.setMargins(123, 0, 0, 0);
-            holder.label.setLayoutParams(layoutParams);
+//            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.label.getLayoutParams();
+//            layoutParams.setMargins(123, 0, 0, 0);
+//            holder.label.setLayoutParams(layoutParams);
         }
 
 

@@ -16,15 +16,7 @@
         android:src="@drawable/expand" />
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_mark"
-        android:visibility="gone"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/human_pic" />
+
 
     <!--保证整块区域可点，使用户好点击-->
     <LinearLayout
@@ -60,15 +52,35 @@
     </LinearLayout>
 
 
-    <TextView
-        android:layout_marginLeft="1dp"
-        android:id="@+id/id_treenode_label"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/id_treenode_icon"
         android:layout_toStartOf="@id/id_confirm"
+        android:orientation="horizontal"
+       >
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_mark"
+        android:visibility="gone"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/human_pic" />
+
+    <TextView
+        android:layout_marginLeft="5dp"
+        android:id="@+id/id_treenode_label"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:textColor="@android:color/black"
         android:textSize="12sp" />
+
+    </LinearLayout>
 
 </RelativeLayout>

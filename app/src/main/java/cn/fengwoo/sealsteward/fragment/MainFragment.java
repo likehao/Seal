@@ -407,9 +407,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     @Override
                     public void run() {
 //                        permissions();
-                        if (stampTag) {
+                        if (stampTag && EasySP.init(getActivity()).getBoolean("enableEnclosure", false)) {
                             mLocationClient.start();
-                            handler.postDelayed(this, 3000);
+                            handler.postDelayed(this, 1000);
                         }
                     }
                 }, 3000);
@@ -929,13 +929,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             currentLocation = location;
 
 
-            if (stampTag) {
+            if (stampTag && EasySP.init(getActivity()).getBoolean("enableEnclosure", false)) {
                 // 正在盖章，计算距离
                 double distance = Utils.distanceOfTwoPoints(location.getLatitude(), location.getLongitude(), Double.parseDouble(EasySP.init(getActivity()).getString("latitude")), Double.parseDouble(EasySP.init(getActivity()).getString("longitude")));
-                Utils.log("distance:" + distance +"");
+                Utils.log("distance:" + distance + "");
                 double scope = Double.parseDouble(EasySP.init(getActivity()).getString("scope"));
 
-                if (distance*1000 > scope) {
+                if (distance * 1000 > scope) {
                     // 大于半径，断开
 
                     Utils.log("distance > scope");
@@ -947,7 +947,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     handler.removeCallbacksAndMessages(null);
                     showToast("超出地理围栏，设备已断开");
                 }
-            }else{
+            } else {
                 // 获取currentAddress
                 getAddress(location.getLatitude(), location.getLongitude());
                 Utils.log(location.getLatitude() + "");

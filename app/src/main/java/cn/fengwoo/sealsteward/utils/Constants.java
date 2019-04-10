@@ -16,6 +16,8 @@ public class Constants {
     // latitude   String // 纬度
     // longitude   String // 经度
 
+    // enableEnclosure boolean // 是否开启电子围栏
+
     public static final int TO_NEARBY_DEVICE = 20;
     public static final int TO_WANT_SEAL = 21;
 
