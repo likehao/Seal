@@ -107,7 +107,9 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
                                 String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
-                                        ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()));
+                                        ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
+                                        ,app.getApplyUserName(),app.getOrgStructureName()
+                                        ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()));
                             }
                             //请求数据
                             if(null != getActivity()){
@@ -125,6 +127,9 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
+                            Looper.prepare();
+                            Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
+                            Looper.loop();
                         }
 
                     }

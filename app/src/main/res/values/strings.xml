@@ -91,7 +91,7 @@
     <string name="start_password">启动密码</string>
     <string name="key_password">按键密码</string>
     <string name="Reset_the_seal">重置印章</string>
-    <string name="reset_device">重置设备</string>
+    <string name="reset_device">重置印章</string>
     <string name="clear">清除</string>
     <string name="complete">完成</string>
     <string name="sealTime">盖章时间</string>
@@ -298,4 +298,6 @@
     <string name="see_record_file">查看记录文件</string>
     <string name="seeSeal_file">查看盖章文件</string>
     <string name="electric">电量:</string>
+    <string name="add_user_need_register">被添加的用户需要先注册</string>
+    <string name="click_company_edit">点击公司可添加部门,点击部门可编辑部门</string>
 </resources>

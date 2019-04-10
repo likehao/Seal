@@ -102,7 +102,9 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
                                 String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
-                                        ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()));
+                                        ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
+                                        ,app.getApplyUserName(),app.getOrgStructureName()
+                                        ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()));
                             }
                             //请求数据
                             if(null != getActivity()){

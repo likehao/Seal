@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -29,10 +28,8 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.Supplier;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,15 +47,12 @@ import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
-import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.AddPopuwindow;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -160,7 +154,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fragmentList = new ArrayList<Fragment>();
         initFragment();
         title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
-
     }
 
     private void setListener() {
@@ -402,24 +395,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                         .getType());
                 assert responseInfo != null;
-
-                if (responseInfo.getCode() == 1002 || responseInfo.getCode() == 1003 || responseInfo.getCode() == 1004){
-                    //关闭定时器
-                    int i = responseInfo.getCode();
-                    stopTimer();
-                    //清除用户信息
-                    LoginData.logout(MainActivity.this);
-                    //断开蓝牙
-                    ((MyApp)getApplication()).removeAllDisposable();
-                    ((MyApp) getApplication()).setConnectionObservable(null);
-                    //下线直接跳转登录界面
-                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                    intent.putExtra("loginstatus","timeout");
-                    intent.putExtra("info",responseInfo.getMessage());
-                    startActivity(intent);
-                    System.exit(0);
-                 //   onBackPressed();// 销毁所有activity退出主程序
-                    Log.e("ATG","下线成功!!!!!!!!!!!!!!!");
+                if (responseInfo.getCode() != null) {
+                    if (responseInfo.getCode() == 1002 || responseInfo.getCode() == 1003 || responseInfo.getCode() == 1004) {
+                        //关闭定时器
+                        int i = responseInfo.getCode();
+                        stopTimer();
+                        //清除用户信息
+                        LoginData.logout(MainActivity.this);
+                        //断开蓝牙
+                        ((MyApp) getApplication()).removeAllDisposable();
+                        ((MyApp) getApplication()).setConnectionObservable(null);
+                        //下线直接跳转登录界面
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.putExtra("loginstatus", "timeout");
+                        intent.putExtra("info", responseInfo.getMessage());
+                        startActivity(intent);
+                        System.exit(0);
+                        //   onBackPressed();// 销毁所有activity退出主程序
+                        Log.e("ATG", "下线成功!!!!!!!!!!!!!!!");
+                    }
                 }
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     for (MessageData messageData : responseInfo.getData()) {
@@ -443,7 +437,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Log.e("TAG", "获取消息成功!!!!!!!!!!!!!!!!");
 
                 } else {
-                    Log.e("TAG",responseInfo.getMessage());
+                    Log.e("TAG", responseInfo.getMessage());
                 }
 
             }

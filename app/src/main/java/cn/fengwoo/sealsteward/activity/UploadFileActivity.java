@@ -173,7 +173,6 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 .getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
-            //            EventBus.getDefault().post(new MessageEvent("上传图片成功","刷新"));
                         Intent intent = new Intent(UploadFileActivity.this,MainActivity.class);
                         startActivity(intent);
                         finish();

@@ -10,8 +10,15 @@
 
     <include layout="@layout/head" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_user_need_register"
+        android:textColor="@color/pink"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"/>
+
     <View
-        android:layout_marginTop="10dp"
         style="@style/line" />
 
     <LinearLayout
@@ -236,6 +243,7 @@
                     android:layout_marginEnd="90dp"
                     android:background="@null"
                     android:hint="@string/please_input_position"
+                    android:text="普通员工"
                     android:textSize="12sp" />
 
 

@@ -17,12 +17,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.StampRecordList;
 import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
@@ -164,6 +167,7 @@ public class RecordAdapter extends BaseAdapter {
                                 viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
                                 recordData.get(position).setApproveStatus(5);
                                 notifyDataSetChanged();
+                                EventBus.getDefault().post(new MessageEvent("关闭刷新","关闭刷新"));
                             }
                         });
                     }

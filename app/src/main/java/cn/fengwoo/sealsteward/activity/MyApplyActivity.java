@@ -68,10 +68,8 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
         titleList.add("已驳回");
         fragmentList.add(new FirstMyApplyFragment());
         fragmentList.add(new SecondMyApplyFragmen());
-        /*fragmentList.add(new ThirdMyApplyFragment());
-        fragmentList.add(new FourthMyApplyFragment());*/
-        fragmentList.add(new ApplyRecordOneFragment());
-        fragmentList.add(new ApplyRecordTwoFragment());
+        fragmentList.add(new ThirdMyApplyFragment());
+        fragmentList.add(new FourthMyApplyFragment());
         viewPager.setAdapter(new TabFragmentAdapter(fragmentManager,MyApplyActivity.this,fragmentList,titleList));
         tabLayout.setupWithViewPager(viewPager);//此方法就是让tablayout和ViewPager联动
 

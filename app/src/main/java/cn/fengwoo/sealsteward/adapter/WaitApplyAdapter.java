@@ -116,8 +116,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                 }
             });
         } else if (code == 5) {  //已审批(审批记录)
-            viewHolder.apply_person_ll.setVisibility(View.VISIBLE);
-            viewHolder.apply_department_ll.setVisibility(View.VISIBLE);
+
             seeRecordCloseBill(status, position, id);
 
         } else {
@@ -166,7 +165,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                 intent.putExtra("headPortrait", waitApplyData.get(position).getHeadPortrait());
                 intent.putExtra("sealName", waitApplyData.get(position).getSealName());
                 intent.putExtra("orgStructureName", waitApplyData.get(position).getOrgStructureName());
-                intent.putExtra("sealPerson", waitApplyData.get(position).getSealPeople());
+                intent.putExtra("sealPerson", waitApplyData.get(position).getApplyUserName());
                 context.startActivity(intent);
             }
         });

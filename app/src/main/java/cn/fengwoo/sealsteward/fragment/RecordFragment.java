@@ -201,12 +201,9 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             Intent intent = new Intent(getActivity(), SelectSealRecodeActivity.class);
             startActivityForResult(intent, 100);
         }
-/*
-        if (s.equals("上传图片成功")){
+        if (s.equals("关闭刷新")){
             record_refreshLayout.autoRefresh();
-
         }
-*/
 
     }
 

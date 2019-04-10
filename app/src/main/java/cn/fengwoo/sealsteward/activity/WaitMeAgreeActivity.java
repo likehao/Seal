@@ -21,6 +21,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,6 +69,10 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("待我审批");
+        Intent intent = getIntent();
+        String param = intent.getStringExtra("msgId");
+        updateReadMsg(param);  //更新已读
+
         set_back_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +82,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         waitMeAgreeDataList = new ArrayList<>();
         wait_me_agree_lv.setOnItemClickListener(this);
         wait_me_agree_apply_smartRL.autoRefresh();
+
     }
 
     /**
@@ -120,6 +126,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                                     wait_me_agree_lv.setAdapter(waitMeAgreeAdapter);
                                     waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
                                     refreshLayout.finishRefresh(); //刷新完成
+
                                 }
                             });
 
@@ -163,4 +170,35 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         super.onResume();
         wait_me_agree_apply_smartRL.autoRefresh();
     }*/
+
+    /**
+     * 更新已读消息
+     */
+    private void updateReadMsg(String msgId){
+        HashMap<String ,String> hashMap = new HashMap<>();
+        hashMap.put("messageId",msgId);
+        HttpUtil.sendDataAsync(WaitMeAgreeActivity.this, HttpUrl.UPDATEREADMSG, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
+                        .getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        Log.e("TAG","消息已被阅读成功!!!!!!!!!");
+                    }
+                }else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+            }
+        });
+    }
 }

@@ -105,12 +105,9 @@ public class MessageFragment extends Fragment implements View.OnClickListener {
                 setMsgId(alarmId);
                 break;
             case R.id.waitApply_msg_ll:
-                if (waitId != null) {
-                    Intent intent = new Intent(getActivity(), WaitMeAgreeActivity.class);
-                    startActivity(intent);
-                }else {
-                    Toast.makeText(getActivity(),"暂无消息",Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(getActivity(), WaitMeAgreeActivity.class);
+                intent.putExtra("msgId", waitId);
+                startActivity(intent);
             //    setMsgId(waitId);
                 break;
         }
