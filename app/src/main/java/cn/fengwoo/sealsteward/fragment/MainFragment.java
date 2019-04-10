@@ -412,7 +412,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             handler.postDelayed(this, 1000);
                         }
                     }
-                }, 3000);
+                }, 1000);
 
                 String expireTime = data.getStringExtra("expireTime");
                 availableCount = data.getStringExtra("availableCount");
@@ -739,6 +739,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 0E A3")) {
                                     // 成功读到一条记录
                                     unuploadedQuantity--; // 未上传的盖章记录数量减一
+                                    Utils.log("unuploadedQuantity:" + unuploadedQuantity);
                                     // 解析数据，存入对象
 
                                     // byte[3] 记录序号 暂时没用
@@ -759,7 +760,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     stampSeqNumber = DataTrans.bytesToInt(stampSeqNumberBytes, 0);
 
                                     // byte[11] - byte[16] 盖章时间（stampTime）
-                                    byte[] stampTimeBytes = DataTrans.subByte(bytes, 11, 16);
+//                                    byte[] stampTimeBytes = DataTrans.subByte(bytes, 11, 6);
                                     String stampTimeHex = Utils.bytesToHexString(bytes).substring(33, 50);
                                     stampTime = DateUtils.hexTimeToTimeStamp(stampTimeHex);
 
