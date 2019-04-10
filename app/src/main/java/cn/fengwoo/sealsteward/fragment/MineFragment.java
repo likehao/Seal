@@ -59,21 +59,21 @@ import okhttp3.Response;
 /**
  * 主页我的
  */
-public class MineFragment extends Fragment implements View.OnClickListener{
+public class MineFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.set_rl)  //设置
-    RelativeLayout set_rl;
+            RelativeLayout set_rl;
     @BindView(R.id.mine_person_data_ll)   //个人信息
-    LinearLayout mine_person_data_ll;
+            LinearLayout mine_person_data_ll;
     @BindView(R.id.my_company_rl)   //我的公司
-    RelativeLayout my_company_rl;
+            RelativeLayout my_company_rl;
     @BindView(R.id.my_sign_rl)  //我的签名
-    RelativeLayout my_sign_rl;
-/*    @BindView(R.id.my_user_rl)  //我的用户
-    RelativeLayout my_user_rl;
-    @BindView(R.id.my_sealList_rl)   //印章列表
-    RelativeLayout my_sealList_rl;
-    @BindView(R.id.my_apply_rl)
-    RelativeLayout my_aply_rl;    //我的申请*/
+            RelativeLayout my_sign_rl;
+    /*    @BindView(R.id.my_user_rl)  //我的用户
+        RelativeLayout my_user_rl;
+        @BindView(R.id.my_sealList_rl)   //印章列表
+        RelativeLayout my_sealList_rl;
+        @BindView(R.id.my_apply_rl)
+        RelativeLayout my_aply_rl;    //我的申请*/
     @BindView(R.id.suggestion_rl)
     RelativeLayout suggestion_rl;
     @BindView(R.id.logout_bt)
@@ -90,12 +90,13 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
     private Intent intent;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.mine_fragment,container,false);
+        View view = inflater.inflate(R.layout.mine_fragment, container, false);
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         initView();
         setListener();
         return view;
@@ -103,15 +104,15 @@ public class MineFragment extends Fragment implements View.OnClickListener{
 
     private void initView() {
         String headPortrait = CommonUtil.getUserData(getActivity()).getHeadPortrait();
-        if(headPortrait != null && !headPortrait.isEmpty()){
+        if (headPortrait != null && !headPortrait.isEmpty()) {
             //先从本地读取，没有则下载
             Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
-            if(bitmap == null){
+            if (bitmap == null) {
                 HttpDownloader.downloadImage(getActivity(), 1, headPortrait, new DownloadImageCallback() {
                     @Override
                     public void onResult(final String fileName) {
-                        if(fileName != null){
-                            getActivity().runOnUiThread(new Runnable(){
+                        if (fileName != null) {
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     String headPortraitPath = "file://" + HttpDownloader.path + fileName;
@@ -121,7 +122,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                         }
                     }
                 });
-            } else{
+            } else {
                 String headPortraitPath = "file://" + HttpDownloader.path + headPortrait;
                 Picasso.with(getActivity()).load(headPortraitPath).into(headImg_cir);
             }
@@ -138,13 +139,13 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         my_aply_rl.setOnClickListener(this);*/
         suggestion_rl.setOnClickListener(this);
         logout_bt.setOnClickListener(this);
-    //    nearby_device_rl.setOnClickListener(this);
+        //    nearby_device_rl.setOnClickListener(this);
         use_Instructions_rl.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.set_rl:
                 intent = new Intent(getActivity(), SetActivity.class);
                 startActivity(intent);
@@ -152,7 +153,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
             case R.id.mine_person_data_ll:  //个人信息
                 intent = new Intent(getActivity(), PersonCenterActivity.class);
                 //startActivity(intent);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
                 break;
             case R.id.my_company_rl:
                 intent = new Intent(getActivity(), MyCompanyActivity.class);
@@ -184,7 +185,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.logout_bt:
                 logoutDialog();
-                if(null != getActivity()){
+                if (null != getActivity()) {
                     LoginData.logout(Objects.requireNonNull(getActivity())); //移除退出标记
                 }
                 break;
@@ -196,8 +197,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    public void onActivityResult(int requestCode,int resultCode,Intent data){
-        if(requestCode == 1 && resultCode == 1){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == 1) {
             initView();
         }
     }
@@ -205,8 +206,8 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     /**
      * 退出
      */
-    private void logoutDialog(){
-        final CommonDialog commonDialog = new CommonDialog(getActivity(),"提示","确认退出吗？","确定");
+    private void logoutDialog() {
+        final CommonDialog commonDialog = new CommonDialog(getActivity(), "提示", "确认退出吗？", "确定");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override
@@ -214,9 +215,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                 HttpUtil.sendDataAsync(getActivity(), HttpUrl.LOGOUT, 1, null, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        Looper.prepare();
-                        Toast.makeText(getActivity(),e+"",Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                        Log.e("TAG", e + "退出错误错误错误!!!!!!!!!!!!!!!");
                     }
 
                     @Override
@@ -225,20 +224,22 @@ public class MineFragment extends Fragment implements View.OnClickListener{
                         Gson gson = new Gson();
                         final ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
-                        if (responseInfo.getData()){
-                            intent = new Intent(getActivity(), LoginActivity.class);
-                            startActivity(intent);
-                            commonDialog.dialog.dismiss();
-                            if(null != getActivity()){
-                                Objects.requireNonNull(getActivity()).finish();
-                            }
-                            //断开蓝牙
-                            ((MyApp)getActivity().getApplication()).removeAllDisposable();
-                            ((MyApp) getActivity().getApplication()).setConnectionObservable(null);
-                            Log.e("TAG","退出成功.........");
+                        if (responseInfo.getCode() == 0) {
+                            if (responseInfo.getData()) {
+                                intent = new Intent(getActivity(), LoginActivity.class);
+                                startActivity(intent);
+                                commonDialog.dialog.dismiss();
+                                if (null != getActivity()) {
+                                    Objects.requireNonNull(getActivity()).finish();
+                                }
+                                //断开蓝牙
+                                ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                                ((MyApp) getActivity().getApplication()).setConnectionObservable(null);
+                                Log.e("TAG", "退出成功.........");
 
-                        }else {
-                            Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -249,7 +250,7 @@ public class MineFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        if(null != getActivity()){
+        if (null != getActivity()) {
             realName.setText(CommonUtil.getUserData(Objects.requireNonNull(getActivity())).getRealName());
             phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
         }

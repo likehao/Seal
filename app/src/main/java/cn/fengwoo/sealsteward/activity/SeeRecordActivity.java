@@ -283,7 +283,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         }
 
         int totalHeight = 0;
-        for (int i = 0, len = listadapter.getCount(); i < len; i++) {
+        for (int i = 0; i < listadapter.getCount(); i++) {
             // listAdapter.getCount()返回数据项的数目
             View listItem = listadapter.getView(i, null, listView);
             // 计算子项View 的宽高

@@ -149,7 +149,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <ListView
+                <cn.fengwoo.sealsteward.utils.ListViewForScrollView
                     android:id="@+id/see_record_lv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -208,30 +208,30 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                             public void run() {
                                 realName_tv.setText(responseInfo.getData().getRealName());
                                 mobilePhone_tv.setText(responseInfo.getData().getMobilePhone());
-                             //   companyName_tv.setText(responseInfo.getData().getCompanyName());
+                                //   companyName_tv.setText(responseInfo.getData().getCompanyName());
                                 companyName_tv.setText(CommonUtil.getUserData(PersonCenterActivity.this).getCompanyName());
                                 department_tv.setText(responseInfo.getData().getOrgStructureName());
                                 job_tv.setText(responseInfo.getData().getJob());
                                 String email = responseInfo.getData().getUserEmail();
-                                if (email == null || email.equals("")){
+                                if (email == null || email.equals("")) {
                                     email_tv.setText("未设置");
-                                }else {
+                                } else {
                                     email_tv.setText(responseInfo.getData().getUserEmail());
                                 }
                                 String headPortrait = responseInfo.getData().getHeadPortrait();
-                                if(headPortrait != null && !headPortrait.isEmpty()){
+                                if (headPortrait != null && !headPortrait.isEmpty()) {
                                     Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
-                                    if(bitmap == null){
-                                        HttpDownloader.downloadImage(PersonCenterActivity.this,1,headPortrait,new DownloadImageCallback(){
+                                    if (bitmap == null) {
+                                        HttpDownloader.downloadImage(PersonCenterActivity.this, 1, headPortrait, new DownloadImageCallback() {
                                             @Override
-                                            public void onResult(final String fileName){
-                                                if(fileName != null){
+                                            public void onResult(final String fileName) {
+                                                if (fileName != null) {
                                                     String path = "file://" + HttpDownloader.path + fileName;
                                                     Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
                                                 }
                                             }
                                         });
-                                    } else{
+                                    } else {
                                         String path = "file://" + HttpDownloader.path + responseInfo.getData().getHeadPortrait();
                                         Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
                                     }
@@ -427,24 +427,23 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                             FileInputStream fis = new FileInputStream(file.getPath());
                                             int b = -1;
                                             List<Byte> byteList = new ArrayList<Byte>();
-                                            while((b = fis.read()) != -1){
-                                                byteList.add((byte)b);
+                                            while ((b = fis.read()) != -1) {
+                                                byteList.add((byte) b);
                                             }
                                             //关闭流
                                             fis.close();
                                             //转换数组
                                             int size = byteList.size();
                                             byte[] buffer = new byte[size];
-                                            for(int i=0;i< size;i++){
+                                            for (int i = 0; i < size; i++) {
                                                 buffer[i] = byteList.get(i);
                                             }
                                             //保存到SD卡中
-                                            Boolean flag =HttpDownloader.saveBitmapToSDCard(buffer,imgName);
-                                            if(flag){
+                                            Boolean flag = HttpDownloader.saveBitmapToSDCard(buffer, imgName);
+                                            if (flag) {
                                                 //更新头像
                                                 updateHeadPortrait(imgName);
-                                            }
-                                            else{
+                                            } else {
                                                 showToast("保存图片失败....");
                                             }
                                         } catch (Exception e) {
@@ -458,6 +457,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                         Looper.loop();
                                     }
                                 }
+
                                 @Override
                                 public void onReqFailed(String errorMsg) {
                                     Log.e("TAG", "发送图片至服务器失败........");
@@ -514,6 +514,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         });
 
     }
+
     private void updateHeadPortrait(final String fileName) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("headPortraitId", fileName);
@@ -535,28 +536,30 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }.getType());
                 if (responseInfo.getCode() == 0) {
-                    //更新缓存
-                    LoginData loginData = CommonUtil.getUserData(PersonCenterActivity.this);
-                    if(loginData != null){
-                        loginData.setHeadPortrait(fileName);
-                        CommonUtil.setUserData(PersonCenterActivity.this,loginData);
-                    }
-
-                    AccountDao accountDao = new AccountDao(PersonCenterActivity.this);
-                    HistoryInfo historyInfo = new HistoryInfo(loginData.getMobilePhone(), loginData.getRealName(), loginData.getHeadPortrait(), new Date().getTime());
-                    accountDao.insert(historyInfo);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //加载图片
-                            String filePath = "file://"+HttpDownloader.path + fileName;
-                            Picasso.with(PersonCenterActivity.this).load(filePath).into(headImg_iv);
-                            Log.e("ATG", "成功加载头像........");
-                            loadingView.cancel();
+                    if (responseInfo.getData()) {
+                        //更新缓存
+                        LoginData loginData = CommonUtil.getUserData(PersonCenterActivity.this);
+                        if (loginData != null) {
+                            loginData.setHeadPortrait(fileName);
+                            CommonUtil.setUserData(PersonCenterActivity.this, loginData);
                         }
-                    });
-                } else{
+
+                        AccountDao accountDao = new AccountDao(PersonCenterActivity.this);
+                        HistoryInfo historyInfo = new HistoryInfo(loginData.getMobilePhone(), loginData.getRealName(), loginData.getHeadPortrait(), new Date().getTime());
+                        accountDao.insert(historyInfo);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //加载图片
+                                String filePath = "file://" + HttpDownloader.path + fileName;
+                                Picasso.with(PersonCenterActivity.this).load(filePath).into(headImg_iv);
+                                Log.e("ATG", "成功加载头像........");
+                                loadingView.cancel();
+                            }
+                        });
+                    }
+                } else {
                     loadingView.cancel();
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
@@ -566,6 +569,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         });
 
     }
+
     /**
      * 选择地址
      */
