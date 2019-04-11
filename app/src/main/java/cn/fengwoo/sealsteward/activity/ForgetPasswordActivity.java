@@ -117,10 +117,10 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
                         if (responseInfo.getCode() == 0){
                             if (responseInfo.getData()){
                                 timer.start();
+                                Log.e("TAG","获取验证码成功!!!!!!!!!!!!!!!!");
                                 Looper.prepare();
                                 showToast("验证码已发送");
                                 Looper.loop();
-                                Log.e("TAG","获取验证码成功!!!!!!!!!!!!!!!!");
                             }
                         }else {
                             Looper.prepare();

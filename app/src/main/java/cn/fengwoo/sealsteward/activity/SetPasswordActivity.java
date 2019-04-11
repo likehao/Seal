@@ -143,11 +143,12 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                         Intent intent = new Intent(SetPasswordActivity.this, LoginActivity.class);
                         intent.putExtra("password",password);
                         startActivity(intent);
+                        finish();
                         Looper.prepare();
                         showToast("注册成功");
                         Looper.loop();
                         Log.e("TAG", "注册成功!!!!!!!!!!!!!!!!!!!");
-                        finish();
+
                     }
                 }else {
                     Looper.prepare();
@@ -195,11 +196,12 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                         Intent intent = new Intent(SetPasswordActivity.this, LoginActivity.class);
                         intent.putExtra("password",password);
                         startActivity(intent);
+                        finish();
                         Looper.prepare();
                         showToast("设置密码成功");
                         Looper.loop();
                         Log.e("TAG", "设置密码成功!!!!!!!!!!!!!!!!!!!");
-                        finish();
+
                     }
                 }else {
                     Looper.prepare();
