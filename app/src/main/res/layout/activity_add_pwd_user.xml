@@ -74,12 +74,14 @@
                     android:textColor="@color/black" />
 
                 <EditText
+                    android:gravity="right"
                     android:id="@+id/et_use_times"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="250dp"
                     android:background="@null"
                     android:hint="请输入次数"
+                    android:layout_marginEnd="10dp"
                     android:textSize="12sp" />
 
             </RelativeLayout>

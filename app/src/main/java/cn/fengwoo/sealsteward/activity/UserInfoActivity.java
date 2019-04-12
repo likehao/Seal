@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -114,7 +115,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     }
 
                     Log.e("TAG", "获取个人信息数据成功........");
-                    Utils.log(result);
+//                    Utils.log(result);
                     //更新
                     runOnUiThread(new Runnable() {
                         @Override
@@ -149,8 +150,18 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 intent.setClass(this, SetPowerActivity.class);
                 intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
                 intent.putExtra("permission", targetPermissionJson);
-                startActivity(intent);
+                startActivityForResult(intent,12);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Utils.log("onActivityResult");
+        if (requestCode == 12 && resultCode == 12) {
+            Utils.log("requestCode == 12 && resultCode == 12");
+            getUserInfoData(uID);
         }
     }
 }

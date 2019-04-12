@@ -603,7 +603,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "重置成功", Toast.LENGTH_SHORT).show();
 
                         }
                     });

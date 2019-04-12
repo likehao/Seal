@@ -164,7 +164,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         addUserInfo.setOrgStructureId(departmentId);
         addUserInfo.setOrgStructureName(departmentName);
         addUserInfo.setMobilePhone(phone_number_et.getText().toString().replace(" ", ""));
-        addUserInfo.setJob(spinner_job.getText().toString());
+        addUserInfo.setJob(et_job.getText().toString());
         addUserInfo.setCode(code_et.getText().toString());
 
         HttpUtil.sendDataAsync(AddUserActivity.this, HttpUrl.ADD_USER, 2, null, addUserInfo, new Callback() {

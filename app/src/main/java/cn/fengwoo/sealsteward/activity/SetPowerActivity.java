@@ -157,48 +157,91 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
     private void setSwitchButtons() {
         if (targetPermissionJson.contains(Constants.permission1)) {
             permission1.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission2)) {
+            funcIdList.add(Constants.permission1);
+        }
+        if (targetPermissionJson.contains(Constants.permission2)) {
             permission2.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission3)) {
+            funcIdList.add(Constants.permission2);
+        }
+        if (targetPermissionJson.contains(Constants.permission3)) {
             permission3.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission4)) {
+            funcIdList.add(Constants.permission3);
+        }
+        if (targetPermissionJson.contains(Constants.permission4)) {
             permission4.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission5)) {
+            funcIdList.add(Constants.permission4);
+        }
+        if (targetPermissionJson.contains(Constants.permission5)) {
             permission5.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission6)) {
+            funcIdList.add(Constants.permission5);
+        }
+        if (targetPermissionJson.contains(Constants.permission6)) {
             permission6.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission7)) {
+            funcIdList.add(Constants.permission6);
+        }
+        if (targetPermissionJson.contains(Constants.permission7)) {
             permission7.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission8)) {
+            funcIdList.add(Constants.permission7);
+        }
+        if (targetPermissionJson.contains(Constants.permission8)) {
             permission8.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission9)) {
+            funcIdList.add(Constants.permission8);
+        }
+        if (targetPermissionJson.contains(Constants.permission9)) {
             permission9.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission10)) {
+            funcIdList.add(Constants.permission9);
+        }
+        if (targetPermissionJson.contains(Constants.permission10)) {
             permission10.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission11)) {
+            funcIdList.add(Constants.permission10);
+        }
+        if (targetPermissionJson.contains(Constants.permission11)) {
             permission11.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission12)) {
+            funcIdList.add(Constants.permission11);
+        }
+        if (targetPermissionJson.contains(Constants.permission12)) {
             permission12.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission13)) {
+            funcIdList.add(Constants.permission12);
+        }
+        if (targetPermissionJson.contains(Constants.permission13)) {
             permission13.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission14)) {
+            funcIdList.add(Constants.permission13);
+        }
+        if (targetPermissionJson.contains(Constants.permission14)) {
             permission14.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission15)) {
+            funcIdList.add(Constants.permission14);
+        }
+        if (targetPermissionJson.contains(Constants.permission15)) {
             permission15.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission16)) {
+            funcIdList.add(Constants.permission15);
+        }
+        if (targetPermissionJson.contains(Constants.permission16)) {
             permission16.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission17)) {
+            funcIdList.add(Constants.permission16);
+        }
+        if (targetPermissionJson.contains(Constants.permission17)) {
             permission17.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission18)) {
+            funcIdList.add(Constants.permission17);
+        }
+        if (targetPermissionJson.contains(Constants.permission18)) {
             permission18.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission19)) {
+            funcIdList.add(Constants.permission18);
+        }
+        if (targetPermissionJson.contains(Constants.permission19)) {
             permission19.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission20)) {
+            funcIdList.add(Constants.permission19);
+        }
+        if (targetPermissionJson.contains(Constants.permission20)) {
             permission20.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission21)) {
+            funcIdList.add(Constants.permission20);
+        }
+        if (targetPermissionJson.contains(Constants.permission21)) {
             permission21.setChecked(true);
-        } else if (targetPermissionJson.contains(Constants.permission22)) {
+            funcIdList.add(Constants.permission21);
+        }
+        if (targetPermissionJson.contains(Constants.permission22)) {
             permission22.setChecked(true);
+            funcIdList.add(Constants.permission22);
         }
     }
 
@@ -389,6 +432,9 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
 
         setPermissionData.setFuncIdList(funcIdList);
 
+//        String jsonString = new Gson().toJson(setPermissionData);
+//        Utils.log("jsonString:" + jsonString);
+
         HttpUtil.sendDataAsync(SetPowerActivity.this, HttpUrl.ADD_USER_PERMISSION, 2, null, setPermissionData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -411,6 +457,7 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                setResult(12);
                                 finish();
                             }
                         });

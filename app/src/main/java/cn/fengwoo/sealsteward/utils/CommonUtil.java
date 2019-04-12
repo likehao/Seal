@@ -150,6 +150,10 @@ public class CommonUtil {
      * 查询长按时间
      */
     public static final byte SELECTPRESSTIME = (byte) 0xA7;
+     /**
+     * illegal
+     */
+    public static final byte ILLEGAL = (byte) 0xA8;
     /**
      * 电量查询
      */

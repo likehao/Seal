@@ -45,9 +45,12 @@ import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,6 +58,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddSealActivity;
+import cn.fengwoo.sealsteward.activity.AddSealSecStepActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
@@ -156,6 +160,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private boolean stampTag = false;
 
     private boolean isConnect = false; // 是否连接蓝牙
+
+    private RxTimerUtil rxTimerUtil;
+
+    private int stampNumber;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -279,7 +287,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     private void loadBanner(List<?> list) {
         banner.setImageLoader(new GlideImageLoader());
-        if(null != getActivity()){
+        if (null != getActivity()) {
             Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -387,10 +395,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                         // 获取系统时间
                         // 获取成功后setNotification();
+                        // setNotification();前获取系统时间
                         getSystemTime();
-
                     }
-                }, 3000);
+                }, 1000);
 
                 break;
 
@@ -499,7 +507,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         });
     }
 
-
+    /**
+     *
+     */
     private void uploadHistoryStampRecord() {
         mUploadHistoryRecord.setSealId(EasySP.init(getActivity()).getString("currentSealId"));
         mUploadHistoryRecord.setRecordList(recordListBeanList);
@@ -573,9 +583,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             stampTag = false;
             currentStampTimes = 0;
         }
-        if (tv_times_left.getText().toString().trim().equals("1")) {
-            setAdmin0();
-        }
+//        if (tv_times_left.getText().toString().trim().equals("1")) {
+//            setAdmin0();
+//        }
     }
 
     @SuppressLint("CheckResult")
@@ -607,12 +617,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             stampTag = false;
 
                             initWhenDisconnectBle();
+                            // 停止timer
+                            rxTimerUtil.cancel();
                         },
                         throwable -> {
                             // Handle an error here.
                         }
                 );
-
 
 
         if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
@@ -657,11 +668,15 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                 if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
                                     Utils.log("握手成功");
                                     // 每隔1min定时获取电量
-                                    new RxTimerUtil().interval(60000, new RxTimerUtil.IRxNext() {
+                                    rxTimerUtil = new RxTimerUtil();
+                                    rxTimerUtil.interval(60000, new RxTimerUtil.IRxNext() {
                                         @Override
                                         public void doNext(long number) {
-                                            Utils.log("a loop");
-                                            if (((MyApp) getActivity().getApplication()).getConnectionObservable() != null) {
+                                            if (!isConnect) {
+                                                return;
+                                            }
+//                                            Utils.log("a loop");
+                                            if (null != getActivity() && ((MyApp) getActivity().getApplication()).getConnectionObservable() != null) {
                                                 ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                                                         .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
                                                         .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -698,7 +713,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     // 盖章序号
                                     String allString = Utils.bytesToHexString(bytes);
                                     String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
-                                    int stampNumber = Integer.valueOf(stampNumberHexString, 16);
+                                    stampNumber = Integer.valueOf(stampNumberHexString, 16);
                                     // 盖章时间
                                     String timeHexString = allString.substring(15, 32);
                                     String timeStamp = DateUtils.hexTimeToTimeStamp(timeHexString);
@@ -736,6 +751,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user", "success"));
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
                                     EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
+                                }
+                                // 违规盖章
+                                else if (Utils.bytesToHexString(bytes).startsWith("FF 06 A8")) {
+                                    // 发送a8给seal
+                                    sendDataToSealAfterIllegal();
+
+                                    // 告诉后台有非法盖章
+                                    sendIllegalToServer();
+
+                                    // 盖章次数加一
+                                    refreshTimes();
+
+                                    // 把这次非法盖章的盖章记录也上传到后台
+                                    sendIllegalRecordToServer();
+
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 0E A3")) {
                                     // 成功读到一条记录
                                     unuploadedQuantity--; // 未上传的盖章记录数量减一
@@ -874,6 +904,56 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             }
                     ));
         }
+    }
+
+
+    private void sendDataToSealAfterIllegal() {
+        byte[] illegalBytes;
+        illegalBytes = new byte[]{0};
+
+        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ILLEGAL, illegalBytes).getBytes()))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                ));
+    }
+
+    /**
+     * 告诉后台有非法盖章
+     */
+    private void sendIllegalToServer() {
+        //添加用户ID为参数
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("sealId", EasySP.init(getActivity()).getString("currentSealId"));
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.ILLEGAL, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Utils.log(e.toString());
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log("sendIllegalToServer():" + result);
+            }
+        });
+    }
+
+    /**
+     * 把这次非法盖章的盖章记录也上传到后台
+     */
+    private void sendIllegalRecordToServer() {
+        uploadStampRecord(stampNumber + 1, System.currentTimeMillis() + "");
     }
 
     /***
