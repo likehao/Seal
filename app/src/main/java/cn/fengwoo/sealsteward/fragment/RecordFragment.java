@@ -60,6 +60,7 @@ import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -357,6 +358,15 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         if (resultCode == REQUESTCODE){
             //上传完记录照片返回时候刷新
             record_refreshLayout.autoRefresh();
+            CommonDialog commonDialog = new CommonDialog(getActivity(),"提示","是否关闭该单据,关闭后记录照片将不能修改,并在后台生成盖章记录PDF","关闭");
+            commonDialog.showDialog();
+            commonDialog.setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    commonDialog.dialog.dismiss();
+                }
+            });
         }
     }
 

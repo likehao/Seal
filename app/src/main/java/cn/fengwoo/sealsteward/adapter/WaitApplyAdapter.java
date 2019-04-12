@@ -37,6 +37,7 @@ import cn.fengwoo.sealsteward.entity.WaitApplyData;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -92,6 +93,7 @@ public class WaitApplyAdapter extends BaseAdapter {
         viewHolder.apply_department_tv.setText(waitApplyData.get(position).getOrgStructureName());
         int status = waitApplyData.get(position).getApproveStatus();
         String id = waitApplyData.get(position).getId();
+
         if (code == 2) { //审批中
             viewHolder.item2_tv.setText("审批进度");
             viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
@@ -130,8 +132,21 @@ public class WaitApplyAdapter extends BaseAdapter {
         viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+   /*             if (waitApplyData.get(position).getUploadPhotoNum() == 0 && code == 3){
+                    CommonDialog commonDialog = new CommonDialog(context,"提示",
+                            "此单据还未上传盖章后牌照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
+                    commonDialog.showDialog();
+                    commonDialog.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            commonPostRequest(id, code == 1 ? 2 : 1, position);
+                            commonDialog.dialog.dismiss();
+                        }
+                    });
+                }else {
+                    commonPostRequest(id, code == 1 ? 2 : 1, position);
+                }*/
                 commonPostRequest(id, code == 1 ? 2 : 1, position);
-
             }
         });
         return view;
