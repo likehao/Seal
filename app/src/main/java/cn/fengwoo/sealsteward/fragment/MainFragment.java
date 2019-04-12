@@ -32,6 +32,7 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
@@ -887,7 +888,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     Utils.log("启动失败");
                                     // 二期设备中加入super，用来区别三期
                                     EventBus.getDefault().post(new MessageEvent("super_ble_launch", "failure"));
-                                } else if (strReturned.equals("C1")) {
+                                } else if (strReturned.equals("C1") || strReturned.equals("o1")) {
                                     // 盖章次数加一
 //                                    Utils.log("盖章次数加一");
 //                                    currentStampTimes++;
@@ -896,6 +897,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                                     refreshTimes();
                                     uploadStampRecord(0, null);
+                                    // 如果是o1加上，告诉后台有非法盖章
+                                    if (strReturned.equals("o1")) {
+                                        sendIllegalToServer();
+                                    }
                                 }
                             },
                             throwable -> {
@@ -1010,6 +1015,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             currentLocation = location;
 
 
+            Utils.log( "enableEnclosure:" +EasySP.init(getActivity()).getBoolean("enableEnclosure", false) + "");
+            Utils.log("stampTag" + stampTag);
             if (stampTag && EasySP.init(getActivity()).getBoolean("enableEnclosure", false)) {
                 // 正在盖章，计算距离
                 double distance = Utils.distanceOfTwoPoints(location.getLatitude(), location.getLongitude(), Double.parseDouble(EasySP.init(getActivity()).getString("latitude")), Double.parseDouble(EasySP.init(getActivity()).getString("longitude")));
@@ -1027,6 +1034,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     initWhenDisconnectBle();
                     handler.removeCallbacksAndMessages(null);
                     showToast("超出地理围栏，设备已断开");
+                    triggeredEnclosure();
                 }
             } else {
                 // 获取currentAddress
@@ -1130,4 +1138,30 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //            Utils.log("connectStatus:" + connectStatus.toString());
 //        }
 //    };
+
+
+    /**
+     * 超出围栏报警
+     */
+    private void triggeredEnclosure() {
+        //添加用户ID为参数
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("sealId", EasySP.init(getActivity()).getString("currentSealId"));
+        hashMap.put("address", currentAddress);
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.TRIGGERED_ENCLOSURE, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Utils.log(e.toString());
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log("triggeredEnclosure():" + result);
+            }
+        });
+    }
 }

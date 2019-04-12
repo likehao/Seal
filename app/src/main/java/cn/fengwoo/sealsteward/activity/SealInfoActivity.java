@@ -38,6 +38,7 @@ import com.squareup.picasso.Picasso;
 import com.suke.widget.SwitchButton;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.white.easysp.EasySP;
 //import com.zhihu.matisse.Matisse;
 //import com.zhihu.matisse.MimeType;
 //import com.zhihu.matisse.filter.Filter;
@@ -111,7 +112,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     TextView tvCompany;
     @BindView(R.id.tv_department)
     TextView tvDepartment;
-//    @BindView(R.id.rl_choose_department)
+    //    @BindView(R.id.rl_choose_department)
 //    RelativeLayout rlChooseDepartment;
     @BindView(R.id.rl_examine)
     RelativeLayout rlExamine;
@@ -242,7 +243,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                                                 @Override
                                                 public void run() {
                                                     String sealPrintPath = "file://" + HttpDownloader.path + fileName;
-                                                    Picasso.with(SealInfoActivity.this).load(sealPrintPath) .resize(600, 200).into(sealPrint_cir);
+                                                    Picasso.with(SealInfoActivity.this).load(sealPrintPath).resize(600, 200).into(sealPrint_cir);
                                                 }
                                             });
                                         }
@@ -250,7 +251,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                                 });
                             } else {
                                 String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
-                                Picasso.with(SealInfoActivity.this).load(sealPrintPath) .resize(600, 200).into(sealPrint_cir);
+                                Picasso.with(SealInfoActivity.this).load(sealPrintPath).resize(600, 200).into(sealPrint_cir);
                             }
                             etSealName.setText(responseInfo.getData().getName());
                             tvMac.setText(responseInfo.getData().getMac());
@@ -268,6 +269,16 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             } else {
                                 setUneditable();
                             }
+
+                            // 存入本地状态
+                            EasySP.init(SealInfoActivity.this).putBoolean("enableEnclosure", responseInfo.getData().isEnableEnclosure());
+
+                            if (responseInfo.getData().getSealEnclosure() != null) {
+                                EasySP.init(SealInfoActivity.this).putString("scope", responseInfo.getData().getSealEnclosure().getScope() + "");
+                                EasySP.init(SealInfoActivity.this).putString("latitude", responseInfo.getData().getSealEnclosure().getLatitude()+"");
+                                EasySP.init(SealInfoActivity.this).putString("longitude", responseInfo.getData().getSealEnclosure().getLongitude() + "");
+                            }
+
                         }
                     });
                     cancelLoadingView();
@@ -292,7 +303,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @OnClick({R.id.rl_pic, R.id.rl_examine, R.id.rl_set_limit, R.id.edit_tv,R.id.rl_pwd_user})
+    @OnClick({R.id.rl_pic, R.id.rl_examine, R.id.rl_set_limit, R.id.edit_tv, R.id.rl_pwd_user})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_pwd_user:
@@ -334,7 +345,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                         intent.putExtra("latitude", responseInfo.getData().getSealEnclosure().getLatitude() + "");
                         intent.putExtra("address", responseInfo.getData().getSealEnclosure().getAddress());
                     }
-                      startActivity(intent);
+                    startActivityForResult(intent, 99);
                 }
 
                 break;
@@ -371,6 +382,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         sealInfoUpdateData.setServiceTime(responseInfo.getData().getServiceTime());
         sealInfoUpdateData.setCrossDepartmentApply(sbTransDepartment.isChecked());
         sealInfoUpdateData.setEnableEnclosure(sbLimit.isChecked());
+
+        String jsonString = new Gson().toJson(sealInfoUpdateData);
+        Utils.log("jsonString:" + jsonString);
 
         HttpUtil.sendDataAsync(SealInfoActivity.this, HttpUrl.SEAL_UPDATE_INFO, 5, null, sealInfoUpdateData, new Callback() {
             @Override
@@ -422,7 +436,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         if (requestCode == 88) {
             getSealInfo(true);
         }
-
+        if (requestCode == 99) {
+            getSealInfo(true);
+        }
 
 
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
@@ -474,10 +490,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-
-
-
-
     private void uploadPic(File file) {
         HashMap<String, Object> hashMap = new HashMap<>();
         Utils.log(file.length() + "");
@@ -518,7 +530,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
             }
         });
     }
-
 
 
 //    private void selectDialog() {
@@ -576,8 +587,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
     }
-
-
 
 
     /**

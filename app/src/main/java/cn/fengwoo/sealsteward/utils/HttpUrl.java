@@ -305,4 +305,9 @@ public class HttpUrl {
     public static final String ILLEGAL = "seal/illegalstamp";
 
 
+    /**
+     *  TRIGGERED_ENCLOSURE 超出围栏报警
+     */
+    public static final String TRIGGERED_ENCLOSURE = "seal/triggeredenclosure";
+
 }

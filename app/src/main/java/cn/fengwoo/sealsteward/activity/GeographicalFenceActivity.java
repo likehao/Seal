@@ -504,6 +504,12 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
 
 
     private void updateEnclosure() {
+
+        if (null == selectPoint) {
+            finish();
+            return;
+        }
+
         Utils.log("updateEnclosure");
         showLoadingView();
         UpdateEnclosureData updateEnclosureData = new UpdateEnclosureData();
@@ -540,6 +546,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                             @Override
                             public void run() {
                                 cancelLoadingView();
+                                setResult(99);
                                 finish();
                             }
                         });
