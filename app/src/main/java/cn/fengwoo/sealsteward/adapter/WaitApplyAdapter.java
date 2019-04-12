@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,7 @@ import cn.fengwoo.sealsteward.activity.ApprovalActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.bean.ApplyListData;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 import cn.fengwoo.sealsteward.utils.DateUtils;
@@ -119,21 +122,15 @@ public class WaitApplyAdapter extends BaseAdapter {
 
             seeRecordCloseBill(status, position, id);
 
-        } else {
+        } else {    //code == 1
             statusView(status);
-          /*  viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    commonPostRequest(id, 2, position);  //撤销
-                }
-            });*/
         }
 
         //关闭单据
         viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commonPostRequest(id, 1, position);
+                commonPostRequest(id, code == 1 ? 2 : 1, position);
 
             }
         });
@@ -166,18 +163,12 @@ public class WaitApplyAdapter extends BaseAdapter {
                 intent.putExtra("sealName", waitApplyData.get(position).getSealName());
                 intent.putExtra("orgStructureName", waitApplyData.get(position).getOrgStructureName());
                 intent.putExtra("sealPerson", waitApplyData.get(position).getApplyUserName());
+                intent.putExtra("applyPdf", waitApplyData.get(position).getApplyPdf());
+                intent.putExtra("stampPdf", waitApplyData.get(position).getStampPdf());
+                intent.putExtra("stampRecordPdf", waitApplyData.get(position).getStampRecordPdf());
                 context.startActivity(intent);
             }
         });
-/*
-        //关闭单据
-        viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commonPostRequest(id, 1, position);
-
-            }
-        });*/
 
     }
 
@@ -238,6 +229,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                                     waitApplyData.get(position).setApproveStatus(5);
                                     notifyDataSetChanged();
+                                    EventBus.getDefault().post(new MessageEvent("关闭刷新","关闭刷新"));
                                 } else {
                                     viewHolder.item2_tv.setText("已撤销");
                                     viewHolder.item2_tv.setEnabled(false);
@@ -245,6 +237,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                                     waitApplyData.get(position).setApproveStatus(4);
                                     notifyDataSetChanged();
+                                    EventBus.getDefault().post(new MessageEvent("撤销刷新","撤销刷新"));
                                 }
                             }
                         });

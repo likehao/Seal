@@ -28,7 +28,7 @@
 
         <EditText
             android:id="@+id/company_name_et"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="@string/please_input_company_name"
             android:background="@null"

@@ -46,6 +46,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     ImageView use_apply_sign_iv;
     private Intent intent;
     String applyId;
+    String fileName;
 
 
     @Override
@@ -105,6 +106,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         Integer count = intent.getIntExtra("count",0);
         String failTime = intent.getStringExtra("failTime");
         String cause = intent.getStringExtra("cause");
+        fileName = intent.getStringExtra("pdf");
         applyId = intent.getStringExtra("applyId");
         detailSealNameTv.setText(sealName);
         detailCountTv.setText(count+"");
@@ -120,6 +122,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.look_file_bt:
                 intent = new Intent(UseSealApplyActivity.this, FileActivity.class);
+                intent.putExtra("fileName",fileName);
                 startActivity(intent);
                 break;
             case R.id.go_approval_tv:

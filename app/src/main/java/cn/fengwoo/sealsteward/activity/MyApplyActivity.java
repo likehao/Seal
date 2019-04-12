@@ -1,6 +1,7 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +47,8 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
     private List<String> titleList;
     //主页面集合
     private List<Fragment> fragmentList;
+    private final static int REQUESTCODEFINISH = 111;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,8 +91,18 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.add_ll:
                 Intent intent = new Intent(MyApplyActivity.this,ApplyUseSealActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,REQUESTCODEFINISH);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUESTCODEFINISH){
+            if (resultCode == 11){
+                finish();
+            }
         }
     }
 }

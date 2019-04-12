@@ -21,6 +21,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +41,7 @@ import cn.fengwoo.sealsteward.activity.UseSealApplyActivity;
 import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
 import cn.fengwoo.sealsteward.bean.ApplyListData;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -109,7 +113,8 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
                                 waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
                                         ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
                                         ,app.getApplyUserName(),app.getOrgStructureName()
-                                        ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()));
+                                        ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf()));
                             }
                             //请求数据
                             if(null != getActivity()){
@@ -127,9 +132,11 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            if (getActivity() != null) {
+                                Looper.prepare();
+                                Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            }
                         }
 
                     }
@@ -176,6 +183,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
                     intent.putExtra("count",waitApplyDataList.get(position).getApplyCount());
                     intent.putExtra("failTime",waitApplyDataList.get(position).getFailTime());
                     intent.putExtra("cause",waitApplyDataList.get(position).getCause());
+                    intent.putExtra("pdf",waitApplyDataList.get(position).getApplyPdf());
                     startActivity(intent);
                 }else {
                     Looper.prepare();
@@ -187,4 +195,38 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
         });
     }
 
+    /**
+     * 处理注册事件
+     *
+     * @param messageEvent
+     */
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        if (s.equals("撤销刷新")){
+            wait_apply_smartRL.autoRefresh();
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);   //注册Eventbus
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);  //解除注册
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     String id;
     private Integer status,count;
     private String applyPdf,stampPdf,stampRecordPdf;
+    private final static int REQUESTCODE = 222;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,12 +116,17 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         set_back_ll.setOnClickListener(this);
         message_more_iv.setVisibility(View.VISIBLE);
         message_more_iv.setOnClickListener(this);
+        see_RecordDetail_smt.autoRefresh();
 
     }
 
     @SuppressLint("SetTextI18n")
     private void initData(){
         Intent intent = getIntent();
+        List<String> listImg = new ArrayList<>();
+        List alist = (List<Object>)getIntent().getSerializableExtra("photoList");
+        listImg.add(String.valueOf(alist));
+
         id = intent.getStringExtra("id");
         count = intent.getIntExtra("count",0);
         int restCount = intent.getIntExtra("restCount",0);
@@ -254,7 +261,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
             intent.putExtra("code",1);
             intent.putExtra("id",id);
             intent.putExtra("count",count);
-            startActivity(intent);
+            startActivityForResult(intent,REQUESTCODE);
+         //   startActivity(intent);
         } else if (s.equals("申请文件")){
             Intent intent = new Intent(this, FileActivity.class);
             intent.putExtra("fileName",applyPdf);
@@ -300,12 +308,6 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        see_RecordDetail_smt.autoRefresh();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
@@ -322,6 +324,15 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUESTCODE && resultCode == 222){
+            setResult(111);
+            finish();
         }
     }
 }

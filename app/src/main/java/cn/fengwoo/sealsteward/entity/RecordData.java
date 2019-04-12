@@ -1,5 +1,7 @@
 package cn.fengwoo.sealsteward.entity;
 
+import java.util.List;
+
 public class RecordData {
 
     private String cause;
@@ -19,10 +21,20 @@ public class RecordData {
     private String headPortrait;
     private String orgStructureName;
 
+    public List<String> getStampRecordImgList() {
+        return stampRecordImgList;
+    }
+
+    public void setStampRecordImgList(List<String> stampRecordImgList) {
+        this.stampRecordImgList = stampRecordImgList;
+    }
+
+    private List<String> stampRecordImgList;
+
     public RecordData(String id, String cause, String sealName, String sealPeople,
                       Integer sealCount, Integer restCount, Integer uploadPhotoNum,
                       String failTime, String sealTime, String sealAddress, Integer approveStatus
-    , String applyPdf , String stampPdf , String stampRecordPdf, String headPortrait, String orgStructureName) {
+    , String applyPdf , String stampPdf , String stampRecordPdf, String headPortrait, String orgStructureName ,List<String> stampRecordImgList) {
         this.id = id;
         this.cause = cause;
         this.sealName = sealName;
@@ -39,6 +51,7 @@ public class RecordData {
         this.stampRecordPdf = stampRecordPdf;
         this.headPortrait = headPortrait;
         this.orgStructureName = orgStructureName;
+        this.stampRecordImgList =stampRecordImgList;
 
     }
 

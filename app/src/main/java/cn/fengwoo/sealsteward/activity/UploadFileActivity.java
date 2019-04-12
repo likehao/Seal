@@ -173,10 +173,9 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 .getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
-                        Intent intent = new Intent(UploadFileActivity.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();
                         loadingView.cancel();
+                        setResult(222);
+                        finish();
                         Looper.prepare();
                         showToast("上传成功");
                         Looper.loop();
@@ -184,7 +183,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 }else {
                     loadingView.cancel();
                     Looper.prepare();
-                    responseInfo.getMessage();
+                    showToast(responseInfo.getMessage());
                     Looper.loop();
                 }
             }
@@ -308,6 +307,9 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                         }).launch();
 //            }
         }
+        if (requestCode == 111 && resultCode == 111){
+             finish();
+        }
     }
 
     /**
@@ -389,8 +391,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         loadingView.cancel();
-                        Intent intent = new Intent(UploadFileActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        setResult(10,intent);
                         finish();
                         Looper.prepare();
                         showToast("申请成功");
@@ -406,44 +407,4 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         });
     }
 
-
-    private void dispatchTakePictureIntent(int requestCode) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                Utils.log(ex.getMessage());
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                photoURI = FileProvider.getUriForFile(this, "cn.fengwoo.sealsteward.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, requestCode);
-            }
-        }
-    }
-
-    String mCurrentPhotoPath;
-
-    private File createImageFile() throws IOException {
-        final String cameraOutDir = Utils.getExternalDCIM(null);
-        //// Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp;
-        File storageDir = new File(cameraOutDir);
-        File image = null;
-        if(storageDir.exists()){
-            image = File.createTempFile(imageFileName,  /* prefix */".jpg",  /* suffix */ storageDir  /* directory */);
-        }
-
-        // Save a file: path for use with ACTION_VIEW intents
-        //mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 }

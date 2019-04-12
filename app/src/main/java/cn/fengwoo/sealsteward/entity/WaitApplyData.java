@@ -21,8 +21,12 @@ public class WaitApplyData implements Serializable {
     private Integer restCount;
     private Integer uploadPhotoNum;
 
+    private String applyPdf;
+    private String stampPdf;
+    private String stampRecordPdf;
+
     public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime, String id, Integer approveStatus, String applyUserName, String orgStructureName
-   ,String headPortrait, Integer sealCount ,Integer restCount ,Integer uploadPhotoNum) {
+   , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf) {
         this.cause = cause;
         this.sealName = sealName;
         this.failTime = failTime;
@@ -36,6 +40,9 @@ public class WaitApplyData implements Serializable {
         this.sealCount = sealCount;
         this.restCount = restCount;
         this.uploadPhotoNum = uploadPhotoNum;
+        this.applyPdf = applyPdf;
+        this.stampPdf = stampPdf;
+        this.stampRecordPdf = stampRecordPdf;
     }
 
     public String getCause() {
@@ -142,5 +149,28 @@ public class WaitApplyData implements Serializable {
         this.uploadPhotoNum = uploadPhotoNum;
     }
 
+    public String getApplyPdf() {
+        return applyPdf;
+    }
+
+    public void setApplyPdf(String applyPdf) {
+        this.applyPdf = applyPdf;
+    }
+
+    public String getStampPdf() {
+        return stampPdf;
+    }
+
+    public void setStampPdf(String stampPdf) {
+        this.stampPdf = stampPdf;
+    }
+
+    public String getStampRecordPdf() {
+        return stampRecordPdf;
+    }
+
+    public void setStampRecordPdf(String stampRecordPdf) {
+        this.stampRecordPdf = stampRecordPdf;
+    }
 
 }

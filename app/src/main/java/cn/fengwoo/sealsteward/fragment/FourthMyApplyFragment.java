@@ -104,7 +104,8 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
                                 waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
                                         ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
                                         ,app.getApplyUserName(),app.getOrgStructureName()
-                                        ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()));
+                                        ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf()));
                             }
                             //请求数据
                             if(null != getActivity()){
@@ -122,9 +123,11 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            if (getActivity() != null) {
+                                Looper.prepare();
+                                Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            }
                         }
 
                     }
@@ -163,6 +166,7 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
                     intent.putExtra("count",waitApplyDataList.get(position).getApplyCount());
                     intent.putExtra("failTime",waitApplyDataList.get(position).getFailTime());
                     intent.putExtra("cause",waitApplyDataList.get(position).getCause());
+                    intent.putExtra("pdf",waitApplyDataList.get(position).getApplyPdf());
                     startActivity(intent);
                 }else {
                     Looper.prepare();

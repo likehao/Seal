@@ -61,7 +61,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
         recommend_seal_rl.setOnClickListener(this);
         clear_cache_rl.setOnClickListener(this);
         try {
-            cache_tv.setText(CleanMessageUtil.getTotalCacheSize(this));
+            cache_tv.setText(CleanMessageUtil.getTotalCacheSize(this));  //获取缓存
         } catch (Exception e) {
             e.printStackTrace();
         }

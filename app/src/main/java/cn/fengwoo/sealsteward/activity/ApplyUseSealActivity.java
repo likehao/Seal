@@ -76,6 +76,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     TextView please_sign_tv;
 
     private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
+    private final static int UPLOADREQUESTCODE = 10;
     private String sealName, sealId;
     private String name, failTime, cause;
     private String applyCount;
@@ -167,8 +168,8 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("userId", userId);
                         intent.putExtra("failTime", time);
                         intent.putExtra("sealId", sealId);
-                        startActivity(intent);
-                        finish();
+                        setResult(11);
+                        startActivityForResult(intent,UPLOADREQUESTCODE);
                         Log.e("ATG", "用印申请check成功!!!!!!!");
                     }
                 } else {
@@ -237,15 +238,22 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECTSEALREQUESTCODE) {
-            //获取选择的印章名称和印章ID
-            if (data != null) {
-                sealId = data.getStringExtra("id");
-                sealName = data.getStringExtra("name");
-                Log.e("TAG", "id------------:" + sealId + "  name------------:" + sealName);
-                sealName_TV.setText(sealName);
-            }
+        switch (requestCode){
+            case UPLOADREQUESTCODE:
+                if (resultCode == 10){
+                    finish();
+                }
+                break;
+            case SELECTSEALREQUESTCODE:
+                if (data != null) {
+                    sealId = data.getStringExtra("id");
+                    sealName = data.getStringExtra("name");
+                    Log.e("TAG", "id------------:" + sealId + "  name------------:" + sealName);
+                    sealName_TV.setText(sealName);
+                }
+                break;
         }
+
     }
 
     @Override

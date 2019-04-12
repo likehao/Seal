@@ -428,11 +428,25 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                loadingView.cancel();
-                //跳转首页
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>()
+                {}.getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        loadingView.cancel();
+                        //跳转首页
+                        intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }else {
+                    loadingView.cancel();
+                    //跳转首页
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }

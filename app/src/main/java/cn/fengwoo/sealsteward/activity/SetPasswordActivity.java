@@ -8,13 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -24,7 +20,6 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -140,7 +135,7 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                 }.getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()) {
-                        Intent intent = new Intent(SetPasswordActivity.this, LoginActivity.class);
+                        Intent intent = new Intent();
                         intent.putExtra("password",password);
                         startActivity(intent);
                         finish();
@@ -196,12 +191,11 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                         Intent intent = new Intent(SetPasswordActivity.this, LoginActivity.class);
                         intent.putExtra("password",password);
                         startActivity(intent);
-                        finish();  
                         Looper.prepare();
                         showToast("设置密码成功");
                         Looper.loop();
                         Log.e("TAG", "设置密码成功!!!!!!!!!!!!!!!!!!!");
-
+                        finish();
                     }
                 }else {
                     Looper.prepare();

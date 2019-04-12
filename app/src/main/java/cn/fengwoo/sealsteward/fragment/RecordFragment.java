@@ -31,6 +31,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     LinearLayout select_record_ll;
     @BindView(R.id.record_ll)
     LinearLayout record_ll;
+    private final static int REQUESTCODE = 111;
 
     @Nullable
     @Override
@@ -142,7 +144,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 list.add(new RecordData(app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                         , app.getStampCount(), app.getAvailableCount(), photoCount
                                         , failTime, sealTime, app.getLastStampAddress(), app.getApproveStatus(),
-                                        app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()));
+                                        app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()
+                                        ,app.getStampRecordImgList()));
 
                             }
                             //请求数据
@@ -262,7 +265,9 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 list.add(new RecordData(app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                         , app.getApplyCount(), app.getAvailableCount(), photoCount
                                         , failTime, sealTime, app.getLastStampAddress(), app.getApproveStatus(),
-                                        app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()));
+                                        app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()
+                                ,app.getStampRecordImgList()));
+                                app.setStampRecordImgList(app.getStampRecordImgList());
 
                             }
                             //请求数据
@@ -334,7 +339,9 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         intent.putExtra("stampRecordPdf", list.get(position).getStampRecordPdf());
         intent.putExtra("headPortrait", list.get(position).getHeadPortrait());
         intent.putExtra("orgStructureName", list.get(position).getOrgStructureName());
-        startActivity(intent);
+        intent.putExtra("photoList",(Serializable)list.get(position).getStampRecordImgList());
+        startActivityForResult(intent,REQUESTCODE);
+
     }
 
     @Override
@@ -347,5 +354,10 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             sealId = data.getStringExtra("sealId");
             getRecordList();   //获取查询记录列表
         }
+        if (resultCode == REQUESTCODE){
+            //上传完记录照片返回时候刷新
+            record_refreshLayout.autoRefresh();
+        }
     }
+
 }
