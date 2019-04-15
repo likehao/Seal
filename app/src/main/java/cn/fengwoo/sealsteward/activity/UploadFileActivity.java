@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
@@ -23,6 +24,7 @@ import com.lxj.matisse.Matisse;
 import com.lxj.matisse.MimeType;
 import com.lxj.matisse.filter.Filter;
 import com.lxj.matisse.internal.entity.CaptureStrategy;
+import com.squareup.picasso.Picasso;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 //import com.zhihu.matisse.Matisse;
@@ -53,9 +55,12 @@ import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
 import cn.fengwoo.sealsteward.utils.GlideEngineImage;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
@@ -83,6 +88,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     ImageView useSealApply_iv;
     @BindView(R.id.useSealApply_Rcv)
     RecyclerView useSealApply_Rcv;
+    @BindView(R.id.upload_photo_ll)
+    LinearLayout upload_photo_ll;
     private RecycleviewAdapter recycleviewAdapter;
     private static final int REQUEST_CODE_CHOOSE = 1;
     private Boolean success = false;
@@ -123,6 +130,47 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         }else {
             title_tv.setText("用印申请");
         }
+        int photoCode = intent.getIntExtra("photoCode",0);
+        if (photoCode == 1){
+            upload_photo_ll.setVisibility(View.GONE);
+            edit_tv.setVisibility(View.GONE);
+            title_tv.setText("用印照片");
+        }
+
+        List<String> list = intent.getStringArrayListExtra("photoList");
+        List<Uri> uriList = new ArrayList<>();
+    //    uriList.add(Uri.parse("http://up.qqjia.com/z/18/tu19139_7.jpg"));
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                //先从本地读取，没有则下载
+                Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(list.get(i));
+                if (bitmap == null){
+                    HttpDownloader.downloadImage(this, 1, list.get(i), new DownloadImageCallback() {
+                        @Override
+                        public void onResult(final String fileName) {
+                            if (fileName != null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String str = "file://" + HttpDownloader.path + fileName;
+                                        Uri uri = Uri.parse(str);
+                                    /*    File file = new File(str);
+                                        FileUtil.getImageContentUri(UploadFileActivity.this,file);*/
+                                        uriList.add(uri);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }else {
+                    String headPortraitPath = "file://" + HttpDownloader.path + list.get(i);
+                    Uri uri = Uri.parse(headPortraitPath);
+                    uriList.add(uri);
+                }
+
+            }
+        }
+        recycleviewAdapter.setData(uriList,this);
     }
 
     @Override

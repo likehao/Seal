@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -62,6 +63,8 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
     private List<WaitApplyData> waitApplyDataList;
     @BindView(R.id.finish_apply_smartRL)
     SmartRefreshLayout finish_apply_smartRL;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -119,6 +122,8 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
                             (getActivity()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    finish_apply_smartRL.setVisibility(View.VISIBLE);
+                                    no_record_ll.setVisibility(View.GONE);
                                     waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,3);
                                     finish_apply_lv.setAdapter(waitApplyAdapter);
                                     waitApplyAdapter.notifyDataSetChanged(); //刷新数据
@@ -128,6 +133,17 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
+                            //设置空列表的时候，显示为一张图片
+
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finish_apply_smartRL.setVisibility(View.GONE);
+                                        no_record_ll.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
                             Looper.prepare();
                             Toast.makeText(getActivity(),responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
                             Looper.loop();

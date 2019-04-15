@@ -94,12 +94,15 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     CircleImageView record_detail_circle;
     @BindView(R.id.record_detail_department_tv)
     TextView department_tv;
+    @BindView(R.id.photoNum_ll)
+    LinearLayout photoNum_ll;
     private SeeRecordAdapter seeRecordAdapter;
     private List<SeeRecordBean> list;
     String id;
     private Integer status,count;
     private String applyPdf,stampPdf,stampRecordPdf;
     private final static int REQUESTCODE = 222;
+    private  ArrayList<String> listImg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +119,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         set_back_ll.setOnClickListener(this);
         message_more_iv.setVisibility(View.VISIBLE);
         message_more_iv.setOnClickListener(this);
+        photoNum_ll.setOnClickListener(this);
         see_RecordDetail_smt.autoRefresh();
 
     }
@@ -123,9 +127,14 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     private void initData(){
         Intent intent = getIntent();
-        List<String> listImg = new ArrayList<>();
-        List alist = (List<Object>)getIntent().getSerializableExtra("photoList");
-        listImg.add(String.valueOf(alist));
+        listImg = new ArrayList<>();
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList = getIntent().getStringArrayListExtra("photoList");
+    //    ArrayList<String> alist = (List<Object>)getIntent().getSerializableExtra("photoList");
+        for (int i = 0;i< arrayList.size();i ++) {
+            //listImg.add(String.valueOf(alist));
+            listImg.add(arrayList.get(i));
+        }
 
         id = intent.getStringExtra("id");
         count = intent.getIntExtra("count",0);
@@ -246,6 +255,12 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                     messagePopuwindow.showPopuwindow(v);
                 }
                 break;
+            case R.id.photoNum_ll:
+                Intent intent = new Intent(this,UploadFileActivity.class);
+                intent.putExtra("photoCode",1);
+                intent.putStringArrayListExtra("photoList",listImg);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -261,6 +276,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
             intent.putExtra("code",1);
             intent.putExtra("id",id);
             intent.putExtra("count",count);
+            intent.putStringArrayListExtra("photoList",listImg);
             startActivityForResult(intent,REQUESTCODE);
          //   startActivity(intent);
         } else if (s.equals("申请文件")){

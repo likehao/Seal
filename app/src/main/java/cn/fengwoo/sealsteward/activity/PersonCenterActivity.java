@@ -165,6 +165,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         headImg_rl.setOnClickListener(this);
         change_pwd_rl.setOnClickListener(this);
         address_rl.setOnClickListener(this);
+        headImg_iv.setOnClickListener(this);
     }
 
     @Override
@@ -312,6 +313,13 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.address_rl:
                 selectAddress();
+                break;
+            case R.id.headImg_iv:
+                intent = new Intent(this,BigImgActivity.class);
+                String img = CommonUtil.getUserData(this).getHeadPortrait();
+                String headPortraitPath = "file://" + HttpDownloader.path + img;
+                intent.putExtra("photo",headPortraitPath);
+                startActivity(intent);
                 break;
         }
     }

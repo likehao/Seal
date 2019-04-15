@@ -71,7 +71,9 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         title_tv.setText("待我审批");
         Intent intent = getIntent();
         String param = intent.getStringExtra("msgId");
-        updateReadMsg(param);  //更新已读
+        if (param != null) {
+            updateReadMsg(param);  //更新已读
+        }
 
         set_back_ll.setOnClickListener(new View.OnClickListener() {
             @Override

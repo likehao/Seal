@@ -24,6 +24,7 @@ import java.util.Objects;
 
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.BigImgActivity;
 import cn.fengwoo.sealsteward.activity.SealInfoActivity;
 import cn.fengwoo.sealsteward.activity.UserInfoActivity;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
@@ -31,6 +32,7 @@ import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.Dept;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;

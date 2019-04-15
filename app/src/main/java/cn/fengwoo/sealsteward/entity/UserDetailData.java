@@ -30,7 +30,7 @@ public class UserDetailData {
     private String realName;
     private String mobilePhone;
     private Object userEmail;
-    private Object headPortrait;
+    private String headPortrait;
     private String autoGraph;
     private Object address;
     private boolean authStatus;
@@ -78,11 +78,11 @@ public class UserDetailData {
         this.userEmail = userEmail;
     }
 
-    public Object getHeadPortrait() {
+    public String getHeadPortrait() {
         return headPortrait;
     }
 
-    public void setHeadPortrait(Object headPortrait) {
+    public void setHeadPortrait(String headPortrait) {
         this.headPortrait = headPortrait;
     }
 

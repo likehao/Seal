@@ -75,12 +75,12 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     private List<RecordData> list;
     private Intent intent;
     @BindView(R.id.record_refreshLayout)
-    RefreshLayout record_refreshLayout;
+    SmartRefreshLayout record_refreshLayout;
     @BindView(R.id.record_lv)
     ListView record_lv;
     String begin, end, personId, sealId;
     @BindView(R.id.select_record_smt)  //单独用来放置查询出来的记录
-    RefreshLayout select_record_smt;
+    SmartRefreshLayout select_record_smt;
     @BindView(R.id.select_record_lv)
     ListView select_record_lv;
     @BindView(R.id.select_record_ll)
@@ -88,6 +88,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     @BindView(R.id.record_ll)
     LinearLayout record_ll;
     private final static int REQUESTCODE = 111;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
 
     @Nullable
     @Override
@@ -154,6 +156,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        record_refreshLayout.setVisibility(View.VISIBLE);
+                                        no_record_ll.setVisibility(View.GONE);
                                         recordAdapter = new RecordAdapter(list, getActivity());
                                         record_lv.setAdapter(recordAdapter);
                                         recordAdapter.notifyDataSetChanged(); //刷新数据
@@ -164,6 +168,17 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
                         } else {
                             refreshLayout.finishRefresh(); //刷新完成
+                            //设置空列表的时候，显示为一张图片
+
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        record_refreshLayout.setVisibility(View.GONE);
+                                        no_record_ll.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
                             Looper.prepare();
                             Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
                             Looper.loop();
@@ -177,6 +192,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         record_refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+           //     setSmartRefreshLayout();
                 refreshLayout.finishLoadMore();  //加载完成
                 refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
             }
@@ -276,6 +292,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        select_record_smt.setVisibility(View.VISIBLE);
+                                        no_record_ll.setVisibility(View.GONE);
                                         recordAdapter = new RecordAdapter(list, getActivity());
                                         select_record_lv.setAdapter(recordAdapter);
                                         recordAdapter.notifyDataSetChanged(); //刷新数据
@@ -285,6 +303,16 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                             }
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
+
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        select_record_smt.setVisibility(View.GONE);
+                                        no_record_ll.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
                             Looper.prepare();
                             Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
                             Looper.loop();
@@ -341,6 +369,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         intent.putExtra("headPortrait", list.get(position).getHeadPortrait());
         intent.putExtra("orgStructureName", list.get(position).getOrgStructureName());
         intent.putExtra("photoList",(Serializable)list.get(position).getStampRecordImgList());
+   //     intent.putStringArrayListExtra("photoList", (ArrayList<String>) list.get(position).getStampRecordImgList());
         startActivityForResult(intent,REQUESTCODE);
 
     }

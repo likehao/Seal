@@ -98,8 +98,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     TextView edit_tv;
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
-
-
     @BindView(R.id.rl_pic)
     RelativeLayout rlPic;
     @BindView(R.id.et_seal_name)
@@ -167,6 +165,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         edit_tv.setText("编辑");
         edit_tv.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
+        sealPrint_cir.setOnClickListener(this);
     }
 
     private void getData() {
@@ -299,6 +298,14 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.set_back_ll:
                 finish();
+                break;
+            case R.id.sealPrint_cir:
+                intent = new Intent(this,BigImgActivity.class);
+                //加载印模
+                String sealPrint = responseInfo.getData().getSealPrint();
+                String sealImg = "file://" + HttpDownloader.path + sealPrint;
+                intent.putExtra("photo",sealImg);
+                startActivity(intent);
                 break;
         }
     }

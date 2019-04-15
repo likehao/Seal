@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -55,6 +56,8 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
     private List<WaitApplyData> waitApplyDataList;
     @BindView(R.id.apply_record_one_smt)
     SmartRefreshLayout apply_record_one_smt;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
 
     @Nullable
     @Override
@@ -115,6 +118,8 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        apply_record_one_smt.setVisibility(View.VISIBLE);
+                                        no_record_ll.setVisibility(View.GONE);
                                         waitApplyAdapter = new WaitApplyAdapter(getActivity(), waitApplyDataList, 5);
                                         apply_record_one_lv.setAdapter(waitApplyAdapter);
                                         waitApplyAdapter.notifyDataSetChanged(); //刷新数据
@@ -125,6 +130,15 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
 
                         } else {
                             refreshLayout.finishRefresh(); //刷新完成
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        apply_record_one_smt.setVisibility(View.GONE);
+                                        no_record_ll.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
                             Looper.prepare();
                             Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
                             Looper.loop();

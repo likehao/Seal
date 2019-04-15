@@ -18,8 +18,8 @@ android {
         applicationId "cn.fengwoo.sealsteward"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 301
-        versionName "3.0.1"
+        versionCode 302
+        versionName "3.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -245,4 +245,9 @@ dependencies {
     implementation project(':matisse')
 
 //    implementation project(':alipay')
+
+    //图片放大缩小
+    implementation('com.github.chrisbanes:PhotoView:2.1.4') {
+        exclude group: 'com.android.support'
+    }
 }

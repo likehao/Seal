@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -63,6 +65,8 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
     private List<WaitApplyData> waitApplyDataList;
     @BindView(R.id.wait_apply_smartRL)
     SmartRefreshLayout wait_apply_smartRL;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,6 +81,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
         waitApplyDataList = new ArrayList<>();
         wait_apply_lv.setOnItemClickListener(this);
         wait_apply_smartRL.autoRefresh();   //自动刷新
+
     }
 
     /**
@@ -121,6 +126,8 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        wait_apply_smartRL.setVisibility(View.VISIBLE);
+                                        no_record_ll.setVisibility(View.GONE);
                                         waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,1);
                                         wait_apply_lv.setAdapter(waitApplyAdapter);
                                         waitApplyAdapter.notifyDataSetChanged(); //刷新数据
@@ -132,6 +139,17 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
+                            //设置空列表的时候，显示为一张图片
+
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        wait_apply_smartRL.setVisibility(View.GONE);
+                                        no_record_ll.setVisibility(View.VISIBLE);
+                                    }
+                                });
+                            }
                             if (getActivity() != null) {
                                 Looper.prepare();
                                 Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();

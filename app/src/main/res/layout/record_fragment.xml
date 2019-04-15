@@ -31,7 +31,6 @@
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/select_record_ll"
         android:layout_width="match_parent"
@@ -58,5 +57,7 @@
 
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     </LinearLayout>
+
+    <include layout="@layout/no_record"/>
 
 </LinearLayout>
