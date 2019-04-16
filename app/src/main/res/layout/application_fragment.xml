@@ -269,7 +269,7 @@
 
                             <TextView
                                 style="@style/application_text"
-                                android:text="@string/use_seal_apply" />
+                                android:text="@string/apply_record" />
 
                         </LinearLayout>
                     </RelativeLayout>

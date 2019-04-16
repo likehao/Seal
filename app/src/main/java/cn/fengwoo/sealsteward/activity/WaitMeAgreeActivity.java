@@ -56,6 +56,9 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
     private List<WaitMeAgreeData> waitMeAgreeDataList;
     @BindView(R.id.wait_me_agree_apply_smartRL)
     SmartRefreshLayout wait_me_agree_apply_smartRL;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,15 +131,14 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                                     wait_me_agree_lv.setAdapter(waitMeAgreeAdapter);
                                     waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
                                     refreshLayout.finishRefresh(); //刷新完成
+                                    no_record_ll.setVisibility(View.GONE);
 
                                 }
                             });
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            Toast.makeText(WaitMeAgreeActivity.this,responseInfo.getMessage(),Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            no_record_ll.setVisibility(View.VISIBLE);
                         }
 
                     }
@@ -191,9 +193,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                         Log.e("TAG","消息已被阅读成功!!!!!!!!!");
                     }
                 }else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
+                    Log.e("TAG",responseInfo.getMessage()+"错误错误!!!!!!!!!!!!!");
                 }
             }
         });

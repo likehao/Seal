@@ -131,9 +131,11 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList = getIntent().getStringArrayListExtra("photoList");
     //    ArrayList<String> alist = (List<Object>)getIntent().getSerializableExtra("photoList");
-        for (int i = 0;i< arrayList.size();i ++) {
-            //listImg.add(String.valueOf(alist));
-            listImg.add(arrayList.get(i));
+        if (arrayList != null) {
+            for (int i = 0; i < arrayList.size(); i++) {
+                //listImg.add(String.valueOf(alist));
+                listImg.add(arrayList.get(i));
+            }
         }
 
         id = intent.getStringExtra("id");

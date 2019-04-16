@@ -197,7 +197,7 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
         @Override
         public void onFinish() {
             send_code_bt.setEnabled(true);
-            send_code_bt.setText("重新获取验证码");
+            send_code_bt.setText("重新发送");
         }
     };
 

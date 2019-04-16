@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -84,8 +85,12 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
     RelativeLayout selectEndTimeRl;
     @BindView(R.id.select_bt)
     Button selectBt;
+    @BindView(R.id.select_sealType_rl)
+    RelativeLayout select_sealType_rl;
+    @BindView(R.id.select_sealType_tv)
+    TextView select_sealType_tv;
     Intent intent;
-    private String person,personId,sealId;
+    private String person, personId, sealId;
     private final static int SELECTPERSONREQUESTCODE = 123;
     private final static int SELECTSEALREQUESTCODE = 10;
 
@@ -108,6 +113,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         selectBeginTimeRl.setOnClickListener(this);
         selectEndTimeRl.setOnClickListener(this);
         selectBt.setOnClickListener(this);
+        select_sealType_rl.setOnClickListener(this);
     }
 
     @Override
@@ -130,7 +136,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 startActivityForResult(intent, SELECTSEALREQUESTCODE);
                 break;
             case R.id.select_nearTime_rl:
-                nearTime();
+                nearTime(1);
                 break;
             case R.id.select_beginTime_rl:
                 selectBeginTime(1);
@@ -139,59 +145,90 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 selectBeginTime(2);
                 break;
             case R.id.select_bt:
-                selectRecord();
+                if (check()) {
+                    selectRecord();
+                }
                 break;
+            case R.id.select_sealType_rl:
+                nearTime(2);
+                break;
+
 
         }
     }
 
     /**
+     * 检查数据是否全部为空
+     * @return
+     */
+    private boolean check(){
+        if (TextUtils.isEmpty(selectPersonTv.getText().toString()) && TextUtils.isEmpty(selectSealTv.getText().toString())
+                && TextUtils.isEmpty(select_sealType_tv.getText().toString()) && TextUtils.isEmpty(selectNearTimeTv.getText().toString())
+        && TextUtils.isEmpty(selectBeginTimeTv.getText().toString()) && TextUtils.isEmpty(selectEndTimeTv.getText().toString())){
+            return false;
+        }
+        return true;
+    }
+    /**
      * 查询盖章记录请求
      */
-    private void selectRecord(){
+    private void selectRecord() {
         intent = new Intent();
-        intent.putExtra("end",end);
-        intent.putExtra("begin",begin);
-        intent.putExtra("personId",personId);
-        intent.putExtra("sealId",sealId);
-        setResult(100,intent);
+        intent.putExtra("end", end);
+        intent.putExtra("begin", begin);
+        intent.putExtra("personId", personId);
+        intent.putExtra("sealId", sealId);
+        intent.putExtra("type", select_sealType_tv.getText().toString());
+        setResult(100, intent);
         finish();
     }
+
     /**
      * 获取最近时间选择器
      */
-    private void nearTime(){
+    private void nearTime(int code) {
         List<String> list = new ArrayList<>();
-     //   List<NearTime> list = new ArrayList<>();
-        list.add("一天");
-        list.add("三天");
-        list.add("一周");
-        list.add("两周");
-        list.add("一个月");
-        SinglePicker<String> picker = new SinglePicker<String>(this,list);
+        //   List<NearTime> list = new ArrayList<>();
+        if (code == 1) {
+            list.add("一天");
+            list.add("三天");
+            list.add("一周");
+            list.add("两周");
+            list.add("一个月");
+        }else {
+            list.add("手机盖章");
+            list.add("密码盖章");
+        }
+        SinglePicker<String> picker = new SinglePicker<String>(this, list);
         picker.setCanceledOnTouchOutside(true);
         picker.setDividerRatio(WheelView.DividerConfig.FILL);
         picker.setTextColor(0xFF000000);
 //        picker.setSubmitTextColor(0xFFFB2C3C);
 //        picker.setCancelTextColor(0xFFFB2C3C);
         picker.setTextSize(15);
-        picker.setSelectedIndex(1);
+        picker.setSelectedIndex(0);
         picker.setLineSpaceMultiplier(2);   //设置每项的高度，范围为2-4
-        picker.setContentPadding(0,10);
+        picker.setContentPadding(0, 10);
         picker.setCycleDisable(true);
         picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                selectNearTimeTv.setText(item);
+                if (code == 1) {
+                    selectNearTimeTv.setText(item);
+                }else {
+                    select_sealType_tv.setText(item);
+                }
             }
 
         });
         picker.show();
     }
+
     /**
      * 时间选择器
      */
-    String begin,end;
+    String begin, end;
+
     @SuppressLint("SimpleDateFormat")
     private void selectBeginTime(int code) {
         TimePickerView timePicker = new TimePickerBuilder(SelectSealRecodeActivity.this, new OnTimeSelectListener() {
@@ -200,27 +237,27 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 if (code == 1) {
                     begin = simpleDateFormat.format(date);  //选择的开始时间
-                    if (end != null){
+                    if (end != null) {
                         Boolean selectB = DateUtils.compare(begin, end);  //比较开始时间和结束时间
-                        if (selectB){
+                        if (selectB) {
                             showToast("开始时间必须小于结束时间");
-                        }else {
+                        } else {
                             selectBeginTimeTv.setText(begin);
                         }
-                    }else {
+                    } else {
                         selectBeginTimeTv.setText(begin);
                     }
                 }
-                if (code == 2){
+                if (code == 2) {
                     end = simpleDateFormat.format(date);  //选择的结束时间
-                    if (begin != null){
+                    if (begin != null) {
                         Boolean selectB = DateUtils.compare(begin, end);
-                        if (selectB){
+                        if (selectB) {
                             showToast("结束时间必须大于开始时间");
-                        }else {
+                        } else {
                             selectEndTimeTv.setText(end);
                         }
-                    }else {
+                    } else {
                         selectEndTimeTv.setText(end);
                     }
                 }
@@ -233,6 +270,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
 
     /**
      * 回调结果
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -241,20 +279,21 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECTPERSONREQUESTCODE) {
             if (data != null) {
-                if(null != data.getExtras().getString("name")){
+                if (null != data.getExtras().getString("name")) {
                     person = Objects.requireNonNull(data.getExtras()).getString("name");
                     personId = data.getExtras().getString("id");
                     selectPersonTv.setText(person);
                 }
             }
         }
-        if (requestCode == SELECTSEALREQUESTCODE){
+        if (requestCode == SELECTSEALREQUESTCODE) {
             if (data != null) {
                 person = data.getExtras().getString("name");
                 sealId = data.getExtras().getString("id");
                 selectSealTv.setText(person);
             }
         }
+
     }
 
 

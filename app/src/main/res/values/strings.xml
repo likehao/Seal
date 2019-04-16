@@ -80,7 +80,8 @@
     <string name="service_fee_time">服务费到期时间</string>
     <string name="seal_time">当前盖章次数</string>
     <string name="lock_seal">锁定印章</string>
-    <string name="want_seal">我要盖章</string>
+    <string name="want_seal">启动印章</string>
+    <string name="apply_record">申请记录</string>
     <string name="use_seal_apply">用印申请</string>
     <string name="Photograph_upload">拍照上传</string>
     <string name="Seal_assignment">印章分配</string>
@@ -301,4 +302,5 @@
     <string name="add_user_need_register">被添加的用户需要先注册</string>
     <string name="click_company_edit">点击公司可添加部门,点击部门可编辑部门</string>
     <string name="no_record">暂无数据</string>
+    <string name="seal_type">盖章类型</string>
 </resources>

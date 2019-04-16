@@ -415,12 +415,20 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
      * 数据同步
      */
     public void dataSync() {
-     //   loadingView.show();
+        new Thread(){
+            @Override
+            public void run() {
+                Looper.prepare();
+                loadingView.show();
+                Looper.loop();
+            }
+        }.start();
         loadingView.showView("数据同步中,请稍后...");
         login_bt.setClickable(false);
         HttpUtil.sendDataAsync(this, HttpUrl.SYNC, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e + "数据同步错误!!!!!!!!!!!!!!!!!!!!!");
                 loadingView.cancel();
                 //跳转首页
                 intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -436,6 +444,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                 {}.getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
+                        Log.e("TAG","数据同步成功!!!!!!!!!!!!!!!!!!!!!");
                         loadingView.cancel();
                         //跳转首页
                         intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -444,6 +453,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     }
                 }else {
                     loadingView.cancel();
+                    Log.e("TAG","数据同步失败!!!!!!!!!!!!!!!!!!!!!");
                     //跳转首页
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

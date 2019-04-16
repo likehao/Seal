@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+    android:background="@color/background">
+
+    <include
+        layout="@layout/no_record"/>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/wait_apply_smartRL"
@@ -24,6 +26,4 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-    <include layout="@layout/no_record"/>
-
-</LinearLayout>
+</FrameLayout>

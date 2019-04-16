@@ -80,6 +80,7 @@ public class ApprovalConfirmActivity extends BaseActivity implements View.OnClic
         set_back_ll.setOnClickListener(this);
         apply_confirm_bt.setOnClickListener(this);
         apply_result_rl.setOnClickListener(this);
+        apply_sign_rl.setOnClickListener(this);
         apply_option_et.setSelection(apply_option_et.getText().length());  //将光标移至文字末尾
         loadingView = new LoadingView(this);
 
@@ -131,6 +132,10 @@ public class ApprovalConfirmActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.apply_result_rl:
                 selectResult();
+                break;
+            case R.id.apply_sign_rl:
+                Intent intent = new Intent(this, AddAutographActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -203,5 +208,41 @@ public class ApprovalConfirmActivity extends BaseActivity implements View.OnClic
 
         });
         picker.show();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+        //读取签名
+        Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
+        if (bitmap == null) {
+            //下载签名
+            HttpDownloader.downloadImage(ApprovalConfirmActivity.this, 2, autoGraph, new DownloadImageCallback() {
+                @Override
+                public void onResult(final String fileName) {
+                    if (fileName != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                Picasso.with(ApprovalConfirmActivity.this).load(sealPrintPath).into(approval_sign_iv);
+                                pleaseSign_tv.setVisibility(View.GONE);
+                                apply_sign_rl.setBackgroundResource(R.color.white);
+                            }
+                        });
+                    }
+                }
+            });
+
+        } else {
+            //不为空则直接显示
+            String sealPrintPath = "file://" + HttpDownloader.path + autoGraph;
+            Picasso.with(ApprovalConfirmActivity.this).load(sealPrintPath).into(approval_sign_iv);
+            pleaseSign_tv.setVisibility(View.GONE);
+            apply_sign_rl.setBackgroundResource(R.color.white);
+        }
     }
 }

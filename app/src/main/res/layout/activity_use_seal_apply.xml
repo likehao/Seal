@@ -227,6 +227,8 @@
                         android:gravity="top|left"
                         android:hint="@string/please_input_reason"
                         android:textColor="@color/black"
+                        android:paddingStart="5dp"
+                        android:paddingTop="5dp"
                         android:textSize="12sp" />
                 </LinearLayout>
 

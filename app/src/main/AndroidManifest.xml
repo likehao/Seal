@@ -104,8 +104,8 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" /> <!-- 点击edittext搜索防止键盘将底部导航顶上来 -->
 
         <activity
@@ -251,8 +251,9 @@
         <activity android:name=".activity.PayActivity" />
         <activity android:name=".activity.SurePayActivity" />
         <activity android:name=".activity.MessageListActivity" />
-        <activity android:name=".activity.UseInstructionsActivity"/>
-        <activity android:name=".activity.BigImgActivity"/>
+        <activity android:name=".activity.UseInstructionsActivity" />
+        <activity android:name=".activity.BigImgActivity" />
+        <activity android:name=".activity.MsgActivity"/>
     </application>
 
 </manifest>

@@ -115,12 +115,11 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        reject_apply_smartRL.setVisibility(View.VISIBLE);
-                                        no_record_ll.setVisibility(View.GONE);
                                         waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,4);
                                         reject_lv.setAdapter(waitApplyAdapter);
                                         waitApplyAdapter.notifyDataSetChanged(); //刷新数据
                                         refreshLayout.finishRefresh(); //刷新完成
+                                        no_record_ll.setVisibility(View.GONE);
                                     }
                                 });
                             }
@@ -128,20 +127,7 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
 
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        reject_apply_smartRL.setVisibility(View.GONE);
-                                        no_record_ll.setVisibility(View.VISIBLE);
-                                    }
-                                });
-                            }
-                            if (getActivity() != null) {
-                                Looper.prepare();
-                                Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
-                                Looper.loop();
-                            }
+                            no_record_ll.setVisibility(View.VISIBLE);
                         }
 
                     }

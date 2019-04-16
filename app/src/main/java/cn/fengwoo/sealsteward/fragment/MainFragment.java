@@ -61,9 +61,12 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddSealActivity;
 import cn.fengwoo.sealsteward.activity.AddSealSecStepActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
+import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
+import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
+import cn.fengwoo.sealsteward.bean.MessageData;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
 import cn.fengwoo.sealsteward.entity.BannerData;
@@ -130,7 +133,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     TextView tv_address;
     @BindView(R.id.tv_ble_name)
     TextView tv_ble_name;
-
+    @BindView(R.id.wait_me_apply_rl)
+    RelativeLayout wait_me_apply_rl;
+    @BindView(R.id.msg_num_tv)
+    TextView msg_num_tv;
     LoadingView loadingView;
     private RxBleConnection rxBleConnection;
     private String availableCount = "0"; // 剩余次数
@@ -157,7 +163,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private int stampType; // 启动类型
     private int userNumber; // 启动序号(密码代码）
     private String systemTimeStampString;
-
+    private String waitId;
     private boolean stampTag = false;
 
     private boolean isConnect = false; // 是否连接蓝牙
@@ -200,6 +206,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         initBanner();
         setListener();
 //        permissions();
+        getMessage();
         return view;
     }
 
@@ -213,6 +220,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         needSeal_rl.setOnClickListener(this);
         useSealApply_rl.setOnClickListener(this);
         approval_record_rl.setOnClickListener(this);
+        wait_me_apply_rl.setOnClickListener(this);
+
     }
 
     @Override
@@ -317,14 +326,72 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 startActivityForResult(intent, Constants.TO_WANT_SEAL);
                 break;
             case R.id.useSealApply_rl:
-                intent = new Intent(getActivity(), MyApplyActivity.class);
+                intent = new Intent(getActivity(), ApplyUseSealActivity.class);
                 startActivity(intent);
                 break;
             case R.id.approval_record_rl:
                 intent = new Intent(getActivity(), ApprovalRecordActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.wait_me_apply_rl:
+                Intent intent = new Intent(getActivity(), WaitMeAgreeActivity.class);
+                intent.putExtra("msgId", waitId);
+                startActivity(intent);
+                break;
         }
+    }
+
+    private void getMessage() {
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.MESSAGE, 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<List<MessageData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<MessageData>>>() {
+                }
+                        .getType());
+                assert responseInfo != null;
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    for (MessageData messageData : responseInfo.getData()) {
+                        if (null != getActivity()) {
+                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //显示消息数
+                                    int type = messageData.getType();
+                                    int msgNum = messageData.getUnreadCount();
+                                    String id = messageData.getId();
+                                    if (type == 4) {
+                                        waitId = id;
+                                        if (msgNum != 0) {
+                                            msg_num_tv.setVisibility(View.VISIBLE);    //待我审批
+                                            msg_num_tv.setText(msgNum + "");
+                                        } else {
+                                            msg_num_tv.setVisibility(View.GONE);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    Log.e("TAG", "获取消息成功!!!!!!!!!!!!!!!!");
+                } else {
+                    Log.e("TAG", responseInfo.getMessage());
+                }
+
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMessage();
     }
 
     /**
@@ -1015,7 +1082,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             currentLocation = location;
 
 
-            Utils.log( "enableEnclosure:" +EasySP.init(getActivity()).getBoolean("enableEnclosure", false) + "");
+            Utils.log("enableEnclosure:" + EasySP.init(getActivity()).getBoolean("enableEnclosure", false) + "");
             Utils.log("stampTag" + stampTag);
             if (stampTag && EasySP.init(getActivity()).getBoolean("enableEnclosure", false)) {
                 // 正在盖章，计算距离

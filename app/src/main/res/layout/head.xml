@@ -49,6 +49,31 @@
                 android:background="@drawable/add" />
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/msg_rl"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/msg" />
+
+            <ImageView
+                android:id="@+id/msg_iv"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@drawable/message_circle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="12dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/record_more_iv"
             android:layout_width="30dp"

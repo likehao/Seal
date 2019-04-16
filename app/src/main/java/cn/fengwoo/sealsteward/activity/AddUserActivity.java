@@ -388,7 +388,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         @Override
         public void onFinish() {
             sendSecurityCode.setEnabled(true);
-            sendSecurityCode.setText("重新获取验证码");
+            sendSecurityCode.setText("重新发送");
         }
     };
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +42,8 @@ import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -65,7 +68,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     private PasswordKeypad mKeypad;
     private boolean state;
     private int i;// index
-
+    LoadingView loadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
+        loadingView = new LoadingView(this);
     }
 
     private void initData() {
@@ -155,12 +159,14 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     public void getData() {
+        loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("sealId", EasySP.init(this).getString("currentSealId"));
         HttpUtil.sendDataAsync(this, HttpUrl.USE_SEAL_APPLYLIST, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", e + "查看详情错误错误!!!!!!!!!!!!!!!!!!!");
+                loadingView.cancel();
             }
 
             @Override
@@ -172,6 +178,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                 }
                         .getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                    loadingView.cancel();
                     for (SealApplyData sealApplyData : responseInfo.getData()) {
 //                        causeDataList.add(new ApplyCauseData(sealApplyData.getApplyCause(),sealApplyData.getApplyCount()));
                         causeDataList.add(new ApplyCauseData(sealApplyData.getApplyCause(), sealApplyData.getAvailableCount()));
@@ -183,14 +190,33 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                         }
                     });
                 } else {
-                    Looper.prepare();
-                    Toast.makeText(ApplyCauseActivity.this, responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
-                    Looper.loop();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingView.cancel();
+                            applyDialog();
+                        }
+                    });
                 }
             }
         });
     }
 
+    /**
+     * 无申请单据弹出去申请dialog
+     */
+    private void applyDialog(){
+        CommonDialog commonDialog = new CommonDialog(this,"您暂无可用申请单","","去申请");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialog.dialog.dismiss();
+                Intent intent = new Intent(ApplyCauseActivity.this,ApplyUseSealActivity.class);
+                startActivityForResult(intent,11);
+            }
+        });
+    }
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 //        Intent intent = new Intent(ApplyCauseActivity.this,SealDetailActivity.class);
@@ -230,6 +256,15 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 11) {
+            if (resultCode == 11) {
+                getData();
+            }
+        }
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {

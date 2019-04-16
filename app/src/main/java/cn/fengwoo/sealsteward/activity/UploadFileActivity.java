@@ -156,6 +156,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                                         Uri uri = Uri.parse(str);
                                     /*    File file = new File(str);
                                         FileUtil.getImageContentUri(UploadFileActivity.this,file);*/
+                                     //   Picasso.with(UploadFileActivity.this).load(uri).into(useSealApply_iv);
                                         uriList.add(uri);
                                     }
                                 });
@@ -165,6 +166,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 }else {
                     String headPortraitPath = "file://" + HttpDownloader.path + list.get(i);
                     Uri uri = Uri.parse(headPortraitPath);
+                   // Picasso.with(UploadFileActivity.this).load(uri).into(useSealApply_iv);
                     uriList.add(uri);
                 }
 

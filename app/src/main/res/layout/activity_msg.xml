@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MsgActivity"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include layout="@layout/head"/>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/message_smt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <View style="@style/line" />
+
+            <LinearLayout
+                android:id="@+id/system_msg_ll"
+                style="@style/message_pressed_effect">
+
+                <RelativeLayout
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <cn.fengwoo.sealsteward.view.CircleImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/system_msg" />
+
+                    <TextView
+                        android:id="@+id/system_msg_tv"
+                        style="@style/message_num"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/system_message"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <View style="@style/line_left" />
+
+            <LinearLayout
+                android:id="@+id/apply_msg_ll"
+                style="@style/message_pressed_effect">
+
+                <RelativeLayout
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <cn.fengwoo.sealsteward.view.CircleImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/apply_msg" />
+
+                    <TextView
+                        android:id="@+id/apply_msg_tv"
+                        style="@style/message_num" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/apply_notify"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <View style="@style/line_left" />
+
+            <LinearLayout
+                android:id="@+id/alarm_msg_ll"
+                style="@style/message_pressed_effect">
+
+                <RelativeLayout
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <cn.fengwoo.sealsteward.view.CircleImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/police_msg" />
+
+                    <TextView
+                        android:id="@+id/alarm_msg_tv"
+                        style="@style/message_num" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/alarm_message"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <View style="@style/line" />
+        </LinearLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+</LinearLayout>

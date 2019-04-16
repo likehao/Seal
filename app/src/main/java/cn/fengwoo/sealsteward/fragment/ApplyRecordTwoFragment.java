@@ -118,29 +118,17 @@ public class ApplyRecordTwoFragment extends Fragment implements AdapterView.OnIt
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        apply_record_two_smt.setVisibility(View.VISIBLE);
-                                        no_record_ll.setVisibility(View.GONE);
                                         waitApplyAdapter = new WaitApplyAdapter(getActivity(), waitApplyDataList, 6);
                                         apply_record_two_lv.setAdapter(waitApplyAdapter);
                                         waitApplyAdapter.notifyDataSetChanged(); //刷新数据
                                         refreshLayout.finishRefresh(); //刷新完成
+                                        no_record_ll.setVisibility(View.GONE);
                                     }
                                 });
                             }
                         } else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        apply_record_two_smt.setVisibility(View.GONE);
-                                        no_record_ll.setVisibility(View.VISIBLE);
-                                    }
-                                });
-                            }
-                            Looper.prepare();
-                            Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            no_record_ll.setVisibility(View.VISIBLE);
                         }
 
                     }

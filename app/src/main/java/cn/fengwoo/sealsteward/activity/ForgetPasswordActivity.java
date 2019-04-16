@@ -195,7 +195,7 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
         @Override
         public void onFinish() {
             forget_pwd_getCode_bt.setEnabled(true);
-            forget_pwd_getCode_bt.setText("重新获取验证码");
+            forget_pwd_getCode_bt.setText("重新发送");
         }
     };
 }

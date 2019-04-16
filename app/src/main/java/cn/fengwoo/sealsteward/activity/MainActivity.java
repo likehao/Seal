@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -62,6 +63,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout scan_ll;  //扫一扫
     @BindView(R.id.add_ll)
     LinearLayout add_ll;  //添加
+    @BindView(R.id.msg_rl)
+    RelativeLayout msg_ll;
+    @BindView(R.id.msg_iv)
+    ImageView msg_iv;
     private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
     private TextView[] textViews = new TextView[5];   //底部导航文字集合
     private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
@@ -134,7 +139,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initView() {
         title_tv = findViewById(R.id.title_tv);
         scan_ll = findViewById(R.id.scan_ll);
-        add_ll.setVisibility(View.VISIBLE);
+        add_ll.setVisibility(View.GONE);
+        msg_ll.setVisibility(View.VISIBLE);
         home_page = findViewById(R.id.home_page);
         record_page = findViewById(R.id.record_page);
         application_page = findViewById(R.id.application_page);
@@ -169,6 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         scan_ll.setOnClickListener(this);
         //       circle_useSeal_apply_ll.setOnClickListener(this);
         add_ll.setOnClickListener(this);
+        msg_ll.setOnClickListener(this);
     }
 
     @Override
@@ -177,7 +184,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.home_page:
                 title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
                 record_more_iv.setVisibility(View.GONE);
-                add_ll.setVisibility(View.VISIBLE);
+            //    add_ll.setVisibility(View.VISIBLE);
+                msg_ll.setVisibility(View.VISIBLE);
                 changeView(0);
                 break;
             case R.id.record_page:
@@ -185,6 +193,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.VISIBLE);
+                msg_ll.setVisibility(View.GONE);
                 changeView(1);
                 break;
             case R.id.message_page:
@@ -192,6 +201,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
+                msg_ll.setVisibility(View.GONE);
                 changeView(2);
                 break;
             case R.id.mine:
@@ -199,6 +209,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
+                msg_ll.setVisibility(View.GONE);
                 changeView(3);
                 break;
             case R.id.application_page:
@@ -206,6 +217,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
+                msg_ll.setVisibility(View.GONE);
                 changeView(4);
                 break;
             case R.id.record_more_iv:
@@ -232,6 +244,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 messagePopuwindow = new MessagePopuwindow(MainActivity.this, 1);
                 messagePopuwindow.showPopuwindow(view);
                 break;
+            case R.id.msg_rl:
+                intent = new Intent(this,MsgActivity.class);
+                startActivity(intent);
+                break;
+
         }
     }
 
@@ -421,8 +438,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     for (MessageData messageData : responseInfo.getData()) {
                         int msgNum = messageData.getUnreadCount();
                         sum += msgNum;
+                        //显示消息数
+                        int type = messageData.getType();
                     }
                     runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (sum == 0){
+                                msg_iv.setVisibility(View.GONE);
+                            }else {
+                                msg_iv.setVisibility(View.VISIBLE);
+                                sum = 0;
+                            }
+                        }
+                    });
+                  /*  runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //显示消息总数
@@ -435,7 +465,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 msgSum_tv.setText(sum + "");
                             }
                         }
-                    });
+                    });*/
                     Log.e("TAG", "获取消息成功!!!!!!!!!!!!!!!!");
 
                 } else {

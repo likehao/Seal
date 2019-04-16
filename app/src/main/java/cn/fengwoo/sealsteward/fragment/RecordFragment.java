@@ -1,6 +1,5 @@
 package cn.fengwoo.sealsteward.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
@@ -20,9 +19,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
@@ -40,28 +36,17 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.activity.RecordDetailActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealRecodeActivity;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
-import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
-import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
-import cn.fengwoo.sealsteward.bean.ApplyListData;
-import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
-import cn.fengwoo.sealsteward.bean.RecordListBean;
 import cn.fengwoo.sealsteward.bean.StampRecordData;
 import cn.fengwoo.sealsteward.bean.StampRecordList;
 import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.WaitApplyData;
-import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.view.CommonDialog;
-import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -156,32 +141,18 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        record_refreshLayout.setVisibility(View.VISIBLE);
-                                        no_record_ll.setVisibility(View.GONE);
                                         recordAdapter = new RecordAdapter(list, getActivity());
                                         record_lv.setAdapter(recordAdapter);
                                         recordAdapter.notifyDataSetChanged(); //刷新数据
                                         refreshLayout.finishRefresh(); //刷新完成
+                                        no_record_ll.setVisibility(View.GONE);
                                     }
                                 });
                             }
 
                         } else {
                             refreshLayout.finishRefresh(); //刷新完成
-                            //设置空列表的时候，显示为一张图片
-
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        record_refreshLayout.setVisibility(View.GONE);
-                                        no_record_ll.setVisibility(View.VISIBLE);
-                                    }
-                                });
-                            }
-                            Looper.prepare();
-                            Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            no_record_ll.setVisibility(View.VISIBLE);
                         }
 
                     }
@@ -292,30 +263,17 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        select_record_smt.setVisibility(View.VISIBLE);
-                                        no_record_ll.setVisibility(View.GONE);
                                         recordAdapter = new RecordAdapter(list, getActivity());
                                         select_record_lv.setAdapter(recordAdapter);
                                         recordAdapter.notifyDataSetChanged(); //刷新数据
                                         refreshLayout.finishRefresh(); //刷新完成
+                                        no_record_ll.setVisibility(View.GONE);
                                     }
                                 });
                             }
                         }else {
                             refreshLayout.finishRefresh(); //刷新完成
-
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        select_record_smt.setVisibility(View.GONE);
-                                        no_record_ll.setVisibility(View.VISIBLE);
-                                    }
-                                });
-                            }
-                            Looper.prepare();
-                            Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
-                            Looper.loop();
+                            no_record_ll.setVisibility(View.VISIBLE);
                         }
                     }
                 });
