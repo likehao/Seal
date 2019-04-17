@@ -390,9 +390,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         sealInfoUpdateData.setCrossDepartmentApply(sbTransDepartment.isChecked());
         sealInfoUpdateData.setEnableEnclosure(sbLimit.isChecked());
 
-        String jsonString = new Gson().toJson(sealInfoUpdateData);
-        Utils.log("jsonString:" + jsonString);
-
         HttpUtil.sendDataAsync(SealInfoActivity.this, HttpUrl.SEAL_UPDATE_INFO, 5, null, sealInfoUpdateData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

@@ -34,6 +34,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.LoginActivity;
 import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
@@ -86,6 +87,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     TextView phone;
     @BindView(R.id.use_Instructions_rl)
     RelativeLayout use_Instructions_rl;
+
+    @BindView(R.id.dfu)
+    Button dfu;
+
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
@@ -141,6 +146,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         logout_bt.setOnClickListener(this);
         //    nearby_device_rl.setOnClickListener(this);
         use_Instructions_rl.setOnClickListener(this);
+        dfu.setOnClickListener(this);
     }
 
     @Override
@@ -193,7 +199,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), UseInstructionsActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.dfu:
 
+                intent = new Intent(getActivity(), DfuActivity.class);
+                startActivity(intent);
+
+                break;
         }
     }
 

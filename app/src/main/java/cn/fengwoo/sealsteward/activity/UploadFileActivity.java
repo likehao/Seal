@@ -386,6 +386,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     fileName.add(str);
                     loadingView.cancel();
                     Log.e("TAG","上传图片成功!!!!!!!!!!!!!!!!!!!!");
+
+                    // 弹出相机
+                    permissions();
+
                     success = true;
                 } else {
                     loadingView.cancel();

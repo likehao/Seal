@@ -35,6 +35,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hjq.toast.ToastUtils;
 import com.polidea.rxandroidble2.RxBleClient;
 import com.polidea.rxandroidble2.RxBleConnection;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -313,6 +314,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sealDevice_rl:
+                if (!Utils.isBluetoothOpen()) {
+                    ToastUtils.show("蓝牙没有打开，请开启蓝牙");
+                    return;
+                }
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 intent.putExtra("isAddNewSeal", false);
 
@@ -849,13 +854,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     byte[] stampTypeBytes = DataTrans.subByte(bytes, 4, 1);
                                     stampType = DataTrans.bytesToInt(stampTypeBytes, 0);
 
-                                    // byte[5] - byte[8] 启动序号（userNumber）
-                                    byte[] userNumberBytes = DataTrans.subByte(bytes, 5, 4);
-                                    userNumber = DataTrans.bytesToInt(userNumberBytes, 0);
 
-                                    // byte[9] - byte[10] 盖章序号（stampSeqNumber）
-                                    byte[] stampSeqNumberBytes = DataTrans.subByte(bytes, 9, 2);
+                                    // byte[5] - byte[6] 盖章序号（stampSeqNumber）
+                                    byte[] stampSeqNumberBytes = DataTrans.subByte(bytes, 5, 2);
                                     stampSeqNumber = DataTrans.bytesToInt(stampSeqNumberBytes, 0);
+
+                                    // byte[7] - byte[10] 启动序号（stampSeqNumber）
+                                    byte[] userNumberBytes = DataTrans.subByte(bytes, 7, 4);
+                                    userNumber = DataTrans.bytesToInt(userNumberBytes, 0);
 
                                     // byte[11] - byte[16] 盖章时间（stampTime）
 //                                    byte[] stampTimeBytes = DataTrans.subByte(bytes, 11, 6);

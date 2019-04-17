@@ -244,6 +244,9 @@ dependencies {
 
     implementation project(':matisse')
 
+    // dfu
+    api 'no.nordicsemi.android:dfu:1.6.1'
+
 //    implementation project(':alipay')
 
     //图片放大缩小

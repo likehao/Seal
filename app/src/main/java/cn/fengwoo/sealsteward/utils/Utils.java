@@ -217,4 +217,9 @@ public class Utils {
 //        BoxingLog.d("external DCIM do not exist.");
         return null;
     }
+
+    public static boolean isBluetoothOpen() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        return bluetoothAdapter.isEnabled();
+    }
 }

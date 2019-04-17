@@ -6,10 +6,10 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,9 +49,10 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReplayingShare;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.CustomDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -59,8 +60,6 @@ import io.reactivex.subjects.PublishSubject;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 
 /**
@@ -109,14 +108,14 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_nearby_device);
 
         ButterKnife.bind(this);
-        getIntentData();
         initView();
+        getIntentData();
         initCheck();
         initData();
         // 不是增加印章的情况时，访问后台拿seal list
         if (!isAddNewSeal) {
             getSealList();
-        }else{
+        } else {
             scanBle();
         }
 
@@ -156,7 +155,13 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         });
                         loadingView.cancel();
                     } else {
-                        scanBle();
+                        //更新
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                scanBle();
+                            }
+                        });
                         loadingView.cancel();
                         Looper.prepare();
                         showToast(responseInfo.getMessage());
@@ -173,7 +178,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private void getIntentData() {
         isAddNewSeal = getIntent().getBooleanExtra("isAddNewSeal", false);
-
+        if (isAddNewSeal) {
+            title_tv.setText("添加印章");
+        }
     }
 
     private void scanBle() {
@@ -257,8 +264,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     }
 
 
-
-
     //扫描到蓝牙添加到列表中
     private void addScanResult(ScanResult scanResult) {
         //蓝牙设备名字和Mac地址
@@ -287,15 +292,16 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private boolean hasTheSeal(String thisMac) {
         boolean hasTheSealTag = false;
-        if (responseInfo != null) {
+        if (responseInfo.getCode() == 0) {
             for (SealData sealData : responseInfo.getData()) {
                 if (sealData.getMac().equals(thisMac)) {
                     hasTheSealTag = true;
                 }
             }
-        }else {
-            hasTheSealTag = true; // 如果responseInfo为空时，hasTheSealTag为true
         }
+//        else {
+//            hasTheSealTag = false; // 如果responseInfo为空时，hasTheSealTag为false
+//        }
         return hasTheSealTag;
     }
 
@@ -320,8 +326,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     }
 
 
-
-    private SealData.SealEnclosureBean  getSealEnclosure(String thisMac) {
+    private SealData.SealEnclosureBean getSealEnclosure(String thisMac) {
         SealData.SealEnclosureBean sealEnclosureBean = new SealData.SealEnclosureBean();
         for (SealData sealData : responseInfo.getData()) {
             if (sealData.getMac().equals(thisMac)) {
@@ -374,23 +379,29 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         String thisMac = scanResultsList.get(position).getBleDevice().getMacAddress();
 
-        if (!hasTheSeal(thisMac)) {
-            showToast("你没有权限操作这个印章。");
+        EasySP.init(this).getString("mac", thisMac);
+
+        if (responseInfo!=null&&!hasTheSeal(thisMac)) {
+//            showToast("你没有权限操作这个印章。");
+            showDialog();
             cancelLoadingView();
+            // 停止扫描
+            if (scanSubscription != null) {
+                scanSubscription.dispose();
+            }
             return;
         }
-
 
 
         // 连接ble设备
 
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
         RxBleDevice device = rxBleClient.getBleDevice(macAddress);
-        ((MyApp)getApplication()).setRxBleDevice(device);
+        ((MyApp) getApplication()).setRxBleDevice(device);
 
         connectionObservable = prepareConnectionObservable(device);
 
-        ((MyApp)getApplication()).setConnectionObservable(connectionObservable);
+        ((MyApp) getApplication()).setConnectionObservable(connectionObservable);
 
         connectDisposable = connectionObservable // <-- autoConnect flag
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -403,9 +414,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             Utils.log("connected");
                             // sava dataProtocolVersion
                             // 根据 ble 名字来判断 dataProtocolVersion
-                            if(scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")){
+                            if (scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")) {
                                 EasySP.init(this).putString("dataProtocolVersion", "3");
-                            }else{
+                            } else {
                                 EasySP.init(this).putString("dataProtocolVersion", "2");
                             }
 
@@ -415,13 +426,13 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             if (!isAddNewSeal) {
                                 // 不是添加新的印章，就是连接原来的seal,保存sealId
                                 EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
+
+                                EasySP.init(this).putBoolean("enableEnclosure", getTargetSealEnableEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()));
+
                                 if (getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()) != null) {
-
-                                    EasySP.init(this).putBoolean("enableEnclosure", getTargetSealEnableEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()));
-
-                                    EasySP.init(this).putString("scope", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getScope()+"");
-                                    EasySP.init(this).putString("latitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLatitude() +"");
-                                    EasySP.init(this).putString("longitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLongitude()+"");
+                                    EasySP.init(this).putString("scope", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getScope() + "");
+                                    EasySP.init(this).putString("latitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLatitude() + "");
+                                    EasySP.init(this).putString("longitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLongitude() + "");
                                 }
                             }
 
@@ -433,7 +444,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 Intent intent = new Intent();
                                 intent.putExtra("bleName", getNameFromList(macAddress));
-                                setResult(Constants.TO_NEARBY_DEVICE,intent);
+                                setResult(Constants.TO_NEARBY_DEVICE, intent);
                                 finish();
                             }
                         },
@@ -460,11 +471,47 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     }
 
 
-    private Observable<RxBleConnection> prepareConnectionObservable( RxBleDevice bleDevice) {
+    private Observable<RxBleConnection> prepareConnectionObservable(RxBleDevice bleDevice) {
         return bleDevice
                 .establishConnection(true)
                 .takeUntil(disconnectTriggerSubject)
                 .compose(ReplayingShare.instance());
     }
+
+
+
+
+    /**
+     * 确认是否删除
+     */
+    private void showDialog() {
+        final CustomDialog commonDialog = new CustomDialog(this, "提示", "您连接的印章不属于您所在的公司", "切换公司");
+        commonDialog.cancel.setText("添加印章");
+        commonDialog.showDialog();
+        commonDialog.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             Utils.log("rihgt");
+                intent = new Intent(NearbyDeviceActivity.this, MyCompanyActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("left");
+                if (!Utils.hasThePermission(NearbyDeviceActivity.this, Constants.permission1)) {
+                    return;
+                }
+                intent = new Intent(NearbyDeviceActivity.this, NearbyDeviceActivity.class);
+                intent.putExtra("isAddNewSeal", true);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+
 
 }

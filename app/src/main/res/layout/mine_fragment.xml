@@ -318,6 +318,12 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:textColor="@color/red" />
 
+            <Button
+                android:visibility="gone"
+                android:id="@+id/dfu"
+                android:text="DFU"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" />
             <View
                 style="@style/line"/>
 

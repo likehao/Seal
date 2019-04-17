@@ -68,7 +68,6 @@ public class VoiceActivity extends BaseActivity implements View.OnClickListener,
                             // Handle an error here.
                         }
                 ));
-
     }
 
     @Override

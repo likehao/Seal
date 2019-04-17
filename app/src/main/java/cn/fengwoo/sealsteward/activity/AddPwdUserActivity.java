@@ -346,9 +346,6 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
 
         Utils.log("sendDataAsync");
 
-        String jsonString = new Gson().toJson(addPwdUserUploadReturn);
-        Utils.log("jsonString:" + jsonString);
-
         HttpUtil.sendDataAsync(AddPwdUserActivity.this, HttpUrl.UPDATE_PWD_USER, 2, null, addPwdUserUploadReturn, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
