@@ -310,10 +310,12 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:weightSum="1">
 
                     <ImageView
                         android:layout_width="15dp"
@@ -323,14 +325,27 @@
 
                     <TextView
                         android:id="@+id/tv_stamp_reason"
-                        android:layout_width="match_parent"
+                        android:layout_width="255dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:gravity="center_vertical"
                         android:text="@string/not_useSeal_apply_couse"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
-
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/tv_check_record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center_vertical"
+                        android:text="查看记录"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout

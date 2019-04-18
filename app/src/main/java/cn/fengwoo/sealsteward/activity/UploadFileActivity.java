@@ -278,13 +278,13 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     private void uploadImgFile() {
 
 //        dispatchTakePictureIntent(123);
-        selectPhone();
+        takeAPic();
     }
 
     /**
      * 选择照片
      */
-    private void selectPhone() {
+    private void takeAPic() {
 //        Matisse.from(UploadFileActivity.this)
 //                .choose(MimeType.ofImage(), false)  //图片类型
 //                .countable(true)    //选中后显示数字;false:选中后显示对号

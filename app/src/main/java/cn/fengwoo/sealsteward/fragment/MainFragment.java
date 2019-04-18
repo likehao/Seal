@@ -66,7 +66,9 @@ import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
+import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
+import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageData;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
@@ -138,6 +140,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     RelativeLayout wait_me_apply_rl;
     @BindView(R.id.msg_num_tv)
     TextView msg_num_tv;
+    @BindView(R.id.tv_check_record)
+    TextView tv_check_record;
+
     LoadingView loadingView;
     private RxBleConnection rxBleConnection;
     private String availableCount = "0"; // 剩余次数
@@ -222,6 +227,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         useSealApply_rl.setOnClickListener(this);
         approval_record_rl.setOnClickListener(this);
         wait_me_apply_rl.setOnClickListener(this);
+        tv_check_record.setOnClickListener(this);
 
     }
 
@@ -343,7 +349,54 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 intent.putExtra("msgId", waitId);
                 startActivity(intent);
                 break;
+
+            case R.id.tv_check_record:
+                getApplyDetail();
+                break;
         }
+    }
+
+    private void getApplyDetail() {
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("applyId", EasySP.init(getActivity()).getString("currentApplyId"));
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYDETAIL, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "查看详情错误错误!!!!!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<GetApplyListBean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<GetApplyListBean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                    intent = new Intent(getActivity(), SeeRecordActivity.class);
+//                    intent.putExtra("status", status);    //传递状态值弹出不同的popuwindow
+                    intent.putExtra("id", EasySP.init(getActivity()).getString("currentApplyId"));
+                    intent.putExtra("count", responseInfo.getData().getApplyCount());
+                    intent.putExtra("restCount",  responseInfo.getData().getAvailableCount());
+                    intent.putExtra("photoNum",  responseInfo.getData().getPhotoCount());
+                    intent.putExtra("headPortrait",  responseInfo.getData().getHeadPortrait());
+                    intent.putExtra("sealName",  responseInfo.getData().getSealName());
+                    intent.putExtra("orgStructureName",  responseInfo.getData().getOrgStructureName());
+                    intent.putExtra("sealPerson",  responseInfo.getData().getSealName());
+                    intent.putExtra("applyPdf",  responseInfo.getData().getApplyPdf());
+                    intent.putExtra("stampPdf",  responseInfo.getData().getStampPdf());
+                    intent.putExtra("stampRecordPdf",  responseInfo.getData().getStampRecordPdf());
+                    startActivity(intent);
+                } else {
+                    Looper.prepare();
+                    Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }
+        });
+
+
     }
 
     private void getMessage() {
@@ -654,7 +707,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             ((MyApp) getActivity().getApplication()).removeAllDisposable();
             ((MyApp) getApplication()).setConnectionObservable(null);
             stampTag = false;
-            currentStampTimes = 0;
+//            currentStampTimes = 0;
         }
 //        if (tv_times_left.getText().toString().trim().equals("1")) {
 //            setAdmin0();
@@ -1067,12 +1120,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     private void initWhenDisconnectBle() {
         currentStampTimes = 0;
-        tv_times_done.setText("0");
-        tv_times_left.setText("0");
+//        tv_times_done.setText("0");
+//        tv_times_left.setText("0");
         electric_ll.setVisibility(View.GONE);
         tv_ble_name.setText("暂无连接印章");
-        tv_stamp_reason.setText("暂无用印申请事由");
-        tv_expired_time.setText("暂无");
+//        tv_stamp_reason.setText("暂无用印申请事由");
+//        tv_expired_time.setText("暂无");
         tv_address.setText("暂无定位信息");
     }
 

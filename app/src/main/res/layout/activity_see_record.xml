@@ -11,127 +11,133 @@
     <include layout="@layout/head" />
 
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/see_RecordDetail_smt"
+      <com.scwang.smartrefresh.layout.SmartRefreshLayout
+          android:id="@+id/see_RecordDetail_smt"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+          <com.scwang.smartrefresh.layout.header.ClassicsHeader
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="130dp"
+                android:background="@color/style">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/record_detail_circle"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/photo_03" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:background="@color/style">
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/record_detail_circle"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="15dp"
-                        android:background="@drawable/photo_03" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/detail_sealPerson_tv"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:text="@string/company_name"
+                        android:textColor="@color/white" />
 
-                        <TextView
-                            android:id="@+id/detail_sealPerson_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/company_name"
-                            android:textColor="@color/white" />
-
-                        <TextView
-                            android:id="@+id/record_detail_department_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/seal"
-                            android:textColor="@color/white" />
-                    </LinearLayout>
-
+                    <TextView
+                        android:id="@+id/record_detail_department_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/seal"
+                        android:textColor="@color/white" />
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/style1">
+
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/style1">
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/detail_sealCount_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="0"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/surplus"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/detail_restCount_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="0"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/photoNum_ll"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/use"
-                            android:textColor="@color/white" />
-
-                        <TextView
-                            android:id="@+id/detail_sealCount_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:text="0"
-                            android:textColor="@color/white" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:background="@color/white" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/surplus"
-                            android:textColor="@color/white" />
-
-                        <TextView
-                            android:id="@+id/detail_restCount_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:text="0"
-                            android:textColor="@color/white" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0.5dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:background="@color/white" />
-
-                    <LinearLayout
-                        android:id="@+id/photoNum_ll"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:gravity="center">
 
                         <TextView
@@ -148,18 +154,23 @@
                             android:text="0"
                             android:textColor="@color/white" />
                     </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="点击上传照片"
+                        android:textColor="@color/white" />
                 </LinearLayout>
-
-                <cn.fengwoo.sealsteward.utils.ListViewForScrollView
-                    android:id="@+id/see_record_lv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:divider="#00000000"
-                    android:dividerHeight="10dp"
-                    android:scrollbars="none" />
             </LinearLayout>
 
-        </ScrollView>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-</LinearLayout>
+            <cn.fengwoo.sealsteward.utils.ListViewForScrollView
+                android:id="@+id/see_record_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:divider="#00000000"
+                android:dividerHeight="10dp"
+                android:scrollbars="none" />
+        </LinearLayout>
+
+    </ScrollView>
+</com.scwang.smartrefresh.layout.SmartRefreshLayout></LinearLayout>

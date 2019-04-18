@@ -141,7 +141,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                 // 如果pwdUserListItem为空，执行原来逻辑
                 if (pwdUserListItem == null) {
                     submit();
-                } else {
+                }else{
                     // 发送命令给ble设备改变次数
 //                    updateUser(pwdUserListItem.getUserNumber() + "");
 
@@ -150,7 +150,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                         format = tvExpiredTime.getText().toString().trim();
                     }
                     try {
-                        updateCountByte = CommonUtil.changeTimes(pwdUserListItem.getUserNumber() + "", Integer.valueOf(sealCount), DateUtils.dateToStamp(format));
+                        updateCountByte = CommonUtil.changeTimes(pwdUserListItem.getUserNumber()+"", Integer.valueOf(sealCount), DateUtils.dateToStamp(format));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -161,7 +161,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                             .subscribe(
                                     characteristicValue -> {
                                         // Characteristic value confirmed.
-                                        Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                         Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
 
                                     },
                                     throwable -> {
@@ -320,7 +320,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
             updateUser(pwdCode);
         } else if (event.msgType.equals("ble_change_stamp_count")) {
             // 修改次数成功，发送网络请求通知服务器
-            updateUser(pwdUserListItem.getUserNumber() + "");
+            updateUser(pwdUserListItem.getUserNumber()+"");
         }
     }
 
@@ -333,7 +333,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
         } else {
             // 把通过选择改的值赋值
             try {
-                pwdUserListItem.setExpireTime(Long.parseLong(DateUtils.dateToStamp(tvExpiredTime.getText().toString())));
+                pwdUserListItem.setExpireTime(Long.parseLong(DateUtils.dateToStamp( tvExpiredTime.getText().toString())));
                 pwdUserListItem.setStampCount(Integer.parseInt(etUseTimes.getText().toString()));
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -361,7 +361,9 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                 String result = response.body().string();
                 Utils.log("更新离线用户信息return:" + result);
                 loadingView.cancel();
-
+//                Looper.prepare();
+//
+//                Looper.loop();
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -371,6 +373,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                         finish();
                     }
                 });
+
 
 
 //                Gson gson = new Gson();

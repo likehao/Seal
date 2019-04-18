@@ -140,8 +140,6 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                             companyListAdapter = new CompanyListAdapter(arrayList, MyCompanyActivity.this);
                             company_list_lv.setAdapter(companyListAdapter);
                             companyListAdapter.notifyDataSetChanged(); //刷新数据
-
-
                         }
                     });
 

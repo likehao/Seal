@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -108,6 +109,25 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                 sealName = etSealName.getText().toString().trim();
                 sealNumber = etSealNumber.getText().toString().trim();
                 useRange = etRange.getText().toString().trim();
+                if (TextUtils.isEmpty(sealName)) {
+                    showToast("请输入印章名称");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(sealNumber)) {
+                    showToast("请输入印章编号");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(useRange)) {
+                    showToast("请输入使用范围");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(departmentName)) {
+                    showToast("请选择所属部门");
+                    return;
+                }
                 checkSeal();
 
 //                Intent intent2 = new Intent();

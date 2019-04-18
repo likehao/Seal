@@ -59,6 +59,8 @@
 
             <RelativeLayout
                 android:id="@+id/apply_time_rl"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 style="@style/pressed_effect">
 
                 <TextView

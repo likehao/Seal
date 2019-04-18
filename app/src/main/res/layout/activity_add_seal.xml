@@ -13,8 +13,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,7 +24,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -40,11 +42,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
                     android:background="@null"
-                    android:hint="@string/please_input_seal_name"
                     android:gravity="end"
-                    android:textSize="12sp"
-                    android:layout_marginEnd="15dp" />
+                    android:hint="@string/please_input_seal_name"
+                    android:textSize="12sp" />
 
 
             </RelativeLayout>
@@ -58,7 +60,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -74,12 +78,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
                     android:background="@null"
-                    android:hint="@string/please_input_seal_number"
-                    android:textSize="12sp"
                     android:gravity="end"
-                    android:inputType="number"
-                    android:layout_marginEnd="15dp" />
+                    android:hint="@string/please_input_seal_number"
+
+                    android:textSize="12sp" />
 
             </RelativeLayout>
 
@@ -121,7 +125,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -137,11 +143,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
                     android:background="@null"
-                    android:hint="@string/please_input_use_Range"
-                    android:textSize="12sp"
                     android:gravity="end"
-                    android:layout_marginEnd="15dp" />
+                    android:hint="@string/please_input_use_Range"
+                    android:textSize="12sp" />
 
             </RelativeLayout>
 
@@ -174,8 +180,8 @@
                     android:layout_marginEnd="30dp"
                     android:gravity="end"
                     android:text="@string/select_belong_department" />
-                <View
-                    style="@style/right_arrow" />
+
+                <View style="@style/right_arrow" />
 
             </RelativeLayout>
 
@@ -186,10 +192,10 @@
                 android:background="@color/line" />
 
             <RelativeLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -202,25 +208,25 @@
             </RelativeLayout>
 
             <ImageView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:background="@drawable/ic_launcher"
-                android:layout_marginStart="20dp"/>
+                android:visibility="gone" />
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/set_map_intercept"/>
+                android:text="@string/set_map_intercept"
+                android:textColor="@color/black"
+                android:visibility="gone" />
 
             <cn.fengwoo.sealsteward.utils.MyMapView
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <com.baidu.mapapi.map.MapView
                     android:layout_width="match_parent"
