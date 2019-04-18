@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,12 +30,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.activity.SelectSealRecodeActivity;
 import cn.fengwoo.sealsteward.activity.UseSealApplyActivity;
 import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
 import cn.fengwoo.sealsteward.bean.ApplyListData;
@@ -44,7 +41,6 @@ import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -65,6 +61,9 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
     SmartRefreshLayout finish_apply_smartRL;
     @BindView(R.id.no_record_ll)
     LinearLayout no_record_ll;
+    String applyId;
+    int i = 1;
+    ResponseInfo<List<GetApplyListBean>> responseInfo;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,6 +79,8 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
         waitApplyDataList = new ArrayList<>();
         finish_apply_lv.setOnItemClickListener(this);
         finish_apply_smartRL.autoRefresh();   //自动刷新
+        waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,3);
+        finish_apply_lv.setAdapter(waitApplyAdapter);
     }
     /**
      * 刷新加载
@@ -89,66 +90,73 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitApplyDataList.clear();
-                ApplyListData applyListData = new ApplyListData();
-                applyListData.setCurPage(1);
-                applyListData.setHasExportPdf(false);
-                applyListData.setHasPage(true);
-                applyListData.setPageSize(10);
-                applyListData.setParam(1);
-                HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYLIST, 2, null, applyListData, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("TAG",e+"错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<List<GetApplyListBean>> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<List<GetApplyListBean>>>(){}
-                                .getType());
-                        if (responseInfo.getData() != null && responseInfo.getCode() == 0){
-                            for(GetApplyListBean app : responseInfo.getData()) {
-                                //时间戳转为时间
-                                String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
-                                String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
-                                waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
-                                        ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
-                                        ,app.getApplyUserName(),app.getOrgStructureName()
-                                        ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()
-                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf()));
-                            }
-                            //请求数据
-                            (getActivity()).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    waitApplyAdapter = new WaitApplyAdapter(getActivity(),waitApplyDataList,3);
-                                    finish_apply_lv.setAdapter(waitApplyAdapter);
-                                    waitApplyAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                    no_record_ll.setVisibility(View.GONE);
-                                }
-                            });
-
-                        }else {
-                            refreshLayout.finishRefresh(); //刷新完成
-                            no_record_ll.setVisibility(View.VISIBLE);
-                        }
-
-                    }
-                });
-
+                i = 1;
+                getThirdData(refreshLayout);
+                refreshLayout.finishRefresh(); //刷新完成
             }
         });
         finish_apply_smartRL.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                refreshLayout.finishLoadMore();  //加载完成
-                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                i += 1;
+                finish_apply_smartRL.setEnableLoadMore(true);
+                refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
+                getThirdData(refreshLayout);
+                //如果成功有数据就加载
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    refreshLayout.finishLoadMore(2000);
+                } else {
+                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                }
             }
         });
 
     }
+
+    private void getThirdData(RefreshLayout refreshLayout){
+        ApplyListData applyListData = new ApplyListData();
+        applyListData.setCurPage(i);
+        applyListData.setHasExportPdf(false);
+        applyListData.setHasPage(true);
+        applyListData.setPageSize(10);
+        applyListData.setParam(1);
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYLIST, 2, null, applyListData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<List<GetApplyListBean>>>(){}
+                        .getType());
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0){
+                    for(GetApplyListBean app : responseInfo.getData()) {
+                        //时间戳转为时间
+                        String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
+                        String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
+                        waitApplyDataList.add(new WaitApplyData(app.getApplyCause(),app.getSealName()
+                                ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
+                                ,app.getApplyUserName(),app.getOrgStructureName()
+                                ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf()));
+                    }
+                    //请求数据
+                    (getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            waitApplyAdapter.notifyDataSetChanged(); //刷新数据
+                            no_record_ll.setVisibility(View.GONE);
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         HashMap<String ,String> hashMap = new HashMap<>();
@@ -185,8 +193,6 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
         });
     }
 
-
-
     /**
      * 处理注册事件
      *
@@ -195,10 +201,10 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent) {
         String s = messageEvent.msgType;
-        if (s.equals("关闭刷新")){
+        applyId = s;
+        if (s.equals("关闭刷新")){   //waitApplyAdapter 和 MyApplyActivity 设置的关闭单据的监听
             finish_apply_smartRL.autoRefresh();
         }
-
     }
 
     @Override
@@ -218,14 +224,6 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 111){
-            finish_apply_smartRL.autoRefresh();
         }
     }
 }

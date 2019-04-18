@@ -140,6 +140,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         wait_time_rl.setOnClickListener(this);
         rl_voice.setOnClickListener(this);
         rl_pwd_user.setOnClickListener(this);
+
     }
 
     @Override

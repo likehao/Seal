@@ -54,6 +54,7 @@ import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
@@ -225,6 +226,9 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     if (responseInfo.getData()){
                         loadingView.cancel();
                         setResult(222);
+                        Intent intent = new Intent(UploadFileActivity.this,MyApplyActivity.class);
+                        intent.putExtra("id",id);
+                        startActivity(intent);
                         finish();
                         Looper.prepare();
                         showToast("上传成功");

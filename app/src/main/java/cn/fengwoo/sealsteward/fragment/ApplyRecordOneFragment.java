@@ -58,6 +58,8 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
     SmartRefreshLayout apply_record_one_smt;
     @BindView(R.id.no_record_ll)
     LinearLayout no_record_ll;
+    private int i = 1;
+    ResponseInfo<List<GetApplyListBean>> responseInfo;
 
     @Nullable
     @Override
@@ -73,6 +75,8 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
         waitApplyDataList = new ArrayList<>();
         apply_record_one_lv.setOnItemClickListener(this);
         apply_record_one_smt.autoRefresh();   //自动刷新
+        waitApplyAdapter = new WaitApplyAdapter(getActivity(), waitApplyDataList, 5);
+        apply_record_one_lv.setAdapter(waitApplyAdapter);
     }
 
     /**
@@ -83,58 +87,9 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitApplyDataList.clear();
-                ApplyListData applyListData = new ApplyListData();
-                applyListData.setCurPage(1);
-                applyListData.setHasExportPdf(false);
-                applyListData.setHasPage(true);
-                applyListData.setPageSize(10);
-                applyListData.setParam(7);
-                HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYLIST, 2, null, applyListData, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<List<GetApplyListBean>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<GetApplyListBean>>>() {
-                        }
-                                .getType());
-                        if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                            for (GetApplyListBean app : responseInfo.getData()) {
-                                //时间戳转为时间
-                                String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
-                                String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
-                                waitApplyDataList.add(new WaitApplyData(app.getApplyCause(), app.getSealName()
-                                        , expireTime, app.getApplyCount(), applyTime, app.getId(), app.getApproveStatus(),
-                                        app.getApplyUserName(), app.getOrgStructureName()
-                                        , app.getHeadPortrait(), app.getStampCount(), app.getAvailableCount(), app.getPhotoCount()
-                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf()));
-                            }
-                            //请求数据
-                            if (null != getActivity()) {
-                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        waitApplyAdapter = new WaitApplyAdapter(getActivity(), waitApplyDataList, 5);
-                                        apply_record_one_lv.setAdapter(waitApplyAdapter);
-                                        waitApplyAdapter.notifyDataSetChanged(); //刷新数据
-                                        refreshLayout.finishRefresh(); //刷新完成
-                                        no_record_ll.setVisibility(View.GONE);
-                                    }
-                                });
-                            }
-
-                        } else {
-                            refreshLayout.finishRefresh(); //刷新完成
-                            no_record_ll.setVisibility(View.VISIBLE);
-                        }
-
-                    }
-                });
-
+                i = 1;
+                getRecordOne(refreshLayout);
+                refreshLayout.finishRefresh(); //刷新完成
             }
         });
         apply_record_one_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -142,6 +97,55 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 refreshLayout.finishLoadMore();  //加载完成
                 refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+            }
+        });
+
+    }
+
+
+    private void getRecordOne(RefreshLayout refreshLayout){
+        ApplyListData applyListData = new ApplyListData();
+        applyListData.setCurPage(i);
+        applyListData.setHasExportPdf(false);
+        applyListData.setHasPage(true);
+        applyListData.setPageSize(10);
+        applyListData.setParam(7);
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYLIST, 2, null, applyListData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<GetApplyListBean>>>() {
+                }
+                        .getType());
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    for (GetApplyListBean app : responseInfo.getData()) {
+                        //时间戳转为时间
+                        String expireTime = DateUtils.getDateString(Long.parseLong(app.getExpireTime())); //失效时间
+                        String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
+                        waitApplyDataList.add(new WaitApplyData(app.getApplyCause(), app.getSealName()
+                                , expireTime, app.getApplyCount(), applyTime, app.getId(), app.getApproveStatus(),
+                                app.getApplyUserName(), app.getOrgStructureName()
+                                , app.getHeadPortrait(), app.getStampCount(), app.getAvailableCount(), app.getPhotoCount()
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf()));
+                    }
+                    //请求数据
+                    if (null != getActivity()) {
+                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                waitApplyAdapter.notifyDataSetChanged(); //刷新数据
+                                no_record_ll.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                }
             }
         });
 

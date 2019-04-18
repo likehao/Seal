@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,44 +24,48 @@ public class AccountDao {
         this.helper = new MyHelper(context);
     }
 
-    public void insert(HistoryInfo info){
+    public void insert(HistoryInfo info) {
         SQLiteDatabase database = helper.getWritableDatabase();
         //根据手机号判断去重
         String[] colum = {"phone"};
         String where = "phone" + "= ?";
         String[] whereValue = {info.getPhone()};
-        Cursor cursor = database.query(TABLE_NAME, colum, where, whereValue,null,null,null);
-        while (cursor.moveToNext()){
+        Cursor cursor = database.query(TABLE_NAME, colum, where, whereValue, null, null, null);
+        while (cursor.moveToNext()) {
             phone = cursor.getString(cursor.getColumnIndex("phone"));
         }
         cursor.close();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("phone",info.getPhone());
-        contentValues.put("name",info.getName());
-        contentValues.put("headPortrait",info.getHeadPortrait());
-        contentValues.put("time",info.getTime());
-        if (!TextUtils.isEmpty(phone)){
-            database.update(TABLE_NAME,contentValues,"phone" + "=?",new String[]{phone});
-        }else {
-            database.insert(TABLE_NAME,null,contentValues);
+        contentValues.put("phone", info.getPhone());
+        contentValues.put("name", info.getName());
+        contentValues.put("headPortrait", info.getHeadPortrait());
+        contentValues.put("time", info.getTime());
+
+        if (!TextUtils.isEmpty(phone)) {
+            database.update(TABLE_NAME, contentValues, "phone" + "=?", new String[]{phone});
+        } else {
+            database.insert(TABLE_NAME, null, contentValues);
         }
         database.close();
+
     }
 
-    public int delete(String phone){
+    public int delete(String phone) {
         SQLiteDatabase database = helper.getWritableDatabase();
-        int count = database.delete(TABLE_NAME,"phone=?",new String[]{phone + ""});
+        int count = database.delete(TABLE_NAME, "phone=?", new String[]{phone + ""});
         database.close();
         return count;
     }
+
     //查询
-    public List<HistoryInfo> quaryAll(){
+    public List<HistoryInfo> quaryAll() {
         SQLiteDatabase database = helper.getWritableDatabase();
         //查看表中所有数据
-        Cursor cursor = database.query(TABLE_NAME,null,null,null,null,null,null);
+        Cursor cursor = database.query(TABLE_NAME, null, null, null, null, null, null);
         List<HistoryInfo> list = new ArrayList<>();
         //移动到下一行
-            while (cursor.moveToNext()){
+        try {
+            while (cursor.moveToNext()) {
                 HistoryInfo historyInfo = new HistoryInfo();
                 //返回列名对应的列索引值
                 historyInfo.setName(cursor.getString(cursor.getColumnIndex("name")));
@@ -72,6 +77,11 @@ public class AccountDao {
             database.close();
             //关闭游标，释放资源
             cursor.close();
-            return list;
+
+        } catch (Exception e) {
+            Log.e("TAG", e + "错误错误错误!!!!!!!!!!!!!!");
+        }
+        return list;
     }
+
 }

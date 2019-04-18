@@ -53,6 +53,7 @@
                     android:digits="0123456789"
                     android:hint="@string/phone_et"
                     android:inputType="phone"
+                    android:maxLength="11"
                     android:textCursorDrawable="@drawable/login_edit_focus_color" />
             </LinearLayout>
         </LinearLayout>

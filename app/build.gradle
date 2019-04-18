@@ -18,8 +18,8 @@ android {
         applicationId "cn.fengwoo.sealsteward"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 303
-        versionName "3.0.3"
+        versionCode 304
+        versionName "3.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -246,7 +246,6 @@ dependencies {
 
     // dfu
     api 'no.nordicsemi.android:dfu:1.6.1'
-
 //    implementation project(':alipay')
 
     //图片放大缩小

@@ -7,18 +7,29 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.TabFragmentAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.fragment.ApplyRecordOneFragment;
 import cn.fengwoo.sealsteward.fragment.ApplyRecordTwoFragment;
 import cn.fengwoo.sealsteward.fragment.FirstMyApplyFragment;
@@ -26,6 +37,12 @@ import cn.fengwoo.sealsteward.fragment.FourthMyApplyFragment;
 import cn.fengwoo.sealsteward.fragment.SecondMyApplyFragmen;
 import cn.fengwoo.sealsteward.fragment.ThirdMyApplyFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.CommonDialog;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 我的申请
@@ -76,8 +93,60 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
         viewPager.setAdapter(new TabFragmentAdapter(fragmentManager,MyApplyActivity.this,fragmentList,titleList));
         tabLayout.setupWithViewPager(viewPager);//此方法就是让tablayout和ViewPager联动
 
+        //获取上传记录照片传过来的id值
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("id");
+        if (id != null){
+            Objects.requireNonNull(tabLayout.getTabAt(2)).select();   //打开指定页面
+            CommonDialog commonDialog = new CommonDialog(this,"提示","是否关闭该单据,关闭后记录照片将不能修改,并在后台生成盖章记录PDF","关闭");
+            commonDialog.showDialog();
+            commonDialog.setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    commonDialog.dialog.dismiss();
+                    close(id);
+                }
+            });
+        }
+
     }
 
+    /**
+     * 关闭单据
+     */
+    private void close(String applyId){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("applyId", applyId);
+        HttpUtil.sendDataAsync(this, HttpUrl.APPLICLOSE, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //设置监听然后在ThirdMyApplyFragment回调刷新
+                                    EventBus.getDefault().post(new MessageEvent("关闭刷新","关闭刷新"));
+                                }
+                            });
+                    }
+                }else {
+                    Log.e("TAG", responseInfo.getMessage() + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+                }
+            }
+        });
+    }
     private void setListener() {
         set_back_ll.setOnClickListener(this);
         add_ll.setOnClickListener(this);
@@ -100,7 +169,7 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUESTCODEFINISH){
-            if (resultCode == 11){
+            if (resultCode == 11){     // ApplyUseSealActivity设置的监听
                 finish();
             }
         }

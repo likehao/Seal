@@ -94,7 +94,10 @@ public class WaitApplyAdapter extends BaseAdapter {
         int status = waitApplyData.get(position).getApproveStatus();
         String id = waitApplyData.get(position).getId();
 
-        if (code == 2) { //审批中
+        if (code == 1){    //待审批
+            statusView(status);
+
+        }else if (code == 2) { //审批中
             viewHolder.item2_tv.setText("审批进度");
             viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
@@ -104,11 +107,10 @@ public class WaitApplyAdapter extends BaseAdapter {
                     context.startActivity(intent);
                 }
             });
-        } else if (code == 3) {  //已审批(用印申请)
-
+        } else if (code == 3) {  //已审批(我的申请)
             seeRecordCloseBill(status, position, id);
 
-        } else if (code == 4) {  //已驳回
+        } else if (code == 4) {  //已驳回（我的申请）
 
             viewHolder.item2_tv.setText("重提");
             viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
@@ -121,34 +123,20 @@ public class WaitApplyAdapter extends BaseAdapter {
                 }
             });
         } else if (code == 5) {  //已审批(审批记录)
-
             seeRecordCloseBill(status, position, id);
 
-        } else {    //code == 1
-            statusView(status);
+        } else {    //code == 6     已驳回（审批记录）
+            viewHolder.item2_tv.setText("重提");
+            viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
+            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
+            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
 
-        //关闭单据
-        viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-   /*             if (waitApplyData.get(position).getUploadPhotoNum() == 0 && code == 3){
-                    CommonDialog commonDialog = new CommonDialog(context,"提示",
-                            "此单据还未上传盖章后牌照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
-                    commonDialog.showDialog();
-                    commonDialog.setClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            commonPostRequest(id, code == 1 ? 2 : 1, position);
-                            commonDialog.dialog.dismiss();
-                        }
-                    });
-                }else {
-                    commonPostRequest(id, code == 1 ? 2 : 1, position);
-                }*/
-                commonPostRequest(id, code == 1 ? 2 : 1, position);
-            }
-        });
         return view;
 
     }
@@ -160,9 +148,12 @@ public class WaitApplyAdapter extends BaseAdapter {
 
         viewHolder.item1_tv.setVisibility(View.VISIBLE);
         viewHolder.item2_tv.setText("关闭单据");
+        viewHolder.item2_tv.setEnabled(true);
         viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
         viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
+
         statusView(status);
+
         //查看记录
         viewHolder.item1_tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,6 +173,27 @@ public class WaitApplyAdapter extends BaseAdapter {
                 intent.putExtra("stampPdf", waitApplyData.get(position).getStampPdf());
                 intent.putExtra("stampRecordPdf", waitApplyData.get(position).getStampRecordPdf());
                 context.startActivity(intent);
+            }
+        });
+
+        //关闭单据
+        viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (waitApplyData.get(position).getUploadPhotoNum() == 0){
+                    CommonDialog commonDialog = new CommonDialog(context,"提示",
+                            "此单据还未上传盖章后拍照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
+                    commonDialog.showDialog();
+                    commonDialog.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            commonDialog.dialog.dismiss();
+                            commonPostRequest(id, code == 1 ? 2 : 1, position);
+                        }
+                    });
+                }else {
+                    commonPostRequest(id, code == 1 ? 2 : 1, position);
+                }
             }
         });
 
@@ -290,4 +302,5 @@ public class WaitApplyAdapter extends BaseAdapter {
             apply_department_tv = view.findViewById(R.id.apply_department_tv);
         }
     }
+
 }

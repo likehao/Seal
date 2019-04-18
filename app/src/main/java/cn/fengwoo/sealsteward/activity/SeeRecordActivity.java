@@ -103,6 +103,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     private String applyPdf,stampPdf,stampRecordPdf;
     private final static int REQUESTCODE = 222;
     private  ArrayList<String> listImg;
+    private int i = 1;
+    ResponseInfo<List<RecordListBean>> responseInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +123,6 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         message_more_iv.setOnClickListener(this);
         photoNum_ll.setOnClickListener(this);
         see_RecordDetail_smt.autoRefresh();
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -175,6 +176,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         department_tv.setText(orgStructureName);
         list = new ArrayList<>();
         setSmartDetail();
+        seeRecordAdapter = new SeeRecordAdapter(SeeRecordActivity.this,list);
+        see_record_lv.setAdapter(seeRecordAdapter);
     }
     /**
      * 刷新盖章详情
@@ -184,62 +187,70 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
-                SeeRecordDetailBean seeRecordDetailBean = new SeeRecordDetailBean();
-                seeRecordDetailBean.setCurPage(1);
-                seeRecordDetailBean.setHasPage(true);
-                seeRecordDetailBean.setPageSize(10);
-                seeRecordDetailBean.setParam(id);
-
-                HttpUtil.sendDataAsync(SeeRecordActivity.this, HttpUrl.SEALRECORDLIST, 2, null, seeRecordDetailBean, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<List<RecordListBean>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<RecordListBean>>>() {
-                        }
-                                .getType());
-                        if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                            for (RecordListBean app : responseInfo.getData()) {
-                                String sealTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));  //最近盖章时间戳转为时间
-                                list.add(new SeeRecordBean(app.getFlowNumber(),sealTime,app.getAddress()));
-                            }
-                            //请求数据
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    seeRecordAdapter = new SeeRecordAdapter(SeeRecordActivity.this,list);
-                                    see_record_lv.setAdapter(seeRecordAdapter);
-                                    setListViewHeightBasedOnChildren(see_record_lv);
-                                    seeRecordAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                }
-                            });
-
-                        } else {
-                            refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            showToast(responseInfo.getMessage());
-                            Looper.loop();
-                        }
-
-                    }
-                });
-
+                i = 1;
+                getDetail(refreshLayout);
+                refreshLayout.finishRefresh(); //刷新完成
             }
         });
         see_RecordDetail_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                refreshLayout.finishLoadMore();  //加载完成
-                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                i += 1;
+                see_RecordDetail_smt.setEnableLoadMore(true);
+                refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
+                getDetail(refreshLayout);
+                //如果成功有数据就加载
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    refreshLayout.finishLoadMore(2000);//延迟2000毫秒后结束加载
+                } else {
+                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                }
             }
         });
 
+    }
+
+    /**
+     * 获取详情请求
+     */
+    private void getDetail(RefreshLayout refreshLayout){
+        SeeRecordDetailBean seeRecordDetailBean = new SeeRecordDetailBean();
+        seeRecordDetailBean.setCurPage(i);
+        seeRecordDetailBean.setHasPage(true);
+        seeRecordDetailBean.setPageSize(10);
+        seeRecordDetailBean.setParam(id);
+
+        HttpUtil.sendDataAsync(SeeRecordActivity.this, HttpUrl.SEALRECORDLIST, 2, null, seeRecordDetailBean, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<RecordListBean>>>() {
+                }
+                        .getType());
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    for (RecordListBean app : responseInfo.getData()) {
+                        String sealTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));  //最近盖章时间戳转为时间
+                        list.add(new SeeRecordBean(app.getFlowNumber(),sealTime,app.getAddress()));
+                    }
+                    //请求数据
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setListViewHeightBasedOnChildren(see_record_lv);
+                            seeRecordAdapter.notifyDataSetChanged(); //刷新数据
+                        }
+                    });
+
+                }
+
+            }
+        });
     }
     @Override
     public void onClick(View v) {

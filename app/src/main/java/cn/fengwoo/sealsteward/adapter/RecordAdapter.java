@@ -116,7 +116,7 @@ public class RecordAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (recordData.get(position).getUploadPhotoNum() == 0){
                     CommonDialog commonDialog = new CommonDialog(context,"提示",
-                            "此单据还未上传盖章后牌照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
+                            "此单据还未上传盖章后拍照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
                     commonDialog.showDialog();
                     commonDialog.setClickListener(new View.OnClickListener() {
                         @Override

@@ -346,6 +346,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     EasySP.init(LoginActivity.this).putBoolean("isAdmin", loginResponseInfo.getData().getAdmin());
                     //存储用户的姓名，电话，头像
                     HistoryInfo historyInfo = new HistoryInfo(phone, user.getRealName(), user.getHeadPortrait(), new Date().getTime());
+
                     accountDao.insert(historyInfo);
                     //下载用户头像
                     if (user.getHeadPortrait() != null && !user.getHeadPortrait().isEmpty()) {

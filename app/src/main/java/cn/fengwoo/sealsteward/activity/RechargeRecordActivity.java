@@ -56,6 +56,8 @@ public class RechargeRecordActivity extends BaseActivity {
     SmartRefreshLayout recharge_smt;
     RechargeRecordAdapter recordAdapter;
     List<RechargeRecordData> recordDataList;
+    private int i = 1;
+    ResponseInfo<List<RechargeRecordBean>> responseInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,8 @@ public class RechargeRecordActivity extends BaseActivity {
             }
         });
         recordDataList = new ArrayList<>();
+        recordAdapter = new RechargeRecordAdapter(recordDataList, RechargeRecordActivity.this);
+        recharge_record_lv.setAdapter(recordAdapter);
     }
 
     /**
@@ -87,69 +91,83 @@ public class RechargeRecordActivity extends BaseActivity {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 recordDataList.clear();
-                ApplyListData applyListData = new ApplyListData();
-                applyListData.setCurPage(1);
-                applyListData.setHasPage(true);
-                applyListData.setPageSize(10);
-                HttpUtil.sendDataAsync(RechargeRecordActivity.this, HttpUrl.RECHARGERECORD, 2, null, applyListData, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<List<RechargeRecordBean>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<RechargeRecordBean>>>() {
-                        }
-                                .getType());
-                        if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                            for (RechargeRecordBean app : responseInfo.getData()) {
-                                try {
-                                    Integer type;
-                                    //时间戳转为时间
-                                    String rechargeTime = DateUtils.getDateString(Long.parseLong(app.getRechargeTime()));// 支付时间
-                                    String expireTime = DateUtils.getDateString(Long.parseLong(app.getCurrentServiceExpireTime()));// 服务费到期时间
-                                    recordDataList.add(new RechargeRecordData(rechargeTime, app.getPaymentResult(), app.getSealName()
-                                            , app.getOrgStructureName(), app.getPackageContent(),app.getPaymentType(), expireTime, app.getAmountOfMoney()));
-                                } catch (NumberFormatException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                            //请求数据
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    recordAdapter = new RechargeRecordAdapter(recordDataList, RechargeRecordActivity.this);
-                                    recharge_record_lv.setAdapter(recordAdapter);
-                                    recordAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                }
-                            });
-
-                        } else {
-                            refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            showToast(responseInfo.getMessage());
-                            Looper.loop();
-                        }
-
-                    }
-                });
-
+                i = 1;
+                getRecharge(refreshLayout);
+                refreshLayout.finishRefresh(); //刷新完成
             }
         });
         recharge_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                refreshLayout.finishLoadMore();  //加载完成
-                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+
+                i += 1;
+                recharge_smt.setEnableLoadMore(true);
+                refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
+                getRecharge(refreshLayout);
+                //如果成功有数据就加载
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    refreshLayout.finishLoadMore(2000);
+                } else {
+                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                }
             }
         });
     }
 
+    /**
+     * 获取充值记录请求
+     * @param refreshLayout
+     */
+    private void getRecharge(RefreshLayout refreshLayout){
+        ApplyListData applyListData = new ApplyListData();
+        applyListData.setCurPage(i);
+        applyListData.setHasPage(true);
+        applyListData.setPageSize(10);
+        HttpUtil.sendDataAsync(RechargeRecordActivity.this, HttpUrl.RECHARGERECORD, 2, null, applyListData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<RechargeRecordBean>>>() {
+                }
+                        .getType());
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    for (RechargeRecordBean app : responseInfo.getData()) {
+                        try {
+                            Integer type;
+                            //时间戳转为时间
+                            String rechargeTime = DateUtils.getDateString(Long.parseLong(app.getRechargeTime()));// 支付时间
+                            String expireTime = DateUtils.getDateString(Long.parseLong(app.getCurrentServiceExpireTime()));// 服务费到期时间
+                            recordDataList.add(new RechargeRecordData(rechargeTime, app.getPaymentResult(), app.getSealName()
+                                    , app.getOrgStructureName(), app.getPackageContent(),app.getPaymentType(), expireTime, app.getAmountOfMoney()));
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    //请求数据
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recordAdapter.notifyDataSetChanged(); //刷新数据
+                        }
+                    });
+
+                } else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+
+            }
+        });
+
+    }
     @Override
     protected void onResume() {
         super.onResume();

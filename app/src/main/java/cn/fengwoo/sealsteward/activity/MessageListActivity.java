@@ -63,6 +63,8 @@ public class MessageListActivity extends BaseActivity{
     ListView message_list_lv;
     List<MessageDeatileBean> list;
     private MessageAdapter messageAdapter;
+    private int i = 1;
+    ResponseInfo<List<MessageDeatileBean>> responseInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,8 @@ public class MessageListActivity extends BaseActivity{
             }
         });
         list = new ArrayList<>();
-
+        messageAdapter = new MessageAdapter(list,MessageListActivity.this);
+        message_list_lv.setAdapter(messageAdapter);
     }
 
     private void getMsgDetail(){
@@ -92,61 +95,70 @@ public class MessageListActivity extends BaseActivity{
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
-                SeeRecordDetailBean msgData = new SeeRecordDetailBean();
-                msgData.setCurPage(1);
-                msgData.setHasPage(true);
-                msgData.setPageSize(10);
-                Intent intent = getIntent();
-                String param = intent.getStringExtra("msgId");
-                msgData.setParam(param);
-                HttpUtil.sendDataAsync(MessageListActivity.this, HttpUrl.MESSAGEDETAIL, 2, null, msgData, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("TAG",e+"错误错误错误错误错误错误!!!!!!!!!!!!!!!");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
-                        Gson gson = new Gson();
-                        ResponseInfo<List<MessageDeatileBean>> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<List<MessageDeatileBean>>>(){}
-                                .getType());
-                        if (responseInfo.getData() != null && responseInfo.getCode() == 0){
-                            for(MessageDeatileBean app : responseInfo.getData()) {
-                                //时间戳转为时间
-                                String expireTime = DateUtils.getDateString(Long.parseLong(app.getCreateTime())); //失效时间
-                                list.add(new MessageDeatileBean(expireTime,app.getTitle(),app.getContent()));
-                            }
-                            //请求数据
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    messageAdapter = new MessageAdapter(list,MessageListActivity.this);
-                                    message_list_lv.setAdapter(messageAdapter);
-                                    messageAdapter.notifyDataSetChanged(); //刷新数据
-                                    refreshLayout.finishRefresh(); //刷新完成
-                                    Log.e("TAG","获取消息列表成功!!!!!!!!!!!!!!!!!!!!");
-                                    updateReadMsg(param);
-                                }
-                            });
-
-                        }else {
-                            refreshLayout.finishRefresh(); //刷新完成
-                            Looper.prepare();
-                            showToast(responseInfo.getMessage());
-                            Looper.loop();
-                        }
-
-                    }
-                });
-
+                i = 1;
+                getMsgData(refreshLayout);
+                refreshLayout.finishRefresh(); //刷新完成
             }
         });
         message_list_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                refreshLayout.finishLoadMore();  //加载完成
-                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                i += 1;
+                message_list_smt.setEnableLoadMore(true);
+                refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
+                getMsgData(refreshLayout);
+                //如果成功有数据就加载
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    refreshLayout.finishLoadMore(2000);
+                } else {
+                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                }
+            }
+        });
+    }
+
+    private void getMsgData(RefreshLayout refreshLayout){
+        SeeRecordDetailBean msgData = new SeeRecordDetailBean();
+        msgData.setCurPage(i);
+        msgData.setHasPage(true);
+        msgData.setPageSize(10);
+        Intent intent = getIntent();
+        String param = intent.getStringExtra("msgId");
+        msgData.setParam(param);
+        HttpUtil.sendDataAsync(MessageListActivity.this, HttpUrl.MESSAGEDETAIL, 2, null, msgData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<List<MessageDeatileBean>>>(){}
+                        .getType());
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0){
+                    for(MessageDeatileBean app : responseInfo.getData()) {
+                        //时间戳转为时间
+                        String expireTime = DateUtils.getDateString(Long.parseLong(app.getCreateTime())); //失效时间
+                        list.add(new MessageDeatileBean(expireTime,app.getTitle(),app.getContent()));
+                    }
+                    //请求数据
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageAdapter.notifyDataSetChanged(); //刷新数据
+                            Log.e("TAG","获取消息列表成功!!!!!!!!!!!!!!!!!!!!");
+                            updateReadMsg(param);
+                        }
+                    });
+
+                }else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+
             }
         });
     }
