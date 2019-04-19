@@ -91,7 +91,7 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitApplyDataList.clear();
                 i = 1;
-                getThirdData(refreshLayout);
+                getThirdData();
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -101,7 +101,7 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
                 i += 1;
                 finish_apply_smartRL.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getThirdData(refreshLayout);
+                getThirdData();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);
@@ -113,7 +113,7 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
 
     }
 
-    private void getThirdData(RefreshLayout refreshLayout){
+    private void getThirdData(){
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasExportPdf(false);

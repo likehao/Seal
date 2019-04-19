@@ -16,7 +16,7 @@ public class StampRecordData implements Serializable {
     private Boolean hasExportPdf;
     private Boolean hasPage;
     private Integer pageSize;
-    private Parem param;
+    private Param param;
 
     @Override
     public String toString() {
@@ -60,15 +60,15 @@ public class StampRecordData implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public Parem getParam() {
+    public Param getParam() {
         return param;
     }
 
-    public void setParam(Parem param) {
+    public void setParam(Param param) {
         this.param = param;
     }
 
-    public static class Parem{
+    public static class Param{
 
         /**
          * "param": {
@@ -82,11 +82,13 @@ public class StampRecordData implements Serializable {
         private String endTime;
         private String sealId;
         private String startTime;
+        private Integer stampType;
 
-        public void Parem(String applyUser, String endTime, String sealId, String startTime) {
+        public void Param(String applyUser, String endTime, String sealId, Integer stampType,String startTime) {
             this.applyUser = applyUser;
             this.endTime = endTime;
             this.sealId = sealId;
+            this.stampType = stampType;
             this.startTime = startTime;
         }
 
@@ -122,6 +124,14 @@ public class StampRecordData implements Serializable {
             this.startTime = startTime;
         }
 
+        public Integer getStampType() {
+            return stampType;
+        }
+
+        public void setStampType(Integer stampType) {
+            this.stampType = stampType;
+        }
+
         @Override
         public String toString() {
             return "Parem{" +
@@ -129,6 +139,7 @@ public class StampRecordData implements Serializable {
                     ", endTime='" + endTime + '\'' +
                     ", sealId='" + sealId + '\'' +
                     ", startTime='" + startTime + '\'' +
+                    ", stampType='" + stampType + '\'' +
                     '}';
         }
 

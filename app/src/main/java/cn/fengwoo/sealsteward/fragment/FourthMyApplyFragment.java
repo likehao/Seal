@@ -88,7 +88,7 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitApplyDataList.clear(); //清除数据
                 i = 1;
-                getFourthData(refreshLayout);
+                getFourthData();
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -98,7 +98,7 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
                 i += 1;
                 reject_apply_smartRL.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getFourthData(refreshLayout);
+                getFourthData();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);
@@ -110,7 +110,7 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
 
     }
 
-    private void getFourthData(RefreshLayout refreshLayout){
+    private void getFourthData(){
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasExportPdf(false);

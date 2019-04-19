@@ -64,6 +64,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     @BindView(R.id.record_lv)
     ListView record_lv;
     String begin, end, personId, sealId;
+    int type;
     @BindView(R.id.select_record_smt)  //单独用来放置查询出来的记录
             SmartRefreshLayout select_record_smt;
     @BindView(R.id.select_record_lv)
@@ -117,7 +118,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 i = 1;
-                getData(refreshLayout);
+                getData();
                 refreshLayout.finishRefresh(); //刷新完成
 
             }
@@ -129,7 +130,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 i += 1;
                 record_refreshLayout.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getData(refreshLayout);
+                getData();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);
@@ -144,9 +145,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     /**
      * 获取记录请求
      *
-     * @param refreshLayout
      */
-    private void getData(RefreshLayout refreshLayout) {
+    private void getData() {
         StampRecordData stampRecordData = new StampRecordData();
         stampRecordData.setCurPage(i);
         stampRecordData.setHasPage(true);
@@ -236,7 +236,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 j = 1;
-                getSelectData(refreshLayout);
+                getSelectData();
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -246,7 +246,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 j += 1;
                 select_record_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getSelectData(refreshLayout);
+                getSelectData();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);//延迟2000毫秒后结束加载
@@ -260,11 +260,11 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     /**
      * 发送获取查询记录请求
      *
-     * @param refreshLayout
      */
-    private void getSelectData(RefreshLayout refreshLayout) {
+    String endTime,startTime;
+    private void getSelectData() {
         StampRecordData stampRecordData = new StampRecordData();
-        StampRecordData.Parem parem = new StampRecordData.Parem();
+        StampRecordData.Param param = new StampRecordData.Param();
         stampRecordData.setCurPage(j);
         stampRecordData.setHasExportPdf(false);
         stampRecordData.setHasPage(true);
@@ -272,14 +272,14 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         try {
             //时间转为时间戳
             if (end != null && begin != null) {
-                String endTime = DateUtils.dateToStamp2(end);
-                String startTime = DateUtils.dateToStamp2(begin);
-                parem.Parem(personId, endTime, sealId, startTime);
+                endTime = DateUtils.dateToStamp2(end);
+                startTime = DateUtils.dateToStamp2(begin);
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        stampRecordData.setParam(parem);
+        param.Param(personId, endTime, sealId, 1, startTime);     // 1为APP盖章，2为密码盖章
+        stampRecordData.setParam(param);
 
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.STAMPRECORDAPPLYLIST, 2, null, stampRecordData, new Callback() {
             @Override
@@ -379,6 +379,12 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             begin = data.getStringExtra("begin");
             personId = data.getStringExtra("personId");
             sealId = data.getStringExtra("sealId");
+            String sealType = data.getStringExtra("type");
+           /* if (sealType != null && sealType.equals("密码盖章")){
+                type = 1;
+            }else {
+                type = 0;
+            }*/
             getRecordList();   //获取查询记录列表
         }
         if (resultCode == REQUESTCODE) {

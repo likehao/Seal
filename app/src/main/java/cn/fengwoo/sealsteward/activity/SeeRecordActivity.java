@@ -188,7 +188,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 i = 1;
-                getDetail(refreshLayout);
+                getDetail();
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -198,7 +198,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 i += 1;
                 see_RecordDetail_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getDetail(refreshLayout);
+                getDetail();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);//延迟2000毫秒后结束加载
@@ -213,7 +213,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     /**
      * 获取详情请求
      */
-    private void getDetail(RefreshLayout refreshLayout){
+    private void getDetail(){
         SeeRecordDetailBean seeRecordDetailBean = new SeeRecordDetailBean();
         seeRecordDetailBean.setCurPage(i);
         seeRecordDetailBean.setHasPage(true);

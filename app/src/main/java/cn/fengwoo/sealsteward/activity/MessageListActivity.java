@@ -96,7 +96,7 @@ public class MessageListActivity extends BaseActivity{
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 i = 1;
-                getMsgData(refreshLayout);
+                getMsgData();
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -106,7 +106,7 @@ public class MessageListActivity extends BaseActivity{
                 i += 1;
                 message_list_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getMsgData(refreshLayout);
+                getMsgData();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);
@@ -117,7 +117,7 @@ public class MessageListActivity extends BaseActivity{
         });
     }
 
-    private void getMsgData(RefreshLayout refreshLayout){
+    private void getMsgData(){
         SeeRecordDetailBean msgData = new SeeRecordDetailBean();
         msgData.setCurPage(i);
         msgData.setHasPage(true);

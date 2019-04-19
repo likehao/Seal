@@ -88,7 +88,7 @@ public class ApplyRecordTwoFragment extends Fragment implements AdapterView.OnIt
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitApplyDataList.clear();
                 i = 1;
-                getRecordTwo(refreshLayout);
+                getRecordTwo();
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -98,7 +98,7 @@ public class ApplyRecordTwoFragment extends Fragment implements AdapterView.OnIt
                 i += 1;
                 apply_record_two_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getRecordTwo(refreshLayout);
+                getRecordTwo();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);
@@ -110,7 +110,7 @@ public class ApplyRecordTwoFragment extends Fragment implements AdapterView.OnIt
 
     }
 
-    private void getRecordTwo(RefreshLayout refreshLayout){
+    private void getRecordTwo(){
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasExportPdf(false);

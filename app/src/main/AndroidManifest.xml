@@ -207,7 +207,6 @@
         <activity android:name=".activity.AboutActivity" />
         <activity android:name=".activity.DfuActivity" />
         <activity android:name=".activity.NotificationActivity" />
-
         <activity android:name=".activity.PwdUserActivity" />
         <activity android:name=".activity.AddPwdUserActivity" />
         <activity android:name=".activity.VoiceActivity" />
@@ -254,10 +253,11 @@
         <activity android:name=".activity.MessageListActivity" />
         <activity android:name=".activity.UseInstructionsActivity" />
         <activity android:name=".activity.BigImgActivity" />
-        <activity android:name=".activity.MsgActivity"/>
+        <activity android:name=".activity.MsgActivity" />
 
-        <service android:name="cn.fengwoo.sealsteward.utils.DfuService" />
+        <service android:name=".utils.DfuService" />
 
+        <activity android:name=".activity.SelectPwdRecordActivity"></activity>
     </application>
 
 </manifest>

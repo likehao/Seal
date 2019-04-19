@@ -6,16 +6,16 @@ public class RecordListBean implements Serializable {
 
     /**
      * 盖章记录详情
-     *  "data": [
-     {
-     "address": "string",
-     "flowNumber": "string",
-     "id": "string",
-     "latitude": 0,
-     "longitude": 0,
-     "stampTime": "2019-03-22T12:30:35.754Z"
-     }
-     ],
+     * "data": [
+     * {
+     * "address": "string",
+     * "flowNumber": "string",
+     * "id": "string",
+     * "latitude": 0,
+     * "longitude": 0,
+     * "stampTime": "2019-03-22T12:30:35.754Z"
+     * }
+     * ],
      */
     private String address;
     private String flowNumber;

@@ -97,7 +97,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 i = 1;
                 waitApplyDataList.clear();
-                getFirstData(refreshLayout);
+                getFirstData();
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -108,7 +108,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
                 i += 1;
                 wait_apply_smartRL.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getFirstData(refreshLayout);
+                getFirstData();
                 //如果成功有数据就加载
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);
@@ -120,7 +120,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
 
     }
 
-    private void getFirstData(RefreshLayout refreshLayout){
+    private void getFirstData(){
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasExportPdf(false);

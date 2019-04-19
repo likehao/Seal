@@ -2,29 +2,19 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,25 +24,12 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.adapter.RecordAdapter;
-import cn.fengwoo.sealsteward.bean.MessageEvent;
-import cn.fengwoo.sealsteward.bean.StampRecordData;
-import cn.fengwoo.sealsteward.bean.StampRecordList;
-import cn.fengwoo.sealsteward.entity.NearTime;
-import cn.fengwoo.sealsteward.entity.RecordData;
-import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DateUtils;
-import cn.fengwoo.sealsteward.utils.HttpUrl;
-import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
-import cn.qqtheme.framework.picker.OptionPicker;
 import cn.qqtheme.framework.picker.SinglePicker;
 import cn.qqtheme.framework.widget.WheelView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * 查询盖章记录
@@ -159,28 +136,41 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
 
     /**
      * 检查数据是否全部为空
+     *
      * @return
      */
-    private boolean check(){
+    private boolean check() {
         if (TextUtils.isEmpty(selectPersonTv.getText().toString()) && TextUtils.isEmpty(selectSealTv.getText().toString())
                 && TextUtils.isEmpty(select_sealType_tv.getText().toString()) && TextUtils.isEmpty(selectNearTimeTv.getText().toString())
-        && TextUtils.isEmpty(selectBeginTimeTv.getText().toString()) && TextUtils.isEmpty(selectEndTimeTv.getText().toString())){
+                && TextUtils.isEmpty(selectBeginTimeTv.getText().toString()) && TextUtils.isEmpty(selectEndTimeTv.getText().toString())) {
             return false;
         }
         return true;
     }
+
     /**
      * 查询盖章记录请求
      */
     private void selectRecord() {
-        intent = new Intent();
-        intent.putExtra("end", end);
-        intent.putExtra("begin", begin);
-        intent.putExtra("personId", personId);
-        intent.putExtra("sealId", sealId);
-        intent.putExtra("type", select_sealType_tv.getText().toString());
-        setResult(100, intent);
-        finish();
+        String type = select_sealType_tv.getText().toString();
+        if (type.equals("密码盖章")) {
+            intent = new Intent(this, SelectPwdRecordActivity.class);
+            intent.putExtra("end", end);
+            intent.putExtra("begin", begin);
+            intent.putExtra("personId", personId);
+            intent.putExtra("sealId", sealId);
+            //    intent.putExtra("type", 1);
+            startActivity(intent);
+        } else {
+            intent = new Intent();
+            intent.putExtra("end", end);
+            intent.putExtra("begin", begin);
+            intent.putExtra("personId", personId);
+            intent.putExtra("sealId", sealId);
+            //    intent.putExtra("type", select_sealType_tv.getText().toString());
+            setResult(100, intent);
+            finish();
+        }
     }
 
     /**
@@ -195,7 +185,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
             list.add("一周");
             list.add("两周");
             list.add("一个月");
-        }else {
+        } else {
             list.add("手机盖章");
             list.add("密码盖章");
         }
@@ -207,7 +197,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
 //        picker.setCancelTextColor(0xFFFB2C3C);
         picker.setTextSize(15);
         picker.setSelectedIndex(0);
-        picker.setLineSpaceMultiplier(2);   //设置每项的高度，范围为2-4
+        picker.setLineSpaceMultiplier(3);   //设置每项的高度，范围为2-4
         picker.setContentPadding(0, 10);
         picker.setCycleDisable(true);
         picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
@@ -215,7 +205,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
             public void onItemPicked(int index, String item) {
                 if (code == 1) {
                     selectNearTimeTv.setText(item);
-                }else {
+                } else {
                     select_sealType_tv.setText(item);
                 }
             }
