@@ -270,7 +270,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.photoNum_ll:
                 Intent intent = new Intent(this,UploadFileActivity.class);
-                intent.putExtra("photoCode",1);
+                intent.putExtra("code",1);
+                intent.putExtra("id",id);
                 intent.putStringArrayListExtra("photoList",listImg);
                 startActivity(intent);
                 break;

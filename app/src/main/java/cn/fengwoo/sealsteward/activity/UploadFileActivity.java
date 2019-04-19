@@ -3,13 +3,10 @@ package cn.fengwoo.sealsteward.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,13 +15,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lxj.matisse.Matisse;
-import com.lxj.matisse.MimeType;
-import com.lxj.matisse.filter.Filter;
-import com.lxj.matisse.internal.entity.CaptureStrategy;
-import com.squareup.picasso.Picasso;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 //import com.zhihu.matisse.Matisse;
@@ -32,35 +26,22 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 //import com.zhihu.matisse.filter.Filter;
 //import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.fengwoo.sealsteward.BuildConfig;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RecycleviewAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
-import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.FileUtil;
-import cn.fengwoo.sealsteward.utils.GifSizeFilter;
-import cn.fengwoo.sealsteward.utils.GlideEngineImage;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -91,26 +72,41 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     RecyclerView useSealApply_Rcv;
     @BindView(R.id.upload_photo_ll)
     LinearLayout upload_photo_ll;
+
+    @BindView(R.id.subtract)
+    TextView subtract;
+    @BindView(R.id.page)
+    TextView page;
+    @BindView(R.id.add)
+    TextView add;
+
     private RecycleviewAdapter recycleviewAdapter;
     private static final int REQUEST_CODE_CHOOSE = 1;
     private Boolean success = false;
     LoadingView loadingView;
-    List<String> fileName = new ArrayList<>();
-    int code,count;
+    int code;
+    int count;
     String id;
+    List<String> allFileName = new ArrayList<>(); // 所有图片的名字
+    //    List<String> nicePicFileName = new ArrayList<>(); // 当前要显示的9张图片的名字
+    List<Uri> ninePicUri = new ArrayList<>();
+    int currentPage = 0; // 当前页面，第一页为0，首次加载为0
 
-    private Uri photoURI;
+    int totalPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_file);
-
         ButterKnife.bind(this);
         initView();
     }
 
     private void initView() {
+        subtract.setOnClickListener(this);
+        page.setOnClickListener(this);
+        add.setOnClickListener(this);
+
         set_back_ll.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
         edit_tv.setVisibility(View.VISIBLE);
@@ -118,35 +114,77 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         edit_tv.setOnClickListener(this);
         useSealApply_iv.setOnClickListener(this);
         //设置布局,列数
-        useSealApply_Rcv.setLayoutManager(new GridLayoutManager(this, 4));
+        useSealApply_Rcv.setLayoutManager(new GridLayoutManager(this, 3));
         recycleviewAdapter = new RecycleviewAdapter();
+
+        recycleviewAdapter.setOnDeleteListener(new RecycleviewAdapter.OnDeleteListener() {
+            @Override
+            public void delete(String str) {
+                Utils.log("delete");
+                allFileName.remove(str);
+                showCurrentPagePic();
+            }
+        });
+
         useSealApply_Rcv.setAdapter(recycleviewAdapter);
         loadingView = new LoadingView(this);
         Intent intent = getIntent();
-        code = intent.getIntExtra("code",0);   //记录详情上传照片传递过来
+        code = intent.getIntExtra("code", 0);   //记录详情上传照片传递过来
         id = intent.getStringExtra("id");
-        count = intent.getIntExtra("count",0);
-        if (code == 1){
+        count = intent.getIntExtra("count", 0);
+        allFileName = intent.getStringArrayListExtra("photoList");
+        if (code == 1) {
+            // 上传记录
             title_tv.setText("上传照片");
-        }else {
+        } else {
+            // 上传印模
             title_tv.setText("用印申请");
         }
-        int photoCode = intent.getIntExtra("photoCode",0);
-        if (photoCode == 1){
-            upload_photo_ll.setVisibility(View.GONE);
-            edit_tv.setVisibility(View.GONE);
-            title_tv.setText("用印照片");
-        }
 
-        List<String> list = intent.getStringArrayListExtra("photoList");
+        // 显示图片
+        if (allFileName.size() > 0) {
+            // 当前显示页面
+            currentPage = 0;
+            int allFileNumber = allFileName.size();
+            if (allFileNumber <= 9) {
+                show9Pics(allFileName);
+            } else {
+                List<String> targetList = new ArrayList<>(); // 0到9张图片
+                targetList = allFileName.subList(0, 9);
+                show9Pics(targetList);
+
+//                // 显示最后一页的图片
+//                List<String> targetList = new ArrayList<>();
+//                // 大于9张，得出最后一页的图片名字
+//                int allPage = allFileNumber / 9;
+//                targetList = allFileName.subList(9 * allPage + 1, allFileNumber);
+//                show9Pics(targetList);
+            }
+
+            totalPage = allFileName.size() / 9;
+
+            // 显示当前页面
+            page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+
+        }
+    }
+
+    /**
+     * 显示9宫格图片，小于等于9张图片
+     *
+     * @param list
+     */
+    private void show9Pics(List<String> list) {
+        // uriList 要在此初始化
         List<Uri> uriList = new ArrayList<>();
-    //    uriList.add(Uri.parse("http://up.qqjia.com/z/18/tu19139_7.jpg"));
+
+        // 下载和显示图片
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 //先从本地读取，没有则下载
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(list.get(i));
-                if (bitmap == null){
-                    HttpDownloader.downloadImage(this, 1, list.get(i), new DownloadImageCallback() {
+                if (bitmap == null) {
+                    HttpDownloader.downloadImage(this, 5, list.get(i), new DownloadImageCallback() {
                         @Override
                         public void onResult(final String fileName) {
                             if (fileName != null) {
@@ -155,29 +193,33 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                                     public void run() {
                                         String str = "file://" + HttpDownloader.path + fileName;
                                         Uri uri = Uri.parse(str);
-                                    /*    File file = new File(str);
-                                        FileUtil.getImageContentUri(UploadFileActivity.this,file);*/
-                                     //   Picasso.with(UploadFileActivity.this).load(uri).into(useSealApply_iv);
                                         uriList.add(uri);
+                                        recycleviewAdapter.setData(uriList, UploadFileActivity.this, list);
+                                        recycleviewAdapter.notifyDataSetChanged();
                                     }
                                 });
                             }
                         }
                     });
-                }else {
+                } else {
                     String headPortraitPath = "file://" + HttpDownloader.path + list.get(i);
                     Uri uri = Uri.parse(headPortraitPath);
-                   // Picasso.with(UploadFileActivity.this).load(uri).into(useSealApply_iv);
                     uriList.add(uri);
                 }
-
             }
         }
-        recycleviewAdapter.setData(uriList,this);
+        recycleviewAdapter.setData(uriList, this, list);
+        recycleviewAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onClick(View v) {
+        List<String> targetList;
+
+        // 总共多少页
+        totalPage = allFileName.size() / 9;
+
         switch (v.getId()) {
             case R.id.set_back_ll:
                 finish();
@@ -186,55 +228,111 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 permissions();
                 break;
             case R.id.edit_tv:
-                if (success) {
-                    if (code != 0){
-                        //上传照片提交
-                        uploadPhoto();
-                    }else {
-                        //用印申请提交
-                        addUserSealApply();
+//                if (success) {
+                    if (code != 0) {
+                        // 记录提交
+                        uploadRecord();
+                    } else {
+                        // 印模提交
+                        uploadMoulage();
                     }
-                }else {
-                    showToast("请上传图片");
+//                } else {
+//                    showToast("请上传图片");
+//                }
+                break;
+            case R.id.add:
+                if (currentPage + 1 > totalPage) {
+                    showToast("已经到最后一页了");
+                    return;
                 }
+
+                currentPage++;
+
+                // 显示当前页面
+                page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+
+                targetList = new ArrayList<>(); // 0到9张图片
+                if (9 * (currentPage + 1) > allFileName.size()) {
+                    // 显示最后一页的图片
+                    targetList = new ArrayList<>();
+                    // 大于9张，得出最后一页的图片名字
+                    int allPage = allFileName.size() / 9;
+                    targetList = allFileName.subList(9 * allPage, allFileName.size());
+                    show9Pics(targetList);
+                } else {
+                    targetList = allFileName.subList(9 * currentPage, 9 * (currentPage + 1));
+                    show9Pics(targetList);
+                }
+                break;
+            case R.id.subtract:
+                if (currentPage - 1 < 0) {
+                    showToast("已经到第一页了");
+                    return;
+                }
+
+                currentPage--;
+
+                // 显示当前页面
+                page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+
+                targetList = new ArrayList<>(); // 0到9张图片
+                targetList = allFileName.subList(9 * currentPage, 9 * (currentPage + 1));
+                show9Pics(targetList);
+//                }
                 break;
         }
     }
 
+    private void showCurrentPagePic() {
+        List<String> targetList = new ArrayList<>(); // 0到9张图片
+        if (9 * (currentPage + 1) > allFileName.size()) {
+            // 显示最后一页的图片
+            targetList = new ArrayList<>();
+            // 大于9张，得出最后一页的图片名字
+            int allPage = allFileName.size() / 9;
+            targetList = allFileName.subList(9 * allPage, allFileName.size());
+            show9Pics(targetList);
+        } else {
+            targetList = allFileName.subList(9 * currentPage, 9 * (currentPage + 1));
+            show9Pics(targetList);
+        }
+    }
+
     /**
-     * 上传记录照片
+     * 记录
      */
-    private void uploadPhoto(){
+    private void uploadRecord() {
         loadingView.show();
         AddUseSealApplyBean bean = new AddUseSealApplyBean();
         bean.setApplyId(id);
-        bean.setImgList(fileName);
+        bean.setImgList(allFileName);
         HttpUtil.sendDataAsync(this, HttpUrl.UPDATESTAMPIMAGE, 2, null, bean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
-                Log.e("TAG",e +"上传记录照片错误错误错误!!!!!!!!!!!!!!");
+                Log.e("TAG", e + "上传记录照片错误错误错误!!!!!!!!!!!!!!");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
-                .getType());
-                if (responseInfo.getCode() == 0){
-                    if (responseInfo.getData()){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
                         loadingView.cancel();
                         setResult(222);
-                        Intent intent = new Intent(UploadFileActivity.this,MyApplyActivity.class);
-                        intent.putExtra("id",id);
+                        Intent intent = new Intent(UploadFileActivity.this, MyApplyActivity.class);
+                        intent.putExtra("id", id);
                         startActivity(intent);
                         finish();
                         Looper.prepare();
                         showToast("上传成功");
                         Looper.loop();
                     }
-                }else {
+                } else {
                     loadingView.cancel();
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
@@ -243,6 +341,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             }
         });
     }
+
     /**
      * 申请权限
      */
@@ -261,7 +360,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                             //开启图片选择器
 //                            takePhoto.onPickFromCapture(imageUri);
                             Utils.log("权限accept!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                            uploadImgFile();
+//                            uploadImgFile();
+                            takeAPic();
                         } else if (permission.shouldShowRequestPermissionRationale) {
                             showToast("您已拒绝权限申请");
                         } else {
@@ -272,44 +372,17 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     }
 
-    /**
-     * 上传用印申请图片
-     */
-    private void uploadImgFile() {
-
-//        dispatchTakePictureIntent(123);
-        takeAPic();
-    }
 
     /**
      * 选择照片
      */
     private void takeAPic() {
-//        Matisse.from(UploadFileActivity.this)
-//                .choose(MimeType.ofImage(), false)  //图片类型
-//                .countable(true)    //选中后显示数字;false:选中后显示对号
-//                .capture(true)  //是否提供拍照功能
-//                .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))//存储到哪里
-//                .maxSelectable(4)   //可选最大数
-//                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
-//                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
-//                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)   //图像选择和预览活动所需的方向。
-//                .thumbnailScale(0.85f)  //缩略图的清晰程度(与内存占用有关)
-//                .imageEngine(new GlideEngineImage())   // for glide-V4  图片加载引擎  原本使用的是GlideEngine
-//                .originalEnable(true)
-//                .maxOriginalSize(10)
-//               // .autoHideToolbarOnSingleTap(true)
-//                .forResult(REQUEST_CODE_CHOOSE);
-
         Matisse.from(UploadFileActivity.this)
                 .capture()
                 .isCrop(false)
                 .forResult(REQUEST_CODE_CHOOSE);
-
     }
 
-    List<Uri> mSelected = new ArrayList<>();
-    List<String> path;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -320,54 +393,44 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             File fileByUri = new File(Matisse.obtainCaptureImageResult(data));
 
             // 显示在本地
-            mSelected.add(FileUtil.getImageContentUri(this,fileByUri));
-            recycleviewAdapter.setData(mSelected, UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
+//            ninePicUri.add(FileUtil.getImageContentUri(this, fileByUri));
+//            recycleviewAdapter.setData(ninePicUri, UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
+            Luban.with(this)
+                    .load(fileByUri)
+                    .ignoreBy(100)
+                    .filter(new CompressionPredicate() {
+                        @Override
+                        public boolean apply(String path) {
+                            return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                        }
+                    })
+                    .setCompressListener(new OnCompressListener() {
+                        @Override
+                        public void onStart() {
+                            // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                        }
 
-//            mSelected = Matisse.obtainSelectUriResult(data);
-//            //   path =  Matisse.obtainPathResult(data);
-//            //加载图片数据
-//            recycleviewAdapter.setData(mSelected, UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
-//            for (int i = 0; i < mSelected.size(); i++) {
-                //将uri转为file
-            //    File fileByUri = FileUtil.getFileByUri(mSelected.get(i), this);   //拍照转会报错
-//                File fileByUri = new File(FileUtil.getRealFilePath(UploadFileActivity.this, mSelected.get(i)));
-                Luban.with(this)
-                        .load(fileByUri)
-                        .ignoreBy(100)
-                        .filter(new CompressionPredicate() {
-                            @Override
-                            public boolean apply(String path) {
-                                return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                            }
-                        })
-                        .setCompressListener(new OnCompressListener() {
-                            @Override
-                            public void onStart() {
-                                // TODO 压缩开始前调用，可以在方法内启动 loading UI
-                            }
+                        @Override
+                        public void onSuccess(File file) {
+                            // TODO 压缩成功后调用，返回压缩后的图片文件
+                            //上传图片
+                            uploadPic(file);
+                        }
 
-                            @Override
-                            public void onSuccess(File file) {
-                                // TODO 压缩成功后调用，返回压缩后的图片文件
-                                //上传图片
-                                uploadPic(file);
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                // TODO 当压缩过程出现问题时调用
-                                Log.e("TAG", e + "");
-                            }
-                        }).launch();
-//            }
+                        @Override
+                        public void onError(Throwable e) {
+                            // TODO 当压缩过程出现问题时调用
+                            Log.e("TAG", e + "");
+                        }
+                    }).launch();
         }
-        if (requestCode == 111 && resultCode == 111){
-             finish();
+        if (requestCode == 111 && resultCode == 111) {
+            finish();
         }
     }
 
     /**
-     * 上传图片至服务器 (category -> 5:上传记录图片  4:申请用印上传图片)
+     * 上传图片至服务器 (category -> 5:上传记录图片  4:申请用印上传图片)（单独上传图片）
      *
      * @param file
      */
@@ -387,9 +450,9 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 }.getType());
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     String str = responseInfo.getData().getFileName();
-                    fileName.add(str);
+                    allFileName.add(str);
                     loadingView.cancel();
-                    Log.e("TAG","上传图片成功!!!!!!!!!!!!!!!!!!!!");
+                    Log.e("TAG", "上传图片成功!!!!!!!!!!!!!!!!!!!!");
 
                     // 弹出相机
                     permissions();
@@ -416,9 +479,9 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     }
 
     /**
-     * 用印申请
+     * 印模
      */
-    private void addUserSealApply() {
+    private void uploadMoulage() {
         loadingView.show();
         Intent intent = getIntent();
         String cause = intent.getStringExtra("cause");
@@ -432,7 +495,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         addUseSealApplyBean.setApplyUser(userId);
         addUseSealApplyBean.setExpireTime(failTime);
         addUseSealApplyBean.setSealId(sealId);
-        addUseSealApplyBean.setImgList(fileName);
+        addUseSealApplyBean.setImgList(allFileName);
         HttpUtil.sendDataAsync(UploadFileActivity.this, HttpUrl.ADDUSESEAL, 2, null, addUseSealApplyBean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -449,7 +512,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         loadingView.cancel();
-                        setResult(10,intent);
+                        setResult(10, intent);
                         finish();
                         Looper.prepare();
                         showToast("申请成功");

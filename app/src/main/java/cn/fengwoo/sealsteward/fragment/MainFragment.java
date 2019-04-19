@@ -709,9 +709,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             stampTag = false;
 //            currentStampTimes = 0;
         }
-//        if (tv_times_left.getText().toString().trim().equals("1")) {
-//            setAdmin0();
-//        }
+        if (tv_times_left.getText().toString().trim().equals("1")) {
+            setAdmin0();
+        }
     }
 
     @SuppressLint("CheckResult")

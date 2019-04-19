@@ -16,21 +16,32 @@ import cn.fengwoo.sealsteward.R;
  */
 public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.ViewHolder>{
     private List<Uri> uriList;
+    private List<String> strList;
     private Context context;
-    public void setData(List<Uri> list,Context context){
+    private OnDeleteListener onDeleteListener;
+
+    public void setData(List<Uri> list,Context context,List<String> strList){
         this.uriList = list;
         this.context = context;
+        this.strList = strList;
         notifyDataSetChanged();
     }
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup parent, int i) {
         ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.uri_item,parent,false));
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder( ViewHolder viewHolder, int i) {
         Glide.with(context).load(uriList.get(i)).into(viewHolder.imageView);
+        viewHolder.iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteListener.delete(strList.get(i));
+            }
+        });
     }
 
     @Override
@@ -40,10 +51,19 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView imageView;
+        private ImageView iv;
         ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.img);
-
+            iv = itemView.findViewById(R.id.iv);
         }
+    }
+
+    public interface OnDeleteListener {
+        void delete(String Str);
+    }
+
+    public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
+        this.onDeleteListener = onDeleteListener;
     }
 }

@@ -22,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hjq.toast.ToastUtils;
 import com.white.easysp.EasySP;
 
 import org.greenrobot.eventbus.EventBus;
@@ -261,6 +262,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.add_seal_rl:
+                if (!Utils.isBluetoothOpen()) {
+                    ToastUtils.show("蓝牙没有打开，请开启蓝牙");
+                    return;
+                }
                 if (!Utils.hasThePermission(getActivity(), Constants.permission1)) {
                     return;
                 }
