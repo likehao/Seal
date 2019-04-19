@@ -188,9 +188,6 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                 }.getType());
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()) {
-                        Intent intent = new Intent(SetPasswordActivity.this, LoginActivity.class);
-                        intent.putExtra("password",password);
-                        startActivity(intent);
                         finish();
                         Looper.prepare();
                         showToast("设置密码成功");

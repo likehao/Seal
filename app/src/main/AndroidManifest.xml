@@ -255,7 +255,6 @@
         <activity android:name=".activity.UseInstructionsActivity" />
         <activity android:name=".activity.BigImgActivity" />
         <activity android:name=".activity.MsgActivity"/>
-        <activity android:name=".activity.UseInstructionsActivity"/>
 
         <service android:name="cn.fengwoo.sealsteward.utils.DfuService" />
 
