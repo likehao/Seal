@@ -105,6 +105,7 @@ public class MessagePopuwindow extends PopupWindow implements View.OnClickListen
         }else {
             TextView apply_file_tv = mview.findViewById(R.id.apply_file_tv);
             TextView upload_photo_tv = mview.findViewById(R.id.upload_photo_tv);
+            upload_photo_tv.setVisibility(View.GONE);
             apply_file_tv.setOnClickListener(this);
             upload_photo_tv.setOnClickListener(this);
         }
