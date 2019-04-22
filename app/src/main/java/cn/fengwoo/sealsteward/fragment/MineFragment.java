@@ -1,8 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
@@ -20,15 +18,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.mapsdkplatform.comapi.map.C;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -36,8 +38,8 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.LoginActivity;
-import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
+import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
@@ -50,7 +52,6 @@ import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.view.CircleImageView;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
@@ -90,7 +91,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.dfu)
     Button dfu;
-
+    @BindView(R.id.mine_smt)
+    SmartRefreshLayout mine_smt;
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
@@ -104,6 +106,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
         initView();
         setListener();
+        getSmtData();
         return view;
     }
 
@@ -147,8 +150,41 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         //    nearby_device_rl.setOnClickListener(this);
         use_Instructions_rl.setOnClickListener(this);
         dfu.setOnClickListener(this);
+        mine_smt.setEnableLoadMore(false);
     }
 
+    private void getSmtData(){
+        mine_smt.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                //添加用户ID为参数
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("userId", CommonUtil.getUserData(getActivity()).getId());
+                HttpUtil.sendDataAsync(getActivity(), HttpUrl.USERINFO, 1, hashMap, null, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Looper.prepare();
+                        Toast.makeText(getActivity(), e + "", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                        Log.e("TAG", "获取个人信息数据失败........");
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = response.body().string();
+                        Gson gson = new Gson();
+                        final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
+                        }.getType());
+                        if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
+                            mine_smt.finishRefresh();
+                        }
+
+                    }
+                });
+                mine_smt.finishRefresh();
+            }
+        });
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

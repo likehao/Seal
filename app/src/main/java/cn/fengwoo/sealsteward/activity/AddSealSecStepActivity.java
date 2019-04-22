@@ -12,10 +12,12 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lxj.matisse.Matisse;
@@ -70,6 +72,14 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     LinearLayout set_back_ll;
     @BindView((R.id.iv))
     ImageView imageView;
+    @BindView(R.id.secStep_tv)
+    TextView secStep_tv;
+    @BindView(R.id.add_secStep_bt)
+    Button add_secStep_bt;
+    @BindView(R.id.secStep_ll)
+    LinearLayout secStep_ll;
+    @BindView(R.id.img)
+    ImageView img;
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
     private Uri imageUri;
@@ -99,6 +109,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         title_tv.setText("添加印章");
         set_back_ll.setOnClickListener(this);
         imageView.setOnClickListener(this);
+        add_secStep_bt.setOnClickListener(this);
     }
 
     private void initData() {
@@ -127,6 +138,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             case R.id.iv:
                 permissions();
                 break;
+            case R.id.add_secStep_bt:
+                addSeal();
+                break;
         }
     }
 
@@ -150,8 +164,10 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
                     // 保存 印模 名字
                     sealPringString = responseInfo.getData().getFileName();
+                    secStep_ll.setVisibility(View.GONE);
+                    Glide.with(AddSealSecStepActivity.this).load(file).into(img);
                     //添加印章
-                    addSeal();
+              //      addSeal();
                 } else {
                     Looper.prepare();
                     showToast(responseInfo.getMessage());

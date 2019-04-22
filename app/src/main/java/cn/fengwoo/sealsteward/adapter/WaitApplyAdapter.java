@@ -30,6 +30,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.ApprovalActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.bean.ApplyListData;
+import cn.fengwoo.sealsteward.bean.ApproveProgress;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
@@ -104,6 +105,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     intent = new Intent(context, ApprovalActivity.class);
+                    intent.putExtra("applyId",waitApplyData.get(position).getId());
                     context.startActivity(intent);
                 }
             });

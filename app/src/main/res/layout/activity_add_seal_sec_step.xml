@@ -1,31 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".activity.AboutActivity">
+    android:background="@color/white"
+    tools:context=".activity.AboutActivity"
+    android:orientation="vertical">
 
     <include layout="@layout/head" />
 
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:background="@drawable/add" />
-
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginTop="205dp"
-        android:text="@string/app_name"
-        android:textColor="@color/black" />
+        android:layout_marginTop="80dp">
 
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/secStep_ll"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@color/background"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sec_step" />
+
+            <TextView
+                android:id="@+id/secStep_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/style"
+                android:textSize="12sp"
+                android:text="@string/add_secStep"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/add_secStep_bt"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="90dp"
+        android:textColor="@color/white"
+        android:background="@drawable/login_circle_bg"
+        android:text="@string/add"/>
+
+</LinearLayout>

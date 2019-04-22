@@ -87,11 +87,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
         initData();
         getDate();
 
-
-
 //        setListAdapter();
-
-
     }
 
     private void initView() {
@@ -120,7 +116,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-    @OnClick({R.id.add_ll, R.id.set_back_ll})
+    @OnClick({R.id.add_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_ll:
@@ -130,9 +126,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                 Intent intent = new Intent();
                 intent.setClass(this, AddPwdUserActivity.class);
                 startActivityForResult(intent,123);
-                break;
-            case R.id.set_back_ll:
-                finish();
                 break;
         }
     }
