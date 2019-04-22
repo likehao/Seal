@@ -198,6 +198,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             // Handle an error here.
                         }
                 );
+
     }
 
     private void initView() {
