@@ -37,7 +37,8 @@
             android:gravity="center"
             android:id="@+id/subtract"
             android:layout_width="50dp"
-            android:text="-"
+            android:text=""
+            android:background="@drawable/leftx"
             android:textSize="33sp"
             android:layout_height="50dp"
             android:src="@drawable/add_img" />
@@ -52,9 +53,10 @@
         <TextView
             android:gravity="center"
             android:textSize="33sp"
+            android:background="@drawable/rightx"
 
             android:id="@+id/add"
-            android:text="+"
+            android:text=""
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/add_img" />

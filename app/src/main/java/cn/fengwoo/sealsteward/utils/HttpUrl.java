@@ -2,7 +2,7 @@ package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
     //    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
-    public static final String URL = "http://192.168.0.117:8800/";  //调试环境
+    public static final String URL = "http://192.168.0.152:8800/";  //调试环境
 //    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //测试
 //    public static final String URL = "http://www.baiheyz.com:8080/bhsealappservice/";    //线上
 
@@ -313,5 +313,12 @@ public class HttpUrl {
      * 离线记录
      */
     public static final String OFFLINERECORD = "stamp/offlinestamprecord";
+
+    /**
+     * 改变部门
+     */
+    public static final String CHANGE_ORG = "company/moveuserorseal";
+
+
 
 }

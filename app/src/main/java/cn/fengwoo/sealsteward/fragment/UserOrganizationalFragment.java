@@ -30,6 +30,8 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.ChangeInformationActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
+import cn.fengwoo.sealsteward.activity.SelectPeopleMultiActivity;
+import cn.fengwoo.sealsteward.activity.SelectSealMultiActivity;
 import cn.fengwoo.sealsteward.activity.UserInfoActivity;
 import cn.fengwoo.sealsteward.adapter.ExpandListViewAdapter;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
@@ -117,6 +119,20 @@ public class UserOrganizationalFragment extends Fragment {
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
+
+                            mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList,0,0);
+                            mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
+                                @Override
+                                public void clicked(String id,int type,String parentName) {
+                                    Utils.log("id:" + id);
+                                    if (type == 3) {
+                                        selectDialog(id);
+                                    }
+                                }
+                            });
+                            mListView.setAdapter(mAdapter);
+
                             mLinkedList.addAll(NodeHelper.sortNodes(data));
                             mAdapter.notifyDataSetChanged();
                             Utils.log("mAdapter.notifyDataSetChanged();");
@@ -134,6 +150,8 @@ public class UserOrganizationalFragment extends Fragment {
 //        strings.add("切换");
         strings.add("删除");
         strings.add("查看详情");
+        strings.add("移动人员");
+
         final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(getActivity(), strings);
         optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -214,9 +232,32 @@ public class UserOrganizationalFragment extends Fragment {
                         });
                     }
                 }
+                else if (position == 2) {
+//                    loadingView.show();
+//                    deleteDialog(); //提示删除
+
+                    if (!Utils.hasThePermission(getActivity(), Constants.permission23)) {
+                        return;
+                    }
+
+                    Intent intent = new Intent(getActivity(), SelectPeopleMultiActivity.class);
+                    Utils.log("sealID:" + uid);
+//                    intent.putExtra("departmentName", departmentName);
+//                    intent.putExtra("sealID", uid);
+                    startActivityForResult(intent,123);
+                    optionBottomDialog.dismiss();
+                }
             }
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Utils.log("" + requestCode);
+        mLinkedList =  new LinkedList<>();
+        initData();
+        getDate();
+    }
 
 }

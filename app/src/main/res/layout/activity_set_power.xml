@@ -329,6 +329,34 @@
             </RelativeLayout>
 
             <View style="@style/line" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="移动用户或印章到其他部门权限" />
+
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/permission23"
+                    style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="固件升级权限" />
+
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/permission24"
+                    style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

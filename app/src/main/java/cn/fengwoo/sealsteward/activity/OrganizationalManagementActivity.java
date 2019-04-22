@@ -1,37 +1,57 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.white.easysp.EasySP;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
+import cn.fengwoo.sealsteward.entity.AddPwdUserUpload;
+import cn.fengwoo.sealsteward.entity.AddPwdUserUploadReturn;
+import cn.fengwoo.sealsteward.entity.ChangeOrgEntity;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.fragment.UserOrganizationalFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
+import cn.fengwoo.sealsteward.utils.DataProtocol;
+import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
+import cn.fengwoo.sealsteward.utils.SerializableMap;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.MyApp;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -56,6 +76,10 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
     private String m_id, m_name;
     LoadingView loadingView;
     Intent intent;
+    private Map<String, String> selectedUidsMap; // user id和类型的map
+    private String fromMultiSelect;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +90,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 2);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
-            public void clicked(String id, int type,String parentName) {
+            public void clicked(String id, int type, String parentName) {
                 Utils.log("id:" + id);
                 if (type == 3) {
 //                    selectDialog(id);
@@ -99,6 +123,13 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         data = new ArrayList<>();
         mLinkedList.addAll(NodeHelper.sortNodes(data));
         mAdapter.notifyDataSetChanged();
+        fromMultiSelect = getIntent().getStringExtra("fromMultiSelect");
+        if (!TextUtils.isEmpty(fromMultiSelect)) {
+            Bundle bundle = getIntent().getExtras();
+            SerializableMap serializableMap = (SerializableMap) bundle.get("map");
+            Utils.log(serializableMap.getMap().size() + "");
+            selectedUidsMap = serializableMap.getMap();
+        }
     }
 
     private void getDate() {
@@ -116,14 +147,14 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Utils.log(result);
-                Log.e("TAG",result);
+                Log.e("TAG", result);
                 Gson gson = new Gson();
                 OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
                 assert organizationalStructureData != null;
                 Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1 && dataBean.getType() != filterType2) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(),2,false,dataBean.getPortrait()));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false, dataBean.getPortrait()));
                     }
                 }
                 runOnUiThread(new Runnable() {
@@ -158,15 +189,113 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
                 finish();
                 break;
             case R.id.edit_tv:
-                Utils.log("confirm");
-                intent = new Intent();
-                intent.putExtra("id", m_id);
-                intent.putExtra("name", m_name);
-                setResult(123,intent);
-                finish();
+                if (fromMultiSelect.equals("4")) {
+                    // 修改印章的部门
+                    changeOrg(1);
+
+                } else if (fromMultiSelect.equals("3")) {
+                    // 修改人的部门
+                    changeOrg(0);
+
+                } else {
+                    Utils.log("confirm");
+                    intent = new Intent();
+                    intent.putExtra("id", m_id);
+                    intent.putExtra("name", m_name);
+                    setResult(123, intent);
+                    finish();
+                }
                 break;
         }
     }
 
+
+    private void changeOrg(int type) {
+        if (TextUtils.isEmpty(m_id)) {
+            showToast("请选择！");
+            return;
+        }
+        loadingView.show();
+
+        List<String> ids = new ArrayList<>();
+        for (Map.Entry<String, String> entry : selectedUidsMap.entrySet()) {
+            System.out.println("Key = " + entry.getKey());
+            Utils.log("Key = " + entry.getKey());
+            ids.add(entry.getKey());
+        }
+        ChangeOrgEntity changeOrgEntity = new ChangeOrgEntity();
+        changeOrgEntity.setType(type);
+        changeOrgEntity.setOrgStrId(m_id);
+        changeOrgEntity.setIds(ids);
+
+        HttpUtil.sendDataAsync(OrganizationalManagementActivity.this, HttpUrl.CHANGE_ORG, 2, null, changeOrgEntity, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log(result);
+                loadingView.cancel();
+                finish();
+
+//                Gson gson = new Gson();
+//                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddPwdUserUploadReturn>>() {
+//                }.getType());
+//                if (responseInfo.getCode() == 0) {
+//                    if (responseInfo.getData() != null) {
+//                        loadingView.cancel();
+////                        finish();
+//                        runOnUiThread(new Runnable() {
+//                            @SuppressLint("CheckResult")
+//                            @Override
+//                            public void run() {
+//                                // 发送pwd给seal
+//                                String pwd = responseInfo.getData().getPassword();
+//                                String sealCount = etUseTimes.getText().toString().trim();
+//
+//                                try {
+//                                    startAllByte = CommonUtil.addPwd(pwd, Integer.valueOf(sealCount), DateUtils.dateToStamp(format));
+//                                } catch (ParseException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
+//                                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ADDPRESSPWD, startAllByte).getBytes()))
+//                                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+//                                        .subscribe(
+//                                                characteristicValue -> {
+//                                                    // Characteristic value confirmed.
+//                                                },
+//                                                throwable -> {
+//                                                    // Handle an error here.
+//                                                }
+//                                        ));
+//                            }
+//                        });
+//                        Looper.prepare();
+////                        showToast("添加成功");
+//                        Looper.loop();
+//                    } else {
+//                        loadingView.cancel();
+//                        Looper.prepare();
+//                        showToast(responseInfo.getMessage());
+//                        Looper.loop();
+//                    }
+//                } else {
+//                    loadingView.cancel();
+//                    Looper.prepare();
+//                    showToast(responseInfo.getMessage());
+//                    Looper.loop();
+//                }
+
+            }
+        });
+
+    }
 
 }

@@ -19,6 +19,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.fragment.SealOrganizationalFragment;
 import cn.fengwoo.sealsteward.fragment.UserOrganizationalFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.Utils;
 
 /**
  * 组织架构
@@ -129,6 +130,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
             case 1:
                 if (sealOrganizationalFragment == null) {
                     sealOrganizationalFragment = new SealOrganizationalFragment();
+                    Utils.log(" new SealOrganizationalFragment()");
                     fragmentTransaction.add(R.id.organizational_fl, sealOrganizationalFragment);
                 } else {
                     fragmentTransaction.show(sealOrganizationalFragment);
@@ -164,5 +166,11 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
         linearLayouts[0].setBackground(index == 0 ? getResources().getDrawable(R.drawable.select_user_organizational) : getResources().getDrawable(R.drawable.user_organizational));
         textViews[1].setTextColor(index == 1 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
         linearLayouts[1].setBackground(index == 1 ? getResources().getDrawable(R.drawable.select_seal_organizational) : getResources().getDrawable(R.drawable.seal_organizational));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.log("onResume");
     }
 }

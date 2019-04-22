@@ -43,6 +43,8 @@ public class Constants {
     public static final String permission20 = "f3371243418811e9af5a2cfda1ba8f68";//"添加组织架构" //
     public static final String permission21 = "b9f8b134421611e9af5a2cfda1ba8f68";//"编辑组织架构"
     public static final String permission22 = "f33d24bc418811e9af5a2cfda1ba8f68";//"删除组织架构"
+    public static final String permission23 = "b4a8e501626611e9802700163e004197";//"移动用户或印章到其他部门权限"
+    public static final String permission24 = "afeb1d90626611e9802700163e004197";//"固件升级权限"
 
 
     public static final UUID SERVICE_UUID = UUID.fromString("000018F0-0000-1000-8000-00805F9B34FB");
