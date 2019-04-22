@@ -168,6 +168,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("userId", userId);
                         intent.putExtra("failTime", time);
                         intent.putExtra("sealId", sealId);
+                        intent.putExtra("category", 4);
                         setResult(11);
                         startActivityForResult(intent,UPLOADREQUESTCODE);
                         Log.e("ATG", "用印申请check成功!!!!!!!");

@@ -94,6 +94,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     int totalPage;
 
+    private int category = 0;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +136,11 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         code = intent.getIntExtra("code", 0);   //记录详情上传照片传递过来
         id = intent.getStringExtra("id");
         count = intent.getIntExtra("count", 0);
+        category = intent.getIntExtra("category", 0);
         allFileName = intent.getStringArrayListExtra("photoList");
+        if (null == allFileName) {
+            allFileName = new ArrayList<>(); // 所有图片的名字
+        }
         if (code == 1) {
             // 上传记录
             title_tv.setText("上传照片");
@@ -142,7 +150,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         }
 
         // 显示图片
-        if (allFileName.size() > 0) {
+        if (null != allFileName && allFileName.size() > 0) {
             // 当前显示页面
             currentPage = 0;
             int allFileNumber = allFileName.size();
@@ -184,7 +192,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 //先从本地读取，没有则下载
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(list.get(i));
                 if (bitmap == null) {
-                    HttpDownloader.downloadImage(this, 5, list.get(i), new DownloadImageCallback() {
+                    HttpDownloader.downloadImage(this, category, list.get(i), new DownloadImageCallback() {
                         @Override
                         public void onResult(final String fileName) {
                             if (fileName != null) {
@@ -217,8 +225,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         List<String> targetList;
 
-        // 总共多少页
-        totalPage = allFileName.size() / 9;
+        if (allFileName != null) {
+            // 总共多少页
+            totalPage = allFileName.size() / 9;
+        }
 
         switch (v.getId()) {
             case R.id.set_back_ll:
@@ -229,18 +239,21 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.edit_tv:
 //                if (success) {
-                    if (code != 0) {
-                        // 记录提交
-                        uploadRecord();
-                    } else {
-                        // 印模提交
-                        uploadMoulage();
-                    }
+                if (code != 0) {
+                    // 记录提交
+                    uploadRecord();
+                } else {
+                    // 印模提交
+                    uploadMoulage();
+                }
 //                } else {
 //                    showToast("请上传图片");
 //                }
                 break;
             case R.id.add:
+                if (allFileName == null) {
+                    return;
+                }
                 if (currentPage + 1 > totalPage) {
                     showToast("已经到最后一页了");
                     return;
@@ -265,6 +278,9 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
             case R.id.subtract:
+                if (allFileName == null) {
+                    return;
+                }
                 if (currentPage - 1 < 0) {
                     showToast("已经到第一页了");
                     return;
@@ -454,6 +470,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     loadingView.cancel();
                     Log.e("TAG", "上传图片成功!!!!!!!!!!!!!!!!!!!!");
 
+                    showCurrentPagePic();
                     // 弹出相机
                     permissions();
 
