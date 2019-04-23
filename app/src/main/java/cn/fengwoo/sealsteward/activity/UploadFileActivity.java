@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,6 +21,12 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lxj.matisse.Matisse;
+import com.maning.imagebrowserlibrary.ImageEngine;
+import com.maning.imagebrowserlibrary.MNImageBrowser;
+import com.maning.imagebrowserlibrary.listeners.OnClickListener;
+import com.maning.imagebrowserlibrary.listeners.OnLongClickListener;
+import com.maning.imagebrowserlibrary.listeners.OnPageChangeListener;
+import com.maning.imagebrowserlibrary.model.ImageBrowserConfig;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 //import com.zhihu.matisse.Matisse;
@@ -38,14 +45,17 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RecycleviewAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
+import cn.fengwoo.sealsteward.engine.GlideImageEngine;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.FileUtil;
+import cn.fengwoo.sealsteward.utils.GlideEngineImage;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.RecyclerViewClickListener;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -88,16 +98,20 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     int code;
     int count;
     String id;
-    List<String> allFileName = new ArrayList<>(); // 所有图片的名字
+    ArrayList<String> allFileName = new ArrayList<>(); // 所有图片的名字
     //    List<String> nicePicFileName = new ArrayList<>(); // 当前要显示的9张图片的名字
     List<Uri> ninePicUri = new ArrayList<>();
     int currentPage = 0; // 当前页面，第一页为0，首次加载为0
-
     int totalPage;
-
     private int category = 0;
+    public ImageBrowserConfig.TransformType transformType = ImageBrowserConfig.TransformType.Transform_Default;
+    public ImageBrowserConfig.IndicatorType indicatorType = ImageBrowserConfig.IndicatorType.Indicator_Number;
+    public ImageBrowserConfig.ScreenOrientationType screenOrientationType = ImageBrowserConfig.ScreenOrientationType.Screenorientation_Default;
+    private ImageEngine imageEngine = new GlideImageEngine();
+
 
     private boolean isRead = false;
+    private int type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +119,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         setContentView(R.layout.activity_upload_file);
         ButterKnife.bind(this);
         initView();
+        clickListener();
     }
 
     private void initView() {
@@ -140,6 +155,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         category = intent.getIntExtra("category", 0);
         allFileName = intent.getStringArrayListExtra("photoList");
         isRead = intent.getBooleanExtra("isRead", false);
+        type = intent.getIntExtra("type",0);
         if (null == allFileName) {
             allFileName = new ArrayList<>(); // 所有图片的名字
         }
@@ -193,7 +209,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
      *
      * @param list
      */
+    ArrayList<String> imgList;
+
     private void show9Pics(List<String> list) {
+        imgList = new ArrayList<>();    //点击图片预览查看支持滑动所需要的图片集合
         // uriList 要在此初始化
         List<Uri> uriList = new ArrayList<>();
 
@@ -211,6 +230,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                                     @Override
                                     public void run() {
                                         String str = "file://" + HttpDownloader.path + fileName;
+                                        imgList.add(str);
                                         Uri uri = Uri.parse(str);
                                         uriList.add(uri);
                                         recycleviewAdapter.setData(uriList, UploadFileActivity.this, list,isRead);
@@ -222,6 +242,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     });
                 } else {
                     String headPortraitPath = "file://" + HttpDownloader.path + list.get(i);
+                    imgList.add(headPortraitPath);
                     Uri uri = Uri.parse(headPortraitPath);
                     uriList.add(uri);
                 }
@@ -350,10 +371,15 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         loadingView.cancel();
-                        setResult(222);
-                        Intent intent = new Intent(UploadFileActivity.this, MyApplyActivity.class);
-                        intent.putExtra("id", id);
-                        startActivity(intent);
+                        if (type == 321){      //区别是主页记录进入还是应用里的记录进入
+                            Intent intent = new Intent(UploadFileActivity.this,MyApplyActivity.class);
+                            intent.putExtra("id", id);
+                            setResult(222);
+                            startActivity(intent);
+                        }else {
+                            setResult(222);
+                        }
+
                         finish();
                         Looper.prepare();
                         showToast("上传成功");
@@ -562,4 +588,51 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         });
     }
 
+    /**
+     * 点击图片预览查看事件
+     */
+    private void clickListener() {
+        useSealApply_Rcv.addOnItemTouchListener(new RecyclerViewClickListener(this, useSealApply_Rcv, new RecyclerViewClickListener.OnItem2ClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+      /*          Intent intent = new Intent(UploadFileActivity.this,BigImgActivity.class);
+                String img = "file://" + HttpDownloader.path + allFileName.get(position);
+                intent.putExtra("photo",img);
+                startActivity(intent);*/
+
+                MNImageBrowser.with(UploadFileActivity.this)
+                        //页面切换效果
+                        .setTransformType(transformType)
+                        //指示器效果
+                        .setIndicatorType(indicatorType)
+                        //设置隐藏指示器
+                        .setIndicatorHide(false)
+                        //当前位置
+                        .setCurrentPosition(position)
+                        //图片引擎
+                        .setImageEngine(imageEngine)
+                        //图片集合（setImageList和setImageUrl二选一，会覆盖）
+                        .setImageList(imgList)
+                        //单张图片
+                        //   .setImageUrl(img)
+                        //方向设置
+                        .setScreenOrientationType(screenOrientationType)
+                        //点击监听
+                        .setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(FragmentActivity activity, ImageView view, int position, String url) {
+
+                            }
+                        })
+
+                        //显示：传入当前View
+                        .show(view);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                //长按事件
+            }
+        }));
+    }
 }

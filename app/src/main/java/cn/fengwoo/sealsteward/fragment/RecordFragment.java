@@ -389,6 +389,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         }
         if (resultCode == REQUESTCODE) {
             //上传完记录照片返回时候刷新
+            record_refreshLayout.autoRefresh();
             CommonDialog commonDialog = new CommonDialog(getActivity(), "提示", "是否关闭该单据,关闭后记录照片将不能修改,并在后台生成盖章记录PDF", "关闭");
             commonDialog.showDialog();
             commonDialog.setClickListener(new View.OnClickListener() {

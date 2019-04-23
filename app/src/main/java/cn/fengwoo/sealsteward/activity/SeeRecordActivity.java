@@ -108,6 +108,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     private int i = 1;
     ResponseInfo<List<RecordListBean>> responseInfo;
     private boolean isRead = false;
+    private int type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +173,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         applyPdf = intent.getStringExtra("applyPdf");
         stampPdf = intent.getStringExtra("stampPdf");
         stampRecordPdf = intent.getStringExtra("stampRecordPdf");
+        type = intent.getIntExtra("type",0);
 
         status = intent.getIntExtra("status",0);
         if (status == 5) {
@@ -289,7 +291,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 intent.putExtra("id",id);
                 intent.putExtra("isRead", isRead);
                 intent.putStringArrayListExtra("photoList",listImg);
-                startActivity(intent);
+                intent.putExtra("type",type);
+                startActivityForResult(intent,REQUESTCODE);
                 break;
         }
     }

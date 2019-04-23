@@ -10,11 +10,19 @@
 
     <include layout="@layout/head" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_photo"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textSize="12sp"
+        />
     <LinearLayout
         android:id="@+id/upload_photo_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp">
 
         <ImageView
@@ -24,43 +32,47 @@
             android:src="@drawable/add_img" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="已上传的照片"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textSize="12sp"
+        />
 
     <LinearLayout
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:gravity="center"
             android:id="@+id/subtract"
-            android:layout_width="30dp"
-            android:text=""
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@drawable/leftx"
-            android:layout_gravity="center_vertical"
-            android:textSize="33sp"
-            android:layout_height="30dp"
+            android:layout_gravity="center"
             android:src="@drawable/add_img" />
         <TextView
             android:gravity="center"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:id="@+id/page"
-            android:layout_gravity="center"
             android:layout_width="250dp"
             android:text="1页"
             android:layout_height="50dp"
+            android:background="@color/white"
             android:src="@drawable/add_img" />
         <TextView
             android:gravity="center"
-            android:textSize="33sp"
             android:background="@drawable/rightx"
-            android:layout_gravity="center_vertical"
             android:id="@+id/add"
-            android:text=""
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
             android:src="@drawable/add_img" />
 
     </LinearLayout>
@@ -68,8 +80,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/useSealApply_Rcv"

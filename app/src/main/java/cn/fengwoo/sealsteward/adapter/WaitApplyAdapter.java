@@ -4,9 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,20 +18,18 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.ApprovalActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
-import cn.fengwoo.sealsteward.bean.ApplyListData;
-import cn.fengwoo.sealsteward.bean.ApproveProgress;
-import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
-import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CommonDialog;
@@ -174,6 +168,8 @@ public class WaitApplyAdapter extends BaseAdapter {
                 intent.putExtra("applyPdf", waitApplyData.get(position).getApplyPdf());
                 intent.putExtra("stampPdf", waitApplyData.get(position).getStampPdf());
                 intent.putExtra("stampRecordPdf", waitApplyData.get(position).getStampRecordPdf());
+                intent.putExtra("photoList", (Serializable) waitApplyData.get(position).getStampRecordImgList());
+                intent.putExtra("type", 321);
                 context.startActivity(intent);
             }
         });

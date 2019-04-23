@@ -16,21 +16,14 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            android:text="事由:"
-            android:textColor="@color/black" />
-
-        <TextView
             android:id="@+id/record_couse_tv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:text="@string/seal"
             android:layout_centerVertical="true"
-            android:layout_marginStart="65dp"
             android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:layout_marginStart="10dp"
             android:layout_toStartOf="@+id/close_documents_tv"
             android:layout_marginEnd="5dp"
             android:textSize="12sp" />

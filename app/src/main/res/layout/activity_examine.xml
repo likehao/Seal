@@ -4,24 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AboutActivity"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".activity.AboutActivity">
 
     <include layout="@layout/head" />
 
     <LinearLayout
-        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
         android:orientation="vertical">
-
 
 
         <RelativeLayout
             android:id="@+id/rl_one"
+            style="@style/pressed_effect"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            style="@style/pressed_effect"
             android:background="@color/white">
 
             <TextView
@@ -51,12 +50,11 @@
             android:background="@color/line" />
 
 
-
         <RelativeLayout
             android:id="@+id/rl_two"
+            style="@style/pressed_effect"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            style="@style/pressed_effect"
             android:background="@color/white">
 
             <TextView
@@ -88,9 +86,9 @@
 
         <RelativeLayout
             android:id="@+id/rl_three"
+            style="@style/pressed_effect"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            style="@style/pressed_effect"
             android:background="@color/white">
 
             <TextView
@@ -122,9 +120,9 @@
 
         <RelativeLayout
             android:id="@+id/rl_four"
+            style="@style/pressed_effect"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            style="@style/pressed_effect"
             android:background="@color/white">
 
             <TextView
@@ -149,15 +147,10 @@
         </RelativeLayout>
 
         <View
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="15dp"
-            android:background="@color/line" />
-
-
-
-
-
+            android:background="@color/line"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btn_add"
@@ -165,11 +158,10 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
+            android:background="@drawable/login_circle_bg"
             android:text="@string/add_approval"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            android:background="@drawable/login_circle_bg"/>
-
+            android:textSize="15sp" />
 
 
     </LinearLayout>

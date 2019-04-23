@@ -40,7 +40,7 @@ public class CameraActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_camera);
-        jCameraView = (JCameraView) findViewById(R.id.jcameraview);
+        jCameraView = findViewById(R.id.jcameraview);
         getPermission();
     }
 

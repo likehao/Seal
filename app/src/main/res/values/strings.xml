@@ -19,7 +19,7 @@
     <string name="seal_apply">盖章申请</string>
     <string name="person_Authentication">未个人认证</string>
     <string name="company_Authentication">未企业认证</string>
-    <string name="company_name">深圳白鹤区块链科技有限公司</string>
+    <string name="company_name">深圳白鹤区块链科技有限公司版权所有</string>
     <string name="job">研发中心</string>
     <string name="my_data">我的资料</string>
     <string name="my_company">我的公司</string>
@@ -304,4 +304,5 @@
     <string name="no_record">暂无数据</string>
     <string name="seal_type">盖章类型</string>
     <string name="add_secStep">请在空白纸上盖一次清晰的章并拍照</string>
+    <string name="approveLevel">审批等级</string>
 </resources>

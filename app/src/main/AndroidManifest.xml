@@ -263,7 +263,8 @@
 
         <service android:name=".utils.DfuService" />
 
-        <activity android:name=".activity.SelectPwdRecordActivity"></activity>
+        <activity android:name=".activity.SelectPwdRecordActivity" />
+        <activity android:name=".activity.ApprovalFlowActivity"></activity>
     </application>
 
 </manifest>

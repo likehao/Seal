@@ -42,7 +42,7 @@ import okhttp3.Response;
 import okhttp3.internal.Util;
 
 /**
- * 关于
+ * 设置审批流
  */
 public class ExamineActivity extends BaseActivity {
     @BindView(R.id.title_tv)

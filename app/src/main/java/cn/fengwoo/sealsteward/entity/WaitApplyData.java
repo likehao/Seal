@@ -1,6 +1,7 @@
 package cn.fengwoo.sealsteward.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 待审批adapter
@@ -24,9 +25,19 @@ public class WaitApplyData implements Serializable {
     private String applyPdf;
     private String stampPdf;
     private String stampRecordPdf;
+    private List<String> stampRecordImgList;
+
+    public List<String> getStampRecordImgList() {
+        return stampRecordImgList;
+    }
+
+    public void setStampRecordImgList(List<String> stampRecordImgList) {
+        this.stampRecordImgList = stampRecordImgList;
+    }
+
 
     public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime, String id, Integer approveStatus, String applyUserName, String orgStructureName
-   , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf) {
+   , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf,List<String> stampRecordImgList) {
         this.cause = cause;
         this.sealName = sealName;
         this.failTime = failTime;
@@ -43,6 +54,7 @@ public class WaitApplyData implements Serializable {
         this.applyPdf = applyPdf;
         this.stampPdf = stampPdf;
         this.stampRecordPdf = stampRecordPdf;
+        this.stampRecordImgList = stampRecordImgList;
     }
 
     public String getCause() {

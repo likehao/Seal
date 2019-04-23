@@ -12,6 +12,9 @@ import java.util.List;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.ApproveProgress;
 
+/**
+ * 审批进度adapter
+ */
 public class ApproveProgressAdapter extends BaseAdapter {
 
     private List<ApproveProgress> list;
