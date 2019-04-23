@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -70,6 +71,13 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     private int i;// index
     LoadingView loadingView;
 
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            return false;
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,10 +133,19 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                                 .subscribe(
                                         characteristicValue -> {
                                             // Characteristic value confirmed.
-                                            // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (loadingView != null) {
+                                                        loadingView.cancel();
+                                                    }
+                                                }
+                                            }, 5000);
                                         },
                                         throwable -> {
                                             // Handle an error here.
+                                            Utils.log(throwable.toString());
                                         }
                                 ));
 
@@ -162,6 +179,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("sealId", EasySP.init(this).getString("currentSealId"));
+//        hashMap.put("sealId", "735faefbc483452788772daade833705");
         HttpUtil.sendDataAsync(this, HttpUrl.USE_SEAL_APPLYLIST, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -205,18 +223,19 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     /**
      * 无申请单据弹出去申请dialog
      */
-    private void applyDialog(){
-        CommonDialog commonDialog = new CommonDialog(this,"您暂无可用申请单","","去申请");
+    private void applyDialog() {
+        CommonDialog commonDialog = new CommonDialog(this, "您暂无可用申请单", "", "去申请");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 commonDialog.dialog.dismiss();
-                Intent intent = new Intent(ApplyCauseActivity.this,ApplyUseSealActivity.class);
-                startActivityForResult(intent,11);
+                Intent intent = new Intent(ApplyCauseActivity.this, ApplyUseSealActivity.class);
+                startActivityForResult(intent, 11);
             }
         });
     }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 //        Intent intent = new Intent(ApplyCauseActivity.this,SealDetailActivity.class);
@@ -254,6 +273,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        handler.removeCallbacksAndMessages(null);
     }
 
     @Override

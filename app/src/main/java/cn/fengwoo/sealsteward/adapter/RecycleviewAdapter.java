@@ -19,12 +19,15 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
     private List<String> strList;
     private Context context;
     private OnDeleteListener onDeleteListener;
+    private boolean isRead = false;
 
-    public void setData(List<Uri> list,Context context,List<String> strList){
+
+    public void setData(List<Uri> list, Context context, List<String> strList, boolean isRead) {
         this.uriList = list;
         this.context = context;
         this.strList = strList;
         notifyDataSetChanged();
+        this.isRead = isRead;
     }
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup parent, int i) {
@@ -42,6 +45,11 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
                 onDeleteListener.delete(strList.get(i));
             }
         });
+        if (isRead) {
+            viewHolder.iv.setVisibility(View.GONE);
+        } else {
+            viewHolder.iv.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

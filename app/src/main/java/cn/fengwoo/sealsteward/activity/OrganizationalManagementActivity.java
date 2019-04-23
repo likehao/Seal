@@ -124,6 +124,7 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
         mLinkedList.addAll(NodeHelper.sortNodes(data));
         mAdapter.notifyDataSetChanged();
         fromMultiSelect = getIntent().getStringExtra("fromMultiSelect");
+
         if (!TextUtils.isEmpty(fromMultiSelect)) {
             Bundle bundle = getIntent().getExtras();
             SerializableMap serializableMap = (SerializableMap) bundle.get("map");
@@ -189,11 +190,11 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
                 finish();
                 break;
             case R.id.edit_tv:
-                if (fromMultiSelect.equals("4")) {
+                if (null != fromMultiSelect && fromMultiSelect.equals("4")) {
                     // 修改印章的部门
                     changeOrg(1);
 
-                } else if (fromMultiSelect.equals("3")) {
+                } else if (null != fromMultiSelect && fromMultiSelect.equals("3")) {
                     // 修改人的部门
                     changeOrg(0);
 

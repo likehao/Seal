@@ -207,6 +207,7 @@
         <activity android:name=".activity.AboutActivity" />
         <activity android:name=".activity.SelectPeopleMultiActivity" />
         <activity android:name=".activity.SelectSealMultiActivity" />
+        <activity android:name=".activity.CameraActivity" />
 
 
 

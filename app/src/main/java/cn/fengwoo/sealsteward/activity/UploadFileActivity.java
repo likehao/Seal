@@ -97,7 +97,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     private int category = 0;
 
-
+    private boolean isRead = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +139,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         count = intent.getIntExtra("count", 0);
         category = intent.getIntExtra("category", 0);
         allFileName = intent.getStringArrayListExtra("photoList");
+        isRead = intent.getBooleanExtra("isRead", false);
         if (null == allFileName) {
             allFileName = new ArrayList<>(); // 所有图片的名字
         }
@@ -176,6 +177,15 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
 
         }
+
+        if (isRead) {
+            upload_photo_ll.setVisibility(View.GONE);
+            edit_tv.setVisibility(View.GONE);
+        }else {
+            upload_photo_ll.setVisibility(View.VISIBLE);
+            edit_tv.setVisibility(View.VISIBLE);
+        }
+
     }
 
     /**
@@ -203,7 +213,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                                         String str = "file://" + HttpDownloader.path + fileName;
                                         Uri uri = Uri.parse(str);
                                         uriList.add(uri);
-                                        recycleviewAdapter.setData(uriList, UploadFileActivity.this, list);
+                                        recycleviewAdapter.setData(uriList, UploadFileActivity.this, list,isRead);
                                         recycleviewAdapter.notifyDataSetChanged();
                                     }
                                 });
@@ -217,7 +227,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 }
             }
         }
-        recycleviewAdapter.setData(uriList, this, list);
+        recycleviewAdapter.setData(uriList, this, list,isRead);
         recycleviewAdapter.notifyDataSetChanged();
     }
 
@@ -398,6 +408,12 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 .capture()
                 .isCrop(false)
                 .forResult(REQUEST_CODE_CHOOSE);
+
+
+//        Intent intent = new Intent();
+//        intent.setClass(this, CameraActivity.class);
+//        startActivityForResult(intent, 123);
+
     }
 
 

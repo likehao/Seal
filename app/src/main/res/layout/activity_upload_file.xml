@@ -31,21 +31,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:layout_marginStart="10dp">
+        >
 
         <TextView
             android:gravity="center"
             android:id="@+id/subtract"
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:text=""
             android:background="@drawable/leftx"
+            android:layout_gravity="center_vertical"
             android:textSize="33sp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:src="@drawable/add_img" />
         <TextView
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:id="@+id/page"
+            android:layout_gravity="center"
             android:layout_width="250dp"
             android:text="1页"
             android:layout_height="50dp"
@@ -54,11 +56,11 @@
             android:gravity="center"
             android:textSize="33sp"
             android:background="@drawable/rightx"
-
+            android:layout_gravity="center_vertical"
             android:id="@+id/add"
             android:text=""
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/add_img" />
 
     </LinearLayout>

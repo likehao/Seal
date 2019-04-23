@@ -387,6 +387,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     intent.putExtra("applyPdf",  responseInfo.getData().getApplyPdf());
                     intent.putExtra("stampPdf",  responseInfo.getData().getStampPdf());
                     intent.putExtra("stampRecordPdf",  responseInfo.getData().getStampRecordPdf());
+                    intent.putExtra("status",  responseInfo.getData().getApproveStatus());
+                    Utils.log("status:" + responseInfo.getData().getApproveStatus());
                     startActivity(intent);
                 } else {
                     Looper.prepare();

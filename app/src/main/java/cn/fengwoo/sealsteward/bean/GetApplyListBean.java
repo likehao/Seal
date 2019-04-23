@@ -42,7 +42,7 @@ public class GetApplyListBean implements Serializable {
     private String applyTime;
     private String applyUser;
     private String applyUserName;
-    private Integer approveStatus;
+    private Integer approveStatus; // 5 表示已关闭
     private String autoGraph;
     private Integer availableCount;
     private String expireTime;

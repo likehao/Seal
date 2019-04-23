@@ -96,6 +96,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     TextView department_tv;
     @BindView(R.id.photoNum_ll)
     LinearLayout photoNum_ll;
+    @BindView(R.id.photo_tip)
+    TextView photo_tip;
     private SeeRecordAdapter seeRecordAdapter;
     private List<SeeRecordBean> list;
     String id;
@@ -105,6 +107,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     private  ArrayList<String> listImg;
     private int i = 1;
     ResponseInfo<List<RecordListBean>> responseInfo;
+    private boolean isRead = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +150,9 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         String sealPerson = intent.getStringExtra("sealPerson");
         String headPortrait = intent.getStringExtra("headPortrait");
         String orgStructureName = intent.getStringExtra("orgStructureName");
+//        int approveStatus = intent.getIntExtra("approveStatus",0);
+
+
         //加载详情头像
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
         if(bitmap == null){
@@ -168,6 +174,14 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         stampRecordPdf = intent.getStringExtra("stampRecordPdf");
 
         status = intent.getIntExtra("status",0);
+        if (status == 5) {
+            // 已关闭，只读
+            isRead = true;
+            photo_tip.setText("点击查看照片");
+        }else {
+            isRead = false;
+            photo_tip.setText("点击上传照片");
+        }
         detail_sealPerson_tv.setText(sealPerson);
         detail_sealCount_tv.setText(count+"");
         detail_restCount_tv.setText(restCount+"");
@@ -273,6 +287,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 intent.putExtra("category", 5);
                 intent.putExtra("code",1);
                 intent.putExtra("id",id);
+                intent.putExtra("isRead", isRead);
                 intent.putStringArrayListExtra("photoList",listImg);
                 startActivity(intent);
                 break;

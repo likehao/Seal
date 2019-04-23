@@ -187,6 +187,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         // ble 设备扫描
         scanSubscription = rxBleClient.scanBleDevices(
                 new ScanSettings.Builder()
+//                        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
                         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -271,7 +272,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         String deviceName = scanResult.getBleDevice().getName();
         String deviceMac = scanResult.getBleDevice().getMacAddress();
         //过滤蓝牙
-        if (deviceName != null && (deviceName.equals("BLE-baihe") || deviceName.contains("BHQKL"))) {
+//        if (deviceName != null && (deviceName.equals("BLE-baihe") || deviceName.contains("BHQKL"))) {
+        if (true) {
             String itemName = "";
             if (!isAddNewSeal) {
                 // 如果不是增加新设备的情况，如果seal list里存在这个seal，替换掉名字
@@ -397,7 +399,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         // 连接ble设备
 
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
+
         RxBleDevice device = rxBleClient.getBleDevice(macAddress);
+//        RxBleDevice device = rxBleClient.getBleDevice("00:15:84:00:01:67");
+
         ((MyApp) getApplication()).setRxBleDevice(device);
 
         connectionObservable = prepareConnectionObservable(device);
