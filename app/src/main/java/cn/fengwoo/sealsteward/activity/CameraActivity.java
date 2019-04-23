@@ -3,12 +3,10 @@ package cn.fengwoo.sealsteward.activity;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
@@ -35,7 +33,6 @@ import cn.fengwoo.sealsteward.utils.CameraUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.SystemUtils;
 import cn.fengwoo.sealsteward.utils.ToastFactory;
-import cn.fengwoo.sealsteward.utils.Utils;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener {
     private Camera mCamera;
@@ -81,7 +78,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_camerax);
         context = this;
         initView();
         initData();
@@ -221,7 +218,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                             }
                         }).start();
                     }
-                    isview = false;
+//                    isview = false;
                 }
                 break;
 
@@ -465,13 +462,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 // path存入list
                 allFilePath.add(img_path);
 
-                Utils.log(allFilePath.size() + "");
-                Intent intent = new Intent();
-                intent.putExtra(AppConstant.KEY.IMG_PATH, img_path);
-                intent.putExtra(AppConstant.KEY.PIC_WIDTH, screenWidth);
-                intent.putExtra(AppConstant.KEY.PIC_HEIGHT, picHeight);
-                setResult(AppConstant.RESULT_CODE.RESULT_OK, intent);
-                setResult(123,intent);
+//                Utils.log(allFilePath.size() + "");
+//                Intent intent = new Intent();
+//                intent.putExtra(AppConstant.KEY.IMG_PATH, img_path);
+//                intent.putExtra(AppConstant.KEY.PIC_WIDTH, screenWidth);
+//                intent.putExtra(AppConstant.KEY.PIC_HEIGHT, picHeight);
+//                setResult(AppConstant.RESULT_CODE.RESULT_OK, intent);
+//                setResult(123,intent);
 //                finish();
 
                 //这里打印宽高 就能看到 CameraUtil.getInstance().getPropPictureSize(parameters.getSupportedPictureSizes(), 200);
