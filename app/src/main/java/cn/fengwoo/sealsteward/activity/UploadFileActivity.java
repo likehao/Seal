@@ -128,7 +128,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         setContentView(R.layout.activity_upload_file);
         ButterKnife.bind(this);
         initView();
-        clickListener();
+//        clickListener();
     }
 
     private void initView() {
@@ -154,6 +154,41 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 showCurrentPagePic();
             }
         });
+
+        recycleviewAdapter.setOnClickBigPicListener(new RecycleviewAdapter.OnClickBigPicListener() {
+            @Override
+            public void clickPic(int position,View view) {
+
+                MNImageBrowser.with(UploadFileActivity.this)
+                        //页面切换效果
+                        .setTransformType(transformType)
+                        //指示器效果
+                        .setIndicatorType(indicatorType)
+                        //设置隐藏指示器
+                        .setIndicatorHide(false)
+                        //当前位置
+                        .setCurrentPosition(position)
+                        //图片引擎
+                        .setImageEngine(imageEngine)
+                        //图片集合（setImageList和setImageUrl二选一，会覆盖）
+                        .setImageList(imgList)
+                        //单张图片
+                        //   .setImageUrl(img)
+                        //方向设置
+                        .setScreenOrientationType(screenOrientationType)
+                        //点击监听
+                        .setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(FragmentActivity activity, ImageView view, int position, String url) {
+
+                            }
+                        })
+
+                        //显示：传入当前View
+                        .show(view);
+            }
+        });
+
 
         useSealApply_Rcv.setAdapter(recycleviewAdapter);
         loadingView = new LoadingView(this);

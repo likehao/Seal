@@ -94,6 +94,10 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
     SwitchButton permission23;
     @BindView(R.id.permission24)
     SwitchButton permission24;
+    @BindView(R.id.permission25)
+    SwitchButton permission25;
+    @BindView(R.id.permission26)
+    SwitchButton permission26;
     private LoadingView loadingView;
     private SetPermissionData setPermissionData;
     private String userId;
@@ -143,6 +147,8 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
         permission22.setOnCheckedChangeListener(this);
         permission23.setOnCheckedChangeListener(this);
         permission24.setOnCheckedChangeListener(this);
+        permission25.setOnCheckedChangeListener(this);
+        permission26.setOnCheckedChangeListener(this);
         loadingView = new LoadingView(this);
     }
 
@@ -256,6 +262,14 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
         if (targetPermissionJson.contains(Constants.permission24)) {
             permission24.setChecked(true);
             funcIdList.add(Constants.permission24);
+        }
+        if (targetPermissionJson.contains(Constants.permission25)) {
+            permission25.setChecked(true);
+            funcIdList.add(Constants.permission25);
+        }
+        if (targetPermissionJson.contains(Constants.permission26)) {
+            permission26.setChecked(true);
+            funcIdList.add(Constants.permission26);
         }
     }
 
@@ -438,7 +452,6 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
                 break;
 
 
-
             case R.id.permission23:
                 if (isChecked) {
                     funcIdList.add(Constants.permission23);
@@ -451,6 +464,23 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
                     funcIdList.add(Constants.permission24);
                 } else {
                     funcIdList.remove(Constants.permission24);
+                }
+                break;
+
+
+
+            case R.id.permission25:
+                if (isChecked) {
+                    funcIdList.add(Constants.permission25);
+                } else {
+                    funcIdList.remove(Constants.permission25);
+                }
+                break;
+            case R.id.permission26:
+                if (isChecked) {
+                    funcIdList.add(Constants.permission26);
+                } else {
+                    funcIdList.remove(Constants.permission26);
                 }
                 break;
         }

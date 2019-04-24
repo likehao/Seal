@@ -323,6 +323,10 @@ public class HttpUrl {
      */
     public static final String CHANGE_ORG = "company/moveuserorseal";
 
+    /**
+     * 改变seal
+     */
+    public static final String REPLACE_SEAL = "seal/replaceseal";
 
 
 }

@@ -7,18 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
+
 import java.util.List;
+
 import cn.fengwoo.sealsteward.R;
 
 /**
  * 意见反馈上传图片使用的适配
  */
-public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.ViewHolder>{
+public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.ViewHolder> {
     private List<Uri> uriList;
     private List<String> strList;
     private Context context;
     private OnDeleteListener onDeleteListener;
+    private OnClickBigPicListener onClickBigPicListener;
     private boolean isRead = false;
 
 
@@ -29,15 +33,16 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
         notifyDataSetChanged();
         this.isRead = isRead;
     }
+
     @Override
-    public ViewHolder onCreateViewHolder( ViewGroup parent, int i) {
-        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.uri_item,parent,false));
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.uri_item, parent, false));
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder( ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ViewHolder viewHolder, int i) {
         Glide.with(context).load(uriList.get(i)).into(viewHolder.imageView);
         viewHolder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +50,13 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
                 onDeleteListener.delete(strList.get(i));
             }
         });
+        viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickBigPicListener.clickPic(i, v);
+            }
+        });
+
         if (isRead) {
             viewHolder.iv.setVisibility(View.GONE);
         } else {
@@ -57,9 +69,10 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
         return uriList == null ? 0 : uriList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private ImageView iv;
+
         ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.img);
@@ -69,6 +82,14 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
 
     public interface OnDeleteListener {
         void delete(String Str);
+    }
+
+    public interface OnClickBigPicListener {
+        void clickPic(int position, View view);
+    }
+
+    public void setOnClickBigPicListener(OnClickBigPicListener onClickBigPicListener) {
+        this.onClickBigPicListener = onClickBigPicListener;
     }
 
     public void setOnDeleteListener(OnDeleteListener onDeleteListener) {

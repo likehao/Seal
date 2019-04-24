@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddUserActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
+import cn.fengwoo.sealsteward.activity.ChangeSealActivity;
 import cn.fengwoo.sealsteward.activity.EditOrganizationActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
@@ -112,6 +113,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     RelativeLayout rl_voice;
     @BindView(R.id.rl_pwd_user)
     RelativeLayout rl_pwd_user;
+    @BindView(R.id.change_seal)
+    RelativeLayout change_seal;
 
     private SinglePicker<String> picker;
 
@@ -121,6 +124,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         view = inflater.inflate(R.layout.application_fragment, container, false);
         ButterKnife.bind(this, view);
         setListener();
+        hideSomeIcon();
         return view;
     }
 
@@ -136,11 +140,48 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         recharge_record_rl.setOnClickListener(this);
         use_seal_apply_rl.setOnClickListener(this);
         approvalRecord_rl.setOnClickListener(this);
-  //      wait_me_agree_rl.setOnClickListener(this);
- //       wait_handle_rl.setOnClickListener(this);
+        //      wait_me_agree_rl.setOnClickListener(this);
+        //       wait_handle_rl.setOnClickListener(this);
         wait_time_rl.setOnClickListener(this);
         rl_voice.setOnClickListener(this);
         rl_pwd_user.setOnClickListener(this);
+        change_seal.setOnClickListener(this);
+
+    }
+
+    private void hideSomeIcon() {
+        if (!Utils.hasThePermission(getActivity(), Constants.permission6)) {
+            start_psd_rl.setVisibility(View.GONE);
+        }
+        if (!Utils.hasThePermission(getActivity(), Constants.permission7)) {
+            key_psd_rl.setVisibility(View.GONE);
+        }
+        if (!Utils.hasThePermission(getActivity(), Constants.permission9)) {
+            reset_device_rl.setVisibility(View.GONE);
+        }
+        if (!Utils.hasThePermission(getActivity(), Constants.permission4)) {
+            press_time_rl.setVisibility(View.GONE);
+        }
+        if (!Utils.hasThePermission(getActivity(), Constants.permission8)) {
+            rl_voice.setVisibility(View.GONE);
+        }
+        if (!Utils.hasThePermission(getActivity(), Constants.permission15)) {
+            add_person_rl.setVisibility(View.GONE);
+        }
+        if (!Utils.hasThePermission(getActivity(), Constants.permission1)) {
+            add_seal_rl.setVisibility(View.GONE);
+        }
+
+        // 组织架构
+        if (!Utils.hasThePermission(getActivity(), Constants.permission26)) {
+            organizational_structure_rl.setVisibility(View.GONE);
+        }
+
+        // 更换印章
+        if (!Utils.hasThePermission(getActivity(), Constants.permission25)) {
+            change_seal.setVisibility(View.GONE);
+        }
+
 
     }
 
@@ -153,6 +194,9 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.organizational_structure_rl:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission26)) {
+                    return;
+                }
                 intent = new Intent(getActivity(), OrganizationalStructureActivity.class);
                 startActivity(intent);
                 break;
@@ -164,7 +208,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
-                    Utils.showToast(getActivity(),"三期印章无此功能");
+                    Utils.showToast(getActivity(), "三期印章无此功能");
                     return;
                 }
                 intent = new Intent(getActivity(), StartPasswordActivity.class);
@@ -179,7 +223,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
-                    Utils.showToast(getActivity(),"三期印章无此功能");
+                    Utils.showToast(getActivity(), "三期印章无此功能");
                     return;
                 }
                 intent = new Intent(getActivity(), StartPasswordActivity.class);
@@ -205,7 +249,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
 
 
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
-                    Utils.showToast(getActivity(),"二期印章无此功能");
+                    Utils.showToast(getActivity(), "二期印章无此功能");
                     return;
                 }
 
@@ -221,7 +265,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
-                    Utils.showToast(getActivity(),"二期印章无此功能");
+                    Utils.showToast(getActivity(), "二期印章无此功能");
                     return;
                 }
                 readDelayTime();
@@ -235,7 +279,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
-                    Utils.showToast(getActivity(),"二期印章无此功能");
+                    Utils.showToast(getActivity(), "二期印章无此功能");
                     return;
                 }
                 intent = new Intent(getActivity(), VoiceActivity.class);
@@ -247,7 +291,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
-                    Utils.showToast(getActivity(),"二期印章无此功能");
+                    Utils.showToast(getActivity(), "二期印章无此功能");
                     return;
                 }
                 intent = new Intent(getActivity(), PwdUserActivity.class);
@@ -275,8 +319,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.service_charge_rl:   //服务费充值
                 intent = new Intent(getActivity(), SelectSealActivity.class);
-             //   intent.putExtra("electronic", 1);
-                intent.putExtra("serviceRecharge","pay");
+                //   intent.putExtra("electronic", 1);
+                intent.putExtra("serviceRecharge", "pay");
                 startActivity(intent);
                 break;
             case R.id.recharge_record_rl:
@@ -297,6 +341,13 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.wait_handle_rl:
                 intent = new Intent(getActivity(), WaitHandleActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.change_seal:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission25)) {
+                    return;
+                }
+                intent = new Intent(getActivity(), ChangeSealActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -366,7 +417,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     @SuppressLint("CheckResult")
     private void readDelayTime() {
         byte[] select_seal_delay = new byte[]{0};
-        ((MyApp) getActivity().getApplication()).getDisposableList().add( ((MyApp) getActivity().getApplication()).getConnectionObservable()
+        ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SELECTSEALDELAY, select_seal_delay).getBytes()))
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -408,7 +459,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 } else {
                     String reset = "RESET";
                     byte[] resetBytes = reset.getBytes();
-                    ((MyApp)getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                    ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, resetBytes))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(

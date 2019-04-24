@@ -357,6 +357,37 @@
             </RelativeLayout>
 
 
+
+
+
+            <View style="@style/line" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="更换印章" />
+
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/permission25"
+                    style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View style="@style/line" />
+
+            <RelativeLayout style="@style/set_power_rl">
+
+                <TextView
+                    style="@style/set_power_tv"
+                    android:text="查看公司组织架构" />
+
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/permission26"
+                    style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

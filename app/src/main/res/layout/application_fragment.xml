@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
@@ -43,15 +44,22 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
-                    <LinearLayout
+                    <cn.fengwoo.sealsteward.view.QMUIFloatLayout
+                        android:id="@+id/qmuidemo_floatlayout1"
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        app:qmui_maxNumber="12"
+
+                        android:padding="20dp"
+                        android:gravity="left"
+                        app:qmui_childHorizontalSpacing="40dp"
+
+                        app:qmui_childVerticalSpacing="20dp">
 
                         <RelativeLayout
                             android:id="@+id/press_time_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -62,7 +70,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/press_time"/>
+                                    android:background="@drawable/press_time" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -73,8 +81,8 @@
 
                         <RelativeLayout
                             android:id="@+id/wait_time_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -95,8 +103,8 @@
                         </RelativeLayout>
                         <RelativeLayout
                             android:id="@+id/start_psd_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -118,8 +126,8 @@
 
                         <RelativeLayout
                             android:id="@+id/key_psd_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -139,18 +147,14 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+
+
 
                         <RelativeLayout
                             android:id="@+id/reset_device_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -172,8 +176,8 @@
 
                         <RelativeLayout
                             android:id="@+id/rl_pwd_user"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -195,8 +199,8 @@
 
                         <RelativeLayout
                             android:id="@+id/rl_voice"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -216,10 +220,10 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <RelativeLayout style="@style/add"
-                            android:layout_weight="1"/>
 
-                    </LinearLayout>
+
+                    </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
+
                 </LinearLayout>
             </LinearLayout>
             <!--第二个卡片开始！！！！！！！！！！！！！！！！！！！！！！！！！-->
@@ -246,15 +250,22 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <LinearLayout
+                <cn.fengwoo.sealsteward.view.QMUIFloatLayout
+                    android:id="@+id/qmuidemo_floatlayout2"
                     android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    app:qmui_maxNumber="12"
+
+                    android:padding="20dp"
+                    android:gravity="left"
+                    app:qmui_childHorizontalSpacing="40dp"
+
+                    app:qmui_childVerticalSpacing="20dp">
 
                     <RelativeLayout
                         android:id="@+id/use_seal_apply_rl"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <LinearLayout
@@ -276,8 +287,8 @@
 
                     <RelativeLayout
                         android:id="@+id/approvalRecord_rl"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <LinearLayout
@@ -299,8 +310,8 @@
 
                     <RelativeLayout
                         android:id="@+id/wait_me_agree_rl"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <LinearLayout
@@ -323,8 +334,8 @@
 
                     <RelativeLayout
                         android:id="@+id/wait_handle_rl"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <LinearLayout
@@ -344,7 +355,7 @@
 
                         </LinearLayout>
                     </RelativeLayout>
-                </LinearLayout>
+                </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
 
             </LinearLayout>
             <!--第二个卡片结束！！！！！！！！！！！！！！！！！！！！！！！！！-->
@@ -378,15 +389,22 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
-                    <LinearLayout
+                    <cn.fengwoo.sealsteward.view.QMUIFloatLayout
+                        android:id="@+id/qmuidemo_floatlayout3"
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        app:qmui_maxNumber="12"
+
+                        android:padding="20dp"
+                        android:gravity="left"
+                        app:qmui_childHorizontalSpacing="40dp"
+
+                        app:qmui_childVerticalSpacing="20dp">
 
                         <RelativeLayout
                             android:id="@+id/organizational_structure_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -408,8 +426,8 @@
 
                         <RelativeLayout
                             android:id="@+id/add_person_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -432,8 +450,8 @@
 
                         <RelativeLayout
                             android:id="@+id/add_seal_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -453,9 +471,32 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <RelativeLayout style="@style/add" />
 
-                    </LinearLayout>
+                        <RelativeLayout
+                            android:id="@+id/change_seal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    style="@style/imageView"
+                                    android:background="@drawable/change_seal"/>
+
+                                <TextView
+                                    style="@style/application_text"
+                                    android:text="@string/add_seal" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
+
 
                 </LinearLayout>
             </LinearLayout>
@@ -488,15 +529,22 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
-                    <LinearLayout
+                    <cn.fengwoo.sealsteward.view.QMUIFloatLayout
+                        android:id="@+id/qmuidemo_floatlayout4"
                         android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        app:qmui_maxNumber="12"
+
+                        android:padding="20dp"
+                        android:gravity="left"
+                        app:qmui_childHorizontalSpacing="40dp"
+
+                        app:qmui_childVerticalSpacing="20dp">
 
                         <RelativeLayout
                             android:id="@+id/service_charge_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -518,8 +566,8 @@
 
                         <RelativeLayout
                             android:id="@+id/recharge_record_rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <LinearLayout
@@ -539,16 +587,11 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
 
-                        </RelativeLayout>
 
-                        <RelativeLayout style="@style/add" />
 
-                    </LinearLayout>
+
+                    </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
 
                 </LinearLayout>
             </LinearLayout>
