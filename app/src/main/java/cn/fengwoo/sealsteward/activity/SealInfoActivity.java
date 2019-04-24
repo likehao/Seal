@@ -148,7 +148,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
     private String sealPring = "";
     private static final int REQUEST_CODE_CHOOSE = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -332,10 +331,10 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
 
-                intent = new Intent(this, ExamineActivity.class);
+                intent = new Intent(this, ApprovalFlowActivity.class);
                 intent.putExtra("sealId", responseInfo.getData().getId());
+                intent.putExtra("sealName", responseInfo.getData().getName());
                 intent.putExtra("sealApproveFlowList", new Gson().toJson(responseInfo.getData().getSealApproveFlowList()));
-
                 startActivityForResult(intent, 88);
                 break;
             case R.id.rl_set_limit: // 地理围栏

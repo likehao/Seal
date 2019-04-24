@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AddApprovalFlowActivity"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <include layout="@layout/head"/>
+
+    <View
+        style="@style/line"
+        android:layout_marginTop="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/select_approvalPeople_rl"
+            style="@style/pressed_effect"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="@string/approval_people"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/approval_people_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:gravity="right"
+                android:hint="请选择审批人" />
+
+            <View style="@style/right_arrow" />
+
+        </RelativeLayout>
+
+        <View
+            style="@style/line_left"/>
+        <RelativeLayout
+            android:id="@+id/select_approvalType_rl"
+            style="@style/pressed_effect"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="@string/approval_type"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/approval_type_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:textDirection="rtl"
+                android:hint="请选择审批类型" />
+
+            <View style="@style/right_arrow" />
+
+        </RelativeLayout>
+        <View
+            style="@style/line_left"/>
+        <RelativeLayout
+            style="@style/pressed_effect"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="@string/approval_level"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/input_level_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="35dp"
+                android:textSize="13sp"
+                android:background="@null"
+                android:gravity="right"
+                android:inputType="number"
+                android:hint="请输入审批等级" />
+
+            <View style="@style/right_arrow" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        style="@style/line"/>
+
+    <Button
+        android:id="@+id/submit_approval_bt"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_circle_bg"
+        android:layout_gravity="center"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        android:layout_marginTop="50dp"/>
+</LinearLayout>

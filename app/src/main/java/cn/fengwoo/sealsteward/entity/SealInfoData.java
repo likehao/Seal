@@ -245,6 +245,22 @@ public class SealInfoData {
         private int approveType;
         private int approveLevel;
 
+        public SealApproveFlowListBean(){
+
+        }
+        public SealApproveFlowListBean(String approveUserName, String orgStructureName, int approveLevel,String id) {
+            this.approveUserName = approveUserName;
+            this.orgStructureName = orgStructureName;
+            this.approveLevel = approveLevel;
+            this.id = id;
+        }
+
+        public SealApproveFlowListBean(String approveUserName, String orgStructureName,String id) {
+            this.approveUserName = approveUserName;
+            this.orgStructureName = orgStructureName;
+            this.id = id;
+        }
+
         public String getId() {
             return id;
         }

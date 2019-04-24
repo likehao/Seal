@@ -423,7 +423,6 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                         }else {
                             setResult(222);
                         }
-
                         finish();
                         Looper.prepare();
                         showToast("上传成功");

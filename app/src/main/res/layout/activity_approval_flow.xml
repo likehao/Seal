@@ -20,7 +20,7 @@
         app:tabSelectedTextColor="@color/style"
         app:tabIndicatorColor="@color/style"/>
 
-    <android.support.v4.view.ViewPager
+    <cn.fengwoo.sealsteward.utils.NoSrcollViewPage
         android:id="@+id/approval_flow_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

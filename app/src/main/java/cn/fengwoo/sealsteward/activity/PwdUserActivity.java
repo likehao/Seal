@@ -240,7 +240,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     }
                 });
 
-
                 // edit
                 viewHolder.setOnClickListener(R.id.btn_edit, new View.OnClickListener() {
                     @Override

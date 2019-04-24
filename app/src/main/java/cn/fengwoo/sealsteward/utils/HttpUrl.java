@@ -322,6 +322,14 @@ public class HttpUrl {
      * 改变部门
      */
     public static final String CHANGE_ORG = "company/moveuserorseal";
+    /**
+     * 添加审批流
+     */
+    public static final String ADDAPPROVALFLOW = "approvalflow/addsealapprovalflow";
+    /**
+     * 删除审批流
+     */
+    public static final String DELETEAPPROVALFLOW = "approvalflow/deletesealapprovalflow";
 
     /**
      * 改变seal
