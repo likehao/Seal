@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -112,6 +114,13 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     private boolean isRead = false;
     private int type;
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -430,15 +439,15 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
      * 选择照片
      */
     private void takeAPic() {
-        Matisse.from(UploadFileActivity.this)
-                .capture()
-                .isCrop(false)
-                .forResult(REQUEST_CODE_CHOOSE);
+//        Matisse.from(UploadFileActivity.this)
+//                .capture()
+//                .isCrop(false)
+//                .forResult(REQUEST_CODE_CHOOSE);
 
 
-//        Intent intent = new Intent();
-//        intent.setClass(this, CameraActivity.class);
-//        startActivityForResult(intent, 123);
+        Intent intent = new Intent();
+        intent.setClass(this, CameraActivity.class);
+        startActivityForResult(intent, 123);
 
     }
 
@@ -450,43 +459,68 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
             // 先上传每次拍的照片
             File fileByUri = new File(Matisse.obtainCaptureImageResult(data));
+            compressAndUpload(fileByUri);
 
             // 显示在本地
 //            ninePicUri.add(FileUtil.getImageContentUri(this, fileByUri));
 //            recycleviewAdapter.setData(ninePicUri, UploadFileActivity.this); //放置的是未压缩过的，发送请求是压缩过的
-            Luban.with(this)
-                    .load(fileByUri)
-                    .ignoreBy(100)
-                    .filter(new CompressionPredicate() {
-                        @Override
-                        public boolean apply(String path) {
-                            return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                        }
-                    })
-                    .setCompressListener(new OnCompressListener() {
-                        @Override
-                        public void onStart() {
-                            // TODO 压缩开始前调用，可以在方法内启动 loading UI
-                        }
-
-                        @Override
-                        public void onSuccess(File file) {
-                            // TODO 压缩成功后调用，返回压缩后的图片文件
-                            //上传图片
-                            uploadPic(file);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            // TODO 当压缩过程出现问题时调用
-                            Log.e("TAG", e + "");
-                        }
-                    }).launch();
         }
+
+        if (requestCode == 123 && resultCode == 123) {
+            Utils.log("requestCode == 123");
+            List<String> allPic = data.getStringArrayListExtra("photoList");
+            Utils.log("allFileName.size()" + allPic.size());
+            int time = 0;
+            for(String str:allPic){
+                File file = new File(str);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        compressAndUpload(file);
+                    }
+                }, time);
+                time = time + 3000;
+            }
+        }
+
         if (requestCode == 111 && resultCode == 111) {
             finish();
         }
     }
+
+
+    private void compressAndUpload( File fileByUri){
+        Luban.with(this)
+                .load(fileByUri)
+                .ignoreBy(100)
+                .filter(new CompressionPredicate() {
+                    @Override
+                    public boolean apply(String path) {
+                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                    }
+                })
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        //上传图片
+                        uploadPic(file);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // TODO 当压缩过程出现问题时调用
+                        Log.e("TAG", e + "");
+                    }
+                }).launch();
+
+    }
+
 
     /**
      * 上传图片至服务器 (category -> 5:上传记录图片  4:申请用印上传图片)（单独上传图片）
@@ -512,10 +546,12 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     allFileName.add(str);
                     loadingView.cancel();
                     Log.e("TAG", "上传图片成功!!!!!!!!!!!!!!!!!!!!");
+                    Utils.log("上传图片成功");
 
                     showCurrentPagePic();
-                    // 弹出相机
-                    permissions();
+
+//                    // 弹出相机
+//                    permissions();
 
                     success = true;
                 } else {
@@ -634,5 +670,11 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 //长按事件
             }
         }));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
     }
 }

@@ -254,4 +254,5 @@ dependencies {
     }
     //图片浏览
     implementation 'com.github.maning0303:MNImageBrowser:V1.1.5'
+
 }

@@ -47,20 +47,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/White">
+        android:paddingBottom="10dp"
+        android:background="@color/black">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:background="@color/transparent"
             >
 
             <ImageView
+                android:id="@+id/iv_little_pic"
+                android:layout_width="60dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_height="70dp" />
+
+            <ImageView
                 android:id="@+id/img_camera"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/take_a_pic" />
+
+            <ImageView
+                android:id="@+id/flash_light"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/img_homepage_camera5" />
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:src="@drawable/selector_btn_flash_light" />
 
         </RelativeLayout>
 
@@ -76,7 +96,47 @@
         android:textSize="120sp"
         android:visibility="gone" />
 
+
     <LinearLayout
+        android:id="@+id/roof"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/Black4"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:weightSum="1"
+
+        >
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_complete"
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="完成"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
         android:id="@+id/home_custom_top_relative"
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -95,7 +155,6 @@
             android:src="@drawable/selector_btn_camera_close1" />
 
         <ImageView
-            android:id="@+id/flash_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

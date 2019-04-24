@@ -3,11 +3,13 @@ package cn.fengwoo.sealsteward.activity;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,18 +23,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.maning.imagebrowserlibrary.ImageEngine;
+import com.maning.imagebrowserlibrary.MNImageBrowser;
+import com.maning.imagebrowserlibrary.listeners.OnClickListener;
+import com.maning.imagebrowserlibrary.model.ImageBrowserConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.engine.GlideImageEngine;
 import cn.fengwoo.sealsteward.utils.AppConstant;
 import cn.fengwoo.sealsteward.utils.BitmapUtils;
 import cn.fengwoo.sealsteward.utils.CameraUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.SystemUtils;
 import cn.fengwoo.sealsteward.utils.ToastFactory;
+import cn.fengwoo.sealsteward.utils.Utils;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener {
     private Camera mCamera;
@@ -71,9 +81,18 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     private ImageView img_camera;
     private int picHeight;
 
+    private TextView tv_cancel, tv_complete;
+    private ImageView iv_little_pic;
+
     private List<String> allFilePath = new ArrayList<>(); // 所有图片的名字
 
-    private String commonPath = "file://" + HttpDownloader.path;
+//    private String commonPath = "file://" + HttpDownloader.path;
+    private String commonPath =  "/storage/emulated/0/SealDownImage/";
+
+    public ImageBrowserConfig.TransformType transformType = ImageBrowserConfig.TransformType.Transform_Default;
+    public ImageBrowserConfig.IndicatorType indicatorType = ImageBrowserConfig.IndicatorType.Indicator_Number;
+    public ImageBrowserConfig.ScreenOrientationType screenOrientationType = ImageBrowserConfig.ScreenOrientationType.Screenorientation_Default;
+    private ImageEngine imageEngine = new GlideImageEngine();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +150,16 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         camera_delay_time_text = (TextView) findViewById(R.id.camera_delay_time_text);
 
         homecamera_bottom_relative = (RelativeLayout) findViewById(R.id.homecamera_bottom_relative);
+
+        tv_cancel = findViewById(R.id.tv_cancel);
+        tv_cancel.setOnClickListener(this);
+
+        tv_complete = findViewById(R.id.tv_complete);
+        tv_complete.setOnClickListener(this);
+
+        iv_little_pic = findViewById(R.id.iv_little_pic);
+        iv_little_pic.setOnClickListener(this);
+
     }
 
     private void initData() {
@@ -179,6 +208,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.img_camera:
                 if (isview) {
@@ -218,7 +248,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                             }
                         }).start();
                     }
-//                    isview = false;
+                    isview = false;
                 }
                 break;
 
@@ -241,8 +271,65 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                     Toast.makeText(CameraActivity.this, "正在拍照请稍后...", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                intent.putStringArrayListExtra("photoList", (ArrayList<String>) allFilePath);
+                setResult(123,intent);
                 finish();
                 break;
+
+
+            case R.id.tv_complete:
+
+                if (allFilePath.size() == 0) {
+                    finish();
+                    return;
+                }
+
+                if (is_camera_delay) {
+                    Toast.makeText(CameraActivity.this, "正在拍照请稍后...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                intent.putStringArrayListExtra("photoList", (ArrayList<String>) allFilePath);
+                setResult(123,intent);
+                finish();
+                break;
+
+            case R.id.tv_cancel:
+                finish();
+                break;
+
+            case R.id.iv_little_pic:
+                MNImageBrowser.with(CameraActivity.this)
+                        //页面切换效果
+                        .setTransformType(transformType)
+                        //指示器效果
+                        .setIndicatorType(indicatorType)
+                        //设置隐藏指示器
+                        .setIndicatorHide(false)
+                        //当前位置
+                        .setCurrentPosition(0)
+                        //图片引擎
+                        .setImageEngine(imageEngine)
+                        //图片集合（setImageList和setImageUrl二选一，会覆盖）
+                        .setImageList((ArrayList<String>) allFilePath)
+                        //单张图片
+                        //   .setImageUrl(img)
+                        //方向设置
+                        .setScreenOrientationType(screenOrientationType)
+                        //点击监听
+                        .setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(FragmentActivity activity, ImageView view, int position, String url) {
+
+                            }
+                        })
+
+                        //显示：传入当前View
+                        .show(iv_little_pic);
+                break;
+
+
 
             //闪光灯
             case R.id.flash_light:
@@ -447,7 +534,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 }
 
                 String img_path = commonPath +
-                        File.separator + System.currentTimeMillis() + ".jpeg";
+                        System.currentTimeMillis() + ".jpg";
 
                 BitmapUtils.saveJPGE_After(context, saveBitmap, img_path, 100);
 
@@ -461,8 +548,16 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
                 // path存入list
                 allFilePath.add(img_path);
+                Utils.log(allFilePath.size() + "");
 
-//                Utils.log(allFilePath.size() + "");
+                // show pic
+//                iv_little_pic.setImageUri(Uri.fromFile(new File("/sdcard/test.jpg")));
+                Glide.with(CameraActivity.this).load(img_path).into(iv_little_pic);
+
+                isview = true;
+                startPreview(mCamera, mHolder);
+
+
 //                Intent intent = new Intent();
 //                intent.putExtra(AppConstant.KEY.IMG_PATH, img_path);
 //                intent.putExtra(AppConstant.KEY.PIC_WIDTH, screenWidth);
