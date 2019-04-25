@@ -43,6 +43,23 @@
                             android:textColor="@color/black"
                             android:textSize="16sp" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/ll_tip1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:text="您暂无此功能权限"
+                            android:textColor="@color/black_3"
+                            android:textSize="16sp" />
+                    </LinearLayout>
 
                     <cn.fengwoo.sealsteward.view.QMUIFloatLayout
                         android:id="@+id/qmuidemo_floatlayout1"
@@ -221,6 +238,30 @@
                         </RelativeLayout>
 
 
+                        <RelativeLayout
+                            android:id="@+id/seal_dfu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    style="@style/imageView"
+                                    android:background="@drawable/seal_dfu"/>
+
+                                <TextView
+                                    style="@style/application_text"
+                                    android:text="固件升级" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+
 
                     </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
 
@@ -247,6 +288,24 @@
                         android:layout_marginStart="5dp"
                         android:text="@string/apply_manager"
                         android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_tip2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="15dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:text="您暂无此功能权限"
+                        android:textColor="@color/black_3"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -286,6 +345,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+
                         android:id="@+id/approvalRecord_rl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -312,14 +372,14 @@
                         android:id="@+id/wait_me_agree_rl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:layout_weight="1">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                            android:orientation="vertical">
 
                             <ImageView
                                 style="@style/imageView"
@@ -335,11 +395,12 @@
                     <RelativeLayout
                         android:id="@+id/wait_handle_rl"
                         android:layout_width="wrap_content"
+                        android:visibility="gone"
+
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
@@ -388,7 +449,22 @@
                             android:textColor="@color/black"
                             android:textSize="16sp" />
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_tip3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:paddingTop="5dp">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:text="您暂无此功能权限"
+                            android:textColor="@color/black_3"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                     <cn.fengwoo.sealsteward.view.QMUIFloatLayout
                         android:id="@+id/qmuidemo_floatlayout3"
                         android:layout_width="match_parent"
@@ -490,7 +566,7 @@
 
                                 <TextView
                                     style="@style/application_text"
-                                    android:text="@string/add_seal" />
+                                    android:text="更换印章" />
 
                             </LinearLayout>
                         </RelativeLayout>
@@ -526,6 +602,23 @@
                             android:layout_marginStart="5dp"
                             android:text="@string/cost_manage"
                             android:textColor="@color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/ll_tip4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:text="您暂无此功能权限"
+                            android:textColor="@color/black_3"
                             android:textSize="16sp" />
                     </LinearLayout>
 

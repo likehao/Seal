@@ -1,21 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".activity.AboutActivity"
     android:background="@color/background">
 
     <include layout="@layout/head" />
 
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="25dp"
+        android:layout_width="match_parent"
+        android:text="版本："
+        android:gravity="center_vertical"
+        android:layout_height="35dp" />
+
+    <TextView
+
+        android:id="@+id/tv_content"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="25dp"
+        android:layout_width="match_parent"
+        android:text=""
+        android:gravity="center_vertical"
+        android:layout_height="35dp" />
+
+
 
     <Button
+        android:visibility="gone"
+        android:layout_marginTop="50dp"
         android:id="@+id/test"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         />
+    <Button
+        android:id="@+id/btn_dfu"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/login_circle_bg"
+        android:text="固件升级"
+        android:textColor="@color/white" />
 
 
-
-</RelativeLayout>
+</LinearLayout>

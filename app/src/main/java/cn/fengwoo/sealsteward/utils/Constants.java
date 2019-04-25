@@ -16,6 +16,11 @@ public class Constants {
     // latitude   String // 纬度
     // longitude   String // 经度
 
+    // DFU
+    // dfu_version String
+    // dfu_file_name String
+    // dfu_content String
+
     // enableEnclosure boolean // 是否开启电子围栏
 
     public static final int TO_NEARBY_DEVICE = 20;

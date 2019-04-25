@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -40,6 +41,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.AddUserActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.ChangeSealActivity;
+import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.EditOrganizationActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
@@ -62,6 +64,7 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
+import cn.fengwoo.sealsteward.view.QMUIFloatLayout;
 import cn.qqtheme.framework.picker.SinglePicker;
 import cn.qqtheme.framework.widget.WheelView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -115,7 +118,24 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     RelativeLayout rl_pwd_user;
     @BindView(R.id.change_seal)
     RelativeLayout change_seal;
-
+    @BindView(R.id.seal_dfu)
+    RelativeLayout seal_dfu;
+    @BindView(R.id.ll_tip1)
+    LinearLayout ll_tip1;
+    @BindView(R.id.ll_tip2)
+    LinearLayout ll_tip2;
+    @BindView(R.id.ll_tip3)
+    LinearLayout ll_tip3;
+    @BindView(R.id.ll_tip4)
+    LinearLayout ll_tip4;
+    @BindView(R.id.qmuidemo_floatlayout1)
+    QMUIFloatLayout qmuidemo_floatlayout1;
+    @BindView(R.id.qmuidemo_floatlayout2)
+    QMUIFloatLayout qmuidemo_floatlayout2;
+    @BindView(R.id.qmuidemo_floatlayout3)
+    QMUIFloatLayout qmuidemo_floatlayout3;
+    @BindView(R.id.qmuidemo_floatlayout4)
+    QMUIFloatLayout qmuidemo_floatlayout4;
     private SinglePicker<String> picker;
 
     @Nullable
@@ -125,6 +145,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         ButterKnife.bind(this, view);
         setListener();
         hideSomeIcon();
+        Utils.log("此时可见");
         return view;
     }
 
@@ -146,6 +167,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         rl_voice.setOnClickListener(this);
         rl_pwd_user.setOnClickListener(this);
         change_seal.setOnClickListener(this);
+        seal_dfu.setOnClickListener(this);
 
     }
 
@@ -181,8 +203,31 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         if (!Utils.hasThePermission(getActivity(), Constants.permission25)) {
             change_seal.setVisibility(View.GONE);
         }
+        // dfu
+        if (!Utils.hasThePermission(getActivity(), Constants.permission24)) {
+            seal_dfu.setVisibility(View.GONE);
+        }
 
+        // 显示提示
+//        Utils.log("qmuidemo_floatlayout2:line:" + qmuidemo_floatlayout2.getChildCount());
+//        Utils.log("qmuidemo_floatlayout2:is invisible:" + Utils.isAllInvisible(qmuidemo_floatlayout2));
 
+        if (Utils.isAllInvisible(qmuidemo_floatlayout1)) {
+            // 所有子view不可见，显示tip
+            ll_tip1.setVisibility(View.VISIBLE);
+        }
+        if (Utils.isAllInvisible(qmuidemo_floatlayout2)) {
+            // 所有子view不可见，显示tip
+            ll_tip2.setVisibility(View.VISIBLE);
+        }
+        if (Utils.isAllInvisible(qmuidemo_floatlayout3)) {
+            // 所有子view不可见，显示tip
+            ll_tip3.setVisibility(View.VISIBLE);
+        }
+        if (Utils.isAllInvisible(qmuidemo_floatlayout4)) {
+            // 所有子view不可见，显示tip
+            ll_tip4.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -348,6 +393,20 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 intent = new Intent(getActivity(), ChangeSealActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.seal_dfu:
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+                    Utils.showToast(getActivity(), "二期印章无此功能");
+                    return;
+                }
+                if (!Utils.hasThePermission(getActivity(), Constants.permission24)) {
+                    return;
+                }
+                intent = new Intent(getActivity(), DfuActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -671,4 +730,16 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         }
     }
 
+
+    // 可见时要刷新ui
+    // 可见的情况有两种，一：onCreateView,二：如下的回调
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Utils.log("hidden:" + hidden);
+        // false时可见
+        if (!hidden) {
+            Utils.log("此时可见");
+        }
+    }
 }

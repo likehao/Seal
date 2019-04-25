@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.longsh.optionframelibrary.OptionBottomDialog;
+import com.white.easysp.EasySP;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -160,6 +161,10 @@ public class SealOrganizationalFragment extends Fragment {
                 Utils.log("position"+position);
                 if (position == 0) {
                     if (!Utils.hasThePermission(getActivity(), Constants.permission3)) {
+                        return;
+                    }
+                    if (EasySP.init(getActivity()).getString("currentSealId").equals(idString)) {
+                        Toast.makeText(getActivity(),"该印章正在连接使用，不能删除。",Toast.LENGTH_SHORT).show();
                         return;
                     }
 

@@ -73,6 +73,7 @@ import cn.fengwoo.sealsteward.bean.MessageData;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
 import cn.fengwoo.sealsteward.entity.BannerData;
+import cn.fengwoo.sealsteward.entity.DfuEntity;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.StampUploadRecordData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -476,6 +477,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //        NetUtil.removeNetConnChangedListener(netConnChangedListener);
     }
 
+
     private void getSystemTime() {
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.SYSTEM_TIME, 1, null, null, new Callback() {
             @Override
@@ -495,10 +497,39 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 setNotification();
             }
         });
-
-
     }
 
+    private void checkDfu(float version) {
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.DFU_UPGRADE_CHECK, 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误!!!!!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log("result:" + result);
+                Gson gson = new Gson();
+                ResponseInfo<DfuEntity> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<DfuEntity>>() {
+                }.getType());
+                DfuEntity dfuEntity = responseInfo.getData();
+                Utils.log("dfuEntity" + dfuEntity.getVersion());
+                float latestVersion = Float.parseFloat(dfuEntity.getVersion());
+                if(latestVersion>version){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showToast("有最新固件，请升级。");
+                        }
+                    });
+                    EasySP.init(getActivity()).putString("dfu_version", dfuEntity.getVersion());
+                    EasySP.init(getActivity()).putString("dfu_file_name", dfuEntity.getFileName());
+                    EasySP.init(getActivity()).putString("dfu_content", dfuEntity.getContent());
+                }
+            }
+        });
+    }
 
     @SuppressLint("CheckResult")
     @Override
@@ -747,6 +778,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             initWhenDisconnectBle();
                             // 停止timer
                             rxTimerUtil.cancel();
+                            // 清空currentSealId
+                            EasySP.init(getActivity()).putString("currentSealId", "");
                         },
                         throwable -> {
                             // Handle an error here.
@@ -795,6 +828,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                                 if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
                                     Utils.log("握手成功");
+                                    // 得到当前版本
+                                    float firmwareVersion;
+                                    firmwareVersion = (float) bytes[4] +((float)bytes[5]/100);
+                                    Utils.log("firmwareVersion:" + firmwareVersion);
+                                    checkDfu(firmwareVersion);
+
                                     // 每隔1min定时获取电量
                                     rxTimerUtil = new RxTimerUtil();
                                     rxTimerUtil.interval(60000, new RxTimerUtil.IRxNext() {

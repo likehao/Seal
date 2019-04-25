@@ -2,9 +2,9 @@ package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
     //    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
-//    public static final String URL = "http://192.168.0.117:8800/";  //调试环境
+    public static final String URL = "http://192.168.0.117:8800/";  //调试环境
 //    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //测试
-    public static final String URL = "http://www.baiheyz.com:8080/bhsealappservice/";    //线上
+//    public static final String URL = "http://www.baiheyz.com:8080/bhsealappservice/";    //线上
 
 
     /**
@@ -264,7 +264,7 @@ public class HttpUrl {
     public static final String USEINSTRUCTIONS = "http://www.baiheyz.com/directions/index.html";
 
     /**
-     *  添加部门
+     * 添加部门
      */
     public static final String ADD_ORG = "company/addorgstr";
     /**
@@ -280,13 +280,13 @@ public class HttpUrl {
      */
     public static final String UPDATECOMPANY = "company/updatecompany";
 
-   /**
+    /**
      * 上传历史记录
      */
     public static final String UPLOAD_HISTORY_RECORD = "stamp/uploadhistoryrecord";
 
     /**
-     *  获取系统时间
+     * 获取系统时间
      */
     public static final String SYSTEM_TIME = "user/systemtime";
 
@@ -299,14 +299,14 @@ public class HttpUrl {
      */
     public static final String DELETEAUTOGRAPH = "user/deleteautograph";
 
-     /**
-     *  illegal
+    /**
+     * illegal
      */
     public static final String ILLEGAL = "seal/illegalstamp";
 
 
     /**
-     *  TRIGGERED_ENCLOSURE 超出围栏报警
+     * TRIGGERED_ENCLOSURE 超出围栏报警
      */
     public static final String TRIGGERED_ENCLOSURE = "seal/triggeredenclosure";
     /**
@@ -336,5 +336,12 @@ public class HttpUrl {
      */
     public static final String REPLACE_SEAL = "seal/replaceseal";
 
-
+    /**
+     * dfu version check
+     */
+    public static final String DFU_UPGRADE_CHECK = "seal/lastsealfirmware";
+    /**
+     * dfu 升级包下载
+     */
+    public static final String DOWNLOAD_DFU_UPGRADE = "file/downloadupgrade";
 }

@@ -66,6 +66,34 @@ public class HttpDownloader {
         });
     }
 
+    public static void downloadDfuZip(Activity activity, final String fileName,final DownloadImageCallback callback){
+        HashMap<String, String> hashMap = new HashMap<>();
+//        hashMap.put("category", category + "");
+        hashMap.put("fileName", fileName);
+        HttpUtil.sendDataAsync(activity, HttpUrl.DOWNLOAD_DFU_UPGRADE, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onResult(null);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                byte[] imgData = response.body().bytes();
+                if(imgData.length > 0){
+                    //Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                    //保存到本地
+                    Boolean result = saveBitmapToSDCard(imgData, fileName);
+                    if(result){
+                        callback.onResult(fileName);
+                        return;
+                    }
+                }
+                callback.onResult(null);
+            }
+        });
+    }
+
+
     /**
      * 从SD卡中读取图片
      * @param imgName

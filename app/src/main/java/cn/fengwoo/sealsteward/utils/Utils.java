@@ -12,6 +12,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,22 +37,24 @@ import static com.mob.tools.utils.DeviceHelper.getApplication;
 public class Utils {
     private static final double EARTH_RADIUS = 6378.137;
     public static final boolean logTag = true;
-    public static IntentFilter intentFilter(){
-       final IntentFilter intentFilter = new IntentFilter();
-       intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
-       intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-       intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-       return intentFilter;
+
+    public static IntentFilter intentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        return intentFilter;
     }
-    public static void log(String str){
+
+    public static void log(String str) {
         if (logTag == true) {
             Logger.d(str);
         }
     }
 
 
-    public static int hexStringToInt(String hexString){
-        return Integer.valueOf(hexString,16);
+    public static int hexStringToInt(String hexString) {
+        return Integer.valueOf(hexString, 16);
     }
 
 
@@ -77,14 +81,14 @@ public class Utils {
         editText.setClickable(true);
     }
 
-    public static int getNumberOfPeople(Map map, Object value){
+    public static int getNumberOfPeople(Map map, Object value) {
         Set set = map.entrySet(); //通过entrySet()方法把map中的每个键值对变成对应成Set集合中的一个对象
         Iterator<Map.Entry<Object, Object>> iterator = set.iterator();
         ArrayList<Object> arrayList = new ArrayList();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             //Map.Entry是一种类型，指向map中的一个键值对组成的对象
             Map.Entry<Object, Object> entry = iterator.next();
-            if(entry.getValue().equals(value)){
+            if (entry.getValue().equals(value)) {
                 arrayList.add(entry.getKey());
             }
         }
@@ -98,16 +102,15 @@ public class Utils {
         targetBytes[0] = (byte) 0xFF;
         targetBytes[1] = (byte) 6;
         targetBytes[2] = (byte) 0xA0;
-        targetBytes[3] = (byte)(now.get(Calendar.YEAR)-2000);
+        targetBytes[3] = (byte) (now.get(Calendar.YEAR) - 2000);
         targetBytes[4] = (byte) (now.get(Calendar.MONTH) + 1);
         targetBytes[5] = (byte) (now.get(Calendar.DAY_OF_MONTH));
         targetBytes[6] = (byte) (now.get(Calendar.HOUR_OF_DAY));
         targetBytes[7] = (byte) (now.get(Calendar.MINUTE));
         targetBytes[8] = (byte) (now.get(Calendar.SECOND));
-        targetBytes[9] = (byte) (targetBytes[0] + targetBytes[1]  + targetBytes[2] + targetBytes[3] + targetBytes[4] + targetBytes[5] + targetBytes[6] + targetBytes[7] + targetBytes[8]);
+        targetBytes[9] = (byte) (targetBytes[0] + targetBytes[1] + targetBytes[2] + targetBytes[3] + targetBytes[4] + targetBytes[5] + targetBytes[6] + targetBytes[7] + targetBytes[8]);
         return targetBytes;
     }
-
 
 
     /**
@@ -120,12 +123,13 @@ public class Utils {
             if (hex.length() == 1) {
                 hex = '0' + hex;
             }
-            str += hex.toUpperCase()+" ";
+            str += hex.toUpperCase() + " ";
         }
 
         return (str);
     }
-    public static void showToast(Context context,String str) {
+
+    public static void showToast(Context context, String str) {
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
 
@@ -133,7 +137,7 @@ public class Utils {
         boolean connectState = false;
         if (((MyApp) getApplication()).getConnectionObservable() == null) {
             Utils.log("没有连接ble设备");
-            Utils.showToast(context,"没有连接印章");
+            Utils.showToast(context, "没有连接印章");
             connectState = false;
         } else {
             connectState = true;
@@ -141,21 +145,20 @@ public class Utils {
         return connectState;
     }
 
-    public static boolean hasThePermission(Context context,String idString) {
+    public static boolean hasThePermission(Context context, String idString) {
         boolean hasTheOne = false;
         String allPermissionHaveGot = EasySP.init(context).getString("permission");
         if (allPermissionHaveGot.contains(idString)) {
             hasTheOne = true;
         } else {
             hasTheOne = false;
-            showToast(context,"没有权限！");
+            showToast(context, "没有权限！");
         }
         return hasTheOne;
     }
 
 
-
-    private String getPath(Context context,Uri uri) {
+    private String getPath(Context context, Uri uri) {
         String[] projection = {MediaStore.Video.Media.DATA};
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
         int column_index = cursor
@@ -181,8 +184,8 @@ public class Utils {
         return bitmap;
     }
 
-    public static double distanceOfTwoPoints(double lat1,double lng1,
-                                             double lat2,double lng2) {
+    public static double distanceOfTwoPoints(double lat1, double lng1,
+                                             double lat2, double lng2) {
         double radLat1 = rad(lat1);
         double radLat2 = rad(lat2);
         double a = radLat1 - radLat2;
@@ -192,9 +195,10 @@ public class Utils {
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * EARTH_RADIUS;
         s = Math.round(s * 10000) / 10000;
-        Log.i("距离",s+"");
+        Log.i("距离", s + "");
         return s;
     }
+
     private static double rad(double d) {
         return d * Math.PI / 180.0;
     }
@@ -222,4 +226,29 @@ public class Utils {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         return bluetoothAdapter.isEnabled();
     }
+
+
+    /**
+     * 判断一个view里的子view是不是全部不可见
+     */
+    public static boolean isAllInvisible(ViewGroup viewGroup) {
+        int count = viewGroup.getChildCount();
+        boolean isAllInvisible = true;
+        for (int i = 0; i < count; i++) {
+            if (viewGroup.getChildAt(i).getVisibility() == View.VISIBLE) {
+                isAllInvisible = false;
+                break;
+            }
+        }
+        return isAllInvisible;
+    }
+
+    public static boolean deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.isFile() && file.exists()) {
+            return file.delete();
+        }
+        return false;
+    }
+
 }

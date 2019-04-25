@@ -1,22 +1,27 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.white.easysp.EasySP;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.DfuService;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.Utils;
 import no.nordicsemi.android.dfu.DfuProgressListener;
@@ -27,47 +32,68 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 /**
  * 关于
  */
-public class DfuActivity extends BaseActivity implements View.OnClickListener {
+public class DfuActivity extends BaseActivity {
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
     @BindView(R.id.test)
     Button test;
+    @BindView(R.id.tv_version)
+    TextView tvVersion;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
+
+    @BindView(R.id.btn_dfu)
+    Button btnDfu;
 
     private String dfu_macAddress;
     private Uri uri = null;
     private String path; // 固件包路径
+    private ProgressDialog pd;
+
+    private String dfu_version;
+    private String dfu_file_name;
+    private String dfu_content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dfu);
         ButterKnife.bind(this);
+        initData();
         initView();
-        dfu_macAddress = EasySP.init(this).getString("mac");
+
+        downloadZip();
         Utils.log(dfu_macAddress);
     }
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("固件升级");
-        set_back_ll.setOnClickListener(this);
-        test.setOnClickListener(this);
+        tvVersion.setText("版本：" + dfu_version);
+        tvContent.setText(dfu_content);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.set_back_ll:
-                finish();
-                break;
-            case R.id.test:
-                path = "file://" + HttpDownloader.path + "a.zip";
+    private void initData() {
+        dfu_macAddress = EasySP.init(this).getString("mac");
+        dfu_file_name = EasySP.init(this).getString("dfu_file_name");
+        dfu_version = EasySP.init(this).getString("dfu_version");
+        dfu_content = EasySP.init(this).getString("dfu_content");
+
+    }
+
+    private void downloadZip() {
+        HttpDownloader.downloadDfuZip(this, dfu_file_name, new DownloadImageCallback() {
+            @Override
+            public void onResult(String fileName) {
+                super.onResult(fileName);
+                Utils.log("filename:" + fileName);
+                path = "file://" + HttpDownloader.path + dfu_file_name;
                 uri = Uri.parse(path);
                 dfu(uri);
-                break;
-        }
+            }
+        });
     }
 
     private void dfu(Uri uri) {
@@ -119,6 +145,7 @@ public class DfuActivity extends BaseActivity implements View.OnClickListener {
                     + ",partTotal " + partsTotal);
 //            tv_show.setText("升级进度：" + percent + "%");
             Utils.log(percent + "");
+            pd.setProgress(percent);
         }
 
         @Override
@@ -139,16 +166,24 @@ public class DfuActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onDfuCompleted(String deviceAddress) {
             Logger.d("TEST", "onDfuCompleted: " + deviceAddress);
+            showToast("固件升级完成");
+            pd.dismiss();
+            boolean result = Utils.deleteFile(path);
+            Utils.log("" + result);
         }
 
         @Override
         public void onDfuAborted(String deviceAddress) {
             Logger.d("TEST" + "onDfuAborted: " + deviceAddress);
+            showToast("升级失败，请重试。");
+            pd.dismiss();
         }
 
         @Override
         public void onError(String deviceAddress, int error, int errorType, String message) {
             Logger.d("TEST" + "onError: " + deviceAddress + ",message:" + message);
+            showToast("升级失败，请重试。");
+            pd.dismiss();
         }
     };
 
@@ -167,5 +202,49 @@ public class DfuActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+    private void showProgress() {
+        // 进度条对话框
+        pd = new ProgressDialog(this);
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setMessage("固件升级中...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.setMax(100);
+        pd.setCancelable(false);
+        // 监听返回键--防止下载的时候点击返回
+        pd.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                    Toast.makeText(DfuActivity.this, "正在固件升级，请稍后", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        pd.show();
+    }
+
+    @OnClick({R.id.test, R.id.btn_dfu,R.id.set_back_ll})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+
+            case R.id.btn_dfu:
+                downloadZip();
+                showProgress();
+                break;
+            case R.id.set_back_ll:
+                finish();
+                break;
+            case R.id.test:
+                path = "file://" + HttpDownloader.path + "a.zip";
+                uri = Uri.parse(path);
+                dfu(uri);
+                showProgress();
+                break;
+        }
     }
 }

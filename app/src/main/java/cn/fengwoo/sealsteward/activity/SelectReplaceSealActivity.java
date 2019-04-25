@@ -25,12 +25,15 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.CustomDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -165,7 +168,7 @@ public class SelectReplaceSealActivity extends BaseActivity implements View.OnCl
                 finish();
                 break;
             case R.id.edit_tv:
-                changeSeal();
+                showDialog();
 //                getSure();
                 break;
         }
@@ -177,6 +180,7 @@ public class SelectReplaceSealActivity extends BaseActivity implements View.OnCl
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("sealId", m_id);
         hashMap.put("mac", theNewMac);
+        hashMap.put("version", "3.01");
         Utils.log("sealId:" + m_id);
         HttpUtil.sendDataAsync(this, HttpUrl.REPLACE_SEAL, 1, hashMap, null, new Callback() {
             @Override
@@ -264,5 +268,20 @@ public class SelectReplaceSealActivity extends BaseActivity implements View.OnCl
             setResult(123, intent);
             finish();
         }
+    }
+
+    /**
+     * 确认是否删除
+     */
+    private void showDialog() {
+        final CommonDialog commonDialog = new CommonDialog(this, "提示", "更换后原来的印章将无法使用，请谨慎操作。", "更换印章");
+//        commonDialog.cancel.setText("取消");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeSeal();
+            }
+        });
     }
 }
