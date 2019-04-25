@@ -308,4 +308,5 @@
     <string name="seal_type">盖章类型</string>
     <string name="add_secStep">请在空白纸上盖一次清晰的章并拍照</string>
     <string name="approveLevel">审批等级</string>
+    <string name="approval_flow_tips">审批顺序是从低等级到高等级依次审批,审批流的人员不能重复</string>
 </resources>

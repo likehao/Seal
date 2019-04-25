@@ -71,6 +71,8 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
     @BindView(R.id.list)
     ListView list;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
 
     private List<PwdUserListItem> items;
     private boolean isEyeOpen = false;
@@ -92,6 +94,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
+        set_back_ll.setOnClickListener(this);
         add_ll.setVisibility(View.VISIBLE);
         title_tv.setText("密码用户");
     }
@@ -155,13 +158,13 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     if (responseInfo.getData() != null) {
                         loadingView.cancel();
                         items = responseInfo.getData();
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 setListAdapter();
                                 if (commonAdapter != null) {
                                     commonAdapter.notifyDataSetChanged();
+                                    no_record_ll.setVisibility(View.GONE);
                                 }
                             }
                         });
@@ -176,9 +179,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     }
                 } else {
                     loadingView.cancel();
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
                 }
             }
         });
@@ -301,6 +301,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void run() {
                         Toast.makeText(PwdUserActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        items.remove(pwdUserListItem);
                         initData();
                         getDate();
 //                                        commonAdapter.notifyDataSetChanged();

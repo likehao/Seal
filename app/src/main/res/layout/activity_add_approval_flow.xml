@@ -116,6 +116,15 @@
     <View
         style="@style/line"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/approval_flow_tips"
+        android:textSize="10sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/short_video_red"/>
+
     <Button
         android:id="@+id/submit_approval_bt"
         android:layout_width="280dp"

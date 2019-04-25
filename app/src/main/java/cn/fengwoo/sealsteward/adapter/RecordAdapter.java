@@ -102,12 +102,12 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder.close.setText("已关闭");
             viewHolder.close.setEnabled(false);
             viewHolder.close.setTextColor(context.getResources().getColor(R.color.gray_text));
-            viewHolder.close.setBackgroundResource(R.drawable.record_off);
+            viewHolder.close.setBackgroundResource(R.drawable.record_bt_off);
         } else {
             viewHolder.close.setText("关闭单据");
             viewHolder.close.setEnabled(true);
-            viewHolder.close.setTextColor(context.getResources().getColor(R.color.black));
-            viewHolder.close.setBackgroundResource(R.drawable.suggestion_gray);
+            viewHolder.close.setTextColor(context.getResources().getColor(R.color.white));
+            viewHolder.close.setBackgroundResource(R.drawable.login_circle_bg);
         }
 
         //关闭单据

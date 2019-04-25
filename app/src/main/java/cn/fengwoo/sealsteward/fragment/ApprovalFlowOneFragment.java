@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
@@ -78,38 +80,42 @@ public class ApprovalFlowOneFragment extends Fragment {
                 viewHolder.setOnClickListener(R.id.oneDelete, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //((SwipeMenuLayout) viewHolder.getConvertView()).quickClose();  //点击侧滑菜单上的选项时关闭
-                        HashMap<String ,String > hashMap = new HashMap<>();
-                        hashMap.put("id",list.get(position).getId());
-                        HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETEAPPROVALFLOW, 4, hashMap, null, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                Log.e("TAG",e+"删除审批流错误错误!!!!!!!!!!");
-                            }
+                        if (list.size() > 1) {
+                            //((SwipeMenuLayout) viewHolder.getConvertView()).quickClose();  //点击侧滑菜单上的选项时关闭
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", list.get(position).getId());
+                            HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETEAPPROVALFLOW, 4, hashMap, null, new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    Log.e("TAG", e + "删除审批流错误错误!!!!!!!!!!");
+                                }
 
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String result = response.body().string();
-                                Gson gson = new Gson();
-                                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}
-                                        .getType());
-                                if (responseInfo.getCode() == 0){
-                                    if (responseInfo.getData()){
-                                        if (getActivity() != null) {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    uploadSealInfo(list.get(position).getSealId());
-                                                    list.remove(position);
-                                                    flowOneAdapter.notifyDataSetChanged();
-                                                }
-                                            });
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    String result = response.body().string();
+                                    Gson gson = new Gson();
+                                    ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                                    }
+                                            .getType());
+                                    if (responseInfo.getCode() == 0) {
+                                        if (responseInfo.getData()) {
+                                            if (getActivity() != null) {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        uploadSealInfo(list.get(position).getSealId());
+                                                        list.remove(position);
+                                                        flowOneAdapter.notifyDataSetChanged();
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        });
-
+                            });
+                        }else {
+                            Toast.makeText(getActivity(),"请至少保留一位审批人",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -147,6 +153,8 @@ public class ApprovalFlowOneFragment extends Fragment {
                 ResponseInfo<SealInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<SealInfoData>>() {
                 }.getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                    list.clear();
+                    getApprovalOne();
                     smartRefreshLayout.autoRefresh();
                 }
             }
@@ -164,12 +172,12 @@ public class ApprovalFlowOneFragment extends Fragment {
         }.getType());
         if (systemFuncListInfo != null) {
             for (SealInfoData.SealApproveFlowListBean bean : systemFuncListInfo) {
-                if (bean.getApproveLevel() != 0) {
+                if (bean.getApproveType() == 0) {
                     list.add(new SealInfoData.SealApproveFlowListBean(bean.getApproveUserName(), bean.getOrgStructureName(), bean.getApproveLevel(),bean.getId()));
+                    no_record_ll.setVisibility(View.GONE);
                 }
             }
             flowOneAdapter.notifyDataSetChanged();
-            no_record_ll.setVisibility(View.GONE);
         }
     }
 

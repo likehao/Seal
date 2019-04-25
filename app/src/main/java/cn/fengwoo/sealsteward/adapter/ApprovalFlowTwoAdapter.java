@@ -86,7 +86,14 @@ public class ApprovalFlowTwoAdapter extends BaseAdapter {
                                 .getType());
                         if (responseInfo.getCode() == 0){
                             if (responseInfo.getData()){
-
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        list.remove(position);
+                                        notifyDataSetChanged();
+                                        Log.e("TAG","删除审批流成功成功!!!!!!!!!!");
+                                    }
+                                });
                             }
                         }
                     }

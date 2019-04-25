@@ -24,7 +24,7 @@
         <RelativeLayout
             android:id="@+id/rl_pic"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:background="@color/white">
 
             <TextView
@@ -38,7 +38,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/sealPrint_cir"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"

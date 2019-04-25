@@ -82,12 +82,12 @@ public class ApprovalFlowTwoFragment extends Fragment {
         }.getType());
         if (systemFuncListInfo != null) {
             for (SealInfoData.SealApproveFlowListBean bean : systemFuncListInfo) {
-                if (bean.getApproveLevel() == 0) {
-                    list.add(new SealInfoData.SealApproveFlowListBean(bean.getApproveUserName(), bean.getOrgStructureName(),bean.getId()));
+                if (bean.getApproveType() == 1) {
+                    list.add(new SealInfoData.SealApproveFlowListBean(bean.getApproveUserName(), bean.getOrgStructureName(), bean.getId()));
+                    no_record_ll.setVisibility(View.GONE);
                 }
             }
             flowTwoAdapter.notifyDataSetChanged();
-            no_record_ll.setVisibility(View.GONE);
         }
     }
 

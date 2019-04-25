@@ -180,7 +180,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 //        rlChooseDepartment.setClickable(false);
 //        rlSetLimit.setClickable(false);
         sbLimit.setEnabled(false);
-        rl_pwd_user.setEnabled(false);
+//        rl_pwd_user.setEnabled(false);
         sbTransDepartment.setEnabled(false);
         rlPic.setEnabled(false);
     }

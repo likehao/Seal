@@ -12,15 +12,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -29,7 +26,6 @@ import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.utils.Utils;
 import cn.qqtheme.framework.picker.SinglePicker;
 import cn.qqtheme.framework.widget.WheelView;
 import okhttp3.Call;
@@ -58,6 +54,7 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.submit_approval_bt)
     Button submit;
     String userId;
+    private static final int RESULTCODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +199,7 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
                 ResponseInfo<SealInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<SealInfoData>>() {
                 }.getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                   // setResult(RESULTCODE);
                     finish();
                 }
             }
