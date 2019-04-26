@@ -48,6 +48,7 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -150,7 +151,7 @@ public class UserOrganizationalFragment extends Fragment {
 //        strings.add("切换");
         strings.add("删除");
         strings.add("查看详情");
-        strings.add("移动人员");
+        strings.add("移动到");
 
         final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(getActivity(), strings);
         optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
@@ -158,63 +159,72 @@ public class UserOrganizationalFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.log("position"+position);
                 if (position == 0) {
-                    String uID = CommonUtil.getUserData(getActivity()).getId();
-                    // 判断自己在判断权限之前
-                    if (uID.equals(uid)) {
-                        Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    // 判断权限
-                    if (!Utils.hasThePermission(getActivity(), Constants.permission16)) {
-                        return;
-                    }
+                    optionBottomDialog.dismiss();
+                    CommonDialog commonDialog = new CommonDialog(getActivity(),"确定删除该用户？","删除后该用户将被移除此公司,请谨慎操作!","删除");
+                    commonDialog.showDialog();
+                    commonDialog.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String uID = CommonUtil.getUserData(getActivity()).getId();
+                            // 判断自己在判断权限之前
+                            if (uID.equals(uid)) {
 
-                  // delete
-
-                    if (uID.equals(uid)) {
-                        Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
-                    }else {
-                        // delete user
-                        Utils.log("delete user");
-                        HashMap<String, String> hashMap = new HashMap<>();
-                        hashMap.put("userId", uid);
-                        HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETE_USER, 4, hashMap, null, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                Utils.log(e.toString());
+                                Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // 判断权限
+                            if (!Utils.hasThePermission(getActivity(), Constants.permission16)) {
+                                return;
                             }
 
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String result = response.body().string();
-                                Utils.log(result);
-                                getActivity().runOnUiThread(new Runnable() {
+                            // delete
+
+                            if (uID.equals(uid)) {
+                                Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
+                            }else {
+                                // delete user
+                                Utils.log("delete user");
+                                HashMap<String, String> hashMap = new HashMap<>();
+                                hashMap.put("userId", uid);
+                                HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETE_USER, 4, hashMap, null, new Callback() {
                                     @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                                    public void onFailure(Call call, IOException e) {
+                                        Utils.log(e.toString());
                                     }
-                                });
 
-                                // init
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        String result = response.body().string();
+                                        Utils.log(result);
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
 
-                                data .clear();
+                                        // init
 
-                                mLinkedList.clear();
+                                        data .clear();
 
-                                if(null != getActivity()){
-                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
+                                        mLinkedList.clear();
+
+                                        if(null != getActivity()){
+                                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
 //                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
 
-                                            optionBottomDialog.dismiss();
-                                            getDate();
+                                                    optionBottomDialog.dismiss();
+                                                    getDate();
+                                                }
+                                            });
                                         }
-                                    });
-                                }
+                                    }
+                                });
                             }
-                        });
-                    }
+                        }
+                    });
 
                 } else if (position == 1) {
 //                    loadingView.show();

@@ -1,6 +1,5 @@
 package cn.fengwoo.sealsteward.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,16 +17,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
 import com.mcxtzhang.commonadapter.lvgv.ViewHolder;
-import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -180,5 +178,6 @@ public class ApprovalFlowOneFragment extends Fragment {
             flowOneAdapter.notifyDataSetChanged();
         }
     }
+
 
 }

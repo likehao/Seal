@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,10 +129,18 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
             case R.id.go_approval_tv:
                 intent = new Intent(UseSealApplyActivity.this, ApprovalConfirmActivity.class);
                 intent.putExtra("applyId",applyId);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,99);
                 break;
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 99){
+            setResult(88);
+            finish();
         }
     }
 }

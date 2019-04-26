@@ -137,7 +137,7 @@ public class Utils {
         boolean connectState = false;
         if (((MyApp) getApplication()).getConnectionObservable() == null) {
             Utils.log("没有连接ble设备");
-            Utils.showToast(context, "没有连接印章");
+            Utils.showToast(context, "请连接印章");
             connectState = false;
         } else {
             connectState = true;
@@ -152,7 +152,7 @@ public class Utils {
             hasTheOne = true;
         } else {
             hasTheOne = false;
-            showToast(context, "没有权限！");
+     //       showToast(context, "没有权限！");
         }
         return hasTheOne;
     }

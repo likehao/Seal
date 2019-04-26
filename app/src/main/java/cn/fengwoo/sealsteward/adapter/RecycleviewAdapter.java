@@ -25,7 +25,6 @@ public class RecycleviewAdapter extends RecyclerView.Adapter<RecycleviewAdapter.
     private OnClickBigPicListener onClickBigPicListener;
     private boolean isRead = false;
 
-
     public void setData(List<Uri> list, Context context, List<String> strList, boolean isRead) {
         this.uriList = list;
         this.context = context;

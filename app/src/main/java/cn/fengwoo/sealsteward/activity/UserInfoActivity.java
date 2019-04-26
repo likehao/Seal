@@ -156,7 +156,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                                 @Override
                                                 public void run() {
                                                     String sealPrintPath = "file://" + HttpDownloader.path + fileName;
-                                                    Picasso.with(UserInfoActivity.this).load(sealPrintPath).resize(600, 200).into(user_info_headImg_iv);
+                                                    Picasso.with(UserInfoActivity.this).load(sealPrintPath).into(user_info_headImg_iv);
                                                 }
                                             });
                                         }
@@ -164,7 +164,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                                 });
                             } else {
                                 String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
-                                Picasso.with(UserInfoActivity.this).load(sealPrintPath).resize(600, 200).into(user_info_headImg_iv);
+                                Picasso.with(UserInfoActivity.this).load(sealPrintPath).into(user_info_headImg_iv);
                             }
 
                             realNameTv.setText(responseInfo.getData().getRealName());

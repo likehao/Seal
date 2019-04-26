@@ -20,6 +20,7 @@
     <string name="person_Authentication">未个人认证</string>
     <string name="company_Authentication">未企业认证</string>
     <string name="company_name">深圳白鹤区块链科技有限公司版权所有</string>
+    <string name="pay_company">深圳白鹤区块链科技有限公司</string>
     <string name="job">研发中心</string>
     <string name="my_data">我的资料</string>
     <string name="my_company">我的公司</string>
@@ -281,7 +282,7 @@
     <string name="seal_add">—— 盖章统计 ——</string>
     <string name="connected_seal">—— 已连印章 ——</string>
     <string name="not_location">暂无定位信息</string>
-    <string name="not_select_seal">暂无连接印章</string>
+    <string name="not_select_seal">暂未连接印章</string>
     <string name="not">暂无</string>
     <string name="not_electric">无电量信息</string>
     <string name="use">已用:</string>

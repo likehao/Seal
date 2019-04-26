@@ -181,6 +181,10 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
         });
     }
 
+    /**
+     * 更新印章信息
+     * @param sealId
+     */
     private void uploadSealInfo(String sealId) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("sealIdOrMac", sealId);

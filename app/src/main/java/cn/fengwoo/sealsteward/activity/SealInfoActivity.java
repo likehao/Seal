@@ -257,7 +257,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             tvCompany.setText(CommonUtil.getUserData(SealInfoActivity.this).getCompanyName());
                             tvDepartment.setText(departmentName);
                             etUseRange.setText(responseInfo.getData().getScope());
-                            tvTime.setText(Utils.getDateToString(responseInfo.getData().getServiceTime(), "yyyy/MM/dd"));
+                            tvTime.setText(Utils.getDateToString(responseInfo.getData().getServiceTime(), "yyyy-MM-dd HH:mm:ss"));
 
                             // 两个开关状态
                             sbLimit.setChecked(responseInfo.getData().isEnableEnclosure());

@@ -35,7 +35,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 选择人员
  */
 public class SelectPeopleActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = SelectPeopleActivity.class.getSimpleName();

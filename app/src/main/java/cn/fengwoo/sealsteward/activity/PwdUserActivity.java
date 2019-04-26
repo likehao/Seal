@@ -168,14 +168,8 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                                 }
                             }
                         });
-                        Looper.prepare();
-                        showToast("获取列表成功");
-                        Looper.loop();
                     } else {
                         loadingView.cancel();
-                        Looper.prepare();
-                        showToast(responseInfo.getMessage());
-                        Looper.loop();
                     }
                 } else {
                     loadingView.cancel();

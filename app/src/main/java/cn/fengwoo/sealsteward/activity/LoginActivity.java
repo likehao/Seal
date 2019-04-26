@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -143,6 +145,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
                     initPopuwindow(); //显示历史列表
+                    hintKbTwo();
                     if (historyList.size() == 0) {
                         password_rl.setVisibility(View.VISIBLE);
                     } else {
@@ -156,6 +159,17 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         });
     }
 
+    /**
+     *  关闭软键盘
+     */
+    private void hintKbTwo() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive() && getCurrentFocus() != null) {
+            if (getCurrentFocus().getWindowToken() != null) {
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
 
     /**
      * 登录列表数据

@@ -47,10 +47,13 @@ import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -389,6 +392,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     intent.putExtra("stampPdf",  responseInfo.getData().getStampPdf());
                     intent.putExtra("stampRecordPdf",  responseInfo.getData().getStampRecordPdf());
                     intent.putExtra("status",  responseInfo.getData().getApproveStatus());
+                    intent.putExtra("photoList", (Serializable) responseInfo.getData().getStampRecordImgList());
                     Utils.log("status:" + responseInfo.getData().getApproveStatus());
                     startActivity(intent);
                 } else {
@@ -461,6 +465,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
         //开始轮播
         banner.startAutoPlay();
 //        NetUtil.registerNetConnChangedReceiver(getActivity());
@@ -471,13 +476,32 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     @Override
     public void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
         //结束轮播
         banner.stopAutoPlay();
 //        NetUtil.unregisterNetConnChangedReceiver(getActivity());
 //        NetUtil.removeNetConnChangedListener(netConnChangedListener);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
+    /**
+     * 处理注册事件
+     * @param messageEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        if (s.equals("待我审批消息")){
+            getMessage();
+        }
+    }
     private void getSystemTime() {
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.SYSTEM_TIME, 1, null, null, new Callback() {
             @Override
@@ -1331,4 +1355,5 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             }
         });
     }
+
 }

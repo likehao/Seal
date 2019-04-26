@@ -18,11 +18,23 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/seal_iv"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/ic_launcher" />
+            <RelativeLayout
+                android:layout_width="34dp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/seal_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/main_msg_tv"
+                    style="@style/message_num" />
+
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/seal_tv"

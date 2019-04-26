@@ -45,7 +45,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 我的申请
+ * 申请记录
  */
 public class MyApplyActivity extends BaseActivity implements View.OnClickListener{
 
@@ -77,7 +77,7 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-        title_tv.setText("我的申请");
+        title_tv.setText("申请记录");
         set_back_ll.setVisibility(View.VISIBLE);
         add_ll.setVisibility(View.VISIBLE);
         titleList = new ArrayList<String>();

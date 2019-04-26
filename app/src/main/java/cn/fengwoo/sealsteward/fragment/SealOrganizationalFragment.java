@@ -40,6 +40,7 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
 import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -153,64 +154,73 @@ public class SealOrganizationalFragment extends Fragment {
 //        strings.add("切换");
         strings.add("删除");
         strings.add("查看详情");
-        strings.add("移动印章");
+        strings.add("移动到");
         final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(getActivity(), strings);
         optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Utils.log("position"+position);
                 if (position == 0) {
-                    if (!Utils.hasThePermission(getActivity(), Constants.permission3)) {
-                        return;
-                    }
-                    if (EasySP.init(getActivity()).getString("currentSealId").equals(idString)) {
-                        Toast.makeText(getActivity(),"该印章正在连接使用，不能删除。",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // delete
-                    String uID = CommonUtil.getUserData(getActivity()).getId();
-                        // delete user
-                        Utils.log("delete seal");
-                        HashMap<String, String> hashMap = new HashMap<>();
-                        hashMap.put("sealId", idString);
-                        HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETE_SEAL, 4, hashMap, null, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                Utils.log(e.toString());
+                    optionBottomDialog.dismiss();
+                    CommonDialog commonDialog = new CommonDialog(getActivity(),"确定删除该印章？","删除后该印章将会解除绑定,请谨慎操作!","删除");
+                    commonDialog.showDialog();
+                    commonDialog.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!Utils.hasThePermission(getActivity(), Constants.permission3)) {
+                                return;
+                            }
+                            if (EasySP.init(getActivity()).getString("currentSealId").equals(idString)) {
+                                Toast.makeText(getActivity(),"该印章正在连接使用，不能删除。",Toast.LENGTH_SHORT).show();
+                                return;
                             }
 
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String result = response.body().string();
-                                Utils.log(result);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                            // delete
+                            String uID = CommonUtil.getUserData(getActivity()).getId();
+                            // delete user
+                            Utils.log("delete seal");
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("sealId", idString);
+                            HttpUtil.sendDataAsync(getActivity(), HttpUrl.DELETE_SEAL, 4, hashMap, null, new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    Utils.log(e.toString());
+                                }
 
-                                    }
-                                });
-
-                                // init
-                                data .clear();
-
-                                mLinkedList.clear();
-
-                                if(null != getActivity()){
-                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    String result = response.body().string();
+                                    Utils.log(result);
+                                    getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-//                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
+                                            Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
 
-                                            optionBottomDialog.dismiss();
-                                            getDate();
                                         }
                                     });
-                                }
-                            }
-                        });
 
+                                    // init
+                                    data .clear();
+
+                                    mLinkedList.clear();
+
+                                    if(null != getActivity()){
+                                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+//                                        mLinkedList.addAll(NodeHelper.sortNodes(data));
+
+                                                optionBottomDialog.dismiss();
+                                                getDate();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
+
+                        }
+                    });
 
                 } else if (position == 1) {
 //                    loadingView.show();

@@ -54,6 +54,8 @@ public class RechargeRecordActivity extends BaseActivity {
     ListView recharge_record_lv;
     @BindView(R.id.recharge_smt)
     SmartRefreshLayout recharge_smt;
+    @BindView(R.id.no_record_ll)
+            LinearLayout no_record_ll;
     RechargeRecordAdapter recordAdapter;
     List<RechargeRecordData> recordDataList;
     private int i = 1;
@@ -154,15 +156,11 @@ public class RechargeRecordActivity extends BaseActivity {
                         @Override
                         public void run() {
                             recordAdapter.notifyDataSetChanged(); //刷新数据
+                            no_record_ll.setVisibility(View.GONE);
                         }
                     });
 
-                } else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
                 }
-
             }
         });
 

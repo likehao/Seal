@@ -656,7 +656,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     int minPart = sec / 60;
                     int secPart = sec % 60;
                     if (secPart == 0) {
-                        list.add(minPart + "分");
+                        list.add(minPart + "分钟");
                     } else {
                         list.add(minPart + "分" + secPart + "秒");
                     }

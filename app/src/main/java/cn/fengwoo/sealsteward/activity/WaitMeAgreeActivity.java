@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,10 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +36,7 @@ import cn.fengwoo.sealsteward.adapter.WaitApplyAdapter;
 import cn.fengwoo.sealsteward.adapter.WaitMeAgreeAdapter;
 import cn.fengwoo.sealsteward.bean.ApplyListData;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 import cn.fengwoo.sealsteward.entity.WaitMeAgreeData;
@@ -127,8 +133,6 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
 
     /**
      * 获取待我审批记录请求
-     *
-     * @param refreshLayout
      */
     private void getWaitMeAgreeData() {
         ApplyListData applyListData = new ApplyListData();
@@ -150,24 +154,27 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                 responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<GetApplyListBean>>>() {
                 }
                         .getType());
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    for (GetApplyListBean app : responseInfo.getData()) {
-                        //时间戳转为时间
-                        String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
-                        waitMeAgreeDataList.add(new WaitMeAgreeData(app.getApplyCause(), app.getApplyUserName()
-                                , app.getOrgStructureName(), applyTime, app.getSealName(), app.getApplyCount(), app.getExpireTime(), app.getId(), app.getApplyPdf()));
-                    }
-                    //请求数据
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                            for (GetApplyListBean app : responseInfo.getData()) {
+                                //时间戳转为时间
+                                String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
+                                waitMeAgreeDataList.add(new WaitMeAgreeData(app.getApplyCause(), app.getApplyUserName()
+                                        , app.getOrgStructureName(), applyTime, app.getSealName(), app.getApplyCount(), app.getExpireTime(), app.getId(), app.getApplyPdf()));
+                            }
+                            //请求数据
                             waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
                             no_record_ll.setVisibility(View.GONE);
 
+                        } else {
+                            waitMeAgreeDataList.clear();
+                            waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
+                            no_record_ll.setVisibility(View.VISIBLE);
                         }
-                    });
-
-                }
+                    }
+                });
 
             }
         });
@@ -186,7 +193,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         intent.putExtra("cause", waitMeAgreeDataList.get(position).getCause());
         intent.putExtra("applyId", waitMeAgreeDataList.get(position).getApplyId());
         intent.putExtra("pdf", waitMeAgreeDataList.get(position).getPdf());
-        startActivity(intent);
+        startActivityForResult(intent, 88);
     }
 
     /**
@@ -217,5 +224,13 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 88) {
+            wait_me_agree_apply_smartRL.autoRefresh();
+        }
     }
 }

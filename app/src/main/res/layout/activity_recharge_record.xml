@@ -10,20 +10,27 @@
 
     <include layout="@layout/head"/>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/recharge_smt"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <include layout="@layout/no_record"/>
 
-        <ListView
-            android:id="@+id/recharge_record_lv"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/recharge_smt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"/>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+            android:layout_height="match_parent">
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <ListView
+                android:id="@+id/recharge_record_lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </FrameLayout>
 
 </LinearLayout>

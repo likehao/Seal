@@ -203,14 +203,15 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         if (null == allFileName) {
             allFileName = new ArrayList<>(); // 所有图片的名字
         }
-        if (code == 1) {
+
+        title_tv.setText("上传附件");
+      /*  if (code == 1) {
             // 上传记录
-            title_tv.setText("上传照片");
         } else {
             // 上传印模
             title_tv.setText("用印申请");
         }
-
+*/
         // 显示图片
         if (null != allFileName && allFileName.size() > 0) {
             // 当前显示页面

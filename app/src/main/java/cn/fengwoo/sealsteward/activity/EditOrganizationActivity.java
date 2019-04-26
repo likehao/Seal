@@ -129,7 +129,7 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("编辑");
+        title_tv.setText("组织管理");
         set_back_ll.setOnClickListener(this);
     }
 

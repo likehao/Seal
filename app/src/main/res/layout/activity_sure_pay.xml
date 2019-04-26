@@ -54,7 +54,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/company_name"
+            android:text="@string/pay_company"
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_marginStart="20dp"/>

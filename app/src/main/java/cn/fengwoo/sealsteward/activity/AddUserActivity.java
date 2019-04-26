@@ -131,7 +131,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             case R.id.set_back_ll:
                 finish();
                 break;
-            case R.id.mail_list_rl:
+            case R.id.mail_list_rl:      //被隐藏了
                 intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(intent, 0);
                 break;
@@ -239,7 +239,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
             tv_department.setText(departmentName);
         }
-      /*  switch (requestCode) {
+/*        switch (requestCode) {
             case 0:
                 if (resultCode == RESULT_OK) {
                     Uri contactData = data.getData();
@@ -252,30 +252,36 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
         }*/
-        if (resultCode == Activity.RESULT_OK) {
-            //获取手机通讯录联系人
-            ContentResolver cr = AddUserActivity.this.getContentResolver();
-            Uri contactData = data.getData();
-            //获取所有联系人
-            Cursor cursor = cr.query(contactData, null, null, null, null);
-            if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
-                    //获取用户名和电话
-                    String userName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                    String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId,
-                            null,
-                            null);
-                    while (phone.moveToNext()) {
-                        String phoneNumber = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                //获取手机通讯录联系人
+                ContentResolver cr = AddUserActivity.this.getContentResolver();
+                assert data != null;
+                Uri contactData = data.getData();
+                //获取所有联系人
+                assert contactData != null;
+                Cursor cursor = cr.query(contactData, null, null, null, null);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        while (cursor.moveToNext()) {
+                            //获取用户名和电话
+                            String userName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                            String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                            Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId,
+                                    null,
+                                    null);
+                            while (phone.moveToNext()) {
+                                String phoneNumber = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 //                        userName_et.setText(userName);
-                        phone_number_et.setText(phoneNumber);
+                                phone_number_et.setText(phoneNumber);
+                            }
+                            phone.close();
+                        }
+                        cursor.close();
                     }
-                    phone.close();
                 }
-                cursor.close();
             }
         }
     }

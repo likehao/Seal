@@ -100,7 +100,8 @@ public class SelectSealTypeOneActivity extends BaseActivity implements View.OnCl
         //查询盖章记录跳转过来的时候隐藏掉title
         int code = intent.getIntExtra("code", 0);
         if (code != 0 && code == 1) {
-            title_tv.setVisibility(View.GONE);
+            title_tv.setText("请选择印章");
+       //     title_tv.setVisibility(View.GONE);
         }
     }
 

@@ -108,6 +108,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private Observable<RxBleConnection> connectionObservable;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -398,7 +399,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         if (responseInfo!=null&&!hasTheSeal(thisMac)) {
 //            showToast("你没有权限操作这个印章。");
-            showDialog();
+            showDialog(thisMac);
             cancelLoadingView();
             // 停止扫描
             if (scanSubscription != null) {
@@ -505,7 +506,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     /**
      * 确认是否删除
      */
-    private void showDialog() {
+    private void showDialog(String macAddress) {
         final CustomDialog commonDialog = new CustomDialog(this, "提示", "您连接的印章不属于您所在的公司", "切换公司");
         commonDialog.cancel.setText("添加印章");
         commonDialog.showDialog();
@@ -525,8 +526,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 if (!Utils.hasThePermission(NearbyDeviceActivity.this, Constants.permission1)) {
                     return;
                 }
-                intent = new Intent(NearbyDeviceActivity.this, NearbyDeviceActivity.class);
+                intent = new Intent(NearbyDeviceActivity.this, AddSealActivity.class);
                 intent.putExtra("isAddNewSeal", true);
+                intent.putExtra("mac", macAddress);
                 startActivity(intent);
                 finish();
             }

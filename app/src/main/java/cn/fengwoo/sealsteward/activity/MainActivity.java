@@ -27,6 +27,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageData;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
@@ -67,6 +70,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     RelativeLayout msg_ll;
     @BindView(R.id.msg_iv)
     ImageView msg_iv;
+    @BindView(R.id.main_msg_tv)
+    TextView main_msg_tv;    //工作台消息数
     private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
     private TextView[] textViews = new TextView[5];   //底部导航文字集合
     private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
@@ -184,7 +189,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.home_page:
                 title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
                 record_more_iv.setVisibility(View.GONE);
-            //    add_ll.setVisibility(View.VISIBLE);
+                //    add_ll.setVisibility(View.VISIBLE);
                 msg_ll.setVisibility(View.VISIBLE);
                 changeView(0);
                 break;
@@ -245,7 +250,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 messagePopuwindow.showPopuwindow(view);
                 break;
             case R.id.msg_rl:
-                intent = new Intent(this,MsgActivity.class);
+                intent = new Intent(this, MsgActivity.class);
                 startActivity(intent);
                 break;
 
@@ -434,24 +439,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         Log.e("ATG", "下线成功!!!!!!!!!!!!!!!");
                     }
                 }
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    for (MessageData messageData : responseInfo.getData()) {
-                        int msgNum = messageData.getUnreadCount();
-                        sum += msgNum;
-                        //显示消息数
-                        int type = messageData.getType();
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (sum == 0){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                            for (MessageData messageData : responseInfo.getData()) {
+
+                                int msgNum = messageData.getUnreadCount();
+                                sum += msgNum;
+                                //显示消息数
+                                int type = messageData.getType();
+                                if (type == 4) { //显示工作台待我审批总消息数
+                                    if (msgNum != 0) {
+                                        main_msg_tv.setVisibility(View.VISIBLE);
+                                        main_msg_tv.setText(msgNum + "");
+                                        EventBus.getDefault().post(new MessageEvent("待我审批消息","待我审批消息"));
+                                    } else {
+                                        main_msg_tv.setVisibility(View.GONE);
+                                    }
+                                }
+
+                            }
+                            //显示右上角消息
+                            if (sum == 0) {
                                 msg_iv.setVisibility(View.GONE);
-                            }else {
+                            } else {
                                 msg_iv.setVisibility(View.VISIBLE);
                                 sum = 0;
                             }
-                        }
-                    });
                   /*  runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -466,11 +481,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             }
                         }
                     });*/
-                    Log.e("TAG", "获取消息成功!!!!!!!!!!!!!!!!");
+                            Log.e("TAG", "获取消息成功!!!!!!!!!!!!!!!!");
 
-                } else {
-                    Log.e("TAG", responseInfo.getMessage());
-                }
+                        } else {
+                            Log.e("TAG", responseInfo.getMessage());
+                        }
+
+                    }
+                });
 
             }
         });

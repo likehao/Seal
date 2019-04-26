@@ -18,6 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.ApplyConfirm;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -166,7 +169,9 @@ public class ApprovalConfirmActivity extends BaseActivity implements View.OnClic
                 if (responseInfo.getCode() == 0){
                     if (responseInfo.getData()){
                         loadingView.cancel();
+                        setResult(99);
                         finish();
+
                     }
                 }else {
                     loadingView.cancel();

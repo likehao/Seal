@@ -15,8 +15,10 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -116,9 +118,11 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 nearTime(1);
                 break;
             case R.id.select_beginTime_rl:
+                selectNearTimeTv.setText("");
                 selectBeginTime(1);
                 break;
             case R.id.select_endTime_rl:
+                selectNearTimeTv.setText("");
                 selectBeginTime(2);
                 break;
             case R.id.select_bt:
@@ -205,6 +209,22 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
             public void onItemPicked(int index, String item) {
                 if (code == 1) {
                     selectNearTimeTv.setText(item);
+                    if (index == 0){
+                        beginTime(-1);
+                        endTime();
+                    }else if (index == 1){
+                        beginTime(-3);
+                        endTime();
+                    }else if (index == 2){
+                        beginTime(-7);
+                        endTime();
+                    }else if (index == 3){
+                        beginTime(-14);
+                        endTime();
+                    }else {
+                        beginTime(-30);
+                        endTime();
+                    }
                 } else {
                     select_sealType_tv.setText(item);
                 }
@@ -212,6 +232,28 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
 
         });
         picker.show();
+    }
+
+    /**
+     * 获取前些天时间
+     */
+    private void beginTime(int day) {
+        Calendar calendar =Calendar. getInstance();
+        calendar.add( Calendar. DATE, day); //向前走一天
+        Date yesterday= calendar.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String biginTime = dateFormat.format(yesterday);
+        selectBeginTimeTv.setText(biginTime);
+    }
+    /**
+     * 获取当前时间
+     */
+    private void endTime(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// HH:mm:ss
+        //获取当前时间
+        Date date = new Date(System.currentTimeMillis());
+        String endTime = simpleDateFormat.format(date);
+        selectEndTimeTv.setText(endTime);
     }
 
     /**
@@ -224,7 +266,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         TimePickerView timePicker = new TimePickerBuilder(SelectSealRecodeActivity.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 if (code == 1) {
                     begin = simpleDateFormat.format(date);  //选择的开始时间
                     if (end != null) {

@@ -161,7 +161,8 @@ public class SelectPwdRecordActivity extends BaseActivity implements View.OnClic
                 }.getType());
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     for (OfflineRecordData app : responseInfo.getData()) {
-                        list.add(new SeeRecordBean(app.getFlowNumber(),app.getSealName(),app.getUserName(),app.getStampTime()));
+                        String stampTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));
+                        list.add(new SeeRecordBean(app.getFlowNumber(),app.getSealName(),app.getUserName(),stampTime));
                     }
                     //请求数据
                     runOnUiThread(new Runnable() {
