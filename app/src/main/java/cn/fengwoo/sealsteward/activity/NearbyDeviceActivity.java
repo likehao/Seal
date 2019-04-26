@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -35,6 +36,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +77,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     CheckBox on_off_checkBox;
     @BindView(R.id.seal_lv)
     ListView seal_lv;
+
+    @BindView(R.id.tv_repair)
+    TextView tv_repair;
+
     private com.suke.widget.SwitchButton switchButton;
     //当前安卓是否支持
     private static final int REQUEST_CODE_BLUETOOTH_ON = 1000;
@@ -173,7 +179,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         });
-
     }
 
     private void getIntentData() {
@@ -199,7 +204,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             // Handle an error here.
                         }
                 );
-
     }
 
     private void initView() {
@@ -212,6 +216,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private void setListener() {
         set_back_ll.setOnClickListener(this);
+        tv_repair.setOnClickListener(this);
         seal_lv.setOnItemClickListener(this);
         b = on_off_checkBox.isChecked();
     }
@@ -272,8 +277,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         String deviceName = scanResult.getBleDevice().getName();
         String deviceMac = scanResult.getBleDevice().getMacAddress();
         //过滤蓝牙
-        if (deviceName != null && (deviceName.equals("BLE-baihe") || deviceName.contains("BHQKL"))) {
-//        if (true) {
+//        if (deviceName != null && (deviceName.equals("BLE-baihe") || deviceName.contains("BHQKL"))) {
+        if (true) {
             String itemName = "";
             if (!isAddNewSeal) {
                 // 如果不是增加新设备的情况，如果seal list里存在这个seal，替换掉名字
@@ -368,6 +373,12 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                     mBluetoothAdapter.enable();
                 }
                 break;
+            case R.id.tv_repair:
+                if (scanSubscription != null) {
+                    scanSubscription.dispose();
+                }
+                startActivityForResult(new Intent(this, RepairActivity.class),Constants.TO_NEARBY_DEVICE);
+                break;
         }
     }
 
@@ -383,6 +394,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         String thisMac = scanResultsList.get(position).getBleDevice().getMacAddress();
 
         EasySP.init(this).getString("mac", thisMac);
+//        EasySP.init(this).getString("mac", "00:15:84:00:01:67");
 
         if (responseInfo!=null&&!hasTheSeal(thisMac)) {
 //            showToast("你没有权限操作这个印章。");
@@ -425,6 +437,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 EasySP.init(this).putString("dataProtocolVersion", "2");
                             }
+
 
                             // save mac & seal id
                             EasySP.init(this).putString("mac", scanResultsList.get(position).getBleDevice().getMacAddress());
@@ -480,6 +493,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private Observable<RxBleConnection> prepareConnectionObservable(RxBleDevice bleDevice) {
         return bleDevice
                 .establishConnection(true)
+//                .retry(4)
+//                .delay(1, TimeUnit.SECONDS)
                 .takeUntil(disconnectTriggerSubject)
                 .compose(ReplayingShare.instance());
     }
@@ -518,6 +533,15 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.TO_NEARBY_DEVICE && resultCode == Constants.TO_NEARBY_DEVICE) {
+            String bleName = data.getStringExtra("bleName");
+            Intent intent = new Intent();
+            intent.putExtra("bleName", bleName);
+            setResult(Constants.TO_NEARBY_DEVICE, intent);
+            finish();
+        }
+    }
 }

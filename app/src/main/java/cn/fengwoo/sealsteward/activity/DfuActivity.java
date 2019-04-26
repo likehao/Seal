@@ -56,6 +56,8 @@ public class DfuActivity extends BaseActivity {
     private String dfu_file_name;
     private String dfu_content;
 
+    private boolean isSecDfu = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +66,7 @@ public class DfuActivity extends BaseActivity {
         initData();
         initView();
 
-        downloadZip();
+//        downloadZip();
         Utils.log(dfu_macAddress);
     }
 
@@ -128,7 +130,7 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onEnablingDfuMode(String deviceAddress) {
-            Logger.d("TEST" + "onEnablingDfuMode: " + deviceAddress);
+            Logger.d("TEST" + "onEnablingDfuMode: isSecDfu" + deviceAddress);
             dfu_macAddress = "FF:FF:FF:FF:FF:FF";
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -146,6 +148,7 @@ public class DfuActivity extends BaseActivity {
 //            tv_show.setText("升级进度：" + percent + "%");
             Utils.log(percent + "");
             pd.setProgress(percent);
+            isSecDfu = true;
         }
 
         @Override
@@ -174,16 +177,21 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onDfuAborted(String deviceAddress) {
-            Logger.d("TEST" + "onDfuAborted: " + deviceAddress);
-            showToast("升级失败，请重试。");
-            pd.dismiss();
+            Logger.d("TEST" + "onDfuAborted: " + deviceAddress + "isSecDfu" + isSecDfu);
+            if (isSecDfu) {
+                showToast("升级失败，请重试。");
+                pd.dismiss();
+            }
+
         }
 
         @Override
         public void onError(String deviceAddress, int error, int errorType, String message) {
-            Logger.d("TEST" + "onError: " + deviceAddress + ",message:" + message);
-            showToast("升级失败，请重试。");
-            pd.dismiss();
+            Logger.d("TEST" + "onError: " + deviceAddress + ",message:" + message + "isSecDfu" + isSecDfu);
+            if (isSecDfu) {
+                showToast("升级失败，请重试。");
+                pd.dismiss();
+            }
         }
     };
 
@@ -240,10 +248,10 @@ public class DfuActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.test:
-                path = "file://" + HttpDownloader.path + "a.zip";
-                uri = Uri.parse(path);
-                dfu(uri);
-                showProgress();
+//                path = "file://" + HttpDownloader.path + "a.zip";
+//                uri = Uri.parse(path);
+//                dfu(uri);
+//                showProgress();
                 break;
         }
     }

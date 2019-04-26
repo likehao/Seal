@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    tools:context=".activity.RepairActivity"
+    android:background="@color/background">
+
+    <include layout="@layout/head" />
+
+<EditText
+    android:id="@+id/et_filter"
+    android:background="@drawable/suggestion"
+    android:layout_margin="23dp"
+    android:hint="请输入印章名称"
+    android:paddingLeft="33dp"
+    android:textSize="18sp"
+    android:text=""
+    android:layout_width="match_parent"
+    android:layout_height="35dp" />
+
+    <TextView
+        android:layout_marginLeft="23dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请打开要连接的印章电源开关"/>
+
+
+    <ListView
+        android:id="@+id/seal_lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"/>
+
+</LinearLayout>

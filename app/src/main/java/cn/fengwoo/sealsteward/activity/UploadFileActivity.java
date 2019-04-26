@@ -582,6 +582,12 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     Log.e("TAG", "上传图片成功!!!!!!!!!!!!!!!!!!!!");
                     Utils.log("上传图片成功");
 
+                    totalPage = allFileName.size() / 9;
+                    currentPage = totalPage;
+
+                    // 显示当前页面
+                    page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+
                     showCurrentPagePic();
 
 //                    // 弹出相机

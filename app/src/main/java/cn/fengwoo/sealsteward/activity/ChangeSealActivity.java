@@ -244,7 +244,12 @@ public class ChangeSealActivity extends BaseActivity implements View.OnClickList
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         seal_lv.setAdapter(arrayAdapter);
 
-
+        // 断开蓝牙
+        if (((MyApp) getApplication()).getConnectDisposable() != null) {
+            ((MyApp) getApplication()).getConnectDisposable().dispose();
+        }
+        ((MyApp) getApplication()).removeAllDisposable();
+        ((MyApp) getApplication()).setConnectionObservable(null);
     }
 
     /**
@@ -272,7 +277,7 @@ public class ChangeSealActivity extends BaseActivity implements View.OnClickList
         String deviceName = scanResult.getBleDevice().getName();
         String deviceMac = scanResult.getBleDevice().getMacAddress();
         //过滤蓝牙
-        if (deviceName != null && deviceName.contains("BHQKL")){
+        if (deviceName != null && deviceName.contains("BHQKL")) {
 //        if (true) {
             String itemName = "";
             if (!isAddNewSeal) {
@@ -555,7 +560,7 @@ public class ChangeSealActivity extends BaseActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 Intent intent = new Intent();
-                                intent.setClass(ChangeSealActivity.this,SelectReplaceSealActivity.class);
+                                intent.setClass(ChangeSealActivity.this, SelectReplaceSealActivity.class);
                                 intent.putExtra("theNewMac", macString);
                                 startActivity(intent);
 

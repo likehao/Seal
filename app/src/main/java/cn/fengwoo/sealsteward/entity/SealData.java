@@ -4,7 +4,7 @@ public class SealData {
     /**
      * id : 4c1f302ba6234a6bb86c2efcf2cd66d9
      * mac : 00:15:84:00:01:67
-     * name : 一23
+     * name : 67
      * sealNo : 1233
      * scope : 455
      * sealPrint : df57e850cf52432d8f22555d1bceabe7.jpg
