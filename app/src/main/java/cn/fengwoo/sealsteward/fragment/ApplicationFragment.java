@@ -144,8 +144,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         view = inflater.inflate(R.layout.application_fragment, container, false);
         ButterKnife.bind(this, view);
         setListener();
-        hideSomeIcon();
         Utils.log("此时可见");
+        hideSomeIcon();
         return view;
     }
 
@@ -228,6 +228,19 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             // 所有子view不可见，显示tip
             ll_tip4.setVisibility(View.VISIBLE);
         }
+
+        // seal 管理
+        if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+            press_time_rl.setVisibility(View.GONE);
+            wait_time_rl.setVisibility(View.GONE);
+            rl_voice.setVisibility(View.GONE);
+            rl_pwd_user.setVisibility(View.GONE);
+            seal_dfu.setVisibility(View.GONE);
+        }else{
+            start_psd_rl.setVisibility(View.GONE);
+            key_psd_rl.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -720,7 +733,6 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                         @Override
                         public void run() {
                             Toast.makeText(getActivity(), "重置成功", Toast.LENGTH_SHORT).show();
-
                         }
                     });
                 }
@@ -741,5 +753,6 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         if (!hidden) {
             Utils.log("此时可见");
         }
+        hideSomeIcon();
     }
 }

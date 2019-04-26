@@ -278,8 +278,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         String deviceName = scanResult.getBleDevice().getName();
         String deviceMac = scanResult.getBleDevice().getMacAddress();
         //过滤蓝牙
-//        if (deviceName != null && (deviceName.equals("BLE-baihe") || deviceName.contains("BHQKL"))) {
-        if (true) {
+        if (deviceName != null && (deviceName.equals("BLE-baihe") || deviceName.contains("BHQKL"))) {
+//        if (true) {
             String itemName = "";
             if (!isAddNewSeal) {
                 // 如果不是增加新设备的情况，如果seal list里存在这个seal，替换掉名字

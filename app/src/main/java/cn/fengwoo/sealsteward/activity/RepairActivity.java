@@ -287,11 +287,10 @@ public class RepairActivity extends BaseActivity {
 
     private Observable<RxBleConnection> prepareConnectionObservable(RxBleDevice bleDevice) {
         return bleDevice
-                .establishConnection(true)
+                .establishConnection(false)
 //                .retry(4)
 //                .delay(1, TimeUnit.SECONDS)
                 .takeUntil(disconnectTriggerSubject)
                 .compose(ReplayingShare.instance());
     }
-
 }
