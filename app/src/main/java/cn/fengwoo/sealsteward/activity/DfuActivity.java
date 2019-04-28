@@ -63,6 +63,9 @@ public class DfuActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dfu);
         ButterKnife.bind(this);
+
+
+
         initData();
         initView();
 
@@ -94,6 +97,7 @@ public class DfuActivity extends BaseActivity {
                 path = "file://" + HttpDownloader.path + dfu_file_name;
                 uri = Uri.parse(path);
                 dfu(uri);
+//                showToast("try");
             }
         });
     }
@@ -136,6 +140,7 @@ public class DfuActivity extends BaseActivity {
                 @Override
                 public void run() {
                     dfu(uri);
+//                    showToast("retry");
                 }
             }, 8000);
         }
@@ -188,6 +193,8 @@ public class DfuActivity extends BaseActivity {
         @Override
         public void onError(String deviceAddress, int error, int errorType, String message) {
             Logger.d("TEST" + "onError: " + deviceAddress + ",message:" + message + "isSecDfu" + isSecDfu);
+//            showToast("TEST" + "onError: " + deviceAddress + ",message:" + message + "isSecDfu" + isSecDfu);
+
             if (isSecDfu) {
                 showToast("升级失败，请重试。");
                 pd.dismiss();

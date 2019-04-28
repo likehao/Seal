@@ -662,7 +662,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             picker.show();
         } else if (event.msgType.equals("ble_time_delay")) {
             List<String> list = new ArrayList<>();
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 2; i <= 10; i++) {
                 int sec = i * 30;
                 // 转为分，秒
                 if (sec > 30) {
@@ -685,7 +685,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
 //        picker.setSubmitTextColor(0xFFFB2C3C);
 //        picker.setCancelTextColor(0xFFFB2C3C);
             picker.setTextSize(15);
-            picker.setSelectedIndex(Integer.parseInt(event.msg) - 1);
+            picker.setSelectedIndex(Integer.parseInt(event.msg) - 2);
             picker.setLineSpaceMultiplier(2);   //设置每项的高度，范围为2-4
             picker.setContentPadding(0, 10);
             picker.setCycleDisable(true);
@@ -694,7 +694,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 @Override
                 public void onItemPicked(int index, String item) {
                     Utils.log(item);
-                    byte[] select_seal_delay = new byte[]{(byte) (index + 1)};
+                    byte[] select_seal_delay = new byte[]{(byte) (index + 2)};
                     ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                             .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SETSEALDELAY, select_seal_delay).getBytes()))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
