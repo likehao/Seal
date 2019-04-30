@@ -152,7 +152,8 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
         String sealId = intent.getStringExtra("sealId");
         SealInfoData.SealApproveFlowListBean listBean = new SealInfoData.SealApproveFlowListBean();
         listBean.setApproveUser(userId);
-        listBean.setApproveType(type.getText().toString().equals("审批人") ? 0 : 1);
+    //    listBean.setApproveType(type.getText().toString().equals("审批人") ? 0 : 1);
+        listBean.setApproveType(0);
         listBean.setApproveLevel(Integer.parseInt(level.getText().toString()));
         listBean.setSealId(sealId);
         HttpUtil.sendDataAsync(this, HttpUrl.ADDAPPROVALFLOW, 2, null, listBean, new Callback() {
@@ -203,7 +204,7 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
                 ResponseInfo<SealInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<SealInfoData>>() {
                 }.getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
-                   // setResult(RESULTCODE);
+                    setResult(RESULTCODE);
                     finish();
                 }
             }

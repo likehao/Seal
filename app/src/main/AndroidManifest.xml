@@ -48,7 +48,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
-    <!--android 9.0上使用前台服务，需要添加权限-->
+    <!-- android 9.0上使用前台服务，需要添加权限 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -214,9 +214,6 @@
         <activity android:name=".activity.ChangeSealActivity" />
         <activity android:name=".activity.SelectReplaceSealActivity" />
         <activity android:name=".activity.RepairActivity" />
-
-
-
         <activity android:name=".activity.DfuActivity" />
         <activity android:name=".activity.NotificationActivity" />
         <activity android:name=".activity.PwdUserActivity" />
@@ -271,7 +268,8 @@
 
         <activity android:name=".activity.SelectPwdRecordActivity" />
         <activity android:name=".activity.ApprovalFlowActivity" />
-        <activity android:name=".activity.AddApprovalFlowActivity"></activity>
+        <activity android:name=".activity.AddApprovalFlowActivity" />
+        <activity android:name=".activity.AddApprovalFlowTypeActivity"></activity>
     </application>
 
 </manifest>

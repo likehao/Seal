@@ -166,6 +166,7 @@
     <string name="mail_list">通讯录</string>
     <string name="wait_approval">待审批</string>
     <string name="approval_people">审批人</string>
+    <string name="copy_people">抄送人</string>
     <string name="approval_type">审批类型</string>
     <string name="approval_level">审批等级</string>
     <string name="approvaling">审批中</string>

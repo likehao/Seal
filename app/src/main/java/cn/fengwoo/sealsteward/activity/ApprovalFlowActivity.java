@@ -77,7 +77,7 @@ public class ApprovalFlowActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.add_ll:
-                Intent intent = new Intent(this,AddApprovalFlowActivity.class);
+                Intent intent = new Intent(this,AddApprovalFlowTypeActivity.class);
                 intent.putExtra("sealId",sealId);
                 startActivity(intent);
                 break;
