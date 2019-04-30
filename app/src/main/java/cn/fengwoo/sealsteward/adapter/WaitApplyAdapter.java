@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
@@ -114,8 +115,7 @@ public class WaitApplyAdapter extends BaseAdapter {
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                        intent = new Intent(context, ApprovalActivity.class);
-//                        context.startActivity(intent);
+                    putValue(position);
                 }
             });
         } else if (code == 5) {  //已审批(审批记录)
@@ -128,7 +128,7 @@ public class WaitApplyAdapter extends BaseAdapter {
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    putValue(position);
                 }
             });
         }
@@ -137,6 +137,20 @@ public class WaitApplyAdapter extends BaseAdapter {
 
     }
 
+    /**
+     * 重提传值
+     * @param position
+     */
+    private void putValue(int position){
+        intent = new Intent(context, ApplyUseSealActivity.class);
+        intent.putExtra("重提","重提");
+        intent.putExtra("sealName",waitApplyData.get(position).getSealName());
+        intent.putExtra("applyCount",waitApplyData.get(position).getApplyCount());
+        intent.putExtra("failTime",waitApplyData.get(position).getFailTime());
+        intent.putExtra("cause",waitApplyData.get(position).getCause());
+        intent.putExtra("sign",waitApplyData.get(position).getAutoGraph());
+        context.startActivity(intent);
+    }
     /**
      * 查看记录关闭单据（已审批,已驳回）
      */

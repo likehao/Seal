@@ -134,7 +134,6 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 nearTime(2);
                 break;
 
-
         }
     }
 

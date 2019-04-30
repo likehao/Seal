@@ -241,7 +241,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                                                 @Override
                                                 public void run() {
                                                     String sealPrintPath = "file://" + HttpDownloader.path + fileName;
-                                                    Picasso.with(SealInfoActivity.this).load(sealPrintPath).resize(600, 200).into(sealPrint_cir);
+                                                    Picasso.with(SealInfoActivity.this).load(sealPrintPath).into(sealPrint_cir);
                                                 }
                                             });
                                         }
@@ -249,7 +249,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                                 });
                             } else {
                                 String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
-                                Picasso.with(SealInfoActivity.this).load(sealPrintPath).resize(600, 200).into(sealPrint_cir);
+                                Picasso.with(SealInfoActivity.this).load(sealPrintPath).into(sealPrint_cir);
                             }
                             etSealName.setText(responseInfo.getData().getName());
                             tvMac.setText(responseInfo.getData().getMac());

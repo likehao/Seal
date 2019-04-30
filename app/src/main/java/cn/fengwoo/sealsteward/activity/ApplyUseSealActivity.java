@@ -74,6 +74,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     ImageView apply_sign_iv;
     @BindView(R.id.please_sign_tv)
     TextView please_sign_tv;
+    String type,sign;
 
     private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
     private final static int UPLOADREQUESTCODE = 10;
@@ -89,6 +90,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
 
         ButterKnife.bind(this);
         initView();
+        initData();
     }
 
     private void initView() {
@@ -100,6 +102,22 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         failTime_rl.setOnClickListener(this);
         apply_sign_rl.setOnClickListener(this);
 
+    }
+
+    private void initData(){
+        intent = getIntent();
+        type = intent.getStringExtra("重提");
+        String sealName = intent.getStringExtra("sealName");
+        int applyCount = intent.getIntExtra("applyCount",0);
+        String failTime = intent.getStringExtra("failTime");
+        String cause = intent.getStringExtra("cause");
+        sign = intent.getStringExtra("sign");
+        if (type != null && type.equals("重提")){
+            sealName_TV.setText(sealName);
+            apply_time_et.setText(applyCount+"");
+            fail_time_tv.setText(failTime);
+            apply_cause_et.setText(cause);
+        }
     }
 
     @Override
@@ -260,8 +278,13 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-
-        String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+        String autoGraph = null;
+        //判断是否是重提还是直接用印申请
+        if (type != null && type.equals("重提")) {
+            autoGraph = sign;
+        }else {
+            autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+        }
         //读取签名
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
         if (bitmap == null) {

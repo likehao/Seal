@@ -27,6 +27,8 @@ public class WaitApplyData implements Serializable {
     private String stampRecordPdf;
     private List<String> stampRecordImgList;
 
+    private String autoGraph;
+
     public List<String> getStampRecordImgList() {
         return stampRecordImgList;
     }
@@ -37,7 +39,7 @@ public class WaitApplyData implements Serializable {
 
 
     public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime, String id, Integer approveStatus, String applyUserName, String orgStructureName
-   , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf,List<String> stampRecordImgList) {
+   , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf,List<String> stampRecordImgList,String autoGraph) {
         this.cause = cause;
         this.sealName = sealName;
         this.failTime = failTime;
@@ -55,6 +57,7 @@ public class WaitApplyData implements Serializable {
         this.stampPdf = stampPdf;
         this.stampRecordPdf = stampRecordPdf;
         this.stampRecordImgList = stampRecordImgList;
+        this.autoGraph = autoGraph;
     }
 
     public String getCause() {
@@ -184,5 +187,14 @@ public class WaitApplyData implements Serializable {
     public void setStampRecordPdf(String stampRecordPdf) {
         this.stampRecordPdf = stampRecordPdf;
     }
+
+    public String getAutoGraph() {
+        return autoGraph;
+    }
+
+    public void setAutoGraph(String autoGraph) {
+        this.autoGraph = autoGraph;
+    }
+
 
 }

@@ -140,7 +140,7 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                                 , expireTime, app.getApplyCount(), applyTime, app.getId(), app.getApproveStatus(),
                                 app.getApplyUserName(), app.getOrgStructureName()
                                 , app.getHeadPortrait(), app.getStampCount(), app.getAvailableCount(), app.getPhotoCount()
-                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList()));
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList(),app.getAutoGraph()));
                     }
                     //请求数据
                     if (null != getActivity()) {

@@ -141,17 +141,18 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
                                 ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
                                 ,app.getApplyUserName(),app.getOrgStructureName()
                                 ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()
-                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList()));
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList(),app.getAutoGraph()));
                     }
                     //请求数据
-                    (getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            waitApplyAdapter.notifyDataSetChanged(); //刷新数据
-                            no_record_ll.setVisibility(View.GONE);
-                        }
-                    });
-
+                    if (getActivity() != null) {
+                        (getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                waitApplyAdapter.notifyDataSetChanged(); //刷新数据
+                                no_record_ll.setVisibility(View.GONE);
+                            }
+                        });
+                    }
                 }
             }
         });
