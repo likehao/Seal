@@ -16,10 +16,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/white"
+        style="@style/pressed_effect"
         android:layout_marginTop="10dp">
 
         <RelativeLayout
-            style="@style/pressed_effect"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white">
@@ -53,10 +53,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        style="@style/pressed_effect"
         android:background="@color/white">
 
         <RelativeLayout
-            style="@style/pressed_effect"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white">
@@ -81,4 +81,5 @@
         </RelativeLayout>
 
     </LinearLayout>
+
 </LinearLayout>

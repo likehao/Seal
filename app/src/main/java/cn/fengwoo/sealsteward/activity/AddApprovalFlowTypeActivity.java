@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class AddApprovalFlowTypeActivity extends BaseActivity implements View.On
     @BindView(R.id.copyPeople_ll)
     LinearLayout copyPeople_ll;
     private Intent intent;
+    private String sealId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class AddApprovalFlowTypeActivity extends BaseActivity implements View.On
         set_back_ll.setOnClickListener(this);
         approvalPeople_ll.setOnClickListener(this);
         copyPeople_ll.setOnClickListener(this);
+        intent = getIntent();
+        sealId = intent.getStringExtra("sealId");
     }
 
     @Override
@@ -67,6 +71,7 @@ public class AddApprovalFlowTypeActivity extends BaseActivity implements View.On
                 break;
             case R.id.approvalPeople_ll:
                 intent = new Intent(this,AddApprovalFlowActivity.class);
+                intent.putExtra("sealId",sealId);
                 startActivity(intent);
                 break;
             case R.id.copyPeople_ll:
@@ -91,7 +96,7 @@ public class AddApprovalFlowTypeActivity extends BaseActivity implements View.On
     }
 
     /**
-     * 添加审批流
+     * 添加抄送人
      */
     private void addSealApproveFlow(String userId) {
         Intent intent = getIntent();

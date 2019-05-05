@@ -127,20 +127,20 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
             showToast("请选择审批人");
             return false;
         }
-        if (TextUtils.isEmpty(type.getText().toString())) {
+     /*   if (TextUtils.isEmpty(type.getText().toString())) {
             showToast("请选择审批类型");
             return false;
-        }
+        }*/
         if (TextUtils.isEmpty(level.getText().toString())) {
             showToast("请输入审批等级");
             return false;
         }
-        if (type.getText().toString().equals("审批人")){
+     //   if (type.getText().toString().equals("审批人")){
             if (level.getText().toString().equals("0")) {
                 showToast("审批等级必须为一级或一级以上");
                 return false;
             }
-        }
+    //    }
         return true;
     }
 
