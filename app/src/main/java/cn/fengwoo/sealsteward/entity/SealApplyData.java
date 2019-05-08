@@ -1,27 +1,29 @@
 package cn.fengwoo.sealsteward.entity;
 
+import java.util.List;
+
 public class SealApplyData {
     /**
-     * id : 5b88b31ea5264a7b977a529ac196892f
-     * applyUser : 181544efac594b14b818a74b73579906
+     * id : 89491b78afd542a39d7506b3706a2f4b
+     * applyUser : 89ce71addc644ac98ba49d0f94788a20
      * applyUserName : null
      * headPortrait : null
      * autoGraph : null
      * orgStructureName : null
-     * sealId : 48e7c3e171ed4bb490f82a0d5ef349ec
+     * sealId : 735faefbc483452788772daade833705
      * sealName : null
-     * applyCause : 独孤九剑好
-     * expireTime : 1553595219000
-     * applyCount : 455
-     * applyTime : 1553505264000
+     * applyCause : ffgg
+     * expireTime : 1557382377000
+     * applyCount : 55
+     * applyTime : 1557209597000
      * approveStatus : 1
-     * availableCount : 455
+     * availableCount : 49
      * stampCount : null
      * photoCount : null
      * applyPdf : null
      * stampPdf : null
      * stampRecordPdf : null
-     * stampRecordImgList : null
+     * stampRecordImgList : ["70823997cc0b42388b6f01f331ca561c.jpg","b525fd70cdb24b7c951e012faa597a4c.jpg","92ef171bff604852b8a46da70457792e.jpg"]
      * lastStampTime : null
      * lastStampAddress : null
      */
@@ -45,9 +47,9 @@ public class SealApplyData {
     private Object applyPdf;
     private Object stampPdf;
     private Object stampRecordPdf;
-    private Object stampRecordImgList;
     private Object lastStampTime;
     private Object lastStampAddress;
+    private List<String> stampRecordImgList;
 
     public String getId() {
         return id;
@@ -201,14 +203,6 @@ public class SealApplyData {
         this.stampRecordPdf = stampRecordPdf;
     }
 
-    public Object getStampRecordImgList() {
-        return stampRecordImgList;
-    }
-
-    public void setStampRecordImgList(Object stampRecordImgList) {
-        this.stampRecordImgList = stampRecordImgList;
-    }
-
     public Object getLastStampTime() {
         return lastStampTime;
     }
@@ -224,4 +218,38 @@ public class SealApplyData {
     public void setLastStampAddress(Object lastStampAddress) {
         this.lastStampAddress = lastStampAddress;
     }
+
+    public List<String> getStampRecordImgList() {
+        return stampRecordImgList;
+    }
+
+    public void setStampRecordImgList(List<String> stampRecordImgList) {
+        this.stampRecordImgList = stampRecordImgList;
+    }
+    /**
+     * id : 5b88b31ea5264a7b977a529ac196892f
+     * applyUser : 181544efac594b14b818a74b73579906
+     * applyUserName : null
+     * headPortrait : null
+     * autoGraph : null
+     * orgStructureName : null
+     * sealId : 48e7c3e171ed4bb490f82a0d5ef349ec
+     * sealName : null
+     * applyCause : 独孤九剑好
+     * expireTime : 1553595219000
+     * applyCount : 455
+     * applyTime : 1553505264000
+     * approveStatus : 1
+     * availableCount : 455
+     * stampCount : null
+     * photoCount : null
+     * applyPdf : null
+     * stampPdf : null
+     * stampRecordPdf : null
+     * stampRecordImgList : null
+     * lastStampTime : null
+     * lastStampAddress : null
+     */
+
+
 }

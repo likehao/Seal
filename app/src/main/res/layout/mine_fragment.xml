@@ -112,6 +112,24 @@
                     </RelativeLayout>
 
                     <View style="@style/line" />
+
+
+                    <RelativeLayout
+                        android:id="@+id/my_QRCode_rl"
+                        style="@style/pressed_effect"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="15dp"
+                            android:text="@string/my_QRCode"
+                            android:textColor="@color/black" />
+
+                    </RelativeLayout>
+
+
                     <!--
                                                    <RelativeLayout
                                                        android:id="@+id/my_user_rl"

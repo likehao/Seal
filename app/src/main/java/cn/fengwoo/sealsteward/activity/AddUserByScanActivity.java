@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -17,13 +18,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
 import com.white.easysp.EasySP;
 
@@ -31,18 +34,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
+import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.AddUserInfo;
+import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
+import cn.fengwoo.sealsteward.utils.Dept;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
@@ -54,7 +66,7 @@ import okhttp3.Response;
 /**
  * 添加用户
  */
-public class AddUserActivity extends BaseActivity implements View.OnClickListener {
+public class AddUserByScanActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
@@ -84,9 +96,28 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     @BindView(R.id.add_user_next_Bt)
     Button add_user_next_Bt;
 
+    @BindView(R.id.ll_bottom)
+    LinearLayout ll_bottom;
+
+    @BindView(R.id.realName_tv)
+    TextView realName_tv;
+
+    @BindView(R.id.headImg_iv)
+    ImageView headImg_iv;
+
+    @BindView(R.id.mobilePhone_tv)
+    TextView mobilePhone_tv;
+
+    @BindView(R.id.email_tv)
+    TextView email_tv;
+
+    @BindView(R.id.address_tv)
+    TextView address_tv;
+
     private String departmentId;
     private String departmentName;
     private LoadingView loadingView;
+    private String uId = "";
 
     private static final String[] COUNTRIES = new String[]{
             "经理", "普通员工"
@@ -95,16 +126,24 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_user);
+        setContentView(R.layout.activity_add_user_by_scan);
 
         ButterKnife.bind(this);
+        getData();
         initView();
 
     }
 
+    private void getData() {
+        String result = getIntent().getStringExtra("result");
+
+        uId = result.split("=")[1];
+        Utils.log("uId:" + uId);
+    }
+
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("添加用户");
+        title_tv.setText("扫描结果");
 //        edit_tv.setVisibility(View.VISIBLE);
 //        edit_tv.setText("扫一扫");
         edit_tv.setOnClickListener(this);
@@ -123,7 +162,128 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 spinner_job.setText("");
             }
         });
+
+        hideOrNot();
+
+        showUserInfo();
     }
+
+    private void hideOrNot() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("loadType", "0");
+        HttpUtil.sendDataAsync(this, HttpUrl.ORGANIZATIONAL_STRUCTURE, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Utils.log(e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log(result);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.contains(uId)) {
+                            // hide
+                            ll_bottom.setVisibility(View.GONE);
+                            add_user_next_Bt.setVisibility(View.GONE);
+                        } else {
+                            ll_bottom.setVisibility(View.VISIBLE);
+                            add_user_next_Bt.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void showUserInfo() {
+//        loadingView.show();
+        //添加用户ID为参数
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("userId", uId);
+        HttpUtil.sendDataAsync(this, HttpUrl.USERINFO, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                loadingView.cancel();
+                Looper.prepare();
+                Toast.makeText(AddUserByScanActivity.this, e + "", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+                Log.e("TAG", "获取个人信息数据失败........");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                loadingView.cancel();
+                String result = response.body().string();
+                Gson gson = new Gson();
+                final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
+                }.getType());
+                try {
+                    JSONObject object = new JSONObject(result);
+                    if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                        Log.e("TAG", "获取个人信息数据成功........");
+                        //更新
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                realName_tv.setText(responseInfo.getData().getRealName());
+                                mobilePhone_tv.setText(responseInfo.getData().getMobilePhone());
+                                //   companyName_tv.setText(responseInfo.getData().getCompanyName());
+//                                companyName_tv.setText(CommonUtil.getUserData(PersonCenterActivity.this).getCompanyName());
+//                                department_tv.setText(responseInfo.getData().getOrgStructureName());
+//                                job_tv.setText(responseInfo.getData().getJob());
+                                String email = responseInfo.getData().getUserEmail();
+                                if (email == null || email.equals("")) {
+                                    email_tv.setText("未设置");
+                                } else {
+                                    email_tv.setText(responseInfo.getData().getUserEmail());
+                                }
+                                String headPortrait = responseInfo.getData().getHeadPortrait();
+                                if (headPortrait != null && !headPortrait.isEmpty()) {
+                                    Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
+                                    if (bitmap == null) {
+                                        HttpDownloader.downloadImage(AddUserByScanActivity.this, 1, headPortrait, new DownloadImageCallback() {
+                                            @Override
+                                            public void onResult(final String fileName) {
+                                                if (fileName != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            String path = "file://" + HttpDownloader.path + fileName;
+                                                            Picasso.with(AddUserByScanActivity.this).load(path).into(headImg_iv);
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        String path = "file://" + HttpDownloader.path + responseInfo.getData().getHeadPortrait();
+                                        Picasso.with(AddUserByScanActivity.this).load(path).into(headImg_iv);
+                                    }
+                                }
+                                address_tv.setText(responseInfo.getData().getAddress());
+                            }
+                        });
+//                        loadingView.cancel();
+                        //      setData(object);
+                    } else {
+//                        loadingView.cancel();
+                        Looper.prepare();
+                        showToast(responseInfo.getMessage());
+                        Looper.loop();
+                        Log.e("TAG", "获取个人信息数据失败........");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -149,7 +309,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 if (permissionJson.contains(Constants.permission17)) {
                     addUser();
                 } else {
-                    add_user_next_Bt.setText("完成");
+//                    add_user_next_Bt.setText("完成");
                 }
 
 //                intent = new Intent(this, SetPowerActivity.class);
@@ -160,14 +320,14 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
 
     private void addUser() {
         loadingView.show();
-        AddUserInfo addUserInfo = new AddUserInfo();
-        addUserInfo.setOrgStructureId(departmentId);
-        addUserInfo.setOrgStructureName(departmentName);
-        addUserInfo.setMobilePhone(phone_number_et.getText().toString().replace(" ", ""));
-        addUserInfo.setJob(et_job.getText().toString());
-        addUserInfo.setCode(code_et.getText().toString());
+        AddUserInfo addUserInfo = new AddUserInfo();//
+        addUserInfo.setOrgStructureId(departmentId);//
+        addUserInfo.setOrgStructureName(departmentName);//
+        addUserInfo.setMobilePhone(mobilePhone_tv.getText().toString().replace(" ", ""));//
+        addUserInfo.setJob(et_job.getText().toString());//
+        addUserInfo.setCode("adduser");
 
-        HttpUtil.sendDataAsync(AddUserActivity.this, HttpUrl.ADD_USER, 2, null, addUserInfo, new Callback() {
+        HttpUtil.sendDataAsync(AddUserByScanActivity.this, HttpUrl.ADD_USER, 2, null, addUserInfo, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -196,11 +356,11 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (Utils.hasThePermission(AddUserActivity.this, Constants.permission17)) {
+                                if (Utils.hasThePermission(AddUserByScanActivity.this, Constants.permission17)) {
                                     Intent intent = new Intent();
                                     intent.putExtra("userId", userId);
-                                    intent.setClass(AddUserActivity.this, SetPowerActivity.class);
-                                    intent.putExtra("last_activity", AddUserActivity.class.getSimpleName());
+                                    intent.setClass(AddUserByScanActivity.this, SetPowerActivity.class);
+                                    intent.putExtra("last_activity", AddUserByScanActivity.class.getSimpleName());
                                     startActivity(intent);
                                     finish();
                                 } else {
@@ -255,7 +415,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 //获取手机通讯录联系人
-                ContentResolver cr = AddUserActivity.this.getContentResolver();
+                ContentResolver cr = AddUserByScanActivity.this.getContentResolver();
                 assert data != null;
                 Uri contactData = data.getData();
                 //获取所有联系人
@@ -380,6 +540,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 break;
         }
     }
+
     /**
      * 验证码倒计时
      */

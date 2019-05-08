@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.io.File;
@@ -25,6 +26,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 
 /**
  * 我的二维码
@@ -46,6 +49,16 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.qrcode_photo_ll)
     LinearLayout qrcode_photo_ll;
 
+    @BindView(R.id.tv_tel)
+    TextView tv_tel;
+    @BindView(R.id.tv_job)
+    TextView tv_job;
+    @BindView(R.id.tv_company)
+    TextView tv_company;
+
+    @BindView(R.id.headImg_cir)
+    ImageView headImg_cir;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +76,23 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
         title_tv.setText("我的二维码");
         set_back_ll.setOnClickListener(this);
         save_photo_tv.setOnClickListener(this);
+
+        tv_company.setText(CommonUtil.getUserData(this).getCompanyName());
+        tv_tel.setText(CommonUtil.getUserData(this).getMobilePhone());
+        tv_job.setText(CommonUtil.getUserData(this).getJob());
+
+        // show pic
+        String  headPortrait = CommonUtil.getUserData(this).getHeadPortrait();
+        String headPortraitPath = "file://" + HttpDownloader.path + headPortrait;
+        Picasso.with(this).load(headPortraitPath).into(headImg_cir);
     }
 
     /**
      * 生成带LOGO二维码图片
      */
     private void makeQRCode() {
-        Bitmap bitmap = CodeUtils.createImage("白鹤印章", 600, 600,
+        String qrString = "userId=" + CommonUtil.getUserData(this).getId();
+        Bitmap bitmap = CodeUtils.createImage(qrString, 600, 600,
                 BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         QRCode_iv.setImageBitmap(bitmap);
     }

@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -67,16 +69,21 @@ import cn.fengwoo.sealsteward.activity.AddSealSecStepActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
+import cn.fengwoo.sealsteward.activity.CameraActivity;
+import cn.fengwoo.sealsteward.activity.CameraAutoActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
+import cn.fengwoo.sealsteward.activity.UploadFileActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
+import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageData;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
 import cn.fengwoo.sealsteward.entity.BannerData;
 import cn.fengwoo.sealsteward.entity.DfuEntity;
+import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.StampUploadRecordData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -90,6 +97,7 @@ import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 //import cn.fengwoo.sealsteward.utils.NetUtil;
+import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -102,6 +110,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import rx.Scheduler;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
@@ -181,6 +192,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private RxTimerUtil rxTimerUtil;
 
     private int stampNumber;
+
+    private List<String> picsList;
+
+    private int uploadPicIndex = 0;
+
+    private List<String> allPic;
+
+    private String causeId = ""; // 事由id
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -382,16 +401,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //                    intent.putExtra("status", status);    //传递状态值弹出不同的popuwindow
                     intent.putExtra("id", EasySP.init(getActivity()).getString("currentApplyId"));
                     intent.putExtra("count", responseInfo.getData().getApplyCount());
-                    intent.putExtra("restCount",  responseInfo.getData().getAvailableCount());
-                    intent.putExtra("photoNum",  responseInfo.getData().getPhotoCount());
-                    intent.putExtra("headPortrait",  responseInfo.getData().getHeadPortrait());
-                    intent.putExtra("sealName",  responseInfo.getData().getSealName());
-                    intent.putExtra("orgStructureName",  responseInfo.getData().getOrgStructureName());
-                    intent.putExtra("sealPerson",  responseInfo.getData().getSealName());
-                    intent.putExtra("applyPdf",  responseInfo.getData().getApplyPdf());
-                    intent.putExtra("stampPdf",  responseInfo.getData().getStampPdf());
-                    intent.putExtra("stampRecordPdf",  responseInfo.getData().getStampRecordPdf());
-                    intent.putExtra("status",  responseInfo.getData().getApproveStatus());
+                    intent.putExtra("restCount", responseInfo.getData().getAvailableCount());
+                    intent.putExtra("photoNum", responseInfo.getData().getPhotoCount());
+                    intent.putExtra("headPortrait", responseInfo.getData().getHeadPortrait());
+                    intent.putExtra("sealName", responseInfo.getData().getSealName());
+                    intent.putExtra("orgStructureName", responseInfo.getData().getOrgStructureName());
+                    intent.putExtra("sealPerson", responseInfo.getData().getSealName());
+                    intent.putExtra("applyPdf", responseInfo.getData().getApplyPdf());
+                    intent.putExtra("stampPdf", responseInfo.getData().getStampPdf());
+                    intent.putExtra("stampRecordPdf", responseInfo.getData().getStampRecordPdf());
+                    intent.putExtra("status", responseInfo.getData().getApproveStatus());
                     intent.putExtra("photoList", (Serializable) responseInfo.getData().getStampRecordImgList());
                     Utils.log("status:" + responseInfo.getData().getApproveStatus());
                     startActivity(intent);
@@ -493,15 +512,17 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     /**
      * 处理注册事件
+     *
      * @param messageEvent
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent) {
         String s = messageEvent.msgType;
-        if (s.equals("待我审批消息")){
+        if (s.equals("待我审批消息")) {
             getMessage();
         }
     }
+
     private void getSystemTime() {
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.SYSTEM_TIME, 1, null, null, new Callback() {
             @Override
@@ -540,7 +561,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 DfuEntity dfuEntity = responseInfo.getData();
                 Utils.log("dfuEntity" + dfuEntity.getVersion());
                 float latestVersion = Float.parseFloat(dfuEntity.getVersion());
-                if(latestVersion>version){
+                if (latestVersion > version) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -560,6 +581,37 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case 678:
+                // 断开蓝牙
+                ((MyApp) getApplication()).removeAllDisposable();
+                ((MyApp) getApplication()).setConnectionObservable(null);
+
+                allPic = new ArrayList<>();
+
+                if (data == null) {
+                    return;
+                }
+
+                allPic = data.getStringArrayListExtra("photoList");
+                Utils.log("strList.size()" + allPic.size());
+
+                // 上传照片
+                // 从array里一个个拿数据出来上传
+                // init index
+                uploadPicIndex = 0;
+
+                // 先上第一张
+                File file = new File(allPic.get(0));
+                compressAndUpload(file);
+
+//                ///???
+//                if (picsList != null) {
+//                    Utils.log("picsList.size()" + picsList.size());
+//                    picsList.addAll(allPic);
+//                    Utils.log("picsList.size()" + picsList.size());
+//                }
+                break;
+
             case Constants.TO_NEARBY_DEVICE:
                 if (resultCode != Constants.TO_NEARBY_DEVICE) {
                     return;
@@ -583,6 +635,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     }
                 }, 1000);
 
+                // 跳转到 启动印章 页面
+                intent = new Intent(getActivity(), ApplyCauseActivity.class);
+                startActivityForResult(intent, Constants.TO_WANT_SEAL);
                 break;
 
 
@@ -608,6 +663,30 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 String expireTime = data.getStringExtra("expireTime");
                 availableCount = data.getStringExtra("availableCount");
                 stampReason = data.getStringExtra("stampReason");
+                causeId = data.getStringExtra("id");
+
+                // get pics list
+                picsList = new ArrayList<>();
+                picsList = data.getStringArrayListExtra("pics");
+                if (picsList != null) {
+                    Utils.log("picsList.size:" + picsList.size());
+                }
+
+                // 获取 拍照 方式
+                int mode = EasySP.init(getActivity()).getInt("take_pic_mode");
+                Utils.log("int mode:" + mode);
+
+                if (mode == 1) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            intent.setClass(getActivity(), CameraAutoActivity.class);
+                            startActivityForResult(intent, 678);
+                        }
+                    }, 1000);
+                } else {
+                }
+
                 tv_stamp_reason.setText(stampReason);
                 tv_expired_time.setText(DateUtils.getDateString(Long.parseLong(expireTime)));
 
@@ -854,7 +933,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     Utils.log("握手成功");
                                     // 得到当前版本
                                     float firmwareVersion;
-                                    firmwareVersion = (float) bytes[4] +((float)bytes[5]/100);
+                                    firmwareVersion = (float) bytes[4] + ((float) bytes[5] / 100);
                                     Utils.log("firmwareVersion:" + firmwareVersion);
                                     checkDfu(firmwareVersion);
 
@@ -911,7 +990,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     Utils.log(timeStamp);
                                     refreshTimes();
                                     uploadStampRecord(stampNumber, timeStamp);
-
+                                    EventBus.getDefault().post(new MessageEvent("take_pic", "take_pic"));
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A1 00")) {
                                     // 启动印章成功后，获取“启动序号”
                                     byte[] restTime = DataTrans.subByte(bytes, 4, 4);
@@ -1088,6 +1167,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                                     refreshTimes();
                                     uploadStampRecord(0, null);
+                                    EventBus.getDefault().post(new MessageEvent("take_pic", "take_pic"));
                                     // 如果是o1加上，告诉后台有非法盖章
                                     if (strReturned.equals("o1")) {
                                         sendIllegalToServer();
@@ -1356,4 +1436,163 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         });
     }
 
+
+    private void compressAndUpload(File fileByUri) {
+        Luban.with(getActivity())
+                .load(fileByUri)
+                .ignoreBy(100)
+                .filter(new CompressionPredicate() {
+                    @Override
+                    public boolean apply(String path) {
+                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                    }
+                })
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        //上传图片
+                        uploadPic(file);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // TODO 当压缩过程出现问题时调用
+                        Log.e("TAG", e + "");
+                    }
+                }).launch();
+
+    }
+
+    /**
+     * 上传图片至服务器 (category -> 5:上传记录图片  4:申请用印上传图片)（单独上传图片）
+     *
+     * @param file
+     */
+    private void uploadPic(File file) {
+        loadingView.show();
+        HashMap<String, Object> hashMap = new HashMap<>();
+        Utils.log(file.length() + "");
+        hashMap.put("category", 5);
+        hashMap.put("file", file);
+        HttpUtil httpUtil = new HttpUtil(getActivity());
+        httpUtil.upLoadFile(getActivity(), HttpUrl.UPLOADIMAGE, hashMap, new ReqCallBack<Object>() {
+            @Override
+            public void onReqSuccess(Object result) {
+                Utils.log(result.toString());
+                Gson gson = new Gson();
+                final ResponseInfo<LoadImageData> responseInfo = gson.fromJson(result.toString(), new TypeToken<ResponseInfo<LoadImageData>>() {
+                }.getType());
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    String str = responseInfo.getData().getFileName();
+                    if (picsList == null) {
+                        picsList = new ArrayList<>();
+                    }
+                    picsList.add(str);
+                    loadingView.cancel();
+                    Log.e("TAG", "上传图片成功!!!!!!!!!!!!!!!!!!!!");
+                    Utils.log("上传图片成功");
+
+//                    totalPage = allFileName.size() / 9;
+//                    currentPage = totalPage;
+
+                    // 显示当前页面
+//                    page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+
+//                    showCurrentPagePic();
+
+//                    // 弹出相机
+//                    permissions();
+
+                    // uploadPicIndex加一
+                    uploadPicIndex++;
+                    // 继续上传（uploadPicIndex不能大于数组大小）
+                    if (uploadPicIndex < allPic.size()) {
+                        File file = new File(allPic.get(uploadPicIndex));
+                        compressAndUpload(file);
+                    }
+
+                    // 上传最后一张图片后提交
+                    if (uploadPicIndex == allPic.size()) {
+                        uploadRecord();
+                    }
+
+//                    success = true;
+                } else {
+                    loadingView.cancel();
+//                    success = false;
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+            }
+
+            @Override
+            public void onReqFailed(String errorMsg) {
+                loadingView.cancel();
+//                success = false;
+                showToast(errorMsg);
+                Utils.log(errorMsg);
+                Log.e("TAG", "发送图片至服务器失败........");
+            }
+        });
+    }
+
+
+    /**
+     * 记录（提交）
+     */
+    private void uploadRecord() {
+//        loadingView.show();
+        Utils.log("causeId" + causeId);
+        AddUseSealApplyBean bean = new AddUseSealApplyBean();
+        bean.setApplyId(causeId);
+        bean.setImgList(picsList);
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.UPDATESTAMPIMAGE, 2, null, bean, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+//                loadingView.cancel();
+                Log.e("TAG", e + "上传记录照片错误错误错误!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log("记录（提交）result:" + result);
+                picsList.clear();
+                allPic.clear();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+//                if (responseInfo.getCode() == 0) {
+//                    if (responseInfo.getData()) {
+//                        loadingView.cancel();
+//                        if (type == 321){      //区别是主页记录进入还是应用里的记录进入
+//                            Intent intent = new Intent(geta.this,MyApplyActivity.class);
+//                            intent.putExtra("id", id);
+//                            setResult(222);
+//                            startActivity(intent);
+//                        }else {
+//                            setResult(222);
+//                        }
+//                        finish();
+//                        Looper.prepare();
+//                        showToast("上传成功");
+//                        Looper.loop();
+//                    }
+//                } else {
+//                    loadingView.cancel();
+//                    Looper.prepare();
+//                    showToast(responseInfo.getMessage());
+//                    Looper.loop();
+//                }
+            }
+        });
+    }
 }

@@ -242,12 +242,10 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
 //        startActivity(intent);
 
         i = position;
-        if (EasySP.init(this).getString("dataProtocolVersion").equals("2")) {
-            mKeypad.show(getSupportFragmentManager(), "PasswordKeypad");
-        } else {
-            saveAndJump();
-        }
 
+        Intent intent = new Intent();
+        intent.setClass(this, SelectDialogActivity.class);
+        startActivityForResult(intent, 123);
     }
 
 
@@ -258,6 +256,12 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         intent.putExtra("expireTime", responseInfo.getData().get(i).getExpireTime() + "");
         intent.putExtra("availableCount", responseInfo.getData().get(i).getAvailableCount() + "");
         intent.putExtra("stampReason", responseInfo.getData().get(i).getApplyCause() + "");
+        intent.putExtra("id", responseInfo.getData().get(i).getId() + "");
+
+        // pic list
+        if (responseInfo.getData().get(i).getStampRecordImgList() != null) {
+            intent.putStringArrayListExtra("pics", (ArrayList<String>) responseInfo.getData().get(i).getStampRecordImgList());
+        }
         setResult(Constants.TO_WANT_SEAL, intent);
         finish();
     }
@@ -283,6 +287,15 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
             if (resultCode == 11) {
                 getData();
             }
+        }
+        if (requestCode == 123) {
+            Utils.log("requestCode == 123");
+            if (EasySP.init(this).getString("dataProtocolVersion").equals("2")) {
+                mKeypad.show(getSupportFragmentManager(), "PasswordKeypad");
+            } else {
+                saveAndJump();
+            }
+
         }
     }
 

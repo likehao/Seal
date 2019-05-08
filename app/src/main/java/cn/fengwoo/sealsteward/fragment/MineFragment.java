@@ -39,6 +39,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.LoginActivity;
 import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
+import cn.fengwoo.sealsteward.activity.MyQRCodeActivity;
 import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
@@ -93,6 +94,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     Button dfu;
     @BindView(R.id.mine_smt)
     SmartRefreshLayout mine_smt;
+    @BindView(R.id.my_QRCode_rl)
+    RelativeLayout my_QRCode_rl;
+
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
@@ -151,6 +155,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         use_Instructions_rl.setOnClickListener(this);
         dfu.setOnClickListener(this);
         mine_smt.setEnableLoadMore(false);
+        my_QRCode_rl.setOnClickListener(this);
+
     }
 
     private void getSmtData(){
@@ -240,6 +246,11 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), DfuActivity.class);
                 startActivity(intent);
 
+                break;
+
+            case R.id.my_QRCode_rl:
+                intent = new Intent(getActivity(), MyQRCodeActivity.class);
+                startActivity(intent);
                 break;
         }
     }

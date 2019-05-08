@@ -41,6 +41,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,6 +117,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     private boolean isRead = false;
     private int type;
+
+    private int uploadPicIndex = 0;
+
+    private List<String> allPic;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -503,19 +510,44 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
         if (requestCode == 123 && resultCode == 123) {
             Utils.log("requestCode == 123");
-            List<String> allPic = data.getStringArrayListExtra("photoList");
+            allPic = data.getStringArrayListExtra("photoList");
             Utils.log("allFileName.size()" + allPic.size());
             int time = 0;
-            for(String str:allPic){
-                File file = new File(str);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        compressAndUpload(file);
-                    }
-                }, time);
-                time = time + 3000;
-            }
+//            for(String str:allPic){
+//                File file = new File(str);
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        compressAndUpload(file);
+//                    }
+//                }, time);
+//                time = time + 3000;
+//            }
+
+            // 用线程池，没有达到效果
+////            ExecutorService executorService = Executors.newSingleThreadExecutor();
+//            ExecutorService executorService = Executors.newFixedThreadPool(1);
+//            for(String str:allPic){
+//                File file = new File(str);
+//                executorService.execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Utils.log("executorService:" + str);
+//                        compressAndUpload(file);
+//                    }
+//                });
+//            }
+
+            // 从array里一个个拿数据出来上传
+            // init index
+            uploadPicIndex = 0;
+
+            // 先上第一张
+            File file = new File(allPic.get(0));
+            compressAndUpload(file);
+
+
+
         }
 
         if (requestCode == 111 && resultCode == 111) {
@@ -593,6 +625,14 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
 //                    // 弹出相机
 //                    permissions();
+
+                    // uploadPicIndex加一
+                    uploadPicIndex++;
+                    // 继续上传（uploadPicIndex不能大于数组大小）
+                    if (uploadPicIndex < allPic.size()) {
+                        File file = new File(allPic.get(uploadPicIndex));
+                        compressAndUpload(file);
+                    }
 
                     success = true;
                 } else {

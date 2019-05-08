@@ -23,6 +23,8 @@ public class Constants {
 
     // enableEnclosure boolean // 是否开启电子围栏
 
+    // take_pic_mode    String // 拍照模式： 0：手动   1：自动
+
     public static final int TO_NEARBY_DEVICE = 20;
     public static final int TO_WANT_SEAL = 21;
 

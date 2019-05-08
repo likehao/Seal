@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.ImageUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 
 /**
  * 扫描二维码页面
@@ -43,6 +44,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+        Utils.log("result****" );
 
         ButterKnife.bind(this);
         initView();
@@ -82,17 +84,25 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
     CodeUtils.AnalyzeCallback analyzeCallback = new CodeUtils.AnalyzeCallback() {
         @Override
         public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-            Intent resultIntent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
-            bundle.putString(CodeUtils.RESULT_STRING, result);
-            resultIntent.putExtras(bundle);
-            ScanActivity.this.setResult(RESULT_OK, resultIntent);
+            Utils.log("result:" + result);
+
+            Intent intent = new Intent();
+//            Bundle bundle = new Bundle();
+//            bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
+//            bundle.putString(CodeUtils.RESULT_STRING, result);
+//            resultIntent.putExtras(bundle);
+
+            intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
+            intent.putExtra("result", result);
+            startActivity(intent);
+//            ScanActivity.this.setResult(RESULT_OK, intent);
             ScanActivity.this.finish();
         }
 
         @Override
         public void onAnalyzeFailed() {
+            Utils.log("result:" + "fail");
+
             Intent resultIntent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_FAILED);
@@ -142,6 +152,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                 CodeUtils.analyzeBitmap(ImageUtil.getImageAbsolutePath(this, uri), new CodeUtils.AnalyzeCallback() {
                     @Override
                     public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
+                        Utils.log("result:" + result);
                         showToast("解析结果:" + result);
                     }
 

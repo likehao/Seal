@@ -1,8 +1,10 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,6 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,7 +56,9 @@ import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.AddPopuwindow;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
@@ -101,6 +107,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Timer timer;
     int sum;
 
+    private boolean firstTag = false; // 弹出过一次，变成true
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +151,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initView() {
         title_tv = findViewById(R.id.title_tv);
         scan_ll = findViewById(R.id.scan_ll);
+        scan_ll.setVisibility(View.VISIBLE);
         add_ll.setVisibility(View.GONE);
         msg_ll.setVisibility(View.VISIBLE);
         home_page = findViewById(R.id.home_page);
@@ -191,6 +199,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 record_more_iv.setVisibility(View.GONE);
                 //    add_ll.setVisibility(View.VISIBLE);
                 msg_ll.setVisibility(View.VISIBLE);
+                scan_ll.setVisibility(View.VISIBLE);
                 changeView(0);
                 break;
             case R.id.record_page:
@@ -414,6 +423,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
+                Utils.log("getMessageNum result:" + result);
                 Gson gson = new Gson();
                 ResponseInfo<List<MessageData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<MessageData>>>() {
                 }
@@ -457,8 +467,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                     } else {
                                         main_msg_tv.setVisibility(View.GONE);
                                     }
-                                }
+                                }else if(type == 5){
+                                    if(!firstTag){
+//                                        msgNum = 320;
+//                                        float appVersionOnServer = (float)msgNum / 100;
+//                                        Utils.log("appVersionOnServer:" + appVersionOnServer);
+                                        Utils.log("getLocalVersion:" + Utils.getLocalVersion(MainActivity.this));
 
+                                        if (msgNum > Utils.getLocalVersion(MainActivity.this)) {
+                                            appUpdateDialog();
+                                        }
+                                        firstTag = true;
+                                    }
+                                }
                             }
                             //显示右上角消息
                             if (sum == 0) {
@@ -535,6 +556,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             timerTask.cancel();
             timerTask = null;
         }
+    }
+
+
+    private void appUpdateDialog() {
+        final CommonDialog commonDialog = new CommonDialog(this, "提示", "发现有新的版本，想要立刻吗？", "确定");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://a.app.qq.com/o/simple.jsp?pkgname=cn.fengwoo.sealsteward&fromcase=40002");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                commonDialog.dialog.dismiss();
+            }
+        });
     }
 
 }

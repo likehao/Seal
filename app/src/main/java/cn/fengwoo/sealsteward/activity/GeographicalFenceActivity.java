@@ -8,10 +8,16 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +47,10 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
+import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.baidu.mapapi.search.sug.SuggestionSearch;
+import com.baidu.mapapi.search.sug.SuggestionSearchOption;
 import com.hjq.toast.ToastUtils;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -49,11 +59,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.entity.SealData;
 import cn.fengwoo.sealsteward.entity.UpdateEnclosureData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -88,6 +101,14 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
     @BindView(R.id.tv_save)
     TextView tvSave;
 
+    @BindView(R.id.edit_tv)
+    TextView edit_tv;
+    @BindView(R.id.et_search)
+    TextView et_search;
+
+    @BindView(R.id.lv)
+    ListView lv;
+
     private Intent intent;
     private LocationClient locationClient = null;
     private String locationAddress; //定位地址
@@ -98,10 +119,41 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
     private String selectAddress;
     private LatLng selectPoint;
     private int radioInt = 1000;
-    private String scopeString, sealIdString,longitudeString,latitudeString,addressString;
+    private String scopeString, sealIdString, longitudeString, latitudeString, addressString;
     private OnGetGeoCoderResultListener listener;
 
     private LatLng latLng;
+
+    private SuggestionSearch mSuggestionSearch;
+
+    private ArrayList<String> arrayList = new ArrayList<String>();
+
+    private ArrayAdapter<String> arrayAdapter;
+
+    private List<SuggestionResult.SuggestionInfo> suggestionInfos = new ArrayList<>();
+
+    OnGetSuggestionResultListener onGetSuggestionResultListener = new OnGetSuggestionResultListener() {
+        @Override
+        public void onGetSuggestionResult(SuggestionResult suggestionResult) {
+            //处理sug检索结果
+//            Utils.log("suggestionResult:" + suggestionResult.describeContents());
+//            Utils.log("suggestionResult:" + suggestionResult.getAllSuggestions().get(0).getAddress());
+
+            arrayList.clear();
+            if (suggestionInfos != null) {
+                suggestionInfos.clear();
+            }
+
+            suggestionInfos = suggestionResult.getAllSuggestions();
+            if (suggestionInfos != null) {
+                for (SuggestionResult.SuggestionInfo s : suggestionResult.getAllSuggestions()) {
+                    arrayList.add(s.getKey());
+                }
+                arrayAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,15 +168,69 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
+        edit_tv.setVisibility(View.VISIBLE);
+        edit_tv.setText("取消");
+        title_tv.setVisibility(View.GONE);
+        et_search.setVisibility(View.VISIBLE);
+        edit_tv.setOnClickListener(this);
+
+        et_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // s为空时，lv设置为不可见
+                if (TextUtils.isEmpty(s.toString())) {
+                    lv.setVisibility(View.GONE);
+                } else {
+                    lv.setVisibility(View.VISIBLE);
+                }
+
+                Utils.log(s.toString());
+                // et_search上面的内容改变，搜索地理名字
+                mSuggestionSearch.requestSuggestion(new SuggestionSearchOption()
+                        .city("深圳")
+                        .keyword(s.toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+        lv.setAdapter(arrayAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                latLng = suggestionInfos.get(position).getPt();
+//                OverlayOptions ooCircle1 = new CircleOptions().fillColor(0xAA6495ED)
+//                        .center(latLng).stroke(new Stroke(5, 0xAA00FF00))
+//                        .radius(Integer.parseInt(scopeString));
+//                baiduMap.addOverlay(ooCircle1);
+
+                MapStatus.Builder builder = new MapStatus.Builder();
+                LatLng latLng = suggestionInfos.get(position).getPt();
+                builder.target(latLng).zoom(14.0f);
+                baiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                lv.setVisibility(View.GONE);
+                et_search.setText(arrayList.get(position));
+            }
+        });
+
         //初始化地图
         baiduMap = mapView.getMap();
 
-        UiSettings settings=baiduMap.getUiSettings();
+        UiSettings settings = baiduMap.getUiSettings();
         settings.setAllGesturesEnabled(true);   // false 关闭一切手势操作
         settings.setOverlookingGesturesEnabled(false);//屏蔽双指下拉时变成3D地图
         settings.setRotateGesturesEnabled(false);//屏蔽旋转
 
-        title_tv.setText("设置地理围栏");
+//        title_tv.setText("设置地理围栏");
         initLocationOption();
         mWidthSeekBar.setOnSeekBarChangeListener(this);
 
@@ -141,12 +247,13 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                 getAddress(point.latitude, point.longitude);
 
             }
+
             public boolean onMapPoiClick(MapPoi poi) {
                 return false;
             }
         });
 
-        if(longitudeString!=null){
+        if (longitudeString != null) {
             latLng = new LatLng(Double.parseDouble(latitudeString), Double.parseDouble(longitudeString));
 
             OverlayOptions ooCircle1 = new CircleOptions().fillColor(0xAA6495ED)
@@ -166,15 +273,16 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         addressString = getIntent().getStringExtra("address");
 
 
-
-
         if (addressString != null && addressString.length() > 1) {
             currentAddr = addressString;
             mEtAddress.setText(currentAddr);
 
-            mWidthSeekBar.setProgress(Integer.parseInt(scopeString)/1000);
-            tv_radius.setText(Integer.parseInt(scopeString)/1000 + "km");
+            mWidthSeekBar.setProgress(Integer.parseInt(scopeString) / 1000);
+            tv_radius.setText(Integer.parseInt(scopeString) / 1000 + "km");
         }
+
+        mSuggestionSearch = SuggestionSearch.newInstance();
+        mSuggestionSearch.setOnGetSuggestionResultListener(onGetSuggestionResultListener);
     }
 
     @Override
@@ -182,6 +290,11 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.set_back_ll:
                 finish();
+                break;
+            case R.id.edit_tv:
+                et_search.setText("");
+//                et_search.setFocusable(false);
+                lv.setVisibility(View.GONE);
                 break;
         }
     }
@@ -398,7 +511,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
     public void getAddress(final double latitude, final double longitude) {
         GeoCoder geoCoder = GeoCoder.newInstance();
         final LatLng latLng = new LatLng(latitude, longitude);
-         listener = new OnGetGeoCoderResultListener() {
+        listener = new OnGetGeoCoderResultListener() {
             @Override
             public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
 
@@ -469,21 +582,22 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         //在activity执行onDestroy时必须调用mMapView.onDestroy()
         mapView.onDestroy();
         super.onDestroy();
+        mSuggestionSearch.destroy();
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        radioInt = progress*1000;
+        radioInt = progress * 1000;
         tv_radius.setText(progress + "km");
 
         // init
         baiduMap.clear();
 
-        if(selectPoint == null){
+        if (selectPoint == null) {
             selectPoint = latLng;
         }
 
-        Utils.log(progress +"");
+        Utils.log(progress + "");
         // 添加圆
         OverlayOptions ooCircle = new CircleOptions().fillColor(0xAA6495ED)
                 .center(selectPoint).stroke(new Stroke(5, 0xAA00FF00))
@@ -559,7 +673,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
 
     }
 
-    @OnClick({R.id.tv_cancel, R.id.tv_save,R.id.set_back_ll})
+    @OnClick({R.id.tv_cancel, R.id.tv_save, R.id.set_back_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_cancel:
