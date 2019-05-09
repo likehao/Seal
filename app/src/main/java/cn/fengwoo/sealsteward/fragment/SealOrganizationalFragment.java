@@ -195,7 +195,7 @@ public class SealOrganizationalFragment extends Fragment {
                                         @Override
                                         public void run() {
                                             Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
-
+                                            commonDialog.dialog.dismiss();
                                         }
                                     });
 

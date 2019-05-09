@@ -7,6 +7,7 @@
     <View
         style="@style/line"
         android:layout_marginTop="10dp"/>
+
     <RelativeLayout
         android:id="@+id/select_company_rl"
         android:layout_width="match_parent"

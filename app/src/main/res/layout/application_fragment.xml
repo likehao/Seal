@@ -66,11 +66,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:qmui_maxNumber="12"
-
                         android:padding="20dp"
                         android:gravity="left"
                         app:qmui_childHorizontalSpacing="40dp"
-
                         app:qmui_childVerticalSpacing="20dp">
 
                         <RelativeLayout

@@ -169,6 +169,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 CleanMessageUtil.clearAllCache(SetActivity.this);
+//                CleanMessageUtil.clearImageAllCache(SetActivity.this);
                 showToast("缓存已清除");
                 cache_tv.setText("0k");
                 commonDialog.dialog.dismiss();

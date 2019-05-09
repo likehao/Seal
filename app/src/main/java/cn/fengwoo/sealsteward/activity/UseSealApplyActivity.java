@@ -49,6 +49,8 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     String applyId;
     String fileName;
 
+    @BindView(R.id.use_seal_sign_ll)
+    LinearLayout sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
                             public void run() {
                                 String sealPrintPath = "file://" + HttpDownloader.path + fileName;
                                 Picasso.with(UseSealApplyActivity.this).load(sealPrintPath).into(use_apply_sign_iv);
+                                sign.setBackgroundResource(R.color.white);
                             }
                         });
                     }
@@ -98,6 +101,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
             //不为空则直接显示
             String sealPrintPath = "file://" + HttpDownloader.path + autoGraph;
             Picasso.with(UseSealApplyActivity.this).load(sealPrintPath).into(use_apply_sign_iv);
+            sign.setBackgroundResource(R.color.white);
         }
     }
 

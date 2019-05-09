@@ -8,6 +8,7 @@
     tools:context=".activity.MyCompanyActivity">
 
     <include layout="@layout/head" />
+
     <ListView
         android:id="@+id/company_list_lv"
         android:layout_width="match_parent"
