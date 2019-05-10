@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
+import com.white.easysp.EasySP;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -115,6 +116,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        String state = EasySP.init(this).getString("finger_print");
+
+        if (state.equals("1")) {
+            Intent intent = new Intent();
+            intent.setClass(this, FingerPrintActivity.class);
+            startActivity(intent);
+
+        } else {
+
+        }
+
         initView();
         //初始化扫描
         ZXingLibrary.initDisplayOpinion(this);

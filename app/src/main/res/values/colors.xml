@@ -32,4 +32,12 @@
     <color name="short_video_red">#ff4747</color>
     <color name="Gray">#eeeeee</color>
 
+
+    <color name="lvDividerLine">#d9e3e8</color>
+    <color name="bg_biometric_prompt_dialog">#99000000</color>
+
+    <color name="blue">#6699ff</color>
+
+    <color name="warning_dialog_content_color">#888866</color>
+
 </resources>

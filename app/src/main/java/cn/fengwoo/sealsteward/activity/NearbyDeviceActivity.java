@@ -198,6 +198,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         scanResult -> {
+                            Utils.log("scanResult:" + scanResult.getBleDevice().getName() + "   mac:" + scanResult.getBleDevice().getMacAddress());
                             addScanResult(scanResult);
                             Utils.log("mac:" + scanResult.getBleDevice().getMacAddress());
                         },

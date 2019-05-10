@@ -288,7 +288,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                 getData();
             }
         }
-        if (requestCode == 123) {
+        if (requestCode == 123 && resultCode == 123) {
             Utils.log("requestCode == 123");
             if (EasySP.init(this).getString("dataProtocolVersion").equals("2")) {
                 mKeypad.show(getSupportFragmentManager(), "PasswordKeypad");

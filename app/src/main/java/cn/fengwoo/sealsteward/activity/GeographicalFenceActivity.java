@@ -218,7 +218,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                 builder.target(latLng).zoom(14.0f);
                 baiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
                 lv.setVisibility(View.GONE);
-                et_search.setText(arrayList.get(position));
+//                et_search.setText(arrayList.get(position));
             }
         });
 

@@ -347,6 +347,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     ToastUtils.show("蓝牙没有打开，请开启蓝牙");
                     return;
                 }
+
+                // 断开蓝牙
+                ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                ((MyApp) getApplication()).setConnectionObservable(null);
+
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 intent.putExtra("isAddNewSeal", false);
 

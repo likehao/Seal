@@ -2,4 +2,8 @@
 <resources>
 
     <dimen name="imageSelectDimen">120dp</dimen>
+
+    <dimen name="dimen_20">20dp</dimen>
+    <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimen_3">3dp</dimen>
 </resources>
