@@ -13,8 +13,17 @@ public class WaitMeAgreeData implements Serializable {
     private String failTime;
     private String applyId;
     private String pdf;
+    private String autoGraph;
 
-    public WaitMeAgreeData(String cause, String applyPerson, String department, String applyTime, String sealName, Integer applyCount, String failTime, String applyId,String pdf) {
+    public String getAutoGraph() {
+        return autoGraph;
+    }
+
+    public void setAutoGraph(String autoGraph) {
+        this.autoGraph = autoGraph;
+    }
+
+    public WaitMeAgreeData(String cause, String applyPerson, String department, String applyTime, String sealName, Integer applyCount, String failTime, String applyId, String pdf, String autoGraph) {
         this.cause = cause;
         this.applyPerson = applyPerson;
         this.department = department;
@@ -24,6 +33,7 @@ public class WaitMeAgreeData implements Serializable {
         this.failTime = failTime;
         this.applyId = applyId;
         this.pdf = pdf;
+        this.autoGraph = autoGraph;
     }
 
     public String getCause() {

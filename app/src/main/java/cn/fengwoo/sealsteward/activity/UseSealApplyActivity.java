@@ -76,7 +76,15 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         detailCauseEt.setEnabled(false);
         detailCauseEt.setCursorVisible(false);  //隐藏光标
 
-        String autoGraph = CommonUtil.getUserData(this).getAutoGraph();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void initData() {
+        String sealName = intent.getStringExtra("sealName");
+        Integer count = intent.getIntExtra("count",0);
+        String failTime = intent.getStringExtra("failTime");
+        String cause = intent.getStringExtra("cause");
+        String autoGraph = intent.getStringExtra("autoGraph");
         //读取签名
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
         if(bitmap == null){
@@ -103,14 +111,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
             Picasso.with(UseSealApplyActivity.this).load(sealPrintPath).into(use_apply_sign_iv);
             sign.setBackgroundResource(R.color.white);
         }
-    }
 
-    @SuppressLint("SetTextI18n")
-    private void initData() {
-        String sealName = intent.getStringExtra("sealName");
-        Integer count = intent.getIntExtra("count",0);
-        String failTime = intent.getStringExtra("failTime");
-        String cause = intent.getStringExtra("cause");
         fileName = intent.getStringExtra("pdf");
         applyId = intent.getStringExtra("applyId");
         detailSealNameTv.setText(sealName);

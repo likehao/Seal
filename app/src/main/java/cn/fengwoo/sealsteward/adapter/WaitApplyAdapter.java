@@ -31,6 +31,7 @@ import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CommonDialog;
@@ -89,6 +90,8 @@ public class WaitApplyAdapter extends BaseAdapter {
         viewHolder.apply_department_tv.setText(waitApplyData.get(position).getOrgStructureName());
         int status = waitApplyData.get(position).getApproveStatus();
         String id = waitApplyData.get(position).getId();
+        String applyUser = waitApplyData.get(position).getApplyUser();
+        String userId = CommonUtil.getUserData((Activity)context).getId();
 
         if (code == 1){    //待审批
             statusView(status);
@@ -108,21 +111,28 @@ public class WaitApplyAdapter extends BaseAdapter {
             seeRecordCloseBill(status, position, id);
 
         } else if (code == 4) {  //已驳回（我的申请）
+            if (applyUser.equals(userId))  {   //判断此单据是否是登陆者本人来显示是否可以重提
 
-            viewHolder.item2_tv.setText("重提");
-            viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
-            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
-            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    putValue(position);
-                }
-            });
+                viewHolder.item2_tv.setVisibility(View.VISIBLE);
+                viewHolder.item2_tv.setText("重提");
+                viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
+                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
+                viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        putValue(position);
+                    }
+                });
+            } else {
+                viewHolder.item2_tv.setVisibility(View.GONE);
+
+            }
         } else if (code == 5) {  //已审批(审批记录)
             seeRecordCloseBill(status, position, id);
 
         } else {    //code == 6     已驳回（审批记录）
-            viewHolder.item2_tv.setText("重提");
+            viewHolder.item2_tv.setVisibility(View.GONE);
+         /*   viewHolder.item2_tv.setText("重提");
             viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
             viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +140,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     putValue(position);
                 }
-            });
+            });*/
         }
 
         return view;

@@ -17,6 +17,16 @@ public class WaitApplyData implements Serializable {
     private Integer approveStatus;
     private String applyUserName;
     private String orgStructureName;
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    private String applyUser;
     private String headPortrait;
     private Integer sealCount;
     private Integer restCount;
@@ -39,7 +49,7 @@ public class WaitApplyData implements Serializable {
 
 
     public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime, String id, Integer approveStatus, String applyUserName, String orgStructureName
-   , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf,List<String> stampRecordImgList,String autoGraph) {
+  ,String applyUser , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf,List<String> stampRecordImgList,String autoGraph) {
         this.cause = cause;
         this.sealName = sealName;
         this.failTime = failTime;
@@ -49,6 +59,7 @@ public class WaitApplyData implements Serializable {
         this.approveStatus = approveStatus;
         this.applyUserName = applyUserName;
         this.orgStructureName = orgStructureName;
+        this.applyUser = applyUser;
         this.headPortrait = headPortrait;
         this.sealCount = sealCount;
         this.restCount = restCount;

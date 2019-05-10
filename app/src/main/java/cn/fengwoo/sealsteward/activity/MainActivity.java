@@ -406,13 +406,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //检验是否获取权限，如果获取权限，外部存储会处于开放状态
                 String sdCard = Environment.getExternalStorageState();
                 if (sdCard.equals(Environment.MEDIA_MOUNTED)) {
-                    showToast("允许授权");
+          //          showToast("允许授权");
+                    Log.e("TAG","允许授权");
                 }
             } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showToast("拒绝");
+                     //   showToast("拒绝");
+                        Log.e("TAG","拒绝授权");
                     }
                 });
             }
@@ -573,7 +575,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     private void appUpdateDialog() {
-        final CommonDialog commonDialog = new CommonDialog(this, "提示", "发现有新的版本，想要立刻吗？", "确定");
+        final CommonDialog commonDialog = new CommonDialog(this, "提示", "发现有新的版本", "更新");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override

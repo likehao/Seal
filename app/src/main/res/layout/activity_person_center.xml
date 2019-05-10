@@ -111,8 +111,6 @@
                     <View style="@style/right_arrow" />
                 </RelativeLayout>
 
-                <View style="@style/line_left" />
-
                 <RelativeLayout
                     android:id="@+id/my_QRCode_rl"
                     style="@style/pressed_effect"
@@ -227,8 +225,6 @@
 
                     <View style="@style/right_arrow" />
                 </RelativeLayout>
-
-                <View style="@style/line_left" />
 
                 <RelativeLayout
                     style="@style/pressed_effect"

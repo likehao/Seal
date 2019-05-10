@@ -222,6 +222,10 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             showToast("请填写申请事由");
             return false;
         }
+        if (apply_sign_iv.getDrawable() == null){
+            showToast("请签名");
+            return false;
+        }
         return true;
     }
 

@@ -31,23 +31,32 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/home_page"
-            android:visibility="visible"
             android:textColor="@color/white"
-            android:textSize="18dp" />
+            android:textSize="18sp"
+            android:visibility="visible" />
 
-        <EditText
-            android:visibility="gone"
-            android:id="@+id/et_search"
-            android:layout_width="@dimen/x640"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+        <LinearLayout
+            android:id="@+id/search_ll"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="50dp"
             android:background="@color/white"
-            android:hint=""
-            android:drawableLeft="@android:drawable/ic_menu_search"
-            android:layout_centerHorizontal="true"
-            android:textSize="12sp"
-    />
+            android:visibility="gone"
+            android:layout_centerInParent="true">
 
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/head_search"
+                android:hint="请输入地址"
+                android:textSize="12sp"
+                android:drawablePadding="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_gravity="center"
+                android:background="@null" />
+        </LinearLayout>
 
 
         <LinearLayout
@@ -83,10 +92,10 @@
                 android:id="@+id/msg_iv"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:background="@drawable/message_circle"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="12dp"
-                android:visibility="gone"/>
+                android:background="@drawable/message_circle"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -138,11 +147,11 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:button="@null"
+            android:checked="false"
             android:gravity="center_vertical"
             android:paddingEnd="10dp"
-            android:button="@null"
             android:text="@string/edit"
-            android:checked="false"
             android:textColor="@color/white"
             android:visibility="gone" />
 

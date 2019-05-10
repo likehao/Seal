@@ -153,7 +153,11 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
                         Utils.log("result:" + result);
-                        showToast("解析结果:" + result);
+                        Intent intent = new Intent();
+                        intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
+                        intent.putExtra("result", result);
+                        startActivity(intent);
+                        finish();
                     }
 
                     @Override

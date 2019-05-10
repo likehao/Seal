@@ -138,7 +138,7 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                         String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                         waitApplyDataList.add(new WaitApplyData(app.getApplyCause(), app.getSealName()
                                 , expireTime, app.getApplyCount(), applyTime, app.getId(), app.getApproveStatus(),
-                                app.getApplyUserName(), app.getOrgStructureName()
+                                app.getApplyUserName(), app.getOrgStructureName(),app.getApplyUser()
                                 , app.getHeadPortrait(), app.getStampCount(), app.getAvailableCount(), app.getPhotoCount()
                                 ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList(),app.getAutoGraph()));
                     }
@@ -183,6 +183,7 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                     intent.putExtra("failTime", waitApplyDataList.get(position).getFailTime());
                     intent.putExtra("cause", waitApplyDataList.get(position).getCause());
                     intent.putExtra("pdf", waitApplyDataList.get(position).getApplyPdf());
+                    intent.putExtra("autoGraph",waitApplyDataList.get(position).getAutoGraph());
                     startActivity(intent);
                 } else {
                     Looper.prepare();

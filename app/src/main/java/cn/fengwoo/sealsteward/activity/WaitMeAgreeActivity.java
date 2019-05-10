@@ -162,7 +162,8 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                                 //时间戳转为时间
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitMeAgreeDataList.add(new WaitMeAgreeData(app.getApplyCause(), app.getApplyUserName()
-                                        , app.getOrgStructureName(), applyTime, app.getSealName(), app.getApplyCount(), app.getExpireTime(), app.getId(), app.getApplyPdf()));
+                                        , app.getOrgStructureName(), applyTime, app.getSealName(), app.getApplyCount(),
+                                        app.getExpireTime(), app.getId(), app.getApplyPdf(),app.getAutoGraph()));
                             }
                             //请求数据
                             waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
@@ -193,6 +194,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         intent.putExtra("cause", waitMeAgreeDataList.get(position).getCause());
         intent.putExtra("applyId", waitMeAgreeDataList.get(position).getApplyId());
         intent.putExtra("pdf", waitMeAgreeDataList.get(position).getPdf());
+        intent.putExtra("autoGraph", waitMeAgreeDataList.get(position).getAutoGraph());
         startActivityForResult(intent, 88);
     }
 

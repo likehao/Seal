@@ -19,13 +19,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <View style="@style/line" />
+                <View style="@style/line"
+                    android:layout_marginTop="10dp"/>
 
                 <LinearLayout
                     android:id="@+id/mine_person_data_ll"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:layout_marginTop="10dp"
                     android:background="@color/white"
                     android:orientation="horizontal">
 
@@ -111,8 +111,7 @@
                         <ImageView style="@style/right_arrow" />
                     </RelativeLayout>
 
-                    <View style="@style/line" />
-
+                    <View style="@style/line_left" />
 
                     <RelativeLayout
                         android:id="@+id/my_QRCode_rl"
@@ -127,8 +126,10 @@
                             android:text="@string/my_QRCode"
                             android:textColor="@color/black" />
 
+                        <ImageView style="@style/right_arrow" />
                     </RelativeLayout>
 
+                    <View style="@style/line" />
 
                     <!--
                                                    <RelativeLayout

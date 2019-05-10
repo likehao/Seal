@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
@@ -104,10 +105,11 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
     @BindView(R.id.edit_tv)
     TextView edit_tv;
     @BindView(R.id.et_search)
-    TextView et_search;
-
+    EditText et_search;
     @BindView(R.id.lv)
     ListView lv;
+    @BindView(R.id.search_ll)
+    LinearLayout search_ll;
 
     private Intent intent;
     private LocationClient locationClient = null;
@@ -171,7 +173,12 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
         edit_tv.setVisibility(View.VISIBLE);
         edit_tv.setText("取消");
         title_tv.setVisibility(View.GONE);
-        et_search.setVisibility(View.VISIBLE);
+        search_ll.setVisibility(View.VISIBLE);
+        //使用drawableLeft设置图片大小
+        Drawable drawable = getResources().getDrawable(R.drawable.head_search);
+        drawable.setBounds(5, 0, 40, 40);
+        et_search.setCompoundDrawables(drawable, null, null, null);
+
         edit_tv.setOnClickListener(this);
 
         et_search.addTextChangedListener(new TextWatcher() {
@@ -218,7 +225,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                 builder.target(latLng).zoom(14.0f);
                 baiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
                 lv.setVisibility(View.GONE);
-//                et_search.setText(arrayList.get(position));
+                //    et_search.setText(arrayList.get(position));
             }
         });
 
