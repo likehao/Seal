@@ -313,10 +313,14 @@ public class NodeTreeAdapter extends BaseAdapter {
         holder.label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                expandOrCollapse(position);
+
 //                if (node.get_parent() != null) {
 //                    Utils.log("*************************************************************************" + node.get_parent().get_label());
 //                    clickItemListener.clicked(node.get_id(),node.get_type(), node.get_parent().get_label());
 //                }
+
                 if (node.get_parent() != null) {
                     Utils.log("*************************************************************************" + node.get_parent().get_label());
                     clickItemListener.clicked(node.get_id(), node.get_type(), node.get_parent().get_label());

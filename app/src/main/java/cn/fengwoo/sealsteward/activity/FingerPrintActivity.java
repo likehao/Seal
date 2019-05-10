@@ -16,12 +16,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class FingerPrintActivity extends Activity {
+public class FingerPrintActivity extends Base2Activity {
 
     @BindView(R.id.tv_switch_login)
     TextView tvSwitchLogin;

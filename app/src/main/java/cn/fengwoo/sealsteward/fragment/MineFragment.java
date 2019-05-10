@@ -25,6 +25,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.picasso.Picasso;
+import com.white.easysp.EasySP;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -163,7 +164,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         rl_safe.setOnClickListener(this);
     }
 
-    private void getSmtData(){
+    private void getSmtData() {
         mine_smt.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -185,7 +186,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                         Gson gson = new Gson();
                         final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
                         }.getType());
-                        if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
+                        if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                             mine_smt.finishRefresh();
                         }
 
@@ -195,6 +196,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -274,6 +276,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      * 退出
      */
     private void logoutDialog() {
+        EasySP.init(getActivity()).putString("finger_print", "0");
         final CommonDialog commonDialog = new CommonDialog(getActivity(), "提示", "确认退出吗？", "确定");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {

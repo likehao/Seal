@@ -201,6 +201,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     private String causeId = ""; // 事由id
 
+    private float firmwareVersion;
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -361,6 +363,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 if (!Utils.isConnect(getActivity())) {
                     return;
                 }
+                lockSeal();
                 intent = new Intent(getActivity(), ApplyCauseActivity.class);
                 startActivityForResult(intent, Constants.TO_WANT_SEAL);
                 break;
@@ -845,8 +848,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         // 如果盖完了，次数为0时，断开蓝牙
         if (tv_times_left.getText().toString().trim().equals("0")) {
 //                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
-            ((MyApp) getActivity().getApplication()).removeAllDisposable();
-            ((MyApp) getApplication()).setConnectionObservable(null);
+            if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+                ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                ((MyApp) getApplication()).setConnectionObservable(null);
+            }
             stampTag = false;
 //            currentStampTimes = 0;
         }
@@ -937,7 +942,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                 if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
                                     Utils.log("握手成功");
                                     // 得到当前版本
-                                    float firmwareVersion;
                                     firmwareVersion = (float) bytes[4] + ((float) bytes[5] / 100);
                                     Utils.log("firmwareVersion:" + firmwareVersion);
                                     checkDfu(firmwareVersion);
@@ -1028,7 +1032,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
                                 }
                                 // 违规盖章
-                                else if (Utils.bytesToHexString(bytes).startsWith("FF 06 A8")) {
+                                else if (Utils.bytesToHexString(bytes).startsWith("FF 06 A8 80")) {
                                     // 发送a8给seal
                                     sendDataToSealAfterIllegal();
 
@@ -1038,9 +1042,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     // 盖章次数加一
                                     refreshTimes();
 
-                                    // 把这次非法盖章的盖章记录也上传到后台
-                                    sendIllegalRecordToServer();
-
+                                    if (firmwareVersion <= 3.02) {
+                                        // 把这次非法盖章的盖章记录也上传到后台
+                                        sendIllegalRecordToServer();
+                                    }
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 0E A3")) {
                                     // 成功读到一条记录
                                     unuploadedQuantity--; // 未上传的盖章记录数量减一
@@ -1599,5 +1604,24 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //                }
             }
         });
+    }
+
+
+    @SuppressLint("CheckResult")
+    private void lockSeal() {
+        // 发送查询：长按时间
+        byte[] select_press_time = new byte[]{0};
+        ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.LOCK, select_press_time).getBytes()))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                ));
     }
 }

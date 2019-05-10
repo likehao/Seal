@@ -438,7 +438,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                Utils.log("getMessageNum result:" + result);
+//                Utils.log("getMessageNum result:" + result);
                 Gson gson = new Gson();
                 ResponseInfo<List<MessageData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<MessageData>>>() {
                 }

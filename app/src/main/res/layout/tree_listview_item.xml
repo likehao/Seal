@@ -76,7 +76,7 @@
         android:layout_marginLeft="5dp"
         android:id="@+id/id_treenode_label"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="45dp"
         android:gravity="center_vertical"
         android:textColor="@android:color/black"
         android:textSize="12sp" />

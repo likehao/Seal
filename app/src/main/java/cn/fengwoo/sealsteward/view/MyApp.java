@@ -20,10 +20,12 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tianma.netdetector.lib.NetStateChangeReceiver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -97,6 +99,18 @@ public class MyApp extends MultiDexApplication {
         Logger.addLogAdapter(new AndroidLogAdapter());
         ToastUtils.init(this);
         disposableList = new ArrayList<>();
+        createNoMedia();
+    }
+
+    private void createNoMedia() {
+        String filePath = "file://" + HttpDownloader.path;
+        File nomedia = new File(filePath + ".nomedia" );
+        if (! nomedia.exists())
+            try {
+                nomedia.createNewFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     public void removeAllDisposable() {
