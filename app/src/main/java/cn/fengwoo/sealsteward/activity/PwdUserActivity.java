@@ -188,8 +188,10 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
                 if (CommonUtil.getUserData(PwdUserActivity.this).getId().equals(pwdUserListItem.getUserId())) {
                     viewHolder.getView(R.id.iv_eye).setVisibility(View.VISIBLE);
+                    viewHolder.getView(R.id.layout_all).setVisibility(View.VISIBLE);
                 } else {
                     viewHolder.getView(R.id.iv_eye).setVisibility(View.GONE);
+                    viewHolder.getView(R.id.layout_all).setVisibility(View.GONE);
                 }
                 viewHolder.getView(R.id.iv_eye).setOnClickListener(new View.OnClickListener() {
                     @Override

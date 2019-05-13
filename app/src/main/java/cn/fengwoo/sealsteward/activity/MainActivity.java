@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -109,21 +110,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     int sum;
 
     private boolean firstTag = false; // 弹出过一次，变成true
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Utils.log("onCreateonCreate");
         ButterKnife.bind(this);
 
         String state = EasySP.init(this).getString("finger_print");
-
+        String isFP = "";
+        if (getIntent() != null) {
+            isFP = getIntent().getStringExtra("isFP");
+        }
         if (state.equals("1")) {
-            Intent intent = new Intent();
-            intent.setClass(this, FingerPrintActivity.class);
-            startActivity(intent);
-
+            Utils.log("isFP:" + isFP);
+            // 账号登录过来的
+            if (TextUtils.isEmpty(isFP)) {
+                // 第一次进入主页
+                Intent intent = new Intent();
+                intent.setClass(this, FingerPrintActivity.class);
+                startActivity(intent);
+//                isFP = "1";
+            }
+            if (isFP != null && !isFP.equals("1")) {
+                Intent intent = new Intent();
+                intent.setClass(this, FingerPrintActivity.class);
+                startActivity(intent);
+            }
         } else {
 
         }
@@ -406,15 +421,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //检验是否获取权限，如果获取权限，外部存储会处于开放状态
                 String sdCard = Environment.getExternalStorageState();
                 if (sdCard.equals(Environment.MEDIA_MOUNTED)) {
-          //          showToast("允许授权");
-                    Log.e("TAG","允许授权");
+                    //          showToast("允许授权");
+                    Log.e("TAG", "允许授权");
                 }
             } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                     //   showToast("拒绝");
-                        Log.e("TAG","拒绝授权");
+                        //   showToast("拒绝");
+                        Log.e("TAG", "拒绝授权");
                     }
                 });
             }
@@ -478,12 +493,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                     if (msgNum != 0) {
                                         main_msg_tv.setVisibility(View.VISIBLE);
                                         main_msg_tv.setText(msgNum + "");
-                                        EventBus.getDefault().post(new MessageEvent("待我审批消息","待我审批消息"));
+                                        EventBus.getDefault().post(new MessageEvent("待我审批消息", "待我审批消息"));
                                     } else {
                                         main_msg_tv.setVisibility(View.GONE);
                                     }
-                                }else if(type == 5){
-                                    if(!firstTag){
+                                } else if (type == 5) {
+                                    if (!firstTag) {
 //                                        msgNum = 320;
 //                                        float appVersionOnServer = (float)msgNum / 100;
 //                                        Utils.log("appVersionOnServer:" + appVersionOnServer);

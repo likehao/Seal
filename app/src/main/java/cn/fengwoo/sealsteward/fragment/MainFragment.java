@@ -574,6 +574,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                         @Override
                         public void run() {
                             showToast("有最新固件，请升级。");
+                            EasySP.init(getActivity()).putString("hasNewDfuVersion", "1");
                         }
                     });
                     EasySP.init(getActivity()).putString("dfu_version", dfuEntity.getVersion());

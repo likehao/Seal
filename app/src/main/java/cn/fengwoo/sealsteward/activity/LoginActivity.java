@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
+import com.nestia.biometriclib.BiometricPromptManager;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.white.easysp.EasySP;
@@ -81,6 +84,10 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     Button login_bt;
     @BindView(R.id.head_civ)
     CircleImageView headImageView;
+
+    @BindView(R.id.tv_finger_print_login)
+    TextView tv_finger_print_login;
+
     private List<String> stringList;
     private CheckBox check_down_up;  //弹出账号列表上下箭头
     private AccountDao accountDao;
@@ -95,6 +102,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     private String phone, password;
     private LoadingView loadingView;
     private LoginData user;
+    private BiometricPromptManager mManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +110,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         setContentView(R.layout.activity_login);
         //注解
         ButterKnife.bind(this);
+        mManager = BiometricPromptManager.from(this);
         initView();
         readPermissions();
         initData();
@@ -116,6 +125,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         phone_et.setOnClickListener(this);
         accountDao = new AccountDao(this);
         loadingView = new LoadingView(this);
+        tv_finger_print_login.setOnClickListener(this);
     }
 
     private void initData() {
@@ -160,7 +170,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     }
 
     /**
-     *  关闭软键盘
+     * 关闭软键盘
      */
     private void hintKbTwo() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -245,6 +255,21 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                 }
                 check_down_up.setChecked(false);
                 break;
+            case R.id.tv_finger_print_login:
+                String fpPwd = EasySP.init(LoginActivity.this).getString("l_pwd");
+                if (TextUtils.isEmpty(fpPwd)) {
+                    showToast("请用密码先登录一次");
+                    return;
+                }
+
+                String state = EasySP.init(this).getString("finger_print");
+                if (state.equals("1")) {
+                } else {
+                    // 没有设置指纹登录
+                    showToast("没有打开指纹登录");
+                }
+                identify();
+                break;
         }
     }
 
@@ -260,7 +285,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
             //发送get请求
             loadingView.show();
             loadingView.showView("登录中");
-            loginGet(phone, password);
+            loginGet(phone, password,"0");
         }
     }
 
@@ -315,7 +340,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     /**
      * 发送登录请求
      */
-    private void loginGet(final String phone, final String password) {
+    private void loginGet(final String phone, final String password,String isFP) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mobilePhone", phone);
         hashMap.put("password", password);
@@ -339,6 +364,11 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
 
                 if (loginResponseInfo.getData() != null && loginResponseInfo.getCode() == 0) {
                     Log.e("TAG", "登录请求成功。。。。。。。");
+
+                    // save data
+                    EasySP.init(LoginActivity.this).putString("l_tel", phone);
+                    EasySP.init(LoginActivity.this).putString("l_pwd", password);
+
                     loadingView.cancel();
                     //添加一个登陆标记
                     loginResponseInfo.getData().login(LoginActivity.this);
@@ -381,6 +411,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     } else {
                         //跳转首页
                         intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("isFP", isFP);
                         startActivity(intent);
                         finish();
                     }
@@ -430,7 +461,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
      * 数据同步
      */
     public void dataSync() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 Looper.prepare();
@@ -443,7 +474,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         HttpUtil.sendDataAsync(this, HttpUrl.SYNC, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("TAG",e + "数据同步错误!!!!!!!!!!!!!!!!!!!!!");
+                Log.e("TAG", e + "数据同步错误!!!!!!!!!!!!!!!!!!!!!");
                 loadingView.cancel();
                 //跳转首页
                 intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -455,20 +486,20 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>()
-                {}.getType());
-                if (responseInfo.getCode() == 0){
-                    if (responseInfo.getData()){
-                        Log.e("TAG","数据同步成功!!!!!!!!!!!!!!!!!!!!!");
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        Log.e("TAG", "数据同步成功!!!!!!!!!!!!!!!!!!!!!");
                         loadingView.cancel();
                         //跳转首页
                         intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     }
-                }else {
+                } else {
                     loadingView.cancel();
-                    Log.e("TAG","数据同步失败!!!!!!!!!!!!!!!!!!!!!");
+                    Log.e("TAG", "数据同步失败!!!!!!!!!!!!!!!!!!!!!");
                     //跳转首页
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -525,17 +556,64 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     }
 
     /**
-     *隐藏软键盘
+     * 隐藏软键盘
+     *
      * @param ev
      * @return
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        HideKeyBroadUtils.hide(this,ev);
-        if (selectPopuwindow != null){
+        HideKeyBroadUtils.hide(this, ev);
+        if (selectPopuwindow != null) {
             selectPopuwindow.dismiss();
         }
         check_down_up.setChecked(false);
         return super.dispatchTouchEvent(ev);
+    }
+
+
+    @TargetApi(28)
+    private void identify() {
+        if (mManager.isBiometricPromptEnable()) {
+            mManager.authenticate(new BiometricPromptManager.OnBiometricIdentifyCallback() {
+                @Override
+                public void onUsePassword() {
+//                    Toast.makeText(FingerPrintActivity.this, "onUsePassword", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onSucceeded() {
+                    finish();
+                    //发送get请求
+                    String fpTel = EasySP.init(LoginActivity.this).getString("l_tel");
+                    String fpPwd = EasySP.init(LoginActivity.this).getString("l_pwd");
+                    if (TextUtils.isEmpty(fpPwd)) {
+                        return;
+                    }
+                    loadingView.show();
+                    loadingView.showView("登录中");
+                    loginGet(fpTel, fpPwd, "1");
+//                    Toast.makeText(FingerPrintActivity.this, "onSucceeded", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailed() {
+
+//                    Toast.makeText(FingerPrintActivity.this, "onFailed", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(int code, String reason) {
+
+//                    Toast.makeText(FingerPrintActivity.this, "onError", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCancel() {
+
+//                    Toast.makeText(FingerPrintActivity.this, "onCancel", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }

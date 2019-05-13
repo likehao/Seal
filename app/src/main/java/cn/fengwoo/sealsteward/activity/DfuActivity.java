@@ -46,6 +46,12 @@ public class DfuActivity extends BaseActivity {
 
     @BindView(R.id.btn_dfu)
     Button btnDfu;
+    @BindView(R.id.ll_show_button)
+    LinearLayout llShowButton;
+    @BindView(R.id.tv_current_version)
+    TextView tvCurrentVersion;
+    @BindView(R.id.ll_hide_button)
+    LinearLayout llHideButton;
 
     private String dfu_macAddress;
     private Uri uri = null;
@@ -64,8 +70,6 @@ public class DfuActivity extends BaseActivity {
         setContentView(R.layout.activity_dfu);
         ButterKnife.bind(this);
 
-
-
         initData();
         initView();
 
@@ -78,6 +82,16 @@ public class DfuActivity extends BaseActivity {
         title_tv.setText("固件升级");
         tvVersion.setText("版本：" + dfu_version);
         tvContent.setText(dfu_content);
+        tvVersion.setText("版本：" + dfu_version);
+        String state = EasySP.init(this).getString("hasNewDfuVersion", "0");
+
+        if (state.equals("1")) {
+            llShowButton.setVisibility(View.VISIBLE);
+            llHideButton.setVisibility(View.GONE);
+        } else {
+            llShowButton.setVisibility(View.GONE);
+            llHideButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData() {
@@ -106,6 +120,7 @@ public class DfuActivity extends BaseActivity {
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfu_macAddress).setKeepBond(true);
         starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
         starter.setZip(uri, path);
+
         Logger.d("uri:" + uri);
         Logger.d("path:" + path);
         final DfuServiceController controller = starter.start(this, DfuService.class);
@@ -178,6 +193,7 @@ public class DfuActivity extends BaseActivity {
             pd.dismiss();
             boolean result = Utils.deleteFile(path);
             Utils.log("" + result);
+            EasySP.init(DfuActivity.this).putString("hasNewDfuVersion", "0");
         }
 
         @Override
@@ -243,7 +259,7 @@ public class DfuActivity extends BaseActivity {
         pd.show();
     }
 
-    @OnClick({R.id.test, R.id.btn_dfu,R.id.set_back_ll})
+    @OnClick({R.id.test, R.id.btn_dfu, R.id.set_back_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 

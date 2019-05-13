@@ -9,13 +9,11 @@
         android:id="@+id/id_treenode_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="0dp"
+        android:padding="10dp"
         android:src="@drawable/expand" />
-
-
 
 
     <!--保证整块区域可点，使用户好点击-->
@@ -33,12 +31,12 @@
 
         <CheckBox
             android:id="@+id/cb"
-            app:theme="@style/cb_test"
-
             android:layout_width="25dp"
+
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:focusable="false"
+            app:theme="@style/cb_test"
             tools:ignore="MissingPrefix" />
 
         <ImageView
@@ -58,28 +56,27 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/id_treenode_icon"
         android:layout_toStartOf="@id/id_confirm"
-        android:orientation="horizontal"
-       >
+        android:orientation="horizontal">
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_mark"
-        android:visibility="gone"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/human_pic" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_mark"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/human_pic"
+            android:visibility="visible" />
 
-    <TextView
-        android:layout_marginLeft="5dp"
-        android:id="@+id/id_treenode_label"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:gravity="center_vertical"
-        android:textColor="@android:color/black"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/id_treenode_label"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
 
     </LinearLayout>
 

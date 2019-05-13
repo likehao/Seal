@@ -276,7 +276,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      * 退出
      */
     private void logoutDialog() {
-        EasySP.init(getActivity()).putString("finger_print", "0");
         final CommonDialog commonDialog = new CommonDialog(getActivity(), "提示", "确认退出吗？", "确定");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {

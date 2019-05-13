@@ -10,6 +10,12 @@
 
     <include layout="@layout/head" />
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_show_button"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/tv_version"
         android:layout_marginTop="15dp"
@@ -47,6 +53,24 @@
         android:background="@drawable/login_circle_bg"
         android:text="固件升级"
         android:textColor="@color/white" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_hide_button"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tv_current_version"
+            android:text="版本号：3.02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
+        <TextView
+            android:layout_marginTop="10dp"
+            android:text="当前连接的印章固件版本是最新版本"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

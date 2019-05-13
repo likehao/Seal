@@ -1,9 +1,12 @@
 package cn.fengwoo.sealsteward.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 import com.hjq.toast.ToastUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -22,10 +25,12 @@ import com.tianma.netdetector.lib.NetStateChangeReceiver;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
+import cn.fengwoo.sealsteward.utils.Utils;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -33,6 +38,7 @@ import io.reactivex.disposables.Disposable;
  * SmartRefreshLayout使用指定Header 和 Footer
  */
 public class MyApp extends MultiDexApplication {
+    private static final String TAG = "MyApp";
     private Observable<RxBleConnection> connectionObservable;
     public Disposable connectDisposable;
     public List<Disposable> disposableList;
@@ -91,7 +97,7 @@ public class MyApp extends MultiDexApplication {
             }
         });
     }
-
+    private static List<Activity> activityLinkedList;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -100,6 +106,48 @@ public class MyApp extends MultiDexApplication {
         ToastUtils.init(this);
         disposableList = new ArrayList<>();
         createNoMedia();
+
+
+        activityLinkedList = new LinkedList<>();
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                Log.d(TAG, "onActivityCreated: " + activity.getLocalClassName());
+//                Log.d(TAG, "Pid: " +  + Process.myPid());
+                activityLinkedList.add(activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                Log.d(TAG, "onActivityStarted: " + activity.getLocalClassName());
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                Log.d(TAG, "onActivityStopped: " + activity.getLocalClassName());
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                Log.d(TAG, "onActivityDestroyed: " + activity.getLocalClassName());
+                activityLinkedList.remove(activity);
+            }
+        });
+
     }
 
     private void createNoMedia() {
@@ -107,8 +155,10 @@ public class MyApp extends MultiDexApplication {
         File nomedia = new File(filePath + ".nomedia" );
         if (! nomedia.exists())
             try {
+                nomedia.mkdirs();
                 nomedia.createNewFile();
             } catch (Exception e) {
+                Utils.log(e.toString());
                 e.printStackTrace();
             }
     }
@@ -141,5 +191,17 @@ public class MyApp extends MultiDexApplication {
             res.updateConfiguration(newConfig, res.getDisplayMetrics());
         }
         return res;
+    }
+
+    public static void showList() {
+        for (Activity activity : activityLinkedList) {
+            Log.d(TAG, "showList: " + activity.getLocalClassName());
+        }
+    }
+
+    public static void exitAppList() {
+        for (Activity activity : activityLinkedList) {
+            activity.finish();
+        }
     }
 }

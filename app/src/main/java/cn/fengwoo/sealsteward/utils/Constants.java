@@ -26,6 +26,8 @@ public class Constants {
     // take_pic_mode    String // 拍照模式： 0：手动   1：自动
 
     // finger_print   String // 指纹： 0：关    1：开
+    // hasNewDfuVersion   String // 指纹： 0：无    1：有
+
 
     public static final int TO_NEARBY_DEVICE = 20;
     public static final int TO_WANT_SEAL = 21;

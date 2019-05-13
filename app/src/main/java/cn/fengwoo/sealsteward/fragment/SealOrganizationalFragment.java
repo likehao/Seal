@@ -170,10 +170,10 @@ public class SealOrganizationalFragment extends Fragment {
                             if (!Utils.hasThePermission(getActivity(), Constants.permission3)) {
                                 return;
                             }
-                            if (EasySP.init(getActivity()).getString("currentSealId").equals(idString)) {
-                                Toast.makeText(getActivity(),"该印章正在连接使用，不能删除。",Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+//                            if (EasySP.init(getActivity()).getString("currentSealId").equals(idString)) {
+//                                Toast.makeText(getActivity(),"该印章正在连接使用，不能删除。",Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
 
                             // delete
                             String uID = CommonUtil.getUserData(getActivity()).getId();

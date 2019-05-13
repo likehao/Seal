@@ -116,6 +116,16 @@
                 android:background="@drawable/login_circle_bg"
                 android:text="@string/login_bt"/>
 
+            <TextView
+                android:id="@+id/tv_finger_print_login"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/blue"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/login_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="指纹登录"/>
+
         </RelativeLayout>
             <TextView
                 android:id="@+id/more_tv"
