@@ -141,33 +141,33 @@ public class DfuActivity extends BaseActivity {
     private final DfuProgressListener dfuProgressListener = new DfuProgressListener() {
         @Override
         public void onDeviceConnecting(String deviceAddress) {
-            Logger.d("TEST" + "onDeviceConnecting: " + deviceAddress);
+            Logger.d("TESTS" + "onDeviceConnecting: " + deviceAddress);
         }
 
         @Override
         public void onDeviceConnected(String deviceAddress) {
-            Logger.d("TEST" + "onDeviceConnected: " + deviceAddress);
+            Logger.d("TESTS" + "onDeviceConnected: " + deviceAddress);
         }
 
         @Override
         public void onDfuProcessStarting(String deviceAddress) {
-            Logger.d("TEST" + "onDfuProcessStarting: " + deviceAddress);
+            Logger.d("TESTS" + "onDfuProcessStarting: " + deviceAddress);
         }
 
         @Override
         public void onDfuProcessStarted(String deviceAddress) {
-            Logger.d("TEST" + "onDfuProcessStarted: " + deviceAddress);
+            Logger.d("TESTS" + "onDfuProcessStarted: " + deviceAddress);
         }
 
         @Override
         public void onEnablingDfuMode(String deviceAddress) {
-            Logger.d("TEST" + "onEnablingDfuMode: mac:" + deviceAddress);
-            Logger.d("TEST" + "onEnablingDfuMode: isSecDfu" + isSecDfu);
+            Logger.d("TESTS" + "onEnablingDfuMode: mac:" + deviceAddress);
+            Logger.d("TESTS" + "onEnablingDfuMode: isSecDfu" + isSecDfu);
             dfu_macAddress = "FF:FF:FF:FF:FF:FF";
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Logger.d("TEST" + "第二次dfu" + deviceAddress);
+                    Logger.d("TESTS" + "第二次dfu" + deviceAddress);
                     dfu(uri);
 //                    showToast("retry");
                 }
@@ -176,7 +176,7 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onProgressChanged(String deviceAddress, int percent, float speed, float avgSpeed, int currentPart, int partsTotal) {
-            Logger.d("TEST" + "onProgressChanged: " + deviceAddress + "百分比" + percent + ",speed "
+            Logger.d("TESTS" + "onProgressChanged: " + deviceAddress + "百分比" + percent + ",speed "
                     + speed + ",avgSpeed " + avgSpeed + ",currentPart " + currentPart
                     + ",partTotal " + partsTotal);
 //            tv_show.setText("升级进度：" + percent + "%");
@@ -187,22 +187,22 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onFirmwareValidating(String deviceAddress) {
-            Logger.d("TEST", "onFirmwareValidating: " + deviceAddress);
+            Logger.d("TESTS", "onFirmwareValidating: " + deviceAddress);
         }
 
         @Override
         public void onDeviceDisconnecting(String deviceAddress) {
-            Logger.d("TEST", "onDeviceDisconnecting: " + deviceAddress);
+            Logger.d("TESTS", "onDeviceDisconnecting: " + deviceAddress);
         }
 
         @Override
         public void onDeviceDisconnected(String deviceAddress) {
-            Logger.d("TEST", "onDeviceDisconnected: " + deviceAddress);
+            Logger.d("TESTS", "onDeviceDisconnected: " + deviceAddress);
         }
 
         @Override
         public void onDfuCompleted(String deviceAddress) {
-            Logger.d("TEST", "onDfuCompleted: " + deviceAddress);
+            Logger.d("TESTS", "onDfuCompleted: " + deviceAddress);
             showToast("固件升级完成");
             pd.dismiss();
             boolean result = Utils.deleteFile(path);
@@ -214,7 +214,7 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onDfuAborted(String deviceAddress) {
-            Logger.d("TEST" + "onDfuAborted: " + deviceAddress + "isSecDfu" + isSecDfu);
+            Logger.d("TESTS" + "onDfuAborted: " + deviceAddress + "isSecDfu" + isSecDfu);
             if (isSecDfu) {
                 showToast("升级失败，请重试。");
                 pd.dismiss();
@@ -223,8 +223,8 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onError(String deviceAddress, int error, int errorType, String message) {
-            Logger.d("TEST" + "        onError: " + message + "         message:" + message + "     isSecDfu" + isSecDfu);
-//            showToast("TEST" + "onError: " + deviceAddress + ",message:" + message + "isSecDfu" + isSecDfu);
+            Logger.d("TESTS" + "        onError: " + message + "         message:" + message + "     isSecDfu" + isSecDfu);
+//            showToast("TESTS" + "onError: " + deviceAddress + ",message:" + message + "isSecDfu" + isSecDfu);
 
             if (isSecDfu) {
                 showToast("升级失败，请重试。");
