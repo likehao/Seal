@@ -34,6 +34,7 @@ import com.white.easysp.EasySP;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ import cn.fengwoo.sealsteward.fragment.MineFragment;
 import cn.fengwoo.sealsteward.fragment.RecordFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.PermissionUtils;
@@ -142,6 +144,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
 
         }
+
+        createNoMedia();
 
         initView();
         //初始化扫描
@@ -603,4 +607,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+
+    private void createNoMedia() {
+        String filePath = "file://" + HttpDownloader.path;
+        File nomedia = new File(filePath + ".nomedia" );
+        if (! nomedia.exists())
+            try {
+//                nomedia.mkdirs();
+                nomedia.createNewFile();
+            } catch (Exception e) {
+                Utils.log(e.toString());
+                e.printStackTrace();
+            }
+    }
 }

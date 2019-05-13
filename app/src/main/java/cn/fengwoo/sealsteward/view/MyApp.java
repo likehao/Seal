@@ -105,7 +105,7 @@ public class MyApp extends MultiDexApplication {
         Logger.addLogAdapter(new AndroidLogAdapter());
         ToastUtils.init(this);
         disposableList = new ArrayList<>();
-        createNoMedia();
+//        createNoMedia();
 
 
         activityLinkedList = new LinkedList<>();

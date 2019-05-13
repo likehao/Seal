@@ -186,6 +186,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         isAddNewSeal = getIntent().getBooleanExtra("isAddNewSeal", false);
         if (isAddNewSeal) {
             title_tv.setText("添加印章");
+            tv_repair.setVisibility(View.GONE);
         }
     }
 

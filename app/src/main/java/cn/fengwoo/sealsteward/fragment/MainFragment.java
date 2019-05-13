@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -100,6 +101,7 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.Observable;
@@ -202,6 +204,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private String causeId = ""; // 事由id
 
     private float firmwareVersion;
+
+    private Long lastTime;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -991,6 +995,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
                                     // 印章主动上报消息通知手机发生盖章行为
                                     // 盖章序号
+
+                                    Long intervalTime = System.currentTimeMillis() - lastTime;
+                                    if (intervalTime < 300) {
+                                        tooFastTip();
+                                        // 锁定印章
+                                        lockSeal();
+                                    }
+
+                                    lastTime = System.currentTimeMillis();
+
                                     String allString = Utils.bytesToHexString(bytes);
                                     String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
                                     stampNumber = Integer.valueOf(stampNumberHexString, 16);
@@ -1624,5 +1638,18 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             // Handle an error here.
                         }
                 ));
+    }
+
+
+
+    private void tooFastTip() {
+        final CommonDialog commonDialog = new CommonDialog(getActivity(), "非法盖章", "您盖得太快了，有点跟不上，印章已被锁定！", "确定");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialog.dialog.dismiss();
+            }
+        });
     }
 }
