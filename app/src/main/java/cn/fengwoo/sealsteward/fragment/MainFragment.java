@@ -573,6 +573,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 DfuEntity dfuEntity = responseInfo.getData();
                 Utils.log("dfuEntity" + dfuEntity.getVersion());
                 float latestVersion = Float.parseFloat(dfuEntity.getVersion());
+                EasySP.init(getActivity()).putString("dfu_current_version", version+"");
                 if (latestVersion > version) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

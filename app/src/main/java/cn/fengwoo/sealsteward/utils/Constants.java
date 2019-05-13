@@ -28,6 +28,7 @@ public class Constants {
     // finger_print   String // 指纹： 0：关    1：开
     // hasNewDfuVersion   String // 指纹： 0：无    1：有
 
+    // dfu_current_version   String   // 当前固件版本
 
     public static final int TO_NEARBY_DEVICE = 20;
     public static final int TO_WANT_SEAL = 21;

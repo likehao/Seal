@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -61,9 +63,16 @@ public class DfuActivity extends BaseActivity {
     private String dfu_version;
     private String dfu_file_name;
     private String dfu_content;
+    private String dfu_current_version;
 
     private boolean isSecDfu = false;
 
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            return false;
+        }
+    });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +91,9 @@ public class DfuActivity extends BaseActivity {
         title_tv.setText("固件升级");
         tvVersion.setText("版本：" + dfu_version);
         tvContent.setText(dfu_content);
-        tvVersion.setText("版本：" + dfu_version);
+        if (!TextUtils.isEmpty(dfu_current_version)) {
+            tvCurrentVersion.setText("版本：" + dfu_current_version);
+        }
         String state = EasySP.init(this).getString("hasNewDfuVersion", "0");
 
         if (state.equals("1")) {
@@ -99,6 +110,7 @@ public class DfuActivity extends BaseActivity {
         dfu_file_name = EasySP.init(this).getString("dfu_file_name");
         dfu_version = EasySP.init(this).getString("dfu_version");
         dfu_content = EasySP.init(this).getString("dfu_content");
+        dfu_current_version = EasySP.init(this).getString("dfu_current_version");
 
     }
 
@@ -119,10 +131,10 @@ public class DfuActivity extends BaseActivity {
     private void dfu(Uri uri) {
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfu_macAddress).setKeepBond(true);
         starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
-        starter.setZip(uri, path);
 
-        Logger.d("uri:" + uri);
-        Logger.d("path:" + path);
+        starter.setZip(uri, path);
+        Logger.d("mac:" + dfu_macAddress  + "   uri:" + uri + "   path:" + path);
+
         final DfuServiceController controller = starter.start(this, DfuService.class);
     }
 
@@ -149,15 +161,17 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onEnablingDfuMode(String deviceAddress) {
-            Logger.d("TEST" + "onEnablingDfuMode: isSecDfu" + deviceAddress);
+            Logger.d("TEST" + "onEnablingDfuMode: mac:" + deviceAddress);
+            Logger.d("TEST" + "onEnablingDfuMode: isSecDfu" + isSecDfu);
             dfu_macAddress = "FF:FF:FF:FF:FF:FF";
-            new Handler().postDelayed(new Runnable() {
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    Logger.d("TEST" + "第二次dfu" + deviceAddress);
                     dfu(uri);
 //                    showToast("retry");
                 }
-            }, 8000);
+            }, 40000);
         }
 
         @Override
@@ -194,6 +208,8 @@ public class DfuActivity extends BaseActivity {
             boolean result = Utils.deleteFile(path);
             Utils.log("" + result);
             EasySP.init(DfuActivity.this).putString("hasNewDfuVersion", "0");
+            finish();
+            handler.removeCallbacksAndMessages(null);
         }
 
         @Override
@@ -203,12 +219,11 @@ public class DfuActivity extends BaseActivity {
                 showToast("升级失败，请重试。");
                 pd.dismiss();
             }
-
         }
 
         @Override
         public void onError(String deviceAddress, int error, int errorType, String message) {
-            Logger.d("TEST" + "onError: " + deviceAddress + ",message:" + message + "isSecDfu" + isSecDfu);
+            Logger.d("TEST" + "        onError: " + message + "         message:" + message + "     isSecDfu" + isSecDfu);
 //            showToast("TEST" + "onError: " + deviceAddress + ",message:" + message + "isSecDfu" + isSecDfu);
 
             if (isSecDfu) {
@@ -266,6 +281,15 @@ public class DfuActivity extends BaseActivity {
             case R.id.btn_dfu:
                 downloadZip();
                 showProgress();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("升级失败，请重试。");
+                        if (pd != null) {
+                            pd.dismiss();
+                        }
+                    }
+                },150000);
                 break;
             case R.id.set_back_ll:
                 finish();
