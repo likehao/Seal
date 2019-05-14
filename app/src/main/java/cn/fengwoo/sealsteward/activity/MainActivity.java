@@ -148,6 +148,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {}
 
         initView();
+
         //初始化扫描
         ZXingLibrary.initDisplayOpinion(this);
         changeView(0);  //启动默认显示主页面
