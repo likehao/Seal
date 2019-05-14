@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -84,11 +85,16 @@ public class FingerPrintActivity extends Base2Activity {
                 public void onSucceeded() {
                     Utils.log("onSucceededonSucceeded1");
 
-                    Intent intent = new Intent();
-                    intent = new Intent(FingerPrintActivity.this, MainActivity.class);
-                    intent.putExtra("isFP", "1");
-                    startActivity(intent);
-                    finish();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent();
+                            intent = new Intent(FingerPrintActivity.this, MainActivity.class);
+                            intent.putExtra("isFP", "1");
+                            startActivity(intent);
+                            finish();
+                        }
+                    }, 800);
 
 //                    Toast.makeText(FingerPrintActivity.this, "onSucceeded", Toast.LENGTH_SHORT).show();
                 }

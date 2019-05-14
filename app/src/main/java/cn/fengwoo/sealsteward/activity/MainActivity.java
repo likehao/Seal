@@ -136,17 +136,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 finish();
             }
-            if (isFP != null && !isFP.equals("1")) {
+            Utils.log("888isFP:" + isFP);
+
+            // 忽略通过指纹登录来这和密码登录来这两种情形
+            if (isFP != null && !isFP.equals("1")&& !isFP.equals("0")) {
                 Intent intent = new Intent();
                 intent.setClass(this, FingerPrintActivity.class);
                 startActivity(intent);
                 finish();
             }
-        } else {
-
-        }
-
-//        createNoMedia();
+        } else {}
 
         initView();
         //初始化扫描
