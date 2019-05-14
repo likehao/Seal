@@ -3,10 +3,10 @@
     <string name="biometric_dialog_cancel">取消</string>
     <string name="biometric_dialog_title">提示</string>
     <string name="biometric_dialog_subtitle">验证指纹</string>
-    <string name="biometric_dialog_state_normal">Fingerprint sensor</string>
+    <string name="biometric_dialog_state_normal">验证指纹</string>
     <string name="biometric_dialog_state_failed"> </string>
-    <string name="biometric_dialog_state_error">Verification error, please enter payment password</string>
-    <string name="biometric_dialog_state_error_enable_process">Verification error, setup failed</string>
+    <string name="biometric_dialog_state_error"> </string>
+    <string name="biometric_dialog_state_error_enable_process"> </string>
     <string name="biometric_dialog_state_succeeded">验证指纹成功</string>
     <string name="biometric_dialog_use_password">Use Password</string>
 </resources>

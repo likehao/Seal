@@ -134,17 +134,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Intent intent = new Intent();
                 intent.setClass(this, FingerPrintActivity.class);
                 startActivity(intent);
+                finish();
             }
             if (isFP != null && !isFP.equals("1")) {
                 Intent intent = new Intent();
                 intent.setClass(this, FingerPrintActivity.class);
                 startActivity(intent);
+                finish();
             }
         } else {
 
         }
 
-        createNoMedia();
+//        createNoMedia();
 
         initView();
         //初始化扫描

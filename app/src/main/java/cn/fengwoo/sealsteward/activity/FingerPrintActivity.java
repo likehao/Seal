@@ -24,6 +24,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.MyApp;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -81,9 +82,11 @@ public class FingerPrintActivity extends Base2Activity {
 
                 @Override
                 public void onSucceeded() {
+                    Utils.log("onSucceededonSucceeded1");
+
                     Intent intent = new Intent();
                     intent = new Intent(FingerPrintActivity.this, MainActivity.class);
-//                    intent.putExtra("isFP", "1");
+                    intent.putExtra("isFP", "1");
                     startActivity(intent);
                     finish();
 

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -30,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
@@ -38,6 +40,7 @@ import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.white.easysp.EasySP;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,6 +118,24 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         readPermissions();
         initData();
         dialogOut();
+
+    }
+
+    private void createNoMedia() {
+        //新建一个File，传入文件夹目录
+        File file = new File("/mnt/sdcard/SealDownImage");
+        File file2 = new File("/mnt/sdcard/SealDownImage/.nomedia");
+        //判断文件夹是否存在，如果不存在就创建，否则不创建
+//        if (!file.exists()) {
+        //通过file的mkdirs()方法创建目录中包含却不存在的文件夹
+        file.mkdirs();
+        try {
+            file2.createNewFile();
+        } catch (IOException e) {
+//            Log.d(TAG, e.toString());
+            e.printStackTrace();
+        }
+//        }
     }
 
     private void initView() {
@@ -545,7 +566,8 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     @Override
                     public void accept(Permission permission) throws Exception {
                         if (permission.granted) {
-
+                            Utils.log("****************  666 ***********************");
+                            createNoMedia();
                         } else if (permission.shouldShowRequestPermissionRationale) {
                             showToast("您已拒绝权限申请");
                         } else {
@@ -583,7 +605,8 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
 
                 @Override
                 public void onSucceeded() {
-                    finish();
+                    Utils.log("onSucceededonSucceeded2");
+
                     //发送get请求
                     String fpTel = EasySP.init(LoginActivity.this).getString("l_tel");
                     String fpPwd = EasySP.init(LoginActivity.this).getString("l_pwd");
@@ -593,6 +616,12 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     loadingView.show();
                     loadingView.showView("登录中");
                     loginGet(fpTel, fpPwd, "1");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 800);
 //                    Toast.makeText(FingerPrintActivity.this, "onSucceeded", Toast.LENGTH_SHORT).show();
                 }
 

@@ -155,7 +155,7 @@ public class Utils {
             hasTheOne = true;
         } else {
             hasTheOne = false;
-     //       showToast(context, "没有权限！");
+            //       showToast(context, "没有权限！");
         }
         return hasTheOne;
     }
@@ -253,6 +253,7 @@ public class Utils {
         }
         return false;
     }
+
     /**
      * 获取本地软件版本号
      */
