@@ -997,13 +997,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     // 印章主动上报消息通知手机发生盖章行为
                                     // 盖章序号
 
-                                    Long intervalTime = System.currentTimeMillis() - lastTime;
-                                    if (intervalTime < 300) {
-                                        tooFastTip();
-                                        // 锁定印章
-                                        lockSeal();
+                                    if (lastTime != null) {
+                                        Long intervalTime = System.currentTimeMillis() - lastTime;
+                                        if (intervalTime < 300) {
+                                            tooFastTip();
+                                            // 锁定印章
+                                            lockSeal();
+                                        }
                                     }
-
                                     lastTime = System.currentTimeMillis();
 
                                     String allString = Utils.bytesToHexString(bytes);

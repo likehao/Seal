@@ -134,7 +134,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Intent intent = new Intent();
                 intent.setClass(this, FingerPrintActivity.class);
                 startActivity(intent);
-//                isFP = "1";
             }
             if (isFP != null && !isFP.equals("1")) {
                 Intent intent = new Intent();
