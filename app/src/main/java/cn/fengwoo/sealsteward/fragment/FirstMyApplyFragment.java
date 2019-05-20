@@ -148,7 +148,7 @@ public class FirstMyApplyFragment extends Fragment implements AdapterView.OnItem
                                 ,expireTime,app.getApplyCount(),applyTime,app.getId(),app.getApproveStatus()
                                 ,app.getApplyUserName(),app.getOrgStructureName(),app.getApplyUser()
                                 ,app.getHeadPortrait(),app.getStampCount(),app.getAvailableCount(),app.getPhotoCount()
-                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList(),app.getAutoGraph()));
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList(),app.getAutoGraph(),app.getSealId()));
                     }
                     //请求数据
                     if(null != getActivity()){

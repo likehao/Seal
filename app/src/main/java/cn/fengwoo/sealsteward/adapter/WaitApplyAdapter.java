@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
-import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.WaitApplyData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -132,15 +130,6 @@ public class WaitApplyAdapter extends BaseAdapter {
 
         } else {    //code == 6     已驳回（审批记录）
             viewHolder.item2_tv.setVisibility(View.GONE);
-         /*   viewHolder.item2_tv.setText("重提");
-            viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
-            viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
-            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    putValue(position);
-                }
-            });*/
         }
 
         return view;
@@ -159,6 +148,7 @@ public class WaitApplyAdapter extends BaseAdapter {
         intent.putExtra("failTime",waitApplyData.get(position).getFailTime());
         intent.putExtra("cause",waitApplyData.get(position).getCause());
         intent.putExtra("sign",waitApplyData.get(position).getAutoGraph());
+        intent.putExtra("sealId",waitApplyData.get(position).getSealId());
         context.startActivity(intent);
     }
     /**

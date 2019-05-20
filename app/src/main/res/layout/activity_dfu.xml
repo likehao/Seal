@@ -3,74 +3,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".activity.AboutActivity"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".activity.AboutActivity">
 
     <include layout="@layout/head" />
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/ll_show_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv_version"
-        android:layout_marginTop="15dp"
-        android:paddingLeft="25dp"
-        android:layout_width="match_parent"
-        android:text="版本："
-        android:gravity="center_vertical"
-        android:layout_height="35dp" />
+        android:visibility="gone">
 
-    <TextView
+        <TextView
+            android:id="@+id/tv_version"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="25dp"
+            android:text="版本：" />
 
-        android:id="@+id/tv_content"
-        android:layout_marginTop="15dp"
-        android:paddingLeft="25dp"
-        android:layout_width="match_parent"
-        android:text=""
-        android:gravity="center_vertical"
-        android:layout_height="35dp" />
+        <TextView
 
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="25dp"
+            android:text="" />
 
+        <Button
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="50dp"
+            android:visibility="gone" />
 
-    <Button
-        android:visibility="gone"
-        android:layout_marginTop="50dp"
-        android:id="@+id/test"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        />
-    <Button
-        android:id="@+id/btn_dfu"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/login_circle_bg"
-        android:text="固件升级"
-        android:textColor="@color/white" />
+        <Button
+            android:id="@+id/btn_dfu"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/login_circle_bg"
+            android:text="固件升级"
+            android:textColor="@color/white" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_hide_button"
-        android:orientation="vertical"
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_current_version"
-            android:text="版本号：3.02"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="版本号：3.02" />
 
         <TextView
-            android:layout_marginTop="10dp"
-            android:text="当前连接的印章固件版本是最新版本"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="当前连接的印章固件版本是最新版本" />
     </LinearLayout>
 </LinearLayout>

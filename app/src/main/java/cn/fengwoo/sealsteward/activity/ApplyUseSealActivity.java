@@ -114,6 +114,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         String failTime = intent.getStringExtra("failTime");
         String cause = intent.getStringExtra("cause");
         sign = intent.getStringExtra("sign");
+    //    sealId = intent.getStringExtra("sealId");
         if (type != null && type.equals("重提")) {
             sealName_TV.setText(sealName);
             apply_time_et.setText(applyCount + "");

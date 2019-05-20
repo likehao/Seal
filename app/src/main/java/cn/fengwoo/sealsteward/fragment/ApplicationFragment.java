@@ -655,21 +655,21 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         // read press time
         if (event.msgType.equals("ble_time_press")) {
             List<String> list = new ArrayList<>();
-            list.add("1");
-            list.add("2");
-            list.add("3");
-            list.add("4");
-            list.add("5");
-            list.add("6");
-            list.add("7");
-            list.add("8");
-            list.add("9");
-            list.add("10");
-            list.add("11");
-            list.add("12");
-            list.add("13");
-            list.add("14");
-            list.add("15");
+            list.add("1秒");
+            list.add("2秒");
+            list.add("3秒");
+            list.add("4秒");
+            list.add("5秒");
+            list.add("6秒");
+            list.add("7秒");
+            list.add("8秒");
+            list.add("9秒");
+            list.add("10秒");
+            list.add("11秒");
+            list.add("12秒");
+            list.add("13秒");
+            list.add("14秒");
+            list.add("15秒");
             picker = new SinglePicker<String>(getActivity(), list);
             picker.setCanceledOnTouchOutside(true);
             picker.setDividerRatio(WheelView.DividerConfig.FILL);

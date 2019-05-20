@@ -72,7 +72,7 @@ public class BiometricPromptApi28 implements IBiometricPromptImpl {
 
             mSignature = initSignature(KEY_NAME);
         } catch (Exception e) {
-//            throw new RuntimeException(e);
+     //       throw new RuntimeException(e);
         }
     }
 
