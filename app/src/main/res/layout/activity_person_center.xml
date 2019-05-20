@@ -226,7 +226,7 @@
                     <View style="@style/right_arrow" />
                 </RelativeLayout>
 
-                <View style="@style/line" />
+                <View style="@style/line_left" />
 
                 <RelativeLayout
                     android:id="@+id/rl_auth"
