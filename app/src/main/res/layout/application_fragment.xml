@@ -248,9 +248,28 @@
                                 android:layout_centerInParent="true"
                                 android:orientation="vertical">
 
-                                <ImageView
+                                <RelativeLayout
                                     style="@style/imageView"
-                                    android:background="@drawable/seal_dfu"/>
+
+
+
+                                    android:visibility="visible">
+
+                                    <ImageView
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:background="@drawable/seal_dfu"/>
+
+                                    <ImageView
+                                        android:id="@+id/iv_red_dot"
+                                        android:layout_width="12dp"
+                                        android:layout_height="12dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_marginEnd="0dp"
+                                        android:background="@drawable/message_circle"
+                                        android:visibility="gone" />
+
+                                </RelativeLayout>
 
                                 <TextView
                                     style="@style/application_text"

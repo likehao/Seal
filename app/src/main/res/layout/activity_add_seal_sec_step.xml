@@ -59,4 +59,15 @@
         android:background="@drawable/login_circle_bg"
         android:text="@string/add"/>
 
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_create_seal_pic"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/login_circle_bg"
+        android:text="生成"/>
 </LinearLayout>

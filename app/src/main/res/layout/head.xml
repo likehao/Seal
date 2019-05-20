@@ -26,6 +26,10 @@
         </LinearLayout>
 
         <TextView
+            android:layout_toRightOf="@+id/scan_ll"
+            android:layout_toLeftOf="@+id/msg_rl"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -15,6 +15,9 @@
         android:background="@color/white">
 
         <TextView
+            android:layout_toLeftOf="@+id/select_company_iv"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:id="@+id/company_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

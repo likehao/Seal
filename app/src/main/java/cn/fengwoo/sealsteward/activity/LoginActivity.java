@@ -118,7 +118,6 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         readPermissions();
         initData();
         dialogOut();
-
     }
 
     private void createNoMedia() {
@@ -147,6 +146,13 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         accountDao = new AccountDao(this);
         loadingView = new LoadingView(this);
         tv_finger_print_login.setOnClickListener(this);
+        String state = EasySP.init(this).getString("finger_print");
+        if (state.equals("1")) {
+        } else {
+            // 没有设置指纹登录
+//            showToast("没有打开指纹登录");
+            tv_finger_print_login.setVisibility(View.GONE);
+        }
     }
 
     private void initData() {

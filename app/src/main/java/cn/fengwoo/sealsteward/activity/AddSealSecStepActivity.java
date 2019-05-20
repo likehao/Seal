@@ -4,9 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -18,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lxj.matisse.Matisse;
@@ -34,7 +38,9 @@ import com.white.easysp.EasySP;
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.model.InvokeParam;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -46,13 +52,16 @@ import cn.fengwoo.sealsteward.entity.AddSealData;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
 import cn.fengwoo.sealsteward.utils.GlideEngineImage;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CustomDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
@@ -80,6 +89,10 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     LinearLayout secStep_ll;
     @BindView(R.id.img)
     ImageView img;
+
+    @BindView(R.id.btn_create_seal_pic)
+    Button btn_create_seal_pic;
+
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
     private Uri imageUri;
@@ -92,6 +105,8 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     private String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpeg";
     private String sealPringString;
     private static final int REQUEST_CODE_CHOOSE = 1;
+    private String croppedPicPath;
+    private File resultFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +125,8 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         set_back_ll.setOnClickListener(this);
         imageView.setOnClickListener(this);
         add_secStep_bt.setOnClickListener(this);
+        img.setOnClickListener(this);
+        btn_create_seal_pic.setOnClickListener(this);
     }
 
     private void initData() {
@@ -141,6 +158,14 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             case R.id.add_secStep_bt:
                 addSeal();
                 break;
+            case R.id.img:
+                permissions();
+                break;
+            case R.id.btn_create_seal_pic:
+                String pngFilePath = "/mnt/sdcard/SealDownImage/temp.png"; // 转换图片格式时要用这个路径
+//                String pngFilePath = "file://" + HttpDownloader.path + "temp.png";
+                convertToPng(croppedPicPath, pngFilePath);
+                break;
         }
     }
 
@@ -165,9 +190,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                     // 保存 印模 名字
                     sealPringString = responseInfo.getData().getFileName();
                     secStep_ll.setVisibility(View.GONE);
-                    Glide.with(AddSealSecStepActivity.this).load(file).into(img);
+//                    Glide.with(AddSealSecStepActivity.this).load(file).into(img);
                     //添加印章
-              //      addSeal();
+                    //      addSeal();
                 } else {
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
@@ -196,45 +221,56 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
             //获取选择的文件返回的uri
             assert data != null;
             List<Uri> mSelected = Matisse.obtainSelectUriResult(data);
-            File fileByUri;
+
             if (mSelected != null) {
                 //将uri转为file
-                fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
+                resultFile = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
             } else {
-                fileByUri = new File(Matisse.obtainCaptureImageResult(data));
+                croppedPicPath = Matisse.obtainCropResult(data);
+                resultFile = new File(croppedPicPath);
+                Utils.log("crop后文件大小：" + resultFile.length());
             }
-            //压缩文件
-            Luban.with(this)
-                    .load(fileByUri)   //传入原图
-                    .ignoreBy(100)     //不压缩的阈值，单位为K
-                    //  .setTargetDir(getPath())   //缓存压缩图片路径
-                    .filter(new CompressionPredicate() {
-                        @Override
-                        public boolean apply(String path) {
-                            return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
-                        }
-                    })
-                    .setCompressListener(new OnCompressListener() {
-                        @Override
-                        public void onStart() {
-                            // TODO 压缩开始前调用，可以在方法内启动 loading UI
-                        }
 
-                        @Override
-                        public void onSuccess(final File file) {
-                            // TODO 压缩成功后调用，返回压缩后的图片文件
+            secStep_ll.setVisibility(View.GONE);
+            Glide.with(AddSealSecStepActivity.this).load(resultFile).into(img);
 
-                            Utils.log("aaaaaaaaaaaaaa");
-//                            String filePath = file.getPath();
-//                            Picasso.with(AddSealSecStepActivity.this).load(file).into(sealPrint_cir);
-                            uploadPic(file);
-                        }
+            showDialog();
 
-                        @Override
-                        public void onError(Throwable e) {
-                            // TODO 当压缩过程出现问题时调用
-                        }
-                    }).launch();
+            // 压缩文件
+//            Luban.with(this)
+//                    .load(fileByUri)   //传入原图
+//                    .ignoreBy(100)     //不压缩的阈值，单位为K
+//                    //  .setTargetDir(getPath())   //缓存压缩图片路径
+//                    .filter(new CompressionPredicate() {
+//                        @Override
+//                        public boolean apply(String path) {
+//                            return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+//                        }
+//                    })
+//                    .setCompressListener(new OnCompressListener() {
+//                        @Override
+//                        public void onStart() {
+//                            // TODO 压缩开始前调用，可以在方法内启动 loading UI
+//                        }
+//
+//                        @Override
+//                        public void onSuccess(final File file) {
+//                            // TODO 压缩成功后调用，返回压缩后的图片文件
+//
+//                            Utils.log("aaaaaaaaaaaaaa");
+//
+////                            String filePath = file.getPath();
+////                            Picasso.with(AddSealSecStepActivity.this).load(file).into(sealPrint_cir);
+////                            uploadPic(file);
+//
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            // TODO 当压缩过程出现问题时调用
+//                        }
+//                    }).launch();
         }
     }
 
@@ -336,6 +372,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
                 .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))
                 .maxSelectable(1)   //可选最大数
+
+                .isCrop(true)                         // 开启裁剪
+
                 .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
@@ -343,4 +382,116 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 .imageEngine(new GlideEngineImage())   //图片加载引擎  原本使用的是GlideEngine
                 .forResult(REQUEST_CODE_CHOOSE);
     }
+
+    public void convertToPng(String jpgFilePath, String pngFilePath) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap bitmap = BitmapFactory.decodeFile(jpgFilePath);
+                bitmap = Utils.turnTransparent(bitmap);
+                try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(pngFilePath))) {
+                    if (bitmap.compress(Bitmap.CompressFormat.PNG, 80, bos)) {
+                        bos.flush();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // 显示图片
+                Utils.log("111111111111111111111111111111");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String pngFilePathx = "file://" + HttpDownloader.path + "temp.png";
+//                File pngFile = new File(pngFilePathx);
+
+                        Utils.log("222222222222222222222222222222");
+
+                        Glide.with(AddSealSecStepActivity.this).load(pngFilePathx).diskCacheStrategy(DiskCacheStrategy.NONE).
+                                into(img);
+
+                        File mFile = new File(pngFilePath);
+                        uploadPic(mFile);
+                    }
+                });
+
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        String pngFilePathx = "file://" + HttpDownloader.path + "temp.png";
+////                File pngFile = new File(pngFilePathx);
+//
+//                        Utils.log("222222222222222222222222222222");
+//
+//                        Glide.with(AddSealSecStepActivity.this).load(pngFilePathx).diskCacheStrategy(DiskCacheStrategy.NONE).
+//                                into(img);
+//
+//                        File mFile = new File(pngFilePath);
+//                        uploadPic(mFile);
+//
+//                    }
+//                }, 10000);
+            }
+        }).start();
+//        Bitmap bitmap = BitmapFactory.decodeFile(jpgFilePath);
+//        bitmap = Utils.turnTransparent(bitmap);
+//        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(pngFilePath))) {
+//            if (bitmap.compress(Bitmap.CompressFormat.PNG, 80, bos)) {
+//                bos.flush();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        // 显示图片
+//        Utils.log("111111111111111111111111111111");
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                String pngFilePathx = "file://" + HttpDownloader.path + "temp.png";
+////                File pngFile = new File(pngFilePathx);
+//
+//                Utils.log("222222222222222222222222222222");
+//
+//                Glide.with(AddSealSecStepActivity.this).load(pngFilePathx).diskCacheStrategy(DiskCacheStrategy.NONE).
+//                into(img);
+//
+//                File mFile = new File(pngFilePath);
+//                uploadPic(mFile);
+////              Glide.with(AddSealSecStepActivity.this).load(R.mipmap.ic_launcher).into(img);
+////              Glide.with(this).load(pngFile).into(img); // 不行
+//            }
+//        }, 10000);
+
+    }
+
+
+    /**
+     * 确认是否删除
+     */
+    private void showDialog() {
+        final CustomDialog commonDialog = new CustomDialog(this, "提示", "是否去掉白色背景，生成无底色印模？", "确定");
+        commonDialog.cancel.setText("取消");
+        commonDialog.showDialog();
+        commonDialog.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("rihgt");
+                commonDialog.dialog.dismiss();
+                // 扣图，然后上传扣图后的图片
+                String pngFilePath = "/mnt/sdcard/SealDownImage/temp.png"; // 转换图片格式时要用这个路径
+//                String pngFilePath = "file://" + HttpDownloader.path + "temp.png";
+                convertToPng(croppedPicPath, pngFilePath);
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("left");
+                commonDialog.dialog.dismiss();
+                // 上传原文件
+                uploadPic(resultFile);
+            }
+        });
+    }
+
 }

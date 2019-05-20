@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.security.rp.RPSDK;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -75,6 +76,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.ReboundScrollView;
 import io.reactivex.functions.Consumer;
@@ -122,6 +124,12 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.change_pwd_rl)
     RelativeLayout change_pwd_rl;
 
+    @BindView(R.id.rl_auth)
+    RelativeLayout rl_auth;
+
+    @BindView(R.id.tv_auth)
+    TextView tv_auth;
+
     private LoadingView loadingView;
     private LoginData loginData;
     private static final int REQUEST_CODE_CHOOSE = 1;
@@ -146,6 +154,8 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         ButterKnife.bind(this);
         setListener();
         initView();
+//        refreshData();
+//        tellServer();
     }
 
     private void initView() {
@@ -153,7 +163,6 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         set_back_ll.setVisibility(View.VISIBLE);
         loadingView = new LoadingView(this);
         loginData = new LoginData();
-
     }
 
     private void setListener() {
@@ -166,6 +175,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         change_pwd_rl.setOnClickListener(this);
         address_rl.setOnClickListener(this);
         headImg_iv.setOnClickListener(this);
+        rl_auth.setOnClickListener(this);
     }
 
     @Override
@@ -196,6 +206,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
                 loadingView.cancel();
                 String result = response.body().string();
+                Utils.log(result);
                 Gson gson = new Gson();
                 final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
                 }.getType());
@@ -213,6 +224,11 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                 companyName_tv.setText(CommonUtil.getUserData(PersonCenterActivity.this).getCompanyName());
                                 department_tv.setText(responseInfo.getData().getOrgStructureName());
                                 job_tv.setText(responseInfo.getData().getJob());
+                                if (responseInfo.getData().getAuthStatus()) {
+                                    tv_auth.setText("已认证");
+                                } else {
+                                    tv_auth.setText("未认证");
+                                }
                                 String email = responseInfo.getData().getUserEmail();
                                 if (email == null || email.equals("")) {
                                     email_tv.setText("未设置");
@@ -315,11 +331,20 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 selectAddress();
                 break;
             case R.id.headImg_iv:
-                intent = new Intent(this,BigImgActivity.class);
+                intent = new Intent(this, BigImgActivity.class);
                 String img = CommonUtil.getUserData(this).getHeadPortrait();
                 String headPortraitPath = "file://" + HttpDownloader.path + img;
-                intent.putExtra("photo",headPortraitPath);
+                intent.putExtra("photo", headPortraitPath);
                 startActivity(intent);
+                break;
+            case R.id.rl_auth:
+                if (tv_auth.getText().equals("未认证")) {
+                    // 显示未认证dialog
+                    didntAuth();
+                } else {
+                    // 显示已认证dialog
+                    didAuth();
+                }
                 break;
         }
     }
@@ -362,6 +387,9 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 //参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
                 .captureStrategy(new CaptureStrategy(true, "cn.fengwoo.sealsteward.fileprovider"))
                 .maxSelectable(1)   //可选最大数
+
+                .isCrop(true)                         // 开启裁剪
+
                 .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))  //过滤器
                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.imageSelectDimen))    //缩略图展示的大小
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
@@ -385,7 +413,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 //将uri转为file
                 fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
             } else {
-                fileByUri = new File(Matisse.obtainCaptureImageResult(data));
+                fileByUri = new File(Matisse.obtainCropResult(data));
             }
             //压缩文件
             Luban.with(this)
@@ -722,5 +750,117 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
             e.printStackTrace();
         }
         return detail;
+    }
+
+
+    private void getAuth() {
+        loadingView.show();
+        HttpUtil.sendDataAsync(this, HttpUrl.PERSONAL_AUTH, 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Looper.prepare();
+                Toast.makeText(PersonCenterActivity.this, e + "", Toast.LENGTH_SHORT).show();
+                Looper.loop();
+                Log.e("TAG", "获取个人信息数据失败........");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
+                String result = response.body().string();
+                Utils.log("getAuth:" + result);
+                Gson gson = new Gson();
+                ResponseInfo<String> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<String>>() {}.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RPSDK.start(responseInfo.getData(), PersonCenterActivity.this, new RPSDK.RPCompletedListener() {
+                            @Override
+                            public void onAuditResult(RPSDK.AUDIT audit, String s, String s1) {
+                                Utils.log("onAuditResult " + s + "  & " + s1);
+                                Utils.log("audit:" + audit);
+//                                Toast.makeText(PersonCenterActivity.this, audit + "", Toast.LENGTH_SHORT).show();
+                                if (audit == RPSDK.AUDIT.AUDIT_PASS) {
+                                    //认证通过
+                                    Toast.makeText(PersonCenterActivity.this, "认证通过", Toast.LENGTH_SHORT).show();
+
+                                    // 认证通过后告知后台
+                                    tellServer();
+                                } else if (audit == RPSDK.AUDIT.AUDIT_FAIL) { //认证不通过
+                                    Toast.makeText(PersonCenterActivity.this, "您的资料未能认证通过，请确保人证统一以及证件照的清晰", Toast.LENGTH_SHORT).show();
+                                    tellServer();
+                                } else if (audit == RPSDK.AUDIT.AUDIT_IN_AUDIT) {
+                                    //认证中，通常不会出现，只有在认证审核系统内部出现超时，未在限定时间内返回认证结果时出现。此时提示用户系统处理中，稍后查看认证结果即可。
+                                } else if (audit == RPSDK.AUDIT.AUDIT_NOT) {
+                                    //未认证，用户取消
+                                } else if (audit == RPSDK.AUDIT.AUDIT_EXCEPTION) {
+                                    //系统异常
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    private void tellServer() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("address", "asdf");
+        HttpUtil.sendDataAsync(PersonCenterActivity.this, HttpUrl.UPLOAD_SUCCESSFUL_AUTH, 3, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                Utils.log("999:" + result);
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Utils.log("refreshData()");
+                                refreshData();
+                            }
+                        });
+                    }
+                } else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                    Log.e("TAG", "获取个人信息数据失败........");
+                }
+            }
+        });
+    }
+
+    private void didntAuth() {
+        final CommonDialog commonDialog = new CommonDialog(this, "提示", "您的身份暂未认证，是否立即认证？", "立即认证");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAuth();
+                commonDialog.dialog.dismiss();
+            }
+        });
+    }
+
+    private void didAuth() {
+        final CommonDialog commonDialog = new CommonDialog(this, "提示", "您已认证通过，无需再认证!", "确定");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialog.dialog.dismiss();
+            }
+        });
     }
 }

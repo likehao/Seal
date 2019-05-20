@@ -139,13 +139,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             Utils.log("888isFP:" + isFP);
 
             // 忽略通过指纹登录来这和密码登录来这两种情形
-            if (isFP != null && !isFP.equals("1")&& !isFP.equals("0")) {
+            if (isFP != null && !isFP.equals("1") && !isFP.equals("0")) {
                 Intent intent = new Intent();
                 intent.setClass(this, FingerPrintActivity.class);
                 startActivity(intent);
                 finish();
             }
-        } else {}
+        } else {
+        }
 
         initView();
 
@@ -491,9 +492,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             for (MessageData messageData : responseInfo.getData()) {
 
                                 int msgNum = messageData.getUnreadCount();
-                                sum += msgNum;
                                 //显示消息数
                                 int type = messageData.getType();
+                                if (type != 5) {
+                                    sum += msgNum;
+                                }
                                 if (type == 4) { //显示工作台待我审批总消息数
                                     if (msgNum != 0) {
                                         main_msg_tv.setVisibility(View.VISIBLE);
@@ -611,8 +614,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void createNoMedia() {
         String filePath = "file://" + HttpDownloader.path;
-        File nomedia = new File(filePath + ".nomedia" );
-        if (! nomedia.exists())
+        File nomedia = new File(filePath + ".nomedia");
+        if (!nomedia.exists())
             try {
 //                nomedia.mkdirs();
                 nomedia.createNewFile();

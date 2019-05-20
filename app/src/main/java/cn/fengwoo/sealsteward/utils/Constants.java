@@ -8,6 +8,7 @@ public class Constants {
     // dataProtocolVersion   String // 是二期还是三期   2 为二，3为三
     // mac  String  // mac地址
     //currentSealId  // 当前seal id
+    //currentSealName  // 当前seal name
     //currentApplyId  // 当前 申请 id
     // permission // permission json
     // isAdmin   boolean // 权限是不是admin

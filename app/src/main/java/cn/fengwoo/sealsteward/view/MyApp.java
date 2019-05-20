@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.alibaba.security.rp.RPSDK;
 import com.hjq.toast.ToastUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -101,6 +102,7 @@ public class MyApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        RPSDK.initialize(this); // 阿里认证
         NetStateChangeReceiver.registerReceiver(this);
         Logger.addLogAdapter(new AndroidLogAdapter());
         ToastUtils.init(this);

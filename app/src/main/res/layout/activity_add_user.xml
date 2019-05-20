@@ -243,7 +243,7 @@
                     android:layout_marginEnd="90dp"
                     android:background="@null"
                     android:hint="@string/please_input_position"
-                    android:text="普通员工"
+                    android:text=""
                     android:textSize="12sp" />
 
 

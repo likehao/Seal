@@ -121,9 +121,13 @@ public class HttpUrl {
      */
     public static final String ADD_USER_PERMISSION = "user/adduserpermission";
     /**
-     * 核对添加seal
+     * 核对添加seal（用印申请）
      */
     public static final String SEAL_CHECK_ADD = "seal/checkadd";
+    /**
+     * 重提用印申请
+     */
+    public static final String APPLY_REMENTION = "apply/applyremention";
     /**
      * 添加seal
      */
@@ -344,4 +348,14 @@ public class HttpUrl {
      * dfu 升级包下载
      */
     public static final String DOWNLOAD_DFU_UPGRADE = "file/downloadupgrade";
+
+    /**
+     * 个人认证
+     */
+    public static final String PERSONAL_AUTH = "user/userauthtoken";
+
+    /**
+     * 个人认证结果上传服务器
+     */
+    public static final String UPLOAD_SUCCESSFUL_AUTH = "user/updateuserauthstatus";
 }

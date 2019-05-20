@@ -561,6 +561,7 @@ public class CameraAutoActivity extends Activity implements SurfaceHolder.Callba
 
                 // path存入list
                 allFilePath.add(img_path);
+                tv_complete.setText("完成（" + allFilePath.size() + "）");
                 Utils.log(allFilePath.size() + "");
 
                 // show pic

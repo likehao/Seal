@@ -87,8 +87,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
     private List<String> allFilePath = new ArrayList<>(); // 所有图片的名字
 
-//    private String commonPath = "file://" + HttpDownloader.path;
-    private String commonPath =  "/storage/emulated/0/SealDownImage/";
+    //    private String commonPath = "file://" + HttpDownloader.path;
+    private String commonPath = "/storage/emulated/0/SealDownImage/";
 
     public ImageBrowserConfig.TransformType transformType = ImageBrowserConfig.TransformType.Transform_Default;
     public ImageBrowserConfig.IndicatorType indicatorType = ImageBrowserConfig.IndicatorType.Indicator_Number;
@@ -275,7 +275,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 }
 
                 intent.putStringArrayListExtra("photoList", (ArrayList<String>) allFilePath);
-                setResult(123,intent);
+                setResult(123, intent);
                 finish();
                 break;
 
@@ -293,7 +293,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 }
 
                 intent.putStringArrayListExtra("photoList", (ArrayList<String>) allFilePath);
-                setResult(123,intent);
+                setResult(123, intent);
                 finish();
                 break;
 
@@ -330,7 +330,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                         //显示：传入当前View
                         .show(iv_little_pic);
                 break;
-
 
 
             //闪光灯
@@ -550,6 +549,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
                 // path存入list
                 allFilePath.add(img_path);
+                tv_complete.setText("完成（" + allFilePath.size() + "）");
                 Utils.log(allFilePath.size() + "");
 
                 // show pic

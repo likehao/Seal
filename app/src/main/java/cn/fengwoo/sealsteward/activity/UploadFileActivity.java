@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -626,14 +627,23 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 //                    // 弹出相机
 //                    permissions();
 
+                    if ((allPic.size() - uploadPicIndex - 1) != 0) {
+                        String tipString = "已上传：" + (uploadPicIndex + 1) + "张，还剩：" + (allPic.size() - uploadPicIndex - 1) + "张";
+                        Toast.makeText(UploadFileActivity.this, tipString, Toast.LENGTH_SHORT).show();
+                    }
+
                     // uploadPicIndex加一
                     uploadPicIndex++;
+
                     // 继续上传（uploadPicIndex不能大于数组大小）
                     if (uploadPicIndex < allPic.size()) {
                         File file = new File(allPic.get(uploadPicIndex));
                         compressAndUpload(file);
                     }
 
+                    if (uploadPicIndex == allPic.size()) {
+                        Toast.makeText(UploadFileActivity.this, "图片上传完毕", Toast.LENGTH_SHORT).show();
+                    }
                     success = true;
                 } else {
                     loadingView.cancel();

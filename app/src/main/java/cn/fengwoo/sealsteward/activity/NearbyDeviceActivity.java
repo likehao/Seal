@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.polidea.rxandroidble2.RxBleClient;
@@ -336,6 +337,15 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         return id;
     }
 
+    private String getSealNameFromList(String thisMac) {
+        String name = "";
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(thisMac)) {
+                name = sealData.getName();
+            }
+        }
+        return name;
+    }
 
     private SealData.SealEnclosureBean getSealEnclosure(String thisMac) {
         SealData.SealEnclosureBean sealEnclosureBean = new SealData.SealEnclosureBean();
@@ -420,7 +430,13 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         ((MyApp) getApplication()).setRxBleDevice(device);
 
-        connectionObservable = prepareConnectionObservable(device);
+        if(scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")){
+            // 用三期seal时不自动连接
+            connectionObservable = prepareConnectionObservableWithoutAutoConnect(device);
+        }else{
+            // 用二期seal时不自动连接
+            connectionObservable = prepareConnectionObservable(device);
+        }
 
         ((MyApp) getApplication()).setConnectionObservable(connectionObservable);
 
@@ -448,6 +464,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             if (!isAddNewSeal) {
                                 // 不是添加新的印章，就是连接原来的seal,保存sealId
                                 EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
+
+                                EasySP.init(this).putString("currentSealName", getSealNameFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
 
                                 EasySP.init(this).putBoolean("enableEnclosure", getTargetSealEnableEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()));
 
@@ -496,6 +514,15 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private Observable<RxBleConnection> prepareConnectionObservable(RxBleDevice bleDevice) {
         return bleDevice
                 .establishConnection(true)
+//                .retry(4)
+//                .delay(1, TimeUnit.SECONDS)
+                .takeUntil(disconnectTriggerSubject)
+                .compose(ReplayingShare.instance());
+    }
+
+    private Observable<RxBleConnection> prepareConnectionObservableWithoutAutoConnect(RxBleDevice bleDevice) {
+        return bleDevice
+                .establishConnection(false)
 //                .retry(4)
 //                .delay(1, TimeUnit.SECONDS)
                 .takeUntil(disconnectTriggerSubject)

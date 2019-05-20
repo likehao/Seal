@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -207,6 +209,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     private Long lastTime;
 
+    private Vibrator vibrator;
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -242,6 +246,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         setListener();
 //        permissions();
         getMessage();
+        vibrator=(Vibrator)getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+
         return view;
     }
 
@@ -286,6 +292,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
+                LogUtil.d("333" +result);
                 ResponseInfo<List<BannerData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<BannerData>>>() {
                 }
                         .getType());
@@ -669,6 +676,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //                        permissions();
                         if (stampTag && EasySP.init(getActivity()).getBoolean("enableEnclosure", false)) {
                             mLocationClient.start();
+                            Utils.log("mLocationClient.start();");
                             handler.postDelayed(this, 1000);
                         }
                     }
@@ -1000,6 +1008,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     if (lastTime != null) {
                                         Long intervalTime = System.currentTimeMillis() - lastTime;
                                         if (intervalTime < 300) {
+                                            vibrator.vibrate(3000);
                                             tooFastTip();
                                             // 锁定印章
                                             lockSeal();
@@ -1317,6 +1326,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             Utils.log("stampTag" + stampTag);
             if (stampTag && EasySP.init(getActivity()).getBoolean("enableEnclosure", false)) {
                 // 正在盖章，计算距离
+                Utils.log("distance:"  + "start");
                 double distance = Utils.distanceOfTwoPoints(location.getLatitude(), location.getLongitude(), Double.parseDouble(EasySP.init(getActivity()).getString("latitude")), Double.parseDouble(EasySP.init(getActivity()).getString("longitude")));
                 Utils.log("distance:" + distance + "");
                 double scope = Double.parseDouble(EasySP.init(getActivity()).getString("scope"));

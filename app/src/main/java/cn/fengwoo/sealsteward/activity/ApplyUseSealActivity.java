@@ -22,6 +22,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
+import com.white.easysp.EasySP;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -74,7 +75,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     ImageView apply_sign_iv;
     @BindView(R.id.please_sign_tv)
     TextView please_sign_tv;
-    String type,sign;
+    String type, sign;
 
     private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
     private final static int UPLOADREQUESTCODE = 10;
@@ -82,6 +83,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     private String name, failTime, cause;
     private String applyCount;
     private Intent intent;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,19 +106,29 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
 
     }
 
-    private void initData(){
+    private void initData() {
         intent = getIntent();
         type = intent.getStringExtra("重提");
         String sealName = intent.getStringExtra("sealName");
-        int applyCount = intent.getIntExtra("applyCount",0);
+        int applyCount = intent.getIntExtra("applyCount", 0);
         String failTime = intent.getStringExtra("failTime");
         String cause = intent.getStringExtra("cause");
         sign = intent.getStringExtra("sign");
-        if (type != null && type.equals("重提")){
+        if (type != null && type.equals("重提")) {
             sealName_TV.setText(sealName);
-            apply_time_et.setText(applyCount+"");
+            apply_time_et.setText(applyCount + "");
             fail_time_tv.setText(failTime);
             apply_cause_et.setText(cause);
+            url = HttpUrl.APPLY_REMENTION;
+        } else {
+            url = HttpUrl.CHECKUSESEAL;
+        }
+
+        sealId = EasySP.init(this).getString("currentSealId");
+        sealName = EasySP.init(this).getString("currentSealName");
+        if (!TextUtils.isEmpty(sealName)) {
+            Log.e("TAG", "id------------:" + sealId + "  name------------:" + sealName);
+            sealName_TV.setText(sealName);
         }
     }
 
@@ -165,7 +177,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             e.printStackTrace();
         }
         useSealApplyBean.setSealId(sealId);
-        HttpUtil.sendDataAsync(ApplyUseSealActivity.this, HttpUrl.CHECKUSESEAL, 2, null, useSealApplyBean, new Callback() {
+        HttpUtil.sendDataAsync(ApplyUseSealActivity.this, url, 2, null, useSealApplyBean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", e + "用印申请错误!!!!!!!!!!!!!!!!!!!!");
@@ -188,7 +200,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("sealId", sealId);
                         intent.putExtra("category", 4);
                         setResult(11);
-                        startActivityForResult(intent,UPLOADREQUESTCODE);
+                        startActivityForResult(intent, UPLOADREQUESTCODE);
                         Log.e("ATG", "用印申请check成功!!!!!!!");
                     }
                 } else {
@@ -222,7 +234,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             showToast("请填写申请事由");
             return false;
         }
-        if (apply_sign_iv.getDrawable() == null){
+        if (apply_sign_iv.getDrawable() == null) {
             showToast("请签名");
             return false;
         }
@@ -261,9 +273,9 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case UPLOADREQUESTCODE:
-                if (resultCode == 10){
+                if (resultCode == 10) {
                     finish();
                 }
                 break;
@@ -286,7 +298,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         //判断是否是重提还是直接用印申请
         if (type != null && type.equals("重提")) {
             autoGraph = sign;
-        }else {
+        } else {
             autoGraph = CommonUtil.getUserData(this).getAutoGraph();
         }
         //读取签名

@@ -70,6 +70,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     private boolean state;
     private int i;// index
     LoadingView loadingView;
+    private boolean isFromApplyUseSealActivity = false;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -212,7 +213,9 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                         @Override
                         public void run() {
                             loadingView.cancel();
-                            applyDialog();
+                            if (!isFromApplyUseSealActivity) {
+                                applyDialog();
+                            }
                         }
                     });
                 }
@@ -224,14 +227,18 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
      * 无申请单据弹出去申请dialog
      */
     private void applyDialog() {
+        if (isFromApplyUseSealActivity) {
+            return;
+        }
         CommonDialog commonDialog = new CommonDialog(this, "您暂无可用申请单", "", "去申请");
         commonDialog.showDialog();
+        Utils.log("commonDialog.showDialog()");
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 commonDialog.dialog.dismiss();
                 Intent intent = new Intent(ApplyCauseActivity.this, ApplyUseSealActivity.class);
-                startActivityForResult(intent, 11);
+                startActivityForResult(intent, 12);
             }
         });
     }
@@ -288,6 +295,12 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                 getData();
             }
         }
+
+        if (requestCode == 12) {
+            isFromApplyUseSealActivity = true;
+            getData();
+        }
+
         if (requestCode == 123 && resultCode == 123) {
             Utils.log("requestCode == 123");
             if (EasySP.init(this).getString("dataProtocolVersion").equals("2")) {

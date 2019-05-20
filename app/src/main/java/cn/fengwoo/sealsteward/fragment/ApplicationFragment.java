@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -136,6 +137,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     QMUIFloatLayout qmuidemo_floatlayout3;
     @BindView(R.id.qmuidemo_floatlayout4)
     QMUIFloatLayout qmuidemo_floatlayout4;
+
+    @BindView(R.id.iv_red_dot)
+    ImageView iv_red_dot;
+
     private SinglePicker<String> picker;
 
     @Nullable
@@ -146,7 +151,25 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         setListener();
         Utils.log("此时可见");
         hideSomeIcon();
+        showOrHideRedDot();
         return view;
+    }
+
+    private void showOrHideRedDot() {
+        String state = EasySP.init(getActivity()).getString("hasNewDfuVersion", "0");
+        if (state.equals("1")) {
+            iv_red_dot.setVisibility(View.VISIBLE);
+        } else {
+            iv_red_dot.setVisibility(View.GONE);
+        }
+
+        // 没有连接seal和连接的是二期的seal时，隐藏红点
+        if (!Utils.isConnectWithouToast(getActivity())) {
+            iv_red_dot.setVisibility(View.GONE);
+        }
+        if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+            iv_red_dot.setVisibility(View.GONE);
+        }
     }
 
     private void setListener() {
@@ -174,38 +197,58 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     private void hideSomeIcon() {
         if (!Utils.hasThePermission(getActivity(), Constants.permission6)) {
             start_psd_rl.setVisibility(View.GONE);
+        } else {
+            start_psd_rl.setVisibility(View.VISIBLE);
         }
         if (!Utils.hasThePermission(getActivity(), Constants.permission7)) {
             key_psd_rl.setVisibility(View.GONE);
+        } else {
+            key_psd_rl.setVisibility(View.VISIBLE);
         }
         if (!Utils.hasThePermission(getActivity(), Constants.permission9)) {
             reset_device_rl.setVisibility(View.GONE);
+        } else {
+            reset_device_rl.setVisibility(View.VISIBLE);
         }
         if (!Utils.hasThePermission(getActivity(), Constants.permission4)) {
             press_time_rl.setVisibility(View.GONE);
+        } else {
+            press_time_rl.setVisibility(View.VISIBLE);
         }
         if (!Utils.hasThePermission(getActivity(), Constants.permission8)) {
             rl_voice.setVisibility(View.GONE);
+        } else {
+            rl_voice.setVisibility(View.VISIBLE);
         }
         if (!Utils.hasThePermission(getActivity(), Constants.permission15)) {
             add_person_rl.setVisibility(View.GONE);
+        } else {
+            add_person_rl.setVisibility(View.VISIBLE);
         }
         if (!Utils.hasThePermission(getActivity(), Constants.permission1)) {
             add_seal_rl.setVisibility(View.GONE);
+        } else {
+            add_seal_rl.setVisibility(View.VISIBLE);
         }
 
         // 组织架构
         if (!Utils.hasThePermission(getActivity(), Constants.permission26)) {
             organizational_structure_rl.setVisibility(View.GONE);
+        } else {
+            organizational_structure_rl.setVisibility(View.VISIBLE);
         }
 
         // 更换印章
         if (!Utils.hasThePermission(getActivity(), Constants.permission25)) {
             change_seal.setVisibility(View.GONE);
+        } else {
+            change_seal.setVisibility(View.VISIBLE);
         }
         // dfu
         if (!Utils.hasThePermission(getActivity(), Constants.permission24)) {
             seal_dfu.setVisibility(View.GONE);
+        } else {
+            seal_dfu.setVisibility(View.VISIBLE);
         }
 
         // 显示提示
@@ -236,11 +279,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             rl_voice.setVisibility(View.GONE);
             rl_pwd_user.setVisibility(View.GONE);
             seal_dfu.setVisibility(View.GONE);
-        }else{
+        } else {
             start_psd_rl.setVisibility(View.GONE);
             key_psd_rl.setVisibility(View.GONE);
         }
-
     }
 
     @Override
@@ -754,5 +796,6 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             Utils.log("此时可见");
         }
         hideSomeIcon();
+        showOrHideRedDot();
     }
 }

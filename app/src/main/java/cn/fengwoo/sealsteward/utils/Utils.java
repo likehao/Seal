@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -148,6 +149,18 @@ public class Utils {
         return connectState;
     }
 
+    public static boolean isConnectWithouToast(Context context) {
+        boolean connectState = false;
+        if (((MyApp) getApplication()).getConnectionObservable() == null) {
+            Utils.log("没有连接ble设备");
+//            Utils.showToast(context, "请连接印章");
+            connectState = false;
+        } else {
+            connectState = true;
+        }
+        return connectState;
+    }
+
     public static boolean hasThePermission(Context context, String idString) {
         boolean hasTheOne = false;
         String allPermissionHaveGot = EasySP.init(context).getString("permission");
@@ -270,4 +283,37 @@ public class Utils {
         }
         return localVersion;
     }
+
+    //把白色转换成透明
+    public static Bitmap turnTransparent(Bitmap mBitmap) {
+        Bitmap createBitmap = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        if (mBitmap != null) {
+            int mWidth = mBitmap.getWidth();
+            int mHeight = mBitmap.getHeight();
+            for (int i = 0; i < mHeight; i++) {
+                for (int j = 0; j < mWidth; j++) {
+                    int color = mBitmap.getPixel(j, i);
+                    int g = Color.green(color);
+                    int r = Color.red(color);
+                    int b = Color.blue(color);
+                    int a = Color.alpha(color);
+
+//                    if(g>=250&&r>=250&&b>=250){
+//                        a = 0;
+//                    }
+//                    if(g<=100&&r>=200&&b<=100){
+//                        a = 0;
+//                    }
+
+                    if (g >= 100 && r >= 100 && b >= 100) {
+                        a = 0;
+                    }
+                    color = Color.argb(a, r, g, b);
+                    createBitmap.setPixel(j, i, color);
+                }
+            }
+        }
+        return createBitmap;
+    }
+
 }
