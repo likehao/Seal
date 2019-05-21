@@ -27,6 +27,7 @@ import com.white.easysp.EasySP;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -86,6 +87,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     private Intent intent;
     private String url;
     private String applyId;
+//    private ArrayList<String> imgList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,18 +120,20 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         applyId = intent.getStringExtra("applyId");
         sign = intent.getStringExtra("sign");
         sealId = intent.getStringExtra("sealId");
+//        imgList = intent.getStringArrayListExtra("imgList");
+        url = HttpUrl.CHECKUSESEAL;
         if (type != null && type.equals("重提")) {
             sealName_TV.setText(sealName);
             apply_time_et.setText(applyCount + "");
             fail_time_tv.setText(failTime);
             apply_cause_et.setText(cause);
-            url = HttpUrl.APPLY_REMENTION;
+//            url = HttpUrl.APPLY_REMENTION;
             Utils.log("重提");
         } else {
-            url = HttpUrl.CHECKUSESEAL;
+//            url = HttpUrl.CHECKUSESEAL;
         }
 
-   //     sealId = EasySP.init(this).getString("currentSealId");
+        //     sealId = EasySP.init(this).getString("currentSealId");
         sealName = EasySP.init(this).getString("currentSealName");
         if (!TextUtils.isEmpty(sealName)) {
             Log.e("TAG", "id------------:" + sealId + "  name------------:" + sealName);
@@ -174,9 +178,18 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         useSealApplyBean.setApplyCount(Integer.valueOf(applyCount));
         String userId = CommonUtil.getUserData(this).getId();
         useSealApplyBean.setApplyUser(userId);
-        if (!TextUtils.isEmpty(applyId)) {
-            useSealApplyBean.setApplyId(applyId);
-        }
+//        if (imgList != null) {
+//            Utils.log("imgList:"+ imgList.size());
+//            useSealApplyBean.setImgList(imgList);
+//        }else{
+//            ArrayList<String> imgListx = new ArrayList<>();
+//            imgListx.add("asdf.jpg");
+//            useSealApplyBean.setImgList(imgList);
+//        }
+
+//        if (!TextUtils.isEmpty(applyId)) {
+//            useSealApplyBean.setApplyId(applyId);
+//        }
         //时间转时间戳
         try {
             time = DateUtils.dateToStamp(failTime);
@@ -191,6 +204,8 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", e + "用印申请错误!!!!!!!!!!!!!!!!!!!!");
+                Utils.log("useSealApply:ERROR:" + e.toString());
+
             }
 
             @Override
@@ -210,6 +225,11 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("failTime", time);
                         intent.putExtra("sealId", sealId);
                         intent.putExtra("category", 4);
+
+                        if (!TextUtils.isEmpty(applyId)) {
+                            intent.putExtra("applyId", applyId);
+                        }
+
                         setResult(11);
                         startActivityForResult(intent, UPLOADREQUESTCODE);
                         Log.e("ATG", "用印申请check成功!!!!!!!");

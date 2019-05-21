@@ -51,6 +51,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.RecycleviewAdapter;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
+import cn.fengwoo.sealsteward.bean.AddUseSealApplyBeanx;
 import cn.fengwoo.sealsteward.engine.GlideImageEngine;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
@@ -123,6 +124,10 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     private List<String> allPic;
 
+    private String url;
+
+    private String applyId;
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -136,6 +141,13 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         setContentView(R.layout.activity_upload_file);
         ButterKnife.bind(this);
         initView();
+        applyId = getIntent().getStringExtra("applyId");
+        if (TextUtils.isEmpty(applyId)) {
+            url = HttpUrl.ADDUSESEAL;
+        }else{
+            url = HttpUrl.APPLY_REMENTION;
+        }
+
 //        clickListener();
     }
 
@@ -676,14 +688,17 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         String userId = intent.getStringExtra("userId");
         String failTime = intent.getStringExtra("failTime");
         String sealId = intent.getStringExtra("sealId");
-        AddUseSealApplyBean addUseSealApplyBean = new AddUseSealApplyBean();
+        AddUseSealApplyBeanx addUseSealApplyBean = new AddUseSealApplyBeanx();
         addUseSealApplyBean.setApplyCause(cause);
         addUseSealApplyBean.setApplyCount(Integer.valueOf(applyCount));
         addUseSealApplyBean.setApplyUser(userId);
         addUseSealApplyBean.setExpireTime(failTime);
         addUseSealApplyBean.setSealId(sealId);
         addUseSealApplyBean.setImgList(allFileName);
-        HttpUtil.sendDataAsync(UploadFileActivity.this, HttpUrl.ADDUSESEAL, 2, null, addUseSealApplyBean, new Callback() {
+        if (!TextUtils.isEmpty(applyId)) {
+            addUseSealApplyBean.setApplyId(applyId);
+        }
+        HttpUtil.sendDataAsync(UploadFileActivity.this, url, 2, null, addUseSealApplyBean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", e + "用印申请错误错误!!!!!!!!!!!!!!!!!");

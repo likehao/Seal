@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -123,7 +124,6 @@ public class WaitApplyAdapter extends BaseAdapter {
                 });
             } else {
                 viewHolder.item2_tv.setVisibility(View.GONE);
-
             }
         } else if (code == 5) {  //已审批(审批记录)
             seeRecordCloseBill(status, position, id);
@@ -150,6 +150,7 @@ public class WaitApplyAdapter extends BaseAdapter {
         intent.putExtra("sign",waitApplyData.get(position).getAutoGraph());
         intent.putExtra("sealId",waitApplyData.get(position).getSealId());
         intent.putExtra("applyId",waitApplyData.get(position).getId());
+//        intent.putStringArrayListExtra("imgList", (ArrayList<String>) waitApplyData.get(position).getStampRecordImgList());
         context.startActivity(intent);
     }
     /**

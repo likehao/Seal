@@ -379,6 +379,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 startActivityForResult(intent, Constants.TO_WANT_SEAL);
                 break;
             case R.id.useSealApply_rl:
+                EasySP.init(getActivity()).putString("currentSealName", "");
                 intent = new Intent(getActivity(), ApplyUseSealActivity.class);
                 startActivity(intent);
                 break;

@@ -321,12 +321,11 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
             Intent intent = new Intent(this, FileActivity.class);
             intent.putExtra("fileName",stampPdf);
             startActivity(intent);
-        }else {
+        }else if(s.equals("记录文件")){
             Intent intent = new Intent(this, FileActivity.class);
             intent.putExtra("fileName",stampRecordPdf);
             startActivity(intent);
         }
-
     }
 
     /**

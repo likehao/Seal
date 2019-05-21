@@ -40,6 +40,7 @@ import cn.fengwoo.sealsteward.entity.WaitApplyData;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -190,6 +191,21 @@ public class FourthMyApplyFragment extends Fragment implements AdapterView.OnIte
 
             }
         });
+    }
+
+
+    // 可见时要刷新ui
+    // 可见的情况有两种，一：onCreateView,二：如下的回调
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Utils.log("hidden:" + hidden);
+        // false时可见
+        if (!hidden) {
+            Utils.log("此时可见");
+
+        }
+
     }
 
 }

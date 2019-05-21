@@ -3,7 +3,7 @@ package cn.fengwoo.sealsteward.bean;
 import java.io.Serializable;
 import java.util.List;
 
-public class AddUseSealApplyBean implements Serializable {
+public class AddUseSealApplyBeanx implements Serializable {
 
     /**
      * 添加用印申请
@@ -27,14 +27,14 @@ public class AddUseSealApplyBean implements Serializable {
     private List<String> imgList;
 
     //上传盖章详情图片
-    private String applyId;
+    private String id;
 
     public String getApplyId() {
-        return applyId;
+        return id;
     }
 
     public void setApplyId(String applyId) {
-        this.applyId = applyId;
+        this.id = applyId;
     }
 
     public List<String> getImgList() {
@@ -94,7 +94,7 @@ public class AddUseSealApplyBean implements Serializable {
                 ", expireTime='" + expireTime + '\'' +
                 ", sealId='" + sealId + '\'' +
                 ", imgList=" + imgList +
-                ", applyId=" + applyId +
+                ", applyId=" + id +
                 '}';
     }
 
