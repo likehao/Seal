@@ -121,13 +121,9 @@ public class HttpUrl {
      */
     public static final String ADD_USER_PERMISSION = "user/adduserpermission";
     /**
-     * 核对添加seal（用印申请）
+     * 核对添加seal
      */
     public static final String SEAL_CHECK_ADD = "seal/checkadd";
-    /**
-     * 重提用印申请
-     */
-    public static final String APPLY_REMENTION = "apply/applyremention";
     /**
      * 添加seal
      */
@@ -141,9 +137,13 @@ public class HttpUrl {
      */
     public static final String ADDUSESEAL = "apply/adduseseal";
     /**
-     * 检验用印申请
+     * 检验用印申请（用印申请）
      */
     public static final String CHECKUSESEAL = "apply/checkuseseal";
+    /**
+     * 重提用印申请
+     */
+    public static final String APPLY_REMENTION = "apply/applyremention";
     /**
      * 审批列表
      */

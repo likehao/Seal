@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -173,9 +174,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         animHeight = (screenHeight - screenWidth - menuPopviewHeight - SystemUtils.dp2px(context, 44)) / 2;
 
         //这里相机取景框我这是为宽高比3:4 所以限制底部控件的高度是剩余部分
-        RelativeLayout.LayoutParams bottomParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, menuPopviewHeight);
-        bottomParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        homecamera_bottom_relative.setLayoutParams(bottomParam);
+//        RelativeLayout.LayoutParams bottomParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, menuPopviewHeight);
+//        bottomParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//        homecamera_bottom_relative.setLayoutParams(bottomParam);
     }
 
     private Handler mHandler = new Handler() {
@@ -608,7 +609,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(screenWidth, (screenWidth * pictrueSize.width) / pictrueSize.height);
         //这里当然可以设置拍照位置 比如居中 我这里就置顶了
-        //params.gravity = Gravity.CENTER;
+        params.gravity = Gravity.CENTER;
         surfaceView.setLayoutParams(params);
     }
 

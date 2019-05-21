@@ -26,6 +26,8 @@
         </LinearLayout>
 
         <TextView
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/scan_ll"
             android:layout_toLeftOf="@+id/msg_rl"
             android:ellipsize="end"
@@ -35,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/home_page"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:visibility="visible" />

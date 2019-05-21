@@ -61,6 +61,7 @@
                     style="@style/pressed_effect">
 
                     <TextView
+                        android:id="@+id/tv_namex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -69,6 +70,11 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:layout_marginStart="15dp"
+                        android:gravity="right"
+                        android:layout_toRightOf="@+id/tv_namex"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:id="@+id/realName_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -133,6 +139,8 @@
                     style="@style/pressed_effect">
 
                     <TextView
+                        android:id="@+id/tv_emailx"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -141,6 +149,11 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:layout_marginStart="15dp"
+                        android:gravity="right"
+                        android:layout_toRightOf="@+id/tv_emailx"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:id="@+id/email_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,6 +174,7 @@
                     style="@style/pressed_effect">
 
                     <TextView
+                        android:id="@+id/tv_addressx"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -174,6 +188,11 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
+                        android:layout_marginStart="15dp"
+                        android:gravity="right"
+                        android:layout_toRightOf="@+id/tv_addressx"
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:id="@+id/address_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -309,6 +328,8 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:layout_marginStart="15dp"
+                        android:gravity="right"
                         android:layout_toRightOf="@+id/tv_company_namex"
                         android:ellipsize="end"
                         android:singleLine="true"

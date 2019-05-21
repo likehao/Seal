@@ -41,6 +41,7 @@ import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -84,6 +85,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     private String applyCount;
     private Intent intent;
     private String url;
+    private String applyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +115,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         int applyCount = intent.getIntExtra("applyCount", 0);
         String failTime = intent.getStringExtra("failTime");
         String cause = intent.getStringExtra("cause");
+        applyId = intent.getStringExtra("applyId");
         sign = intent.getStringExtra("sign");
         sealId = intent.getStringExtra("sealId");
         if (type != null && type.equals("重提")) {
@@ -121,6 +124,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             fail_time_tv.setText(failTime);
             apply_cause_et.setText(cause);
             url = HttpUrl.APPLY_REMENTION;
+            Utils.log("重提");
         } else {
             url = HttpUrl.CHECKUSESEAL;
         }
@@ -170,6 +174,9 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         useSealApplyBean.setApplyCount(Integer.valueOf(applyCount));
         String userId = CommonUtil.getUserData(this).getId();
         useSealApplyBean.setApplyUser(userId);
+        if (!TextUtils.isEmpty(applyId)) {
+            useSealApplyBean.setApplyId(applyId);
+        }
         //时间转时间戳
         try {
             time = DateUtils.dateToStamp(failTime);

@@ -149,6 +149,7 @@ public class WaitApplyAdapter extends BaseAdapter {
         intent.putExtra("cause",waitApplyData.get(position).getCause());
         intent.putExtra("sign",waitApplyData.get(position).getAutoGraph());
         intent.putExtra("sealId",waitApplyData.get(position).getSealId());
+        intent.putExtra("applyId",waitApplyData.get(position).getId());
         context.startActivity(intent);
     }
     /**

@@ -46,12 +46,18 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:gravity="left"
+                            android:ellipsize="end"
+                            android:singleLine="true"
                             android:id="@+id/realName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/company_name" />
 
                         <TextView
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:gravity="right"
                             android:id="@+id/phone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

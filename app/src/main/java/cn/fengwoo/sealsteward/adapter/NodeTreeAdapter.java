@@ -244,7 +244,7 @@ public class NodeTreeAdapter extends BaseAdapter {
                                     public void run() {
                                         String picPath = "file://" + HttpDownloader.path + fileName;
                                         Picasso.with(context).load(picPath).into(holder.iv_mark);
-                                        holder.iv_mark.setBackgroundDrawable(context.getResources().getDrawable(R.color.white));
+                                        holder.iv_mark.setBackgroundDrawable(context.getResources().getDrawable(R.color.transparent));
                                     }
                                 });
                             }
@@ -258,7 +258,7 @@ public class NodeTreeAdapter extends BaseAdapter {
                 } else {
                     String headPortraitPath = "file://" + HttpDownloader.path + pic;
                     Picasso.with(context).load(headPortraitPath).into(holder.iv_mark);
-                    holder.iv_mark.setBackgroundDrawable(context.getResources().getDrawable(R.color.white));
+                    holder.iv_mark.setBackgroundDrawable(context.getResources().getDrawable(R.color.Transparent));
                 }
             }
         } else {

@@ -83,6 +83,9 @@
             android:textSize="12sp" />
 
         <TextView
+            android:gravity="left"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:id="@+id/record_seal_people_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
