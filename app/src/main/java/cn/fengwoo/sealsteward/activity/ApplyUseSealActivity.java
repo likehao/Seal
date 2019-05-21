@@ -184,7 +184,9 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        useSealApplyBean.setSealId(sealId);
+        if (!TextUtils.isEmpty(sealId)) {
+            useSealApplyBean.setSealId(sealId);
+        }
         HttpUtil.sendDataAsync(ApplyUseSealActivity.this, url, 2, null, useSealApplyBean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -194,6 +196,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
+                Utils.log("useSealApply:" + result);
                 Gson gson = new Gson();
                 ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }
