@@ -6,7 +6,7 @@
 
     <View
         style="@style/line"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp" />
 
     <RelativeLayout
         android:id="@+id/select_company_rl"
@@ -15,30 +15,29 @@
         android:background="@color/white">
 
         <TextView
-            android:layout_toLeftOf="@+id/select_company_iv"
-            android:ellipsize="end"
-            android:singleLine="true"
             android:id="@+id/company_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/company_name"
             android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/company_name"
             android:textColor="@color/black"
-            android:textSize="15sp"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginEnd="40dp"
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/select_company_iv"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/sure"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
-            android:visibility="gone"
-            android:layout_centerVertical="true"/>
+            android:background="@drawable/sure"
+            android:visibility="gone" />
     </RelativeLayout>
 
-    <View
-        style="@style/line"/>
+    <View style="@style/line" />
 
 </LinearLayout>

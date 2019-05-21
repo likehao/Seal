@@ -73,6 +73,9 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
                         android:background="@null"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:layout_marginStart="90dp"
                         android:textColor="@color/gray_text"
                         android:textSize="15sp" />
 
