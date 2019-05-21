@@ -1001,7 +1001,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     Utils.log("batteryInt:" + batteryInt);
                                     // 刷新ui,赋值电量
                                     electric_ll.setVisibility(View.VISIBLE);
-                                    tv_battery.setText(String.valueOf(batteryInt));
+                                    tv_battery.setText(String.valueOf(batteryInt+"%"));
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
                                     // 印章主动上报消息通知手机发生盖章行为
                                     // 盖章序号

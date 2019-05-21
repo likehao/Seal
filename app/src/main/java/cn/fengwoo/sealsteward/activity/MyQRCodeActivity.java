@@ -93,7 +93,8 @@ public class MyQRCodeActivity extends BaseActivity implements View.OnClickListen
     private void makeQRCode() {
         String qrString = "userId=" + CommonUtil.getUserData(this).getId();
         Bitmap bitmap = CodeUtils.createImage(qrString, 600, 600,
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+//                BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));   生成带logo的二维码图片
+                null);  //生成不带logo的二维码图片
         QRCode_iv.setImageBitmap(bitmap);
     }
 

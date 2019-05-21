@@ -18,8 +18,8 @@ android {
         applicationId "cn.fengwoo.sealsteward"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 310
-        versionName "3.1.0"
+        versionCode 311
+        versionName "3.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
