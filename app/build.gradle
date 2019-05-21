@@ -52,7 +52,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '26.0.2'
 }
 //分享
 MobSDK {
@@ -137,7 +137,8 @@ dependencies {
     implementation(name: 'alipaySdk-15.6.0-20190226104053', ext: 'aar')
 
     // 知乎选图片
-//    implementation(name: 'matisse-debug', ext: 'aar')
+
+    //    implementation(name: 'matisse-debug', ext: 'aar')
 
     //pwd
     implementation(name: 'alipay-release', ext: 'aar')
@@ -155,7 +156,8 @@ dependencies {
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
-//    implementation 'com.squareup.picasso:picasso:2.4.0'
+
+    //    implementation 'com.squareup.picasso:picasso:2.4.0'
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
@@ -199,7 +201,8 @@ dependencies {
     //侧滑删除
     implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
 
-//    //知乎图片选择器
+    //    //知乎图片选择器
+
     //   implementation 'com.zhihu.android:matisse:0.5.1'
 
     //权限申请
@@ -213,6 +216,7 @@ dependencies {
     implementation('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.6') {
         exclude group: 'com.android.support'
     }
+
     //蓝牙操作库
     implementation 'com.polidea.rxandroidble2:rxandroidble:1.8.1'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
@@ -237,36 +241,35 @@ dependencies {
 
     //adapter
     implementation 'com.github.mcxtzhang:all-base-adapter:V1.5.2'
-
     implementation 'com.github.tianma8023:NetDetector:v0.2.0'
 
     // spinner
     implementation 'com.weiwangcn.betterspinner:library:1.1.0'
-
     implementation 'com.hjq:toast:5.8'
-
     implementation project(':matisse')
 
     // dfu
-//    api 'no.nordicsemi.android:dfu:1.6.1'
+
+    //    api 'no.nordicsemi.android:dfu:1.6.1'
     api 'no.nordicsemi.android:dfu:1.8.1'
-//    implementation project(':alipay')
+
+    //    implementation project(':alipay')
 
     //图片放大缩小
     implementation('com.github.chrisbanes:PhotoView:2.1.4') {
         exclude group: 'com.android.support'
     }
+
     //图片浏览
     implementation 'com.github.maning0303:MNImageBrowser:V1.1.5'
     implementation project(':biometriclib')
-
     implementation files('libs/okhttp-3.12.0.jar')
     implementation files('libs/okio-1.16.0.jar')
     implementation files('libs/windvane-min-8.0.3.2.3.jar')
-    implementation (name:'oss-android-sdk-2.9.2',ext:'aar')
-    implementation (name:'FaceLivenessOpen-2.1.6.12',ext:'aar')
-    implementation (name:'rpsdk-3.0.0.2',ext:'aar')
-    implementation (name:'SecurityGuardSDK-external-release-5.4.121',ext:'aar')
-    implementation (name:'SecurityBodySDK-external-release-5.4.79',ext:'aar')
-    implementation (name:'NoCaptchaSDK-external-release-5.4.29',ext:'aar')
+    implementation(name: 'oss-android-sdk-2.9.2', ext: 'aar')
+    implementation(name: 'FaceLivenessOpen-2.1.6.12', ext: 'aar')
+    implementation(name: 'rpsdk-3.0.0.2', ext: 'aar')
+    implementation(name: 'SecurityGuardSDK-external-release-5.4.121', ext: 'aar')
+    implementation(name: 'SecurityBodySDK-external-release-5.4.79', ext: 'aar')
+    implementation(name: 'NoCaptchaSDK-external-release-5.4.29', ext: 'aar')
 }

@@ -114,7 +114,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         String failTime = intent.getStringExtra("failTime");
         String cause = intent.getStringExtra("cause");
         sign = intent.getStringExtra("sign");
-    //    sealId = intent.getStringExtra("sealId");
+        sealId = intent.getStringExtra("sealId");
         if (type != null && type.equals("重提")) {
             sealName_TV.setText(sealName);
             apply_time_et.setText(applyCount + "");
@@ -125,7 +125,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             url = HttpUrl.CHECKUSESEAL;
         }
 
-        sealId = EasySP.init(this).getString("currentSealId");
+   //     sealId = EasySP.init(this).getString("currentSealId");
         sealName = EasySP.init(this).getString("currentSealName");
         if (!TextUtils.isEmpty(sealName)) {
             Log.e("TAG", "id------------:" + sealId + "  name------------:" + sealName);
