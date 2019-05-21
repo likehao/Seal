@@ -138,6 +138,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         if (!TextUtils.isEmpty(sealName)) {
             Log.e("TAG", "id------------:" + sealId + "  name------------:" + sealName);
             sealName_TV.setText(sealName);
+            sealId = EasySP.init(this).getString("currentSealId");
         }
     }
 
