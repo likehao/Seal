@@ -79,7 +79,7 @@ public class DfuActivity extends BaseActivity {
         setContentView(R.layout.activity_dfu);
         ButterKnife.bind(this);
 
-        Toast.makeText(this,"dfu start...................",Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,"dfu start...................",Toast.LENGTH_LONG).show();
         initData();
         initView();
 

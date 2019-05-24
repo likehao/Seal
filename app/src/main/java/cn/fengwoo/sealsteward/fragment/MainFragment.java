@@ -1019,7 +1019,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     lastTime = System.currentTimeMillis();
 
                                     String allString = Utils.bytesToHexString(bytes);
-                                    String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
+//                                        String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
+                                    String stampNumberHexString = allString.substring(12, 14) + allString.substring(9, 11);
                                     stampNumber = Integer.valueOf(stampNumberHexString, 16);
                                     // 盖章时间
                                     String timeHexString = allString.substring(15, 32);
