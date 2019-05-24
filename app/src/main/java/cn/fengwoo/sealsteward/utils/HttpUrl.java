@@ -358,4 +358,9 @@ public class HttpUrl {
      * 个人认证结果上传服务器
      */
     public static final String UPLOAD_SUCCESSFUL_AUTH = "user/updateuserauthstatus";
+
+    /**
+     * 个人认证结果上传服务器
+     */
+    public static final String USER_OFFLINE_STAMP_RECORD = "stamp/userofflinestamprecord";
 }

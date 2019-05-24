@@ -1015,6 +1015,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                             lockSeal();
                                         }
                                     }
+
                                     lastTime = System.currentTimeMillis();
 
                                     String allString = Utils.bytesToHexString(bytes);

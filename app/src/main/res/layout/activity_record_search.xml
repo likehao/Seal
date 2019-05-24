@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AboutActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@color/background">
+
+    <include layout="@layout/head" />
+
+
+    <include layout="@layout/no_record" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_record"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/record_refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ListView
+                android:id="@+id/lv_record"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:divider="#00000000"
+                android:dividerHeight="10dp"
+                android:scrollbars="none" />
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </LinearLayout>
+
+    <EditText
+        android:singleLine="true"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:id="@+id/et_searchx"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="55dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/white"
+        android:drawableStart="@drawable/head_search"
+        android:hint="搜索事由/流水号"
+        android:textSize="18sp" />
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_choice"
+        android:layout_marginTop="110dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_first"
+            style="@style/pressed_effect">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="按事由"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/iv_first"
+                style="@style/right_icon" />
+        </RelativeLayout>
+
+        <View style="@style/line_left" />
+
+        <RelativeLayout
+            android:id="@+id/rl_sec"
+            style="@style/pressed_effect">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:text="按流水号"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/iv_sec"
+                style="@style/right_icon"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+</FrameLayout>

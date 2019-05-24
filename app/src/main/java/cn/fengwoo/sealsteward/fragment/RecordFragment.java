@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -35,6 +36,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.RecordSearchActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealRecodeActivity;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
@@ -46,6 +48,7 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -73,6 +76,13 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     LinearLayout select_record_ll;
     @BindView(R.id.record_ll)
     LinearLayout record_ll;
+
+    @BindView(R.id.et_search)
+    EditText et_search;
+
+    @BindView(R.id.ll_search)
+    LinearLayout ll_search;
+
     private final static int REQUESTCODE = 111;
     @BindView(R.id.no_record_ll)
     LinearLayout no_record_ll;
@@ -107,6 +117,13 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     private void setListener() {
         record_lv.setOnItemClickListener(this);
         select_record_lv.setOnItemClickListener(this);
+        ll_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("onclick");
+                startActivity(new Intent(getActivity(), RecordSearchActivity.class));
+            }
+        });
     }
 
     /**
@@ -290,6 +307,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
+                Utils.log(result);
                 Gson gson = new Gson();
                 ResponseInfo<List<StampRecordList>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<StampRecordList>>>() {
                 }.getType());

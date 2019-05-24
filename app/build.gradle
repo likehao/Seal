@@ -241,6 +241,8 @@ dependencies {
 
     //adapter
     implementation 'com.github.mcxtzhang:all-base-adapter:V1.5.2'
+
+    // 网络检测
     implementation 'com.github.tianma8023:NetDetector:v0.2.0'
 
     // spinner

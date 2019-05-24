@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -158,6 +160,21 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     if (responseInfo.getData() != null) {
                         loadingView.cancel();
                         items = responseInfo.getData();
+
+                        // items 处理
+                        boolean isAdmin = EasySP.init(PwdUserActivity.this).getBoolean("isAdmin");
+                        Utils.log("isAdmin:" + isAdmin);
+                        if (!isAdmin) {
+                            // 如果没有admin权限，过滤items
+                            for(PwdUserListItem pwdUserListItem:items){
+                                if (CommonUtil.getUserData(PwdUserActivity.this).getId().equals(pwdUserListItem.getUserId())) {
+                                    items.clear();
+                                    items.add(pwdUserListItem);
+                                    break;
+                                }
+                            }
+                        }
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -188,11 +205,63 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
                 if (CommonUtil.getUserData(PwdUserActivity.this).getId().equals(pwdUserListItem.getUserId())) {
                     viewHolder.getView(R.id.iv_eye).setVisibility(View.VISIBLE);
-                    viewHolder.getView(R.id.layout_all).setVisibility(View.VISIBLE);
+//                    viewHolder.getView(R.id.layout_all).setVisibility(View.VISIBLE);
                 } else {
                     viewHolder.getView(R.id.iv_eye).setVisibility(View.GONE);
-                    viewHolder.getView(R.id.layout_all).setVisibility(View.GONE);
+//                    viewHolder.getView(R.id.layout_all).setVisibility(View.GONE);
                 }
+
+                Intent intent = new Intent();
+                // item
+                viewHolder.getView(R.id.layout_one).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.log("onItemClick" + "layout_one");
+                        intent.setClass(PwdUserActivity.this, SelectPwdRecordQueryActivity.class);
+                        intent.putExtra("sealId", pwdUserListItem.getSealId());
+                        intent.putExtra("userId", pwdUserListItem.getUserId());
+                        intent.putExtra("userNumber", pwdUserListItem.getUserNumber() + "");
+                        intent.putExtra("userType", pwdUserListItem.getUserType() + "");
+                        startActivity(intent);
+                    }
+                });
+                viewHolder.getView(R.id.layout_two).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.log("onItemClick" + "layout_two");
+                        intent.setClass(PwdUserActivity.this, SelectPwdRecordQueryActivity.class);
+                        intent.putExtra("sealId", pwdUserListItem.getSealId());
+                        intent.putExtra("userId", pwdUserListItem.getUserId());
+                        intent.putExtra("userNumber", pwdUserListItem.getUserNumber() + "");
+                        intent.putExtra("userType", pwdUserListItem.getUserType() + "");
+                        startActivity(intent);
+                    }
+                });
+                viewHolder.getView(R.id.layout_three).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.log("onItemClick" + "layout_three");
+                        intent.setClass(PwdUserActivity.this, SelectPwdRecordQueryActivity.class);
+                        intent.putExtra("sealId", pwdUserListItem.getSealId());
+                        intent.putExtra("userId", pwdUserListItem.getUserId());
+                        intent.putExtra("userNumber", pwdUserListItem.getUserNumber() + "");
+                        intent.putExtra("userType", pwdUserListItem.getUserType() + "");
+                        startActivity(intent);
+                    }
+                });
+                viewHolder.getView(R.id.layout_four).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.log("onItemClick" + "layout_four");
+                        intent.setClass(PwdUserActivity.this, SelectPwdRecordQueryActivity.class);
+                        intent.putExtra("sealId", pwdUserListItem.getSealId());
+                        intent.putExtra("userId", pwdUserListItem.getUserId());
+                        intent.putExtra("userNumber", pwdUserListItem.getUserNumber() + "");
+                        intent.putExtra("userType", pwdUserListItem.getUserType() + "");
+                        startActivity(intent);
+                    }
+                });
+
                 viewHolder.getView(R.id.iv_eye).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -253,6 +322,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         startActivityForResult(intent, 123);
                     }
                 });
+
                 if (isOnlyRead) {
                     viewHolder.getView(R.id.btn_edit).setVisibility(View.GONE);
                     viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
@@ -260,6 +330,13 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
             }
         };
         list.setAdapter(commonAdapter);
+
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Utils.log("onItemClick");
+//            }
+//        });
     }
 
     @Override

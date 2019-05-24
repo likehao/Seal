@@ -11,6 +11,7 @@ import android.os.CountDownTimer;
 import android.os.Looper;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -159,6 +161,27 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void addUser() {
+
+        if(TextUtils.isEmpty(et_job.getText().toString())){
+            Toast.makeText(this,"请输入职位",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(code_et.getText().toString())){
+            Toast.makeText(this,"请输入验证码",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(departmentName)){
+            Toast.makeText(this,"请选择部门",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(phone_number_et.getText().toString())){
+            Toast.makeText(this,"请输入手机号码",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         loadingView.show();
         AddUserInfo addUserInfo = new AddUserInfo();
         addUserInfo.setOrgStructureId(departmentId);

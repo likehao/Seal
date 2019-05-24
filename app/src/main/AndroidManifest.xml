@@ -210,6 +210,7 @@
         <activity android:name=".activity.MyQRCodeActivity" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.RecordSearchActivity" />
         <activity android:name=".activity.SelectPeopleMultiActivity" />
         <activity android:name=".activity.SelectSealMultiActivity" />
         <activity android:name=".activity.CameraActivity" />
@@ -271,6 +272,7 @@
         <service android:name=".utils.DfuService" />
 
         <activity android:name=".activity.SelectPwdRecordActivity" />
+        <activity android:name=".activity.SelectPwdRecordQueryActivity" />
         <activity android:name=".activity.ApprovalFlowActivity" />
         <activity android:name=".activity.AddApprovalFlowActivity" />
         <activity

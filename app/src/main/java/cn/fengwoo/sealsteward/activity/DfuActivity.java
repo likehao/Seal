@@ -79,6 +79,7 @@ public class DfuActivity extends BaseActivity {
         setContentView(R.layout.activity_dfu);
         ButterKnife.bind(this);
 
+        Toast.makeText(this,"dfu start...................",Toast.LENGTH_LONG).show();
         initData();
         initView();
 
@@ -130,6 +131,20 @@ public class DfuActivity extends BaseActivity {
 
     private void dfu(Uri uri) {
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfu_macAddress).setKeepBond(true);
+//        starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+//	starter.setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
+            starter.setPacketsReceiptNotificationsValue(10);
+//            Log.e(TAG, "Android SDK < 26 (8.0) set PRN to 10");
+        } else {
+            starter.setPacketsReceiptNotificationsValue(4);
+//            starter.setForeground(true);
+
+//            Log.e(TAG, "Android SDK >= 26 (8.0) set PRN to 4");
+        }
+
+        // If you want to have experimental buttonless DFU feature supported call additionally:
         starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
 
         starter.setZip(uri, path);
@@ -171,7 +186,7 @@ public class DfuActivity extends BaseActivity {
                     dfu(uri);
 //                    showToast("retry");
                 }
-            }, 40000);
+            }, 8000);
         }
 
         @Override

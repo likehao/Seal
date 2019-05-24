@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
@@ -34,6 +35,7 @@ import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.Utils;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import no.nordicsemi.android.dfu.DfuServiceInitiator;
 
 /**
  * SmartRefreshLayout使用指定Header 和 Footer
@@ -150,6 +152,9 @@ public class MyApp extends MultiDexApplication {
             }
         });
 
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            DfuServiceInitiator.createDfuNotificationChannel(this);
+        }
     }
 
     private void createNoMedia() {
