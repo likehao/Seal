@@ -207,7 +207,7 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
         intent.putExtra("id", list.get(position).getId());
         applyId = list.get(position).getId();
         intent.putExtra("count", list.get(position).getSealCount());
-        intent.putExtra("restCount", list.get(position).getRestCount());
+        intent.putExtra("restCount", list.get(position).getApplyCount());
         intent.putExtra("photoNum", list.get(position).getUploadPhotoNum());
         intent.putExtra("sealPerson", list.get(position).getSealPeople());
         intent.putExtra("sealName", list.get(position).getSealName());
@@ -291,7 +291,7 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
                         } else {
                             photoCount = app.getPhotoCount();
                         }
-                        list.add(new RecordData(app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
+                        list.add(new RecordData(app.getApplyCount(),app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                 , app.getStampCount(), app.getAvailableCount(), photoCount
                                 , failTime, sealTime, app.getLastStampAddress(), app.getApproveStatus(),
                                 app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()

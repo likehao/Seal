@@ -175,7 +175,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                 intent.putExtra("status", status);    //传递状态值弹出不同的popuwindow
                 intent.putExtra("id", id);
                 intent.putExtra("count", waitApplyData.get(position).getSealCount());
-                intent.putExtra("restCount", waitApplyData.get(position).getRestCount());
+                intent.putExtra("restCount", waitApplyData.get(position).getApplyCount());
                 intent.putExtra("photoNum", waitApplyData.get(position).getUploadPhotoNum());
                 intent.putExtra("headPortrait", waitApplyData.get(position).getHeadPortrait());
                 intent.putExtra("sealName", waitApplyData.get(position).getSealName());

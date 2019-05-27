@@ -73,7 +73,7 @@
     <string name="MAC_address">设备地址</string>
     <string name="seal_Personal">印章所属人</string>
     <string name="state">状态</string>
-    <string name="Remainder">剩余次数</string>
+    <string name="Remainder">申请次数</string>
     <string name="Already_locked">已锁定</string>
     <string name="Failure_time">失效时间</string>
     <string name="deadline">过期时间</string>

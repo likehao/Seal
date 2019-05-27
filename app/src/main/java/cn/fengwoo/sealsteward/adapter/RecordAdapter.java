@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,12 +78,13 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder.sealName = view.findViewById(R.id.record_seal_name_tv);
             viewHolder.sealPeople = view.findViewById(R.id.record_seal_people_tv);
             viewHolder.sealCount = view.findViewById(R.id.record_seal_count);
-            viewHolder.restCount = view.findViewById(R.id.rest_count_tv);
+            viewHolder.restCount = view.findViewById(R.id.rest_count_tv); // 申请次数
             viewHolder.uploadPhotoNum = view.findViewById(R.id.upload_photoNum_tv);
             viewHolder.failTime = view.findViewById(R.id.record_failTime_tv);
             viewHolder.sealTime = view.findViewById(R.id.record_seal_time_tv);
             viewHolder.sealAddress = view.findViewById(R.id.record_seal_address_tv);
             viewHolder.close = view.findViewById(R.id.close_documents_tv);
+            viewHolder.ygcs = view.findViewById(R.id.ygcs);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -92,7 +94,7 @@ public class RecordAdapter extends BaseAdapter {
         viewHolder.sealName.setText(recordData.get(position).getSealName());
         viewHolder.sealPeople.setText(recordData.get(position).getSealPeople());
         viewHolder.sealCount.setText(recordData.get(position).getSealCount() + "");
-        viewHolder.restCount.setText(recordData.get(position).getRestCount() + "");
+        viewHolder.restCount.setText(recordData.get(position).getApplyCount() + "");
         viewHolder.uploadPhotoNum.setText(recordData.get(position).getUploadPhotoNum() + "");
         viewHolder.failTime.setText(recordData.get(position).getFailTime());
         viewHolder.sealTime.setText(recordData.get(position).getSealTime());
@@ -108,6 +110,10 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder.close.setEnabled(true);
             viewHolder.close.setTextColor(context.getResources().getColor(R.color.white));
             viewHolder.close.setBackgroundResource(R.drawable.login_circle_bg);
+        }
+        if (recordData.get(position).getSealCount() > recordData.get(position).getApplyCount()) {
+            viewHolder.ygcs.setTextColor(ContextCompat.getColor(context, com.nestia.biometriclib.R.color.text_red));
+            viewHolder.sealCount.setTextColor(ContextCompat.getColor(context, com.nestia.biometriclib.R.color.text_red));
         }
 
         //关闭单据
@@ -187,6 +193,7 @@ public class RecordAdapter extends BaseAdapter {
         private TextView sealTime;
         private TextView sealAddress;
         private TextView close;
+        private TextView ygcs;
     }
 
 }

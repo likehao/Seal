@@ -20,6 +20,16 @@ public class RecordData {
     private String stampRecordPdf;
     private String headPortrait;
     private String orgStructureName;
+    private Integer applyCount;
+
+
+    public Integer getApplyCount() {
+        return applyCount;
+    }
+
+    public void setApplyCount(Integer applyCount) {
+        this.applyCount = applyCount;
+    }
 
     public List<String> getStampRecordImgList() {
         return stampRecordImgList;
@@ -31,10 +41,11 @@ public class RecordData {
 
     private List<String> stampRecordImgList;
 
-    public RecordData(String id, String cause, String sealName, String sealPeople,
+    public RecordData(Integer applyCount,String id, String cause, String sealName, String sealPeople,
                       Integer sealCount, Integer restCount, Integer uploadPhotoNum,
                       String failTime, String sealTime, String sealAddress, Integer approveStatus
     , String applyPdf , String stampPdf , String stampRecordPdf, String headPortrait, String orgStructureName ,List<String> stampRecordImgList) {
+        this.applyCount = applyCount;
         this.id = id;
         this.cause = cause;
         this.sealName = sealName;

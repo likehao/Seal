@@ -194,6 +194,10 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         setSmartDetail();
         seeRecordAdapter = new SeeRecordAdapter(SeeRecordActivity.this,list);
         see_record_lv.setAdapter(seeRecordAdapter);
+
+        if (count - restCount > 0) {
+            seeRecordAdapter.setRedCount(count - restCount);
+        }
     }
     /**
      * 刷新盖章详情

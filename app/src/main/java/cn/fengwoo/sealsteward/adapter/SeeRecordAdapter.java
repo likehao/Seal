@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 import cn.fengwoo.sealsteward.R;
@@ -17,9 +18,14 @@ public class SeeRecordAdapter extends BaseAdapter {
 
     private Context context;
     private List<SeeRecordBean> beanList;
+    private int redCount;
     public SeeRecordAdapter(Context context, List<SeeRecordBean> beanList) {
         this.context = context;
         this.beanList = beanList;
+    }
+
+    public void setRedCount(int redCount) {
+        this.redCount = redCount;
     }
 
     @Override
@@ -51,17 +57,25 @@ public class SeeRecordAdapter extends BaseAdapter {
         viewHolder.sealTime_tv.setText(beanList.get(position).getSealTime());
         viewHolder.seal_address_tv.setText(beanList.get(position).getSealAddress());
 
+        if(position<redCount){
+            viewHolder.iv.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.iv.setVisibility(View.GONE);
+        }
+
         return view;
     }
     class ViewHolder{
         private TextView serial_number_tv;
         private TextView sealTime_tv;
         private TextView seal_address_tv;
+        private ImageView iv;
 
         public ViewHolder(View view){
             serial_number_tv = view.findViewById(R.id.serial_number_tv);
             sealTime_tv = view.findViewById(R.id.sealTime_tv);
             seal_address_tv = view.findViewById(R.id.seal_address_tv);
+            iv = view.findViewById(R.id.iv);
         }
     }
 }

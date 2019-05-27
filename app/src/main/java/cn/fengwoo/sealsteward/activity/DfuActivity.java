@@ -133,16 +133,16 @@ public class DfuActivity extends BaseActivity {
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfu_macAddress).setKeepBond(true);
 //        starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
-//	starter.setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
-            starter.setPacketsReceiptNotificationsValue(10);
-//            Log.e(TAG, "Android SDK < 26 (8.0) set PRN to 10");
-        } else {
-            starter.setPacketsReceiptNotificationsValue(4);
-//            starter.setForeground(true);
-
-//            Log.e(TAG, "Android SDK >= 26 (8.0) set PRN to 4");
-        }
+//        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+////	starter.setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
+//            starter.setPacketsReceiptNotificationsValue(10);
+////            Log.e(TAG, "Android SDK < 26 (8.0) set PRN to 10");
+//        } else {
+//            starter.setPacketsReceiptNotificationsValue(4);
+////            starter.setForeground(true);
+//
+////            Log.e(TAG, "Android SDK >= 26 (8.0) set PRN to 4");
+//        }
 
         // If you want to have experimental buttonless DFU feature supported call additionally:
         starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
@@ -151,6 +151,7 @@ public class DfuActivity extends BaseActivity {
         Logger.d("mac:" + dfu_macAddress  + "   uri:" + uri + "   path:" + path);
 
         final DfuServiceController controller = starter.start(this, DfuService.class);
+//        starter.
     }
 
     private final DfuProgressListener dfuProgressListener = new DfuProgressListener() {
@@ -186,7 +187,7 @@ public class DfuActivity extends BaseActivity {
                     dfu(uri);
 //                    showToast("retry");
                 }
-            }, 8000);
+            }, 40000);
         }
 
         @Override

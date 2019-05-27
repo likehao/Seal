@@ -421,7 +421,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //                    intent.putExtra("status", status);    //传递状态值弹出不同的popuwindow
                     intent.putExtra("id", EasySP.init(getActivity()).getString("currentApplyId"));
                     intent.putExtra("count", responseInfo.getData().getApplyCount());
-                    intent.putExtra("restCount", responseInfo.getData().getAvailableCount());
+                    intent.putExtra("restCount", responseInfo.getData().getApplyCount());
                     intent.putExtra("photoNum", responseInfo.getData().getPhotoCount());
                     intent.putExtra("headPortrait", responseInfo.getData().getHeadPortrait());
                     intent.putExtra("sealName", responseInfo.getData().getSealName());
@@ -860,6 +860,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         Utils.log(String.valueOf("******************************************" + tv_times_done.getText()));
 //                        showToast("asdf");
         tv_times_left.setText((Integer.parseInt(availableCount) - currentStampTimes) + "");
+
+        if ((Integer.parseInt(availableCount) - currentStampTimes) < 0) {
+            tv_times_left.setText("0");
+        }
+
         // 如果盖完了，次数为0时，断开蓝牙
         if (tv_times_left.getText().toString().trim().equals("0")) {
 //                            ((MyApp) getActivity().getApplication()).getConnectDisposable().dispose();
@@ -1028,6 +1033,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     Utils.log(timeStamp);
                                     refreshTimes();
                                     uploadStampRecord(stampNumber, timeStamp);
+                                    Utils.log("stampNumber" + stampNumber + "   " + "timeStamp" + timeStamp);
                                     EventBus.getDefault().post(new MessageEvent("take_pic", "take_pic"));
                                 } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A1 00")) {
                                     // 启动印章成功后，获取“启动序号”
