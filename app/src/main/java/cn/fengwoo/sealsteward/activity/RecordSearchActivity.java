@@ -51,7 +51,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 搜索
  */
 public class RecordSearchActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
     @BindView(R.id.title_tv)
@@ -299,15 +299,13 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
 
                     }
                     //请求数据
-                    if (null != this) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                recordAdapter.notifyDataSetChanged(); //刷新数据
-                                no_record_ll.setVisibility(View.GONE);
-                            }
-                        });
-                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recordAdapter.notifyDataSetChanged(); //刷新数据
+                            no_record_ll.setVisibility(View.GONE);
+                        }
+                    });
 
                 }else{
                     Utils.log("暂无盖章记录x");

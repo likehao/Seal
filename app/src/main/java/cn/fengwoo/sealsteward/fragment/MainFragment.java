@@ -420,7 +420,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     intent = new Intent(getActivity(), SeeRecordActivity.class);
 //                    intent.putExtra("status", status);    //传递状态值弹出不同的popuwindow
                     intent.putExtra("id", EasySP.init(getActivity()).getString("currentApplyId"));
-                    intent.putExtra("count", responseInfo.getData().getApplyCount());
+                    intent.putExtra("count", responseInfo.getData().getStampCount());
                     intent.putExtra("restCount", responseInfo.getData().getApplyCount());
                     intent.putExtra("photoNum", responseInfo.getData().getPhotoCount());
                     intent.putExtra("headPortrait", responseInfo.getData().getHeadPortrait());

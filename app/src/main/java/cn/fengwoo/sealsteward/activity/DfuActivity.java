@@ -32,7 +32,7 @@ import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 /**
- * 关于
+ * 固件升级
  */
 public class DfuActivity extends BaseActivity {
     @BindView(R.id.title_tv)

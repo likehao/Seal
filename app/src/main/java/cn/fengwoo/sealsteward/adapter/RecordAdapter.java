@@ -111,6 +111,8 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder.close.setTextColor(context.getResources().getColor(R.color.white));
             viewHolder.close.setBackgroundResource(R.drawable.login_circle_bg);
         }
+        viewHolder.ygcs.setTextColor(context.getResources().getColor(R.color.black));
+        viewHolder.sealCount.setTextColor(context.getResources().getColor(R.color.gray_text));
         if (recordData.get(position).getSealCount() > recordData.get(position).getApplyCount()) {
             viewHolder.ygcs.setTextColor(ContextCompat.getColor(context, com.nestia.biometriclib.R.color.text_red));
             viewHolder.sealCount.setTextColor(ContextCompat.getColor(context, com.nestia.biometriclib.R.color.text_red));
