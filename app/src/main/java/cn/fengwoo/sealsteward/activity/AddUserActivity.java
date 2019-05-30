@@ -1,9 +1,11 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.os.CountDownTimer;
 import android.os.Looper;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.taobao.windvane.util.PhoneInfo;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
 import com.white.easysp.EasySP;
@@ -38,7 +40,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.AddUserInfo;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
@@ -93,6 +94,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     private static final String[] COUNTRIES = new String[]{
             "经理", "普通员工"
     };
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,8 +264,9 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
             tv_department.setText(departmentName);
         }
-/*        switch (requestCode) {
-            case 0:
+/*
+        switch (requestCode) {
+            case 1:
                 if (resultCode == RESULT_OK) {
                     Uri contactData = data.getData();
                     Cursor cursor = getContentResolver().query(contactData, null, null, null,
@@ -274,7 +277,9 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                     phone_number_et.setText(num);
                 }
                 break;
+
         }*/
+
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 //获取手机通讯录联系人
@@ -307,6 +312,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 }
             }
         }
+
     }
 
     /**
@@ -358,7 +364,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         switch (view.getId()) {
             case R.id.jumpToAdrrList:
                 intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 1);
                 break;
             case R.id.sendSecurityCode:
                 //创建okHttpClient对象

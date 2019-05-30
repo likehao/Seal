@@ -152,7 +152,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/wait_me_apply" />
+                                android:background="@drawable/wait_apply" />
 
                             <TextView
                                 android:id="@+id/msg_num_tv"

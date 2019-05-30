@@ -436,7 +436,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     startActivity(intent);
                 } else {
                     Looper.prepare();
-                    Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "暂无盖章", Toast.LENGTH_SHORT).show();
                     Looper.loop();
                 }
             }
