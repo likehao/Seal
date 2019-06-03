@@ -2,9 +2,9 @@ package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
     //    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
-    public static final String URL = "http://192.168.1.117:8800/";  //调试环境
+//    public static final String URL = "http://192.168.1.117:8800/";  //调试环境
 //    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //测试
-//    public static final String URL = "http://www.baiheyz.com:8080/bhsealappservice/";    //线上
+    public static final String URL = "http://www.baiheyz.com:8080/bhsealappservice/";    //线上
 
 
     /**
@@ -363,4 +363,9 @@ public class HttpUrl {
      * 个人认证结果上传服务器
      */
     public static final String USER_OFFLINE_STAMP_RECORD = "stamp/userofflinestamprecord";
+
+    /**
+     * qrcode login
+     */
+    public static final String SCAN_QRCODE_LOGIN = "user/scanqrcodelogin";
 }
