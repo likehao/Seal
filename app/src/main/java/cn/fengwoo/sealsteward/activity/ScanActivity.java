@@ -87,16 +87,21 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
             Utils.log("result:" + result);
 
             Intent intent = new Intent();
-//            Bundle bundle = new Bundle();
-//            bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
-//            bundle.putString(CodeUtils.RESULT_STRING, result);
-//            resultIntent.putExtras(bundle);
+            if(result.startsWith("qrcode")){
+                Utils.log("888result1:" + result);
+                intent.setClass(ScanActivity.this, ScanToLoginActivity.class);
+                intent.putExtra("result", result);
+                startActivity(intent);
+                finish();
+            }else{
+                Utils.log("888result2:" + result);
+//                            Intent intent = new Intent();
+                intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
+                intent.putExtra("result", result);
+                startActivity(intent);
+                finish();
+            }
 
-            intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
-            intent.putExtra("result", result);
-            startActivity(intent);
-//            ScanActivity.this.setResult(RESULT_OK, intent);
-            ScanActivity.this.finish();
         }
 
         @Override
@@ -152,12 +157,21 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                 CodeUtils.analyzeBitmap(ImageUtil.getImageAbsolutePath(this, uri), new CodeUtils.AnalyzeCallback() {
                     @Override
                     public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-                        Utils.log("result:" + result);
                         Intent intent = new Intent();
-                        intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
-                        intent.putExtra("result", result);
-                        startActivity(intent);
-                        finish();
+                        if(result.startsWith("qrcode")){
+                            Utils.log("888result1:" + result);
+                            intent.setClass(ScanActivity.this, ScanToLoginActivity.class);
+                            intent.putExtra("result", result);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            Utils.log("888result2:" + result);
+//                            Intent intent = new Intent();
+                            intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
+                            intent.putExtra("result", result);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
 
                     @Override

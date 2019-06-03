@@ -74,6 +74,7 @@ import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.CameraActivity;
 import cn.fengwoo.sealsteward.activity.CameraAutoActivity;
+import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
@@ -104,6 +105,7 @@ import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.CustomDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.Observable;
@@ -210,6 +212,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private Long lastTime;
 
     private Vibrator vibrator;
+
+    private boolean hasDfu = false;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -372,6 +376,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 break;
             case R.id.needSeal_rl:
                 if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
+                if(hasDfu){
+                    goToDfuPage();
                     return;
                 }
                 lockSeal();
@@ -586,7 +594,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            showToast("有最新固件，请升级。");
+//                            showToast("有最新固件，请升级。");
+                            Utils.log("UUUUUUUUUU:goToDfuPage");
+                            hasDfu = true;
+                            goToDfuPage();
                             EasySP.init(getActivity()).putString("hasNewDfuVersion", "1");
                         }
                     });
@@ -657,9 +668,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     }
                 }, 1000);
 
-                // 跳转到 启动印章 页面
-                intent = new Intent(getActivity(), ApplyCauseActivity.class);
-                startActivityForResult(intent, Constants.TO_WANT_SEAL);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (hasDfu) {
+                            return;
+                        }
+                        Utils.log("UUUUUUUUUU:jump");
+                        // 跳转到 启动印章 页面
+                        intent = new Intent(getActivity(), ApplyCauseActivity.class);
+                        startActivityForResult(intent, Constants.TO_WANT_SEAL);
+                    }
+                }, 2000);
+
+
                 break;
 
 
@@ -1673,4 +1696,37 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             }
         });
     }
+
+
+
+
+    private void goToDfuPage() {
+        final CustomDialog commonDialog = new CustomDialog(getActivity(), "提示", "有最新固件，请升级。", "确定");
+        commonDialog.cancel.setText("取消");
+        commonDialog.dialog.setCancelable(false);
+        commonDialog.showDialog();
+        commonDialog.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("rihgt");
+                // confirm
+                startActivity(new Intent(getActivity(), DfuActivity.class));
+                commonDialog.dialog.dismiss();
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("left");
+                // cancel
+                // 断开蓝牙
+                ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                ((MyApp) getApplication()).setConnectionObservable(null);
+                commonDialog.dialog.dismiss();
+            }
+        });
+
+    }
+
+
 }

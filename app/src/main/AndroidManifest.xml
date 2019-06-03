@@ -210,6 +210,8 @@
         <activity android:name=".activity.MyQRCodeActivity" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.MyWebViewActivity" />
+        <activity android:name=".activity.ScanToLoginActivity" />
         <activity android:name=".activity.RecordSearchActivity" />
         <activity android:name=".activity.SelectPeopleMultiActivity" />
         <activity android:name=".activity.SelectSealMultiActivity" />
@@ -280,6 +282,7 @@
             android:theme="@style/dialogstyle" />
         <activity android:name=".activity.AddApprovalFlowTypeActivity" />
         <activity android:name=".activity.FingerPrintActivity"></activity>
+        <service android:name="cn.fengwoo.sealsteward.utils.BluetoothService" />
     </application>
 
 </manifest>

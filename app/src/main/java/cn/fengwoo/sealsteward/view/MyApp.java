@@ -152,9 +152,11 @@ public class MyApp extends MultiDexApplication {
             }
         });
 
+
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             DfuServiceInitiator.createDfuNotificationChannel(this);
         }
+
     }
 
     private void createNoMedia() {

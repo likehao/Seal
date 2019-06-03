@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
 import com.white.easysp.EasySP;
 
@@ -48,6 +50,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -363,8 +366,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.jumpToAdrrList:
-                intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, 1);
+                readPermissions();
                 break;
             case R.id.sendSecurityCode:
                 //创建okHttpClient对象
@@ -426,4 +428,28 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             sendSecurityCode.setText("重新发送");
         }
     };
+    /**
+     * 申请权限
+     */
+    @SuppressLint("CheckResult")
+    private void readPermissions() {
+        RxPermissions rxPermissions = new RxPermissions(this);
+        //添加需要的权限
+        rxPermissions.requestEachCombined(Manifest.permission.READ_CONTACTS)
+                .subscribe(new Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) throws Exception {
+                        if (permission.granted) {
+                            Utils.log("****************  666 ***********************");
+//                            createNoMedia();
+                            intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                            startActivityForResult(intent, 1);
+                        } else if (permission.shouldShowRequestPermissionRationale) {
+                            showToast("您已拒绝权限申请");
+                        } else {
+                            showToast("您已拒绝权限申请，请前往设置>应用管理>权限管理打开权限");
+                        }
+                    }
+                });
+    }
 }

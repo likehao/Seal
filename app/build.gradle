@@ -251,11 +251,8 @@ dependencies {
     implementation project(':matisse')
 
     // dfu
-
-    //    api 'no.nordicsemi.android:dfu:1.6.1'
+//    api 'no.nordicsemi.android:dfu:1.6.1'
     api 'no.nordicsemi.android:dfu:1.8.1'
-
-    //    implementation project(':alipay')
 
     //图片放大缩小
     implementation('com.github.chrisbanes:PhotoView:2.1.4') {
@@ -274,4 +271,6 @@ dependencies {
     implementation(name: 'SecurityGuardSDK-external-release-5.4.121', ext: 'aar')
     implementation(name: 'SecurityBodySDK-external-release-5.4.79', ext: 'aar')
     implementation(name: 'NoCaptchaSDK-external-release-5.4.29', ext: 'aar')
+    implementation 'net.vidageek:mirror:1.6.1'
+    implementation project(':FastBleLib')
 }

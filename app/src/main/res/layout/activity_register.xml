@@ -118,6 +118,28 @@
         android:layout_marginTop="15dp"
         android:background="@color/line" />
 
+
+
+    <LinearLayout
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="注册即表示已阅读并同意"/>
+        <TextView
+            android:id="@+id/tv_items"
+            android:textColor="@color/dodgerblue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《印章管家条款》"/>
+
+    </LinearLayout>
+
+
     <Button
         android:id="@+id/register_next_bt"
         android:layout_width="280dp"
@@ -127,5 +149,10 @@
         android:textColor="@color/white"
         android:background="@drawable/login_circle_bg"
         android:text="@string/Next_step"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

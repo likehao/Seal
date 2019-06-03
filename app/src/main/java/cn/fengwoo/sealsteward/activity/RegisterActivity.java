@@ -11,11 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -45,7 +47,12 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
     EditText register_phone_et;
     @BindView(R.id.verificationCode_et) //验证码
             EditText verificationCode_et;
+
+    @BindView(R.id.tv_items)
+    TextView tv_items;
+
     FromToJson fromToJson = new FromToJson();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +68,7 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
         register_next_bt.setOnClickListener(this);
         register_back_iv.setOnClickListener(this);
         send_code_bt.setOnClickListener(this);
+        tv_items.setOnClickListener(this);
     }
 
     @Override
@@ -81,6 +89,11 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
                     //发送获取验证码
                     sendMsg();
                 }
+                break;
+            case R.id.tv_items:
+                Intent intent = new Intent(RegisterActivity.this, MyWebViewActivity.class);
+                intent.putExtra("type", MyWebViewActivity.Type.USER_ARGEEMENT_NOOPER);
+                startActivity(intent);
                 break;
         }
     }
@@ -113,18 +126,18 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
                         String result = response.body().string();
                         Utils.log(result);
                         Gson gson = new Gson();
-                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
+                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
-             //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
-                        if (responseInfo.getCode() == 0){
-                            if (responseInfo.getData()){
+                        //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
+                        if (responseInfo.getCode() == 0) {
+                            if (responseInfo.getData()) {
                                 timer.start();
-                                Log.e("TAG","获取验证码成功!!!!!!!!!!!!!!!!");
+                                Log.e("TAG", "获取验证码成功!!!!!!!!!!!!!!!!");
                                 Looper.prepare();
                                 showToast("验证码已发送");
                                 Looper.loop();
                             }
-                        }else {
+                        } else {
                             Looper.prepare();
                             showToast(responseInfo.getMessage());
                             Looper.loop();
@@ -138,12 +151,12 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
     /**
      * 验证验证码
      */
-    private void checkVerificationCode(){
+    private void checkVerificationCode() {
         //提交短信验证码,判断字符串是否为空
-        if (TextUtils.isEmpty(register_phone_et.getText().toString().trim())){
+        if (TextUtils.isEmpty(register_phone_et.getText().toString().trim())) {
             showToast("请输入手机号");
             return;
-        }else if (TextUtils.isEmpty(verificationCode_et.getText().toString().trim())){
+        } else if (TextUtils.isEmpty(verificationCode_et.getText().toString().trim())) {
             showToast("请输入验证码");
             return;
         }
@@ -164,9 +177,9 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0){
+                if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         //验证成功之后跳转到设置密码页面
                         Intent intent = new Intent(RegisterActivity.this, SetPasswordActivity.class);
@@ -174,7 +187,7 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
                         startActivity(intent);
                         finish();
                     }
-                }else {
+                } else {
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
                     Looper.loop();

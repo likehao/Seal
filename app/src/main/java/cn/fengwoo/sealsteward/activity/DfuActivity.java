@@ -1,10 +1,15 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -22,6 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.BluetoothService;
 import cn.fengwoo.sealsteward.utils.DfuService;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
@@ -67,6 +73,11 @@ public class DfuActivity extends BaseActivity {
 
     private boolean isSecDfu = false;
 
+
+    private static BluetoothService mBluetoothService;
+
+    DfuServiceController controller;
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -79,7 +90,9 @@ public class DfuActivity extends BaseActivity {
         setContentView(R.layout.activity_dfu);
         ButterKnife.bind(this);
 
-//        Toast.makeText(this,"dfu start...................",Toast.LENGTH_LONG).show();
+
+        bindService();
+
         initData();
         initView();
 
@@ -124,25 +137,12 @@ public class DfuActivity extends BaseActivity {
                 path = "file://" + HttpDownloader.path + dfu_file_name;
                 uri = Uri.parse(path);
                 dfu(uri);
-//                showToast("try");
             }
         });
     }
 
     private void dfu(Uri uri) {
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfu_macAddress).setKeepBond(true);
-//        starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
-
-//        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
-////	starter.setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
-//            starter.setPacketsReceiptNotificationsValue(10);
-////            Log.e(TAG, "Android SDK < 26 (8.0) set PRN to 10");
-//        } else {
-//            starter.setPacketsReceiptNotificationsValue(4);
-////            starter.setForeground(true);
-//
-////            Log.e(TAG, "Android SDK >= 26 (8.0) set PRN to 4");
-//        }
 
         // If you want to have experimental buttonless DFU feature supported call additionally:
         starter.setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(true);
@@ -150,8 +150,7 @@ public class DfuActivity extends BaseActivity {
         starter.setZip(uri, path);
         Logger.d("mac:" + dfu_macAddress  + "   uri:" + uri + "   path:" + path);
 
-        final DfuServiceController controller = starter.start(this, DfuService.class);
-//        starter.
+        controller = starter.start(this, DfuService.class);
     }
 
     private final DfuProgressListener dfuProgressListener = new DfuProgressListener() {
@@ -185,9 +184,19 @@ public class DfuActivity extends BaseActivity {
                 public void run() {
                     Logger.d("TESTS" + "第二次dfu" + deviceAddress);
                     dfu(uri);
-//                    showToast("retry");
                 }
-            }, 40000);
+            }, 20000);
+
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String mac = "FF:FF:FF:FF:FF:FF";
+                    mBluetoothService.scanAndConnect5(mac,15000);
+                }
+            }, 3000);
+
+
         }
 
         @Override
@@ -264,8 +273,11 @@ public class DfuActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mBluetoothService != null) {
+            unbindService();
+            mBluetoothService = null;
+        }
     }
-
 
     private void showProgress() {
         // 进度条对话框
@@ -290,32 +302,69 @@ public class DfuActivity extends BaseActivity {
         pd.show();
     }
 
-    @OnClick({R.id.test, R.id.btn_dfu, R.id.set_back_ll})
+    @OnClick({R.id.test, R.id.btn_dfu,R.id.set_back_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
             case R.id.btn_dfu:
                 downloadZip();
                 showProgress();
-                new Handler().postDelayed(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         showToast("升级失败，请重试。");
                         if (pd != null) {
                             pd.dismiss();
+                            finish();
                         }
                     }
-                },150000);
+                },120000);
                 break;
             case R.id.set_back_ll:
                 finish();
                 break;
             case R.id.test:
-//                path = "file://" + HttpDownloader.path + "a.zip";
-//                uri = Uri.parse(path);
-//                dfu(uri);
-//                showProgress();
                 break;
         }
     }
+
+    private void unbindService() {
+        this.unbindService(mFhrSCon);
+    }
+
+    private void bindService() {
+        Intent bindIntent = new Intent(DfuActivity.this, BluetoothService.class);
+        this.bindService(bindIntent, mFhrSCon, Context.BIND_AUTO_CREATE);
+    }
+
+
+    private ServiceConnection mFhrSCon = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBluetoothService = ((BluetoothService.BluetoothBinder) service).getService();
+
+//            mBluetoothService.setScanCallback(callback);
+//
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if(mBluetoothService!=null && mBluetoothService.isBlueEnable()) {
+//
+//                        mBluetoothService.scanDevice();
+//
+//                    }
+//                }
+//            }, 1000);
+        }
+
+
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBluetoothService = null;
+        }
+    };
+
+
 }
