@@ -272,5 +272,7 @@ dependencies {
     implementation(name: 'SecurityBodySDK-external-release-5.4.79', ext: 'aar')
     implementation(name: 'NoCaptchaSDK-external-release-5.4.29', ext: 'aar')
     implementation 'net.vidageek:mirror:1.6.1'
-    implementation project(':FastBleLib')
+//    implementation project(':FastBleLib')
+    implementation 'com.clj.fastble:FastBleLib:2.3.4'
+
 }

@@ -56,11 +56,11 @@
 
                         <ImageView
                             style="@style/imageView"
-                            android:background="@drawable/nearby_device" />
+                            android:background="@drawable/home_addseal" />
 
                         <TextView
                             style="@style/application_text"
-                            android:text="@string/connect_seal" />
+                            android:text="添加印章" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -78,7 +78,7 @@
 
                         <ImageView
                             style="@style/imageView"
-                            android:background="@drawable/i_need_seal" />
+                            android:background="@drawable/home_starttheseal" />
 
                         <TextView
                             style="@style/application_text"
@@ -101,7 +101,7 @@
 
                         <ImageView
                             style="@style/imageView"
-                            android:background="@drawable/use_seal_apply" />
+                            android:background="@drawable/home_applicationforseal" />
 
                         <TextView
                             style="@style/application_text"
@@ -152,7 +152,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/wait_apply" />
+                                android:background="@drawable/home_waitingforapprova" />
 
                             <TextView
                                 android:id="@+id/msg_num_tv"
@@ -205,7 +205,7 @@
                         android:layout_height="15dp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
-                        android:background="@drawable/seal_select" />
+                        android:background="@drawable/home_untiedseal" />
 
                     <TextView
                         android:id="@+id/tv_ble_name"
@@ -280,7 +280,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/location_iv" />
+                        android:background="@drawable/home_nopositioning" />
 
                     <TextView
                         android:id="@+id/tv_address"
@@ -322,7 +322,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/seal_select" />
+                        android:background="@drawable/home_temporarilyuselessprinting" />
 
                     <TextView
                         android:id="@+id/tv_stamp_reason"
@@ -414,7 +414,8 @@
                                 <de.hdodenhof.circleimageview.CircleImageView
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
-                                    android:src="@color/mediumAquamarine" />
+                                    android:paddingTop="10dp"
+                                    android:src="@drawable/home_residualtimes" />
 
                                 <TextView
                                     android:id="@+id/tv_times_left"
@@ -451,7 +452,8 @@
                                 <de.hdodenhof.circleimageview.CircleImageView
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
-                                    android:src="@color/lightCoral" />
+                                    android:paddingTop="10dp"
+                                    android:src="@drawable/home_timesofcover" />
 
                                 <TextView
                                     android:id="@+id/tv_times_done"
@@ -483,7 +485,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/fail_time" />
+                        android:background="@drawable/home_failuretime" />
 
                     <TextView
                         android:layout_width="wrap_content"

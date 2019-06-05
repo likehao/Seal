@@ -1,1 +1,1 @@
-include ':app', ':matisse', ':biometriclib',':FastBleLib'
+include ':app', ':matisse', ':biometriclib'

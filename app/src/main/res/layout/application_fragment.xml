@@ -85,7 +85,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/press_time" />
+                                    android:background="@drawable/application_longpresstime" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -108,7 +108,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/wait_time"/>
+                                    android:background="@drawable/application_waitingtime"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -130,7 +130,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/start_psd"/>
+                                    android:background="@drawable/application_bootpassword"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -153,7 +153,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/press_pwd"/>
+                                    android:background="@drawable/application_keypassword"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -180,7 +180,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/reset_device" />
+                                    android:background="@drawable/application_resetseal" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -203,7 +203,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/pwd_user"/>
+                                    android:background="@drawable/application_passworduser"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -226,7 +226,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/voice_switch"/>
+                                    android:background="@drawable/application_voiceswitch"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -258,7 +258,7 @@
                                     <ImageView
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
-                                        android:background="@drawable/seal_dfu"/>
+                                        android:background="@drawable/application_firmwareupdate"/>
 
                                     <ImageView
                                         android:id="@+id/iv_red_dot"
@@ -352,7 +352,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/use_seal_apply"/>
+                                android:background="@drawable/application_applicationrecord"/>
 
                             <TextView
                                 style="@style/application_text"
@@ -376,7 +376,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/apply_record"/>
+                                android:background="@drawable/application_approvalrecord"/>
 
                             <TextView
                                 style="@style/application_text"
@@ -509,7 +509,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/organization"/>
+                                    android:background="@drawable/application_organizationalstructure"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -532,7 +532,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/add_person"/>
+                                    android:background="@drawable/application_addpersonnel"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -543,6 +543,7 @@
 
 
                         <RelativeLayout
+                            android:visibility="gone"
                             android:id="@+id/add_seal_rl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -556,7 +557,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/add_seal"/>
+                                    android:background="@drawable/application_addseal"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -580,7 +581,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/change_seal"/>
+                                    android:background="@drawable/application_sealchange"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -666,7 +667,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/service_recharge"/>
+                                    android:background="@drawable/application_servicechargerecharge"/>
 
                                 <TextView
                                     style="@style/application_text"
@@ -689,7 +690,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/recharge_record"/>
+                                    android:background="@drawable/application_rechargerecord"/>
 
                                 <TextView
                                     style="@style/application_text"

@@ -282,7 +282,6 @@
             android:theme="@style/dialogstyle" />
         <activity android:name=".activity.AddApprovalFlowTypeActivity" />
         <activity android:name=".activity.FingerPrintActivity"></activity>
-        <service android:name="cn.fengwoo.sealsteward.utils.BluetoothService" />
     </application>
 
 </manifest>

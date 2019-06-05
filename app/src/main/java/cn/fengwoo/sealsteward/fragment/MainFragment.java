@@ -370,12 +370,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 ((MyApp) getApplication()).setConnectionObservable(null);
 
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
-                intent.putExtra("isAddNewSeal", false);
+                intent.putExtra("isAddNewSeal", true);
 
                 startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
                 break;
             case R.id.needSeal_rl:
+                // 断开蓝牙
+                ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                ((MyApp) getApplication()).setConnectionObservable(null);
+
                 if (!Utils.isConnect(getActivity())) {
+                    intent = new Intent(getActivity(), NearbyDeviceActivity.class);
+                    intent.putExtra("isAddNewSeal", false);
+
+                    startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
+
                     return;
                 }
                 if(hasDfu){
@@ -604,6 +613,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     EasySP.init(getActivity()).putString("dfu_version", dfuEntity.getVersion());
                     EasySP.init(getActivity()).putString("dfu_file_name", dfuEntity.getFileName());
                     EasySP.init(getActivity()).putString("dfu_content", dfuEntity.getContent());
+                }else{
+                    hasDfu = false;
                 }
             }
         });
