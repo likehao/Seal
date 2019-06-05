@@ -172,7 +172,10 @@ public class DfuActivity extends BaseActivity {
 //        dfu_macAddress = "FF:FF:FF:FF:FF:FF";
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfu_macAddress)
                 .setDeviceName("123")
-                .setKeepBond(true);
+                .setKeepBond(true).
+                        setDisableNotification(true)
+                ;
+
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
 //	starter.setPacketsReceiptNotificationsValue(DfuServiceInitiator.DEFAULT_PRN_VALUE);
             starter.setPacketsReceiptNotificationsValue(10);

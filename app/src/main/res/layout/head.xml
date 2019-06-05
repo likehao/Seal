@@ -108,22 +108,22 @@
 
         <ImageView
             android:id="@+id/record_more_iv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/more"
+            android:background="@drawable/record_more"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/message_more_iv"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/more"
+            android:background="@drawable/record_more"
             android:visibility="gone" />
 
         <ImageView
