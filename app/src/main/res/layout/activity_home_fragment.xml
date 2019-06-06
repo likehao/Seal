@@ -43,28 +43,6 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:id="@+id/sealDevice_rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            style="@style/imageView"
-                            android:background="@drawable/home_addseal" />
-
-                        <TextView
-                            style="@style/application_text"
-                            android:text="添加印章" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:id="@+id/needSeal_rl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -86,6 +64,30 @@
 
                     </LinearLayout>
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/sealDevice_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            style="@style/imageView"
+                            android:background="@drawable/home_addseal" />
+
+                        <TextView
+                            style="@style/application_text"
+                            android:text="添加印章" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+
 
                 <RelativeLayout
                     android:id="@+id/useSealApply_rl"
@@ -354,7 +356,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="110dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/white"
                     android:orientation="horizontal">
@@ -412,8 +414,8 @@
                                 android:layout_gravity="center_horizontal">
 
                                 <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="70dp"
-                                    android:layout_height="70dp"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
                                     android:paddingTop="10dp"
                                     android:src="@drawable/home_residualtimes" />
 
@@ -424,7 +426,7 @@
                                     android:layout_centerInParent="true"
                                     android:text="0"
                                     android:textColor="@color/white"
-                                    android:textSize="22sp" />
+                                    android:textSize="20sp" />
                             </RelativeLayout>
 
                             <TextView
@@ -450,8 +452,8 @@
                                 android:layout_gravity="center_horizontal">
 
                                 <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="70dp"
-                                    android:layout_height="70dp"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
                                     android:paddingTop="10dp"
                                     android:src="@drawable/home_timesofcover" />
 
@@ -462,7 +464,7 @@
                                     android:layout_centerInParent="true"
                                     android:text="0"
                                     android:textColor="@color/white"
-                                    android:textSize="22sp" />
+                                    android:textSize="20sp" />
                             </RelativeLayout>
 
                             <TextView

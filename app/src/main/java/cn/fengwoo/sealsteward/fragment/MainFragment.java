@@ -366,9 +366,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
 
                 // 断开蓝牙
-                ((MyApp) getActivity().getApplication()).removeAllDisposable();
                 ((MyApp) getApplication()).setConnectionObservable(null);
-
+                ((MyApp) getActivity().getApplication()).removeAllDisposable();
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 intent.putExtra("isAddNewSeal", true);
 
@@ -376,8 +375,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 break;
             case R.id.needSeal_rl:
                 // 断开蓝牙
-                ((MyApp) getActivity().getApplication()).removeAllDisposable();
                 ((MyApp) getApplication()).setConnectionObservable(null);
+                ((MyApp) getActivity().getApplication()).removeAllDisposable();
 
                 if (!Utils.isConnect(getActivity())) {
                     intent = new Intent(getActivity(), NearbyDeviceActivity.class);
@@ -968,209 +967,213 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             byte[] byteTime = CommonUtil.getDateTime(Long.parseLong(systemTimeStampString));
             byte[] eleByte = new byte[]{0};
 
-            ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
-                    .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
+            if (((MyApp) getActivity().getApplication()).getConnectionObservable() != null) {
+                ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                        .flatMap(rxBleConnection -> rxBleConnection.setupNotification(Constants.NOTIFY_UUID))
 //                            .doOnNext(rxBleConnection-> this.rxBleConnection = rxBleConnection)
-                    .doOnNext(notificationObservable -> {
-                        // Notification has been set up ，监听设置成功，然后握手
-                        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
-                                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
-                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(
-                                        characteristicValue -> {
-                                            // Characteristic value confirmed.
-                                            Utils.log("shake hands:" + characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                        },
-                                        throwable -> {
-                                            // Handle an error here.
-                                        }
-                                ));
-                    })
-                    .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            bytes -> {
-                                // Given characteristic has been changes, here is the value.
-                                Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
-
-                                if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
-                                    Utils.log("握手成功");
-                                    // 得到当前版本
-                                    firmwareVersion = (float) bytes[4] + ((float) bytes[5] / 100);
-                                    Utils.log("firmwareVersion:" + firmwareVersion);
-                                    checkDfu(firmwareVersion);
-
-                                    // 每隔1min定时获取电量
-                                    rxTimerUtil = new RxTimerUtil();
-                                    rxTimerUtil.interval(60000, new RxTimerUtil.IRxNext() {
-                                        @Override
-                                        public void doNext(long number) {
-                                            if (!isConnect) {
-                                                return;
+                        .doOnNext(notificationObservable -> {
+                            // Notification has been set up ，监听设置成功，然后握手
+                            ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                    .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.HANDSHAKE, byteTime).getBytes()))
+                                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            characteristicValue -> {
+                                                // Characteristic value confirmed.
+                                                Utils.log("shake hands:" + characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                            },
+                                            throwable -> {
+                                                // Handle an error here.
                                             }
+                                    ));
+                        })
+                        .flatMap(notificationObservable -> notificationObservable) // <-- Notification has been set up, now observe value changes.
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                bytes -> {
+                                    // Given characteristic has been changes, here is the value.
+                                    Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
+
+                                    if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {
+                                        Utils.log("握手成功");
+                                        // 得到当前版本
+                                        firmwareVersion = (float) bytes[4] + ((float) bytes[5] / 100);
+                                        Utils.log("firmwareVersion:" + firmwareVersion);
+                                        checkDfu(firmwareVersion);
+
+                                        // 每隔1min定时获取电量
+                                        rxTimerUtil = new RxTimerUtil();
+                                        rxTimerUtil.interval(60000, new RxTimerUtil.IRxNext() {
+                                            @Override
+                                            public void doNext(long number) {
+                                                if (!isConnect) {
+                                                    return;
+                                                }
 //                                            Utils.log("a loop");
-                                            if (null != getActivity() && ((MyApp) getActivity().getApplication()).getConnectionObservable() != null) {
-                                                ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
-                                                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
-                                                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                                                        .subscribe(
-                                                                characteristicValue -> {
-                                                                    // Characteristic value confirmed.
-                                                                    // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
-                                                                },
-                                                                throwable -> {
-                                                                    // Handle an error here.
-                                                                }
-                                                        ));
+                                                if (null != getActivity() && ((MyApp) getActivity().getApplication()).getConnectionObservable() != null) {
+                                                    ((MyApp) getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                                                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.ElECTRIC, eleByte).getBytes()))
+                                                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                                            .subscribe(
+                                                                    characteristicValue -> {
+                                                                        // Characteristic value confirmed.
+                                                                        // Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                                                                    },
+                                                                    throwable -> {
+                                                                        // Handle an error here.
+                                                                    }
+                                                            ));
+                                                }
+                                            }
+                                        });
+
+                                        // 未上传的盖章记录数量
+                                        byte[] unuploaded = DataTrans.subByte(bytes, 6, 2);
+                                        unuploadedQuantity = DataTrans.bytesToInt(unuploaded, 0);
+                                        // 未上传的盖章记录数量不为0，开始读记录
+                                        if (unuploadedQuantity != 0) {
+                                            readRecord();
+                                        }
+
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
+                                        String batteryString = Utils.bytesToHexString(bytes).substring(9, 11);
+                                        int batteryInt = Integer.parseInt(batteryString, 16);
+                                        Utils.log("batteryInt:" + batteryInt);
+                                        // 刷新ui,赋值电量
+                                        electric_ll.setVisibility(View.VISIBLE);
+                                        tv_battery.setText(String.valueOf(batteryInt+"%"));
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
+                                        // 印章主动上报消息通知手机发生盖章行为
+                                        // 盖章序号
+
+                                        if (lastTime != null) {
+                                            Long intervalTime = System.currentTimeMillis() - lastTime;
+                                            if (intervalTime < 300) {
+                                                vibrator.vibrate(3000);
+                                                tooFastTip();
+                                                // 锁定印章
+                                                lockSeal();
                                             }
                                         }
-                                    });
 
-                                    // 未上传的盖章记录数量
-                                    byte[] unuploaded = DataTrans.subByte(bytes, 6, 2);
-                                    unuploadedQuantity = DataTrans.bytesToInt(unuploaded, 0);
-                                    // 未上传的盖章记录数量不为0，开始读记录
-                                    if (unuploadedQuantity != 0) {
-                                        readRecord();
+                                        lastTime = System.currentTimeMillis();
+
+                                        String allString = Utils.bytesToHexString(bytes);
+//                                        String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
+                                        String stampNumberHexString = allString.substring(12, 14) + allString.substring(9, 11);
+                                        stampNumber = Integer.valueOf(stampNumberHexString, 16);
+                                        // 盖章时间
+                                        String timeHexString = allString.substring(15, 32);
+                                        String timeStamp = DateUtils.hexTimeToTimeStamp(timeHexString);
+                                        Utils.log(timeStamp);
+                                        refreshTimes();
+                                        uploadStampRecord(stampNumber, timeStamp);
+                                        Utils.log("stampNumber" + stampNumber + "   " + "timeStamp" + timeStamp);
+                                        EventBus.getDefault().post(new MessageEvent("take_pic", "take_pic"));
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A1 00")) {
+                                        // 启动印章成功后，获取“启动序号”
+                                        byte[] restTime = DataTrans.subByte(bytes, 4, 4);
+                                        startNumber = DataTrans.bytesToInt(restTime, 0);
+                                        Utils.log("startNumber" + startNumber);
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A7 ")) {
+                                        int pressTime = bytes[3];
+                                        Utils.log(pressTime + "");
+                                        EventBus.getDefault().post(new MessageEvent("ble_time_press", pressTime + ""));
+
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B3 ")) {
+                                        int pressTime = bytes[3];
+                                        Utils.log(pressTime + "");
+                                        EventBus.getDefault().post(new MessageEvent("ble_time_delay", pressTime + ""));
+
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B6 ")) {
+                                        int voiceState = bytes[3];
+                                        Utils.log(voiceState + "");
+                                        EventBus.getDefault().post(new MessageEvent("ble_read_voice", voiceState + ""));
+
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A4 00 ")) {
+                                        byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
+                                        String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
+                                        EventBus.getDefault().post(new MessageEvent("ble_add_pwd", pwdCode + ""));
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B1 00 ")) {
+                                        EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count", "success"));
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B2 00 ")) {
+                                        EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user", "success"));
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
+                                        EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
                                     }
+                                    // 违规盖章
+                                    else if (Utils.bytesToHexString(bytes).startsWith("FF 06 A8 80")) {
+                                        // 发送a8给seal
+                                        sendDataToSealAfterIllegal();
 
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
-                                    String batteryString = Utils.bytesToHexString(bytes).substring(9, 11);
-                                    int batteryInt = Integer.parseInt(batteryString, 16);
-                                    Utils.log("batteryInt:" + batteryInt);
-                                    // 刷新ui,赋值电量
-                                    electric_ll.setVisibility(View.VISIBLE);
-                                    tv_battery.setText(String.valueOf(batteryInt+"%"));
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
-                                    // 印章主动上报消息通知手机发生盖章行为
-                                    // 盖章序号
+                                        // 告诉后台有非法盖章
+                                        sendIllegalToServer();
 
-                                    if (lastTime != null) {
-                                        Long intervalTime = System.currentTimeMillis() - lastTime;
-                                        if (intervalTime < 300) {
-                                            vibrator.vibrate(3000);
-                                            tooFastTip();
-                                            // 锁定印章
-                                            lockSeal();
+                                        // 盖章次数加一
+                                        refreshTimes();
+
+                                        if (firmwareVersion <= 3.02) {
+                                            // 把这次非法盖章的盖章记录也上传到后台
+                                            sendIllegalRecordToServer();
+                                        }
+                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 0E A3")) {
+                                        // 成功读到一条记录
+                                        unuploadedQuantity--; // 未上传的盖章记录数量减一
+                                        Utils.log("unuploadedQuantity:" + unuploadedQuantity);
+                                        // 解析数据，存入对象
+
+                                        // byte[3] 记录序号 暂时没用
+                                        byte[] recordSeq = DataTrans.subByte(bytes, 3, 1);
+                                        int recordSeqInt = DataTrans.bytesToInt(recordSeq, 0);
+                                        Utils.log("recordSeqInt" + recordSeqInt);
+
+                                        // byte[4] 启动类型（stampType）
+                                        byte[] stampTypeBytes = DataTrans.subByte(bytes, 4, 1);
+                                        stampType = DataTrans.bytesToInt(stampTypeBytes, 0);
+
+
+                                        // byte[5] - byte[6] 盖章序号（stampSeqNumber）
+                                        byte[] stampSeqNumberBytes = DataTrans.subByte(bytes, 5, 2);
+                                        stampSeqNumber = DataTrans.bytesToInt(stampSeqNumberBytes, 0);
+
+                                        // byte[7] - byte[10] 启动序号（stampSeqNumber）
+                                        byte[] userNumberBytes = DataTrans.subByte(bytes, 7, 4);
+                                        userNumber = DataTrans.bytesToInt(userNumberBytes, 0);
+
+                                        // byte[11] - byte[16] 盖章时间（stampTime）
+//                                    byte[] stampTimeBytes = DataTrans.subByte(bytes, 11, 6);
+                                        String stampTimeHex = Utils.bytesToHexString(bytes).substring(33, 50);
+                                        stampTime = DateUtils.hexTimeToTimeStamp(stampTimeHex);
+
+                                        // 创建一次盖章记录
+                                        UploadHistoryRecord.RecordListBean recordListBean = new UploadHistoryRecord.RecordListBean();
+                                        recordListBean.setStampType(stampType);
+                                        recordListBean.setUserNumber(userNumber);
+                                        recordListBean.setStampSeqNumber(stampSeqNumber);
+                                        recordListBean.setStampTime(stampTime);
+                                        recordListBeanList.add(recordListBean);
+
+                                        // 准备抹掉一条
+                                        deleteRecord();
+
+                                        if (unuploadedQuantity != 0) {
+                                            // 还有未上传的记录
+                                            // 继续读记录
+                                            readRecord();
+                                        } else {
+                                            // unuploadedQuantity == 0; 此时没有未上传的记录
+                                            // 数据上传服务器
+                                            uploadHistoryStampRecord();
                                         }
                                     }
-
-                                    lastTime = System.currentTimeMillis();
-
-                                    String allString = Utils.bytesToHexString(bytes);
-//                                        String stampNumberHexString = allString.substring(9, 11) + allString.substring(6, 8);
-                                    String stampNumberHexString = allString.substring(12, 14) + allString.substring(9, 11);
-                                    stampNumber = Integer.valueOf(stampNumberHexString, 16);
-                                    // 盖章时间
-                                    String timeHexString = allString.substring(15, 32);
-                                    String timeStamp = DateUtils.hexTimeToTimeStamp(timeHexString);
-                                    Utils.log(timeStamp);
-                                    refreshTimes();
-                                    uploadStampRecord(stampNumber, timeStamp);
-                                    Utils.log("stampNumber" + stampNumber + "   " + "timeStamp" + timeStamp);
-                                    EventBus.getDefault().post(new MessageEvent("take_pic", "take_pic"));
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A1 00")) {
-                                    // 启动印章成功后，获取“启动序号”
-                                    byte[] restTime = DataTrans.subByte(bytes, 4, 4);
-                                    startNumber = DataTrans.bytesToInt(restTime, 0);
-                                    Utils.log("startNumber" + startNumber);
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A7 ")) {
-                                    int pressTime = bytes[3];
-                                    Utils.log(pressTime + "");
-                                    EventBus.getDefault().post(new MessageEvent("ble_time_press", pressTime + ""));
-
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B3 ")) {
-                                    int pressTime = bytes[3];
-                                    Utils.log(pressTime + "");
-                                    EventBus.getDefault().post(new MessageEvent("ble_time_delay", pressTime + ""));
-
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B6 ")) {
-                                    int voiceState = bytes[3];
-                                    Utils.log(voiceState + "");
-                                    EventBus.getDefault().post(new MessageEvent("ble_read_voice", voiceState + ""));
-
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 05 A4 00 ")) {
-                                    byte[] pwdCodeBytes = DataTrans.subByte(bytes, 4, 4);
-                                    String pwdCode = DataTrans.bytesToInt(pwdCodeBytes, 0) + "";
-                                    EventBus.getDefault().post(new MessageEvent("ble_add_pwd", pwdCode + ""));
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B1 00 ")) {
-                                    EventBus.getDefault().post(new MessageEvent("ble_change_stamp_count", "success"));
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 B2 00 ")) {
-                                    EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user", "success"));
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
-                                    EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
+                                },
+                                throwable -> {
+                                    // Handle an error here.
+                                    Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
                                 }
-                                // 违规盖章
-                                else if (Utils.bytesToHexString(bytes).startsWith("FF 06 A8 80")) {
-                                    // 发送a8给seal
-                                    sendDataToSealAfterIllegal();
-
-                                    // 告诉后台有非法盖章
-                                    sendIllegalToServer();
-
-                                    // 盖章次数加一
-                                    refreshTimes();
-
-                                    if (firmwareVersion <= 3.02) {
-                                        // 把这次非法盖章的盖章记录也上传到后台
-                                        sendIllegalRecordToServer();
-                                    }
-                                } else if (Utils.bytesToHexString(bytes).startsWith("FF 0E A3")) {
-                                    // 成功读到一条记录
-                                    unuploadedQuantity--; // 未上传的盖章记录数量减一
-                                    Utils.log("unuploadedQuantity:" + unuploadedQuantity);
-                                    // 解析数据，存入对象
-
-                                    // byte[3] 记录序号 暂时没用
-                                    byte[] recordSeq = DataTrans.subByte(bytes, 3, 1);
-                                    int recordSeqInt = DataTrans.bytesToInt(recordSeq, 0);
-                                    Utils.log("recordSeqInt" + recordSeqInt);
-
-                                    // byte[4] 启动类型（stampType）
-                                    byte[] stampTypeBytes = DataTrans.subByte(bytes, 4, 1);
-                                    stampType = DataTrans.bytesToInt(stampTypeBytes, 0);
-
-
-                                    // byte[5] - byte[6] 盖章序号（stampSeqNumber）
-                                    byte[] stampSeqNumberBytes = DataTrans.subByte(bytes, 5, 2);
-                                    stampSeqNumber = DataTrans.bytesToInt(stampSeqNumberBytes, 0);
-
-                                    // byte[7] - byte[10] 启动序号（stampSeqNumber）
-                                    byte[] userNumberBytes = DataTrans.subByte(bytes, 7, 4);
-                                    userNumber = DataTrans.bytesToInt(userNumberBytes, 0);
-
-                                    // byte[11] - byte[16] 盖章时间（stampTime）
-//                                    byte[] stampTimeBytes = DataTrans.subByte(bytes, 11, 6);
-                                    String stampTimeHex = Utils.bytesToHexString(bytes).substring(33, 50);
-                                    stampTime = DateUtils.hexTimeToTimeStamp(stampTimeHex);
-
-                                    // 创建一次盖章记录
-                                    UploadHistoryRecord.RecordListBean recordListBean = new UploadHistoryRecord.RecordListBean();
-                                    recordListBean.setStampType(stampType);
-                                    recordListBean.setUserNumber(userNumber);
-                                    recordListBean.setStampSeqNumber(stampSeqNumber);
-                                    recordListBean.setStampTime(stampTime);
-                                    recordListBeanList.add(recordListBean);
-
-                                    // 准备抹掉一条
-                                    deleteRecord();
-
-                                    if (unuploadedQuantity != 0) {
-                                        // 还有未上传的记录
-                                        // 继续读记录
-                                        readRecord();
-                                    } else {
-                                        // unuploadedQuantity == 0; 此时没有未上传的记录
-                                        // 数据上传服务器
-                                        uploadHistoryStampRecord();
-                                    }
-                                }
-                            },
-                            throwable -> {
-                                // Handle an error here.
-                                Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
-                            }
-                    ));
+                        ));
+            }else {
+                Utils.log("null null null null null null null null null null null null null null ");
+            }
         } else {
 
             // 二期

@@ -90,6 +90,9 @@ public class DfuActivity extends BaseActivity {
 
     DfuServiceController controller;
 
+
+
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -172,8 +175,8 @@ public class DfuActivity extends BaseActivity {
 //        dfu_macAddress = "FF:FF:FF:FF:FF:FF";
         final DfuServiceInitiator starter = new DfuServiceInitiator(dfu_macAddress)
                 .setDeviceName("123")
-                .setKeepBond(true).
-                        setDisableNotification(true)
+                .setKeepBond(true)
+//                .setDisableNotification(true)
                 ;
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
@@ -206,7 +209,7 @@ public class DfuActivity extends BaseActivity {
 //            else {
 //                starter.setBinOrHex(mFileType, mFileStreamUri, mFilePath).setInitFile(mInitFileStreamUri, mInitFilePath);
 //            }
-        final DfuServiceController controller = starter.start(this, DfuService.class);
+         controller = starter.start(this, DfuService.class);
     }
 
 
@@ -264,8 +267,17 @@ public class DfuActivity extends BaseActivity {
 
         @Override
         public void onEnablingDfuMode(String deviceAddress) {
+//            showToast("onEnablingDfuMode");
             Logger.d("TESTS" + "onEnablingDfuMode: mac:" + deviceAddress);
             Logger.d("TESTS" + "onEnablingDfuMode: isSecDfu" + isSecDfu);
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    controller.abort();
+                }
+            }, 1000);
+
             dfu_macAddress = "FF:FF:FF:FF:FF:FF";
             handler.postDelayed(new Runnable() {
                 @Override
@@ -273,7 +285,7 @@ public class DfuActivity extends BaseActivity {
                     Logger.d("TESTS" + "第二次dfu" + deviceAddress);
                     dfu(uri);
                 }
-            }, 20000);
+            }, 6000);
 
 
             handler.postDelayed(new Runnable() {
@@ -399,7 +411,7 @@ public class DfuActivity extends BaseActivity {
         // 进度条对话框
         pd = new ProgressDialog(this);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setMessage("固件升级中...");
+        pd.setMessage("固件升级中（升级过程大概耗时2分钟）");
         pd.setCanceledOnTouchOutside(false);
         pd.setMax(100);
         pd.setCancelable(false);
