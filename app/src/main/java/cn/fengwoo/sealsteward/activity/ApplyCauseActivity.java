@@ -44,6 +44,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.CustomDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -51,6 +52,8 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 /**
  * 申请事由（我要盖章进入）
@@ -248,11 +251,50 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
 //        Intent intent = new Intent(ApplyCauseActivity.this,SealDetailActivity.class);
 //        startActivity(intent);
 
+
+        String state = EasySP.init(this).getString("hasNewDfuVersion", "0");
+
+        if (state.equals("1")) {
+            goToDfuPage();
+            return;
+        } else {
+
+        }
+
         i = position;
 
         Intent intent = new Intent();
         intent.setClass(this, SelectDialogActivity.class);
         startActivityForResult(intent, 123);
+    }
+
+    private void goToDfuPage() {
+        final CustomDialog commonDialog = new CustomDialog(ApplyCauseActivity.this, "提示", "有最新固件，请升级。", "确定");
+        commonDialog.cancel.setText("取消");
+        commonDialog.dialog.setCancelable(false);
+        commonDialog.showDialog();
+        commonDialog.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("rihgt");
+                // confirm
+                startActivity(new Intent(ApplyCauseActivity.this, DfuActivity.class));
+                commonDialog.dialog.dismiss();
+                finish();
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("left");
+                // cancel
+                // 断开蓝牙
+                ((MyApp) ApplyCauseActivity.this.getApplication()).removeAllDisposable();
+                ((MyApp) getApplication()).setConnectionObservable(null);
+                commonDialog.dialog.dismiss();
+            }
+        });
+
     }
 
 

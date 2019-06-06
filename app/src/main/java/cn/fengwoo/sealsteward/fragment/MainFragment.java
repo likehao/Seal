@@ -213,7 +213,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     private Vibrator vibrator;
 
-    private boolean hasDfu = false;
+//    private boolean hasDfu = false;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -386,10 +386,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                     return;
                 }
-                if(hasDfu){
-                    goToDfuPage();
-                    return;
-                }
+//                if(hasDfu){
+//                    goToDfuPage();
+//                    return;
+//                }
                 lockSeal();
                 intent = new Intent(getActivity(), ApplyCauseActivity.class);
                 startActivityForResult(intent, Constants.TO_WANT_SEAL);
@@ -602,10 +602,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            showToast("有最新固件，请升级。");
+                            showToast("有最新固件，请升级。");
                             Utils.log("UUUUUUUUUU:goToDfuPage");
-                            hasDfu = true;
-                            goToDfuPage();
+//                            hasDfu = true;
+//                            goToDfuPage();
                             EasySP.init(getActivity()).putString("hasNewDfuVersion", "1");
                         }
                     });
@@ -613,7 +613,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     EasySP.init(getActivity()).putString("dfu_file_name", dfuEntity.getFileName());
                     EasySP.init(getActivity()).putString("dfu_content", dfuEntity.getContent());
                 }else{
-                    hasDfu = false;
+//                    hasDfu = false;
                 }
             }
         });
@@ -682,15 +682,15 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     @Override
                     public void run() {
 
-                        if (hasDfu) {
-                            return;
-                        }
+//                        if (hasDfu) {
+//                            return;
+//                        }
                         Utils.log("UUUUUUUUUU:jump");
                         // 跳转到 启动印章 页面
                         intent = new Intent(getActivity(), ApplyCauseActivity.class);
                         startActivityForResult(intent, Constants.TO_WANT_SEAL);
                     }
-                }, 2000);
+                }, 50);
 
 
                 break;

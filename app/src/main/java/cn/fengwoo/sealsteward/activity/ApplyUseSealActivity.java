@@ -237,7 +237,10 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                     }
                 } else {
                     Looper.prepare();
-                    showToast(responseInfo.getMessage());
+//                    showToast(responseInfo.getMessage());
+                    if (responseInfo.getCode() == 106 || responseInfo.getCode() == 108 || responseInfo.getCode() == 109) {
+                        showToast(responseInfo.getMessage());
+                    }
                     Looper.loop();
                 }
 
