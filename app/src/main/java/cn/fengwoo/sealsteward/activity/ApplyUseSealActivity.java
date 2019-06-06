@@ -226,6 +226,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("failTime", time);
                         intent.putExtra("sealId", sealId);
                         intent.putExtra("category", 4);
+                        intent.putExtra("ApplyUseSealActivity", "ApplyUseSealActivity");
 
                         if (!TextUtils.isEmpty(applyId)) {
                             intent.putExtra("applyId", applyId);

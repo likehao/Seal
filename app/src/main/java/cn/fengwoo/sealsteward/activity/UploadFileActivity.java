@@ -2,19 +2,25 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -90,6 +96,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     RecyclerView useSealApply_Rcv;
     @BindView(R.id.upload_photo_ll)
     LinearLayout upload_photo_ll;
+    @BindView(R.id.ll_tab)
+    LinearLayout ll_tab;
 
     @BindView(R.id.subtract)
     TextView subtract;
@@ -97,6 +105,12 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     TextView page;
     @BindView(R.id.add)
     TextView add;
+
+    @BindView(R.id.subtractx)
+    TextView subtractx;
+
+    @BindView(R.id.addx)
+    TextView addx;
 
     private RecycleviewAdapter recycleviewAdapter;
     private static final int REQUEST_CODE_CHOOSE = 1;
@@ -144,7 +158,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         applyId = getIntent().getStringExtra("applyId");
         if (TextUtils.isEmpty(applyId)) {
             url = HttpUrl.ADDUSESEAL;
-        }else{
+        } else {
             url = HttpUrl.APPLY_REMENTION;
         }
 
@@ -152,9 +166,40 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initView() {
+
+        useSealApply_Rcv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //设置recyclerView高度
+                ViewGroup.LayoutParams layoutParams = useSealApply_Rcv.getLayoutParams();
+                if (Build.VERSION.SDK_INT >= 16) {
+                    useSealApply_Rcv.getViewTreeObserver()
+                            .removeOnGlobalLayoutListener(this);
+                } else {
+                    useSealApply_Rcv.getViewTreeObserver()
+                            .removeGlobalOnLayoutListener(this);
+                }
+
+                WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+                int height = wm.getDefaultDisplay().getWidth();
+                if (useSealApply_Rcv.getHeight() < height && useSealApply_Rcv.getHeight() > wm.getDefaultDisplay().getWidth() / 3) {
+                    layoutParams.height = useSealApply_Rcv.getHeight();
+                } else {
+                    layoutParams.height = height;
+                }
+                useSealApply_Rcv.setLayoutParams(layoutParams);
+
+            }
+        });
+
+
+
         subtract.setOnClickListener(this);
+        subtractx.setOnClickListener(this);
         page.setOnClickListener(this);
         add.setOnClickListener(this);
+        addx.setOnClickListener(this);
+        upload_photo_ll.setOnClickListener(this);
 
         set_back_ll.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
@@ -177,7 +222,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
         recycleviewAdapter.setOnClickBigPicListener(new RecycleviewAdapter.OnClickBigPicListener() {
             @Override
-            public void clickPic(int position,View view) {
+            public void clickPic(int position, View view) {
 
                 MNImageBrowser.with(UploadFileActivity.this)
                         //页面切换效果
@@ -219,12 +264,19 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         category = intent.getIntExtra("category", 0);
         allFileName = intent.getStringArrayListExtra("photoList");
         isRead = intent.getBooleanExtra("isRead", false);
-        type = intent.getIntExtra("type",0);
+        type = intent.getIntExtra("type", 0);
         if (null == allFileName) {
             allFileName = new ArrayList<>(); // 所有图片的名字
         }
 
-        title_tv.setText("上传附件");
+        title_tv.setText("盖章文件拍照");
+
+        String applyUseSealActivity = intent.getStringExtra("ApplyUseSealActivity");
+
+        if(!TextUtils.isEmpty(applyUseSealActivity)){
+            title_tv.setText("申请文件拍照");
+        }
+
       /*  if (code == 1) {
             // 上传记录
         } else {
@@ -255,17 +307,20 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             totalPage = allFileName.size() / 9;
 
             // 显示当前页面
-            page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+            page.setText("第" + (currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
 
         }
 
         if (isRead) {
             upload_photo_ll.setVisibility(View.GONE);
             edit_tv.setVisibility(View.GONE);
-        }else {
+        } else {
             upload_photo_ll.setVisibility(View.VISIBLE);
             edit_tv.setVisibility(View.VISIBLE);
         }
+
+
+
 
     }
 
@@ -277,6 +332,12 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     ArrayList<String> imgList;
 
     private void show9Pics(List<String> list) {
+        if (allFileName.size() <= 9) {
+            ll_tab.setVisibility(View.GONE);
+        }else{
+            ll_tab.setVisibility(View.VISIBLE);
+        }
+
         imgList = new ArrayList<>();    //点击图片预览查看支持滑动所需要的图片集合
         // uriList 要在此初始化
         List<Uri> uriList = new ArrayList<>();
@@ -298,7 +359,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                                         imgList.add(str);
                                         Uri uri = Uri.parse(str);
                                         uriList.add(uri);
-                                        recycleviewAdapter.setData(uriList, UploadFileActivity.this, list,isRead);
+                                        recycleviewAdapter.setData(uriList, UploadFileActivity.this, list, isRead);
                                         recycleviewAdapter.notifyDataSetChanged();
                                     }
                                 });
@@ -313,7 +374,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 }
             }
         }
-        recycleviewAdapter.setData(uriList, this, list,isRead);
+        recycleviewAdapter.setData(uriList, this, list, isRead);
         recycleviewAdapter.notifyDataSetChanged();
     }
 
@@ -334,6 +395,11 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             case R.id.useSealApply_iv:
                 permissions();
                 break;
+
+            case R.id.upload_photo_ll:
+                permissions();
+                break;
+
             case R.id.edit_tv:
 //                if (success) {
                 if (code != 0) {
@@ -359,7 +425,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 currentPage++;
 
                 // 显示当前页面
-                page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+                page.setText("第" + (currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
 
                 targetList = new ArrayList<>(); // 0到9张图片
                 if (9 * (currentPage + 1) > allFileName.size()) {
@@ -386,17 +452,67 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 currentPage--;
 
                 // 显示当前页面
-                page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+                page.setText("第" + (currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
 
                 targetList = new ArrayList<>(); // 0到9张图片
                 targetList = allFileName.subList(9 * currentPage, 9 * (currentPage + 1));
                 show9Pics(targetList);
 //                }
                 break;
+
+            case R.id.subtractx:
+                if (allFileName == null) {
+                    return;
+                }
+
+                currentPage = 0;
+
+                // 显示当前页面
+                page.setText("第" + (currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+
+                targetList = new ArrayList<>(); // 0到9张图片
+                targetList = allFileName.subList(9 * currentPage, 9 * (currentPage + 1));
+                show9Pics(targetList);
+
+                break;
+
+            case R.id.addx:
+                currentPage = totalPage;
+
+                // 显示当前页面
+                page.setText("第" + (currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+
+                targetList = new ArrayList<>(); // 0到9张图片
+                if (9 * (currentPage + 1) > allFileName.size()) {
+                    // 显示最后一页的图片
+                    targetList = new ArrayList<>();
+                    // 大于9张，得出最后一页的图片名字
+                    int allPage = allFileName.size() / 9;
+                    targetList = allFileName.subList(9 * allPage, allFileName.size());
+                    show9Pics(targetList);
+                } else {
+                    targetList = allFileName.subList(9 * currentPage, 9 * (currentPage + 1));
+                    show9Pics(targetList);
+                }
+
+                break;
         }
     }
 
     private void showCurrentPagePic() {
+//        useSealApply_Rcv.setLayoutManager(new LinearLayoutManager(this) {
+//            @Override
+//            public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
+//                if (getChildCount() > 0) {
+//                    View firstChildView = recycler.getViewForPosition(0);
+//                    measureChild(firstChildView, widthSpec, heightSpec);
+//                    setMeasuredDimension(View.MeasureSpec.getSize(widthSpec), firstChildView.getMeasuredHeight()*3);
+//                } else {
+//                    super.onMeasure(recycler, state, widthSpec, heightSpec);
+//                }
+//            }
+//        });
+
         List<String> targetList = new ArrayList<>(); // 0到9张图片
         if (9 * (currentPage + 1) > allFileName.size()) {
             // 显示最后一页的图片
@@ -436,12 +552,12 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         loadingView.cancel();
-                        if (type == 321){      //区别是主页记录进入还是应用里的记录进入
-                            Intent intent = new Intent(UploadFileActivity.this,MyApplyActivity.class);
+                        if (type == 321) {      //区别是主页记录进入还是应用里的记录进入
+                            Intent intent = new Intent(UploadFileActivity.this, MyApplyActivity.class);
                             intent.putExtra("id", id);
                             setResult(222);
                             startActivity(intent);
-                        }else {
+                        } else {
                             setResult(222);
                         }
                         finish();
@@ -560,7 +676,6 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             compressAndUpload(file);
 
 
-
         }
 
         if (requestCode == 111 && resultCode == 111) {
@@ -569,7 +684,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
     }
 
 
-    private void compressAndUpload( File fileByUri){
+    private void compressAndUpload(File fileByUri) {
         Luban.with(this)
                 .load(fileByUri)
                 .ignoreBy(100)
@@ -628,11 +743,11 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                     Log.e("TAG", "上传图片成功!!!!!!!!!!!!!!!!!!!!");
                     Utils.log("上传图片成功");
 
-                    totalPage = allFileName.size() / 9;
+                    totalPage = (allFileName.size()-1) / 9; // 0不是第一页
                     currentPage = totalPage;
 
                     // 显示当前页面
-                    page.setText((currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
+                    page.setText("第" + (currentPage + 1) + "页（总共" + (totalPage + 1) + "页）");
 
                     showCurrentPagePic();
 

@@ -431,22 +431,22 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
             int errorCode = bdLocation.getLocType();
             if (errorCode == BDLocation.TypeGpsLocation) {
                 // GPS定位结果
-                showToast(bdLocation.getAddrStr());
+//                showToast(bdLocation.getAddrStr());
             } else if (errorCode == BDLocation.TypeNetWorkLocation) {
                 // 网络定位结果
                 Log.i("TAG", "网络定位成功!!!!!!!!!!!!!!!!!");
 
             } else if (errorCode == BDLocation.TypeOffLineLocation) {
                 // 离线定位结果
-                showToast(bdLocation.getAddrStr());
+//                showToast(bdLocation.getAddrStr());
             } else if (errorCode == BDLocation.TypeServerError) {
-                showToast("服务器错误，请检查");
+//                showToast("服务器错误，请检查");
                 return;
             } else if (errorCode == BDLocation.TypeNetWorkException) {
-                showToast("网络错误，请检查");
+//                showToast("网络错误，请检查");
                 return;
             } else if (errorCode == BDLocation.TypeCriteriaException) {
-                showToast("手机模式错误，请检查是否飞行");
+//                showToast("手机模式错误，请检查是否飞行");
                 return;
             }
             //获取经纬度信息
@@ -528,7 +528,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
                 if (reverseGeoCodeResult == null || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
                     //没有检索到结果
-                    Toast.makeText(GeographicalFenceActivity.this, "定位失败", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(GeographicalFenceActivity.this, "定位失败", Toast.LENGTH_LONG).show();
                     return;
                 }
                 currentAddr = reverseGeoCodeResult.getAddress();
@@ -561,7 +561,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
                     locationClient.stop();
                     locationClient.unRegisterLocationListener(locationListener);*/
                 } else {
-                    showToast("获取定位地址失败");
+//                    showToast("获取定位地址失败");
                 }
             }
         };
@@ -648,7 +648,7 @@ public class GeographicalFenceActivity extends BaseActivity implements View.OnCl
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
                 cancelLoadingView();
-                showToast(e + "");
+//                showToast(e + "");
                 Looper.loop();
             }
 

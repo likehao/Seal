@@ -327,6 +327,21 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     viewHolder.getView(R.id.btn_edit).setVisibility(View.GONE);
                     viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
                 }
+
+                boolean isAdmin = EasySP.init(PwdUserActivity.this).getBoolean("isAdmin");
+                Utils.log("isAdmin:" + isAdmin);
+                if (!isAdmin) {
+                    // 如果没有admin权限，hide delete button
+                    viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
+//                    for(PwdUserListItem pwdUserListItem:items){
+////                        if (CommonUtil.getUserData(PwdUserActivity.this).getId().equals(pwdUserListItem.getUserId())) {
+////                            items.clear();
+////                            items.add(pwdUserListItem);
+////                            break;
+////                        }
+//                    }
+                }
+
             }
         };
         list.setAdapter(commonAdapter);

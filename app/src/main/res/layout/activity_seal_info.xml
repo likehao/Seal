@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
-                android:text="印模"
+                android:text="印模图像"
                 android:textColor="@color/black" />
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
-                android:text="公司"
+                android:text="所属公司"
                 android:textColor="@color/black" />
 
             <TextView
@@ -203,7 +203,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
-                android:text="部门"
+                android:text="所属部门"
                 android:textColor="@color/black" />
 
             <TextView
@@ -237,7 +237,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
-                android:text="审批流"
+                android:text="审批流程"
                 android:textColor="@color/black" />
 
             <View style="@style/right_arrow" />
@@ -284,7 +284,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
-                android:text="是否启动地理围栏"
+                android:text="是否启用地理围栏"
                 android:textColor="@color/black" />
 
 
