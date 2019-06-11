@@ -255,7 +255,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.my_QRCode_rl:
-                intent = new Intent(getActivity(), MyQRCodeActivity.class);
+                intent = new Intent(getActivity(),  MyQRCodeActivity.class);
                 startActivity(intent);
                 break;
 

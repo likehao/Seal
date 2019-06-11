@@ -66,6 +66,8 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     LinearLayout set_back_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
     private CauseAdapter causeAdapter;
     private List<ApplyCauseData> causeDataList;
     private ResponseInfo<List<SealApplyData>> responseInfo;
@@ -209,6 +211,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                         @Override
                         public void run() {
                             causeAdapter.notifyDataSetChanged();
+                            no_record_ll.setVisibility(View.GONE);
                         }
                     });
                 } else {
