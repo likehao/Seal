@@ -177,6 +177,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getSmtData() {
+
         mine_smt.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -283,7 +284,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.my_QRCode_rl:
-                intent = new Intent(getActivity(),  MyQRCodeActivity.class);
+                intent = new Intent(getActivity(), MyQRCodeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.company_QRCode_rl:

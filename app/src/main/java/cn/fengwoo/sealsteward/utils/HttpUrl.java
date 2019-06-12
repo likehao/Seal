@@ -374,4 +374,16 @@ public class HttpUrl {
      * qrcode login
      */
     public static final String SCAN_QRCODE_LOGIN = "user/scanqrcodelogin";
+
+    /**
+     * 添加人员列表
+     */
+    public static final String APPLY_JOIN_USER_LIST = "company/applyjoinuserlist";
+
+    /**
+     * 申请加入公司
+     */
+    public static final String APPLY_JOIN_COMPANY = "company/applyjoincompany";
+
+
 }

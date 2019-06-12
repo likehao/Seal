@@ -616,7 +616,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }else{
 //                    hasDfu = false;
                     EventBus.getDefault().post(new MessageEvent("dfu", "false"));
-
+                    EasySP.init(getActivity()).putString("hasNewDfuVersion", "0");
                 }
             }
         });
