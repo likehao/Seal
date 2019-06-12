@@ -22,13 +22,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.picasso.Picasso;
 import com.white.easysp.EasySP;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -52,7 +48,6 @@ import cn.fengwoo.sealsteward.activity.UseInstructionsActivity;
 import cn.fengwoo.sealsteward.activity.UserInfoActivity;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
@@ -111,7 +106,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.company_QRCode_rl)
     RelativeLayout company_QRCode_rl;
-
     /*
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
@@ -154,6 +148,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 Picasso.with(getActivity()).load(headPortraitPath).into(headImg_cir);
             }
         }
+
     }
 
     private void setListener() {
@@ -169,7 +164,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         //    nearby_device_rl.setOnClickListener(this);
         use_Instructions_rl.setOnClickListener(this);
         dfu.setOnClickListener(this);
-        mine_smt.setEnableLoadMore(false);
+        mine_smt.setEnableLoadMore(false); //屏蔽掉上拉加载的效果
         my_QRCode_rl.setOnClickListener(this);
         rl_safe.setOnClickListener(this);
         my_power_rl.setOnClickListener(this);
