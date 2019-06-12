@@ -144,7 +144,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                                                 @Override
                                                 public void run() {
                                                     if (loadingView != null) {
-                                                        loadingView.cancel();
+//                                                        loadingView.cancel();
                                                     }
                                                 }
                                             }, 5000);
@@ -190,7 +190,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", e + "查看详情错误错误!!!!!!!!!!!!!!!!!!!");
-                loadingView.cancel();
+//                loadingView.cancel();
             }
 
             @Override
@@ -202,7 +202,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                 }
                         .getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
-                    loadingView.cancel();
+//                    loadingView.cancel();
                     for (SealApplyData sealApplyData : responseInfo.getData()) {
 //                        causeDataList.add(new ApplyCauseData(sealApplyData.getApplyCause(),sealApplyData.getApplyCount()));
                         causeDataList.add(new ApplyCauseData(sealApplyData.getApplyCause(), sealApplyData.getAvailableCount()));
@@ -218,7 +218,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loadingView.cancel();
+//                            loadingView.cancel();
                             if (!isFromApplyUseSealActivity) {
                                 applyDialog();
                             }
@@ -295,6 +295,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
                 ((MyApp) ApplyCauseActivity.this.getApplication()).removeAllDisposable();
                 ((MyApp) getApplication()).setConnectionObservable(null);
                 commonDialog.dialog.dismiss();
+                finish();
             }
         });
 
@@ -368,7 +369,18 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
             } else {
                 mKeypad.setPasswordState(false, "密码输入错误");
             }
+        } else if (event.msgType.equals("dfu")) {
+            if (event.msg.equals("true")) {
+                // 有新固件
+                goToDfuPage();
+                if (loadingView != null) {
+                    loadingView.cancel();
+                }
+            } else {
+                if (loadingView != null) {
+                    loadingView.cancel();
+                }
+            }
         }
     }
-
 }

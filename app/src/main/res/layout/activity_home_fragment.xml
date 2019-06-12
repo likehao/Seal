@@ -431,7 +431,7 @@
 
                             <TextView
                                 style="@style/application_text"
-                                android:text="@string/Remainder" />
+                                android:text="剩余次数" />
                         </LinearLayout>
                     </RelativeLayout>
 

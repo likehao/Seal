@@ -17,7 +17,7 @@
     android:layout_margin="23dp"
     android:hint="请输入印章名称"
     android:paddingLeft="33dp"
-    android:textSize="18sp"
+    android:textSize="13sp"
     android:text=""
     android:layout_width="match_parent"
     android:layout_height="35dp" />

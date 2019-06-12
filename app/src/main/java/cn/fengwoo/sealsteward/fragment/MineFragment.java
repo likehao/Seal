@@ -37,6 +37,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.CompanyQRCodeActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.LoginActivity;
 import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
@@ -45,8 +46,10 @@ import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SafeActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
+import cn.fengwoo.sealsteward.activity.SetPowerActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
 import cn.fengwoo.sealsteward.activity.UseInstructionsActivity;
+import cn.fengwoo.sealsteward.activity.UserInfoActivity;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
@@ -55,6 +58,7 @@ import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
@@ -101,6 +105,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.rl_safe)
     RelativeLayout rl_safe;
+
+    @BindView(R.id.my_power_rl)
+    RelativeLayout my_power_rl;
+
+    @BindView(R.id.company_QRCode_rl)
+    RelativeLayout company_QRCode_rl;
 
     /*
         @BindView(R.id.nearby_device_rl)
@@ -162,6 +172,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         mine_smt.setEnableLoadMore(false);
         my_QRCode_rl.setOnClickListener(this);
         rl_safe.setOnClickListener(this);
+        my_power_rl.setOnClickListener(this);
+        company_QRCode_rl.setOnClickListener(this);
     }
 
     private void getSmtData() {
@@ -184,8 +196,24 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
                         Gson gson = new Gson();
-                        final ResponseInfo<UserInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UserInfoData>>() {
+                        final ResponseInfo<LoginData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<LoginData>>() {
                         }.getType());
+
+                        LoginData user = responseInfo.getData();
+
+                        // 本地存入权限
+                        String targetPermissionJson = "";
+                        if (user.getAdmin()) {
+                            targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
+                        } else {
+                            targetPermissionJson = new Gson().toJson(user.getFuncIdList());
+                        }
+//                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
+//                    Utils.log(targetPermissionJson);
+
+                        EasySP.init(getActivity()).putString("permission", targetPermissionJson);
+                        EasySP.init(getActivity()).putBoolean("isAdmin", user.getAdmin());
+
                         if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                             mine_smt.finishRefresh();
                         }
@@ -258,10 +286,24 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 intent = new Intent(getActivity(),  MyQRCodeActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.company_QRCode_rl:
+                intent = new Intent(getActivity(), CompanyQRCodeActivity.class);
+                startActivity(intent);
+                break;
 
             case R.id.rl_safe:
                 intent = new Intent(getActivity(), SafeActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.my_power_rl:
+                Utils.log("click permission");
+                Intent intent = new Intent();
+                intent.putExtra("userId", CommonUtil.getUserData(getActivity()).getId());
+                intent.setClass(getActivity(), SetPowerActivity.class);
+                intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
+                intent.putExtra("permission", EasySP.init(getActivity()).getString("permission"));
+                startActivityForResult(intent, 12);
                 break;
         }
     }

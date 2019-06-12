@@ -401,6 +401,8 @@ public class DfuActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+
 //        if (mBluetoothService != null) {
 ////            unbindService();
 ////            mBluetoothService = null;
@@ -437,7 +439,7 @@ public class DfuActivity extends BaseActivity {
             case R.id.btn_dfu:
                 downloadZip();
                 showProgress();
-                new Handler().postDelayed(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         showToast("升级失败，请重试。");

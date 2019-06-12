@@ -317,6 +317,12 @@ public class HttpUrl {
      * 离线记录
      */
     public static final String OFFLINERECORD = "stamp/offlinestamprecord";
+
+    /**
+     * 离线记录查询
+     */
+    public static final String OFFLINERECORD_search = "stamp/flownumberofflinestamprecord";
+
     /**
      * 审批进度
      */

@@ -612,8 +612,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     EasySP.init(getActivity()).putString("dfu_version", dfuEntity.getVersion());
                     EasySP.init(getActivity()).putString("dfu_file_name", dfuEntity.getFileName());
                     EasySP.init(getActivity()).putString("dfu_content", dfuEntity.getContent());
+                    EventBus.getDefault().post(new MessageEvent("dfu", "true"));
                 }else{
 //                    hasDfu = false;
+                    EventBus.getDefault().post(new MessageEvent("dfu", "false"));
+
                 }
             }
         });
@@ -1047,7 +1050,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                                         if (lastTime != null) {
                                             Long intervalTime = System.currentTimeMillis() - lastTime;
-                                            if (intervalTime < 300) {
+                                            if (intervalTime < 200) {
                                                 vibrator.vibrate(3000);
                                                 tooFastTip();
                                                 // 锁定印章

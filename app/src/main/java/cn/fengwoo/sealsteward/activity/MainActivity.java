@@ -82,6 +82,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     ImageView msg_iv;
     @BindView(R.id.main_msg_tv)
     TextView main_msg_tv;    //工作台消息数
+    @BindView(R.id.ll_record)
+    LinearLayout ll_record;
+    @BindView(R.id.tv_left)
+    TextView tv_left;
+    @BindView(R.id.tv_right)
+    TextView tv_right;
     private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
     private TextView[] textViews = new TextView[5];   //底部导航文字集合
     private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
@@ -112,6 +118,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     int sum;
 
     private boolean firstTag = false; // 弹出过一次，变成true
+
+    private LeftOrRightListener leftOrRightListener;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -229,6 +237,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_page:
+                ll_record.setVisibility(View.GONE);
+                title_tv.setVisibility(View.VISIBLE);
+
                 title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
                 record_more_iv.setVisibility(View.GONE);
                 //    add_ll.setVisibility(View.VISIBLE);
@@ -237,7 +248,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 changeView(0);
                 break;
             case R.id.record_page:
-                title_tv.setText("盖章记录");
+//                title_tv.setText("记录");
+
+                tv_left.setOnClickListener(this);
+                tv_right.setOnClickListener(this);
+
+                ll_record.setVisibility(View.VISIBLE);
+                title_tv.setVisibility(View.GONE);
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.VISIBLE);
@@ -253,6 +270,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 changeView(2);
                 break;
             case R.id.mine:
+                ll_record.setVisibility(View.GONE);
+                title_tv.setVisibility(View.VISIBLE);
+
                 title_tv.setText("我的");
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
@@ -261,6 +281,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 changeView(3);
                 break;
             case R.id.application_page:
+                ll_record.setVisibility(View.GONE);
+                title_tv.setVisibility(View.VISIBLE);
+
                 title_tv.setText("应用");
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
@@ -297,6 +320,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
 
+            case R.id.tv_left:
+                Utils.log("left");
+                leftOrRightListener.whichSide("left");
+                break;
+
+            case R.id.tv_right:
+                Utils.log("right");
+                leftOrRightListener.whichSide("right");
+                break;
         }
     }
 
@@ -623,5 +655,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Utils.log(e.toString());
                 e.printStackTrace();
             }
+    }
+
+
+   public interface LeftOrRightListener {
+        void whichSide(String side);
+    }
+
+    public void setLeftOrRightListener(LeftOrRightListener leftOrRightListener) {
+        this.leftOrRightListener = leftOrRightListener;
     }
 }

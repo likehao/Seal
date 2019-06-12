@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,11 +37,17 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.MainActivity;
+import cn.fengwoo.sealsteward.activity.PwdRecordSearchActivity;
 import cn.fengwoo.sealsteward.activity.RecordSearchActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
+import cn.fengwoo.sealsteward.activity.SelectPwdRecordActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealRecodeActivity;
+import cn.fengwoo.sealsteward.adapter.PwdRecordAdapter;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.bean.OfflineRecordData;
+import cn.fengwoo.sealsteward.bean.SeeRecordBean;
 import cn.fengwoo.sealsteward.bean.StampRecordData;
 import cn.fengwoo.sealsteward.bean.StampRecordList;
 import cn.fengwoo.sealsteward.entity.RecordData;
@@ -83,35 +90,169 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     @BindView(R.id.ll_search)
     LinearLayout ll_search;
 
+    @BindView(R.id.ll_pwdRecord)
+    LinearLayout ll_pwdRecord;
+
+    @BindView(R.id.pwdRecord_lv)
+    ListView pwdRecordLv;
+
     private final static int REQUESTCODE = 111;
+
     @BindView(R.id.no_record_ll)
     LinearLayout no_record_ll;
+
+    @BindView(R.id.pwdRecord_smt)
+    SmartRefreshLayout pwdRecordSmt;
+
     String applyId;
     ResponseInfo<List<StampRecordList>> responseInfo;
     private int i = 1, j = 1;
+    PwdRecordAdapter adapter;
+    private List<SeeRecordBean> pList;
+
+    private int iP = 1;
+    ResponseInfo<List<OfflineRecordData>> responseInfoP;
+
+    private boolean isLeftClick = true;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.record_fragment, container, false);
 
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setLeftOrRightListener(new MainActivity.LeftOrRightListener() {
+            @Override
+            public void whichSide(String side) {
+                Utils.log("side:" + side);
+                switch (side) {
+                    case "left":
+                        isLeftClick = true;
+                        et_search.setHint(R.string.search_content);
+                        record_refreshLayout.autoRefresh(); //自动刷新
+                        ll_pwdRecord.setVisibility(View.GONE);
+                        record_ll.setVisibility(View.VISIBLE);
+                        break;
+                    case "right":
+                        isLeftClick = false;
+                        et_search.setHint(R.string.search_content2);
+                        pwdRecordSmt.autoRefresh();
+                        ll_pwdRecord.setVisibility(View.VISIBLE);
+                        record_ll.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
         ButterKnife.bind(this, view);
         initView();
         setListener();
         record_refreshLayout.autoRefresh(); //自动刷新
         setSmartRefreshLayout();
+
+        // 离线盖章记录
+        getPwdRecord();
+//        pwdRecordSmt.autoRefresh();
+
         initData();
         return view;
     }
 
+
+    private void getPwdRecord() {
+        pwdRecordSmt.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                iP = 1;
+                pList.clear();
+                getPwdRecordData();
+                refreshLayout.finishRefresh(); //刷新完成
+
+            }
+        });
+
+        pwdRecordSmt.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                iP += 1;
+                pwdRecordSmt.setEnableLoadMore(true);
+                refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
+                getPwdRecordData();
+                //如果成功有数据就加载
+                if (responseInfoP.getData() != null && responseInfoP.getCode() == 0) {
+                    refreshLayout.finishLoadMore(2000);
+                } else {
+                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                }
+            }
+        });
+    }
+
+    String endTime,startTime;
+    /**
+     * 获取密码盖章记录请求数据
+     */
+    private void getPwdRecordData() {
+        StampRecordData stampRecordData = new StampRecordData();
+        StampRecordData.Param param = new StampRecordData.Param();
+        stampRecordData.setCurPage(iP);
+        stampRecordData.setHasExportPdf(false);
+        stampRecordData.setHasPage(true);
+        stampRecordData.setPageSize(10);
+        try {
+            //时间转为时间戳
+            if (end != null && begin != null) {
+                endTime = DateUtils.dateToStamp2(end);
+                startTime = DateUtils.dateToStamp2(begin);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        param.Param(applyUser, endTime, sealId, 2,startTime);  // type 1.APP盖章   2.密码盖章
+        param.Param(null, null, null, 2,null);  // type 1.APP盖章   2.密码盖章
+        stampRecordData.setParam(param);
+
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.OFFLINERECORD, 2, null, stampRecordData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                responseInfoP = gson.fromJson(result, new TypeToken<ResponseInfo<List<OfflineRecordData>>>() {
+                }.getType());
+                if (responseInfoP.getData() != null && responseInfoP.getCode() == 0) {
+                    for (OfflineRecordData app : responseInfoP.getData()) {
+                        String stampTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));
+                        pList.add(new SeeRecordBean(app.getFlowNumber(),app.getSealName(),app.getUserName(),stampTime));
+                    }
+                    //请求数据
+                   getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged(); //刷新数据
+                            no_record_ll.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     private void initView() {
         list = new ArrayList<>();
+        pList = new ArrayList<>();
+
     }
 
     private void initData() {
         recordAdapter = new RecordAdapter(list, getActivity());
         record_lv.setAdapter(recordAdapter);
         select_record_lv.setAdapter(recordAdapter);
+        adapter = new PwdRecordAdapter(pList, getActivity());
+        pwdRecordLv.setAdapter(adapter);
     }
 
     private void setListener() {
@@ -121,7 +262,11 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             @Override
             public void onClick(View v) {
                 Utils.log("onclick");
-                startActivity(new Intent(getActivity(), RecordSearchActivity.class));
+                if (isLeftClick) {
+                    startActivity(new Intent(getActivity(), RecordSearchActivity.class));
+                }else{
+                    startActivity(new Intent(getActivity(), PwdRecordSearchActivity.class));
+                }
             }
         });
     }
@@ -161,7 +306,6 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
     /**
      * 获取记录请求
-     *
      */
     private void getData() {
         StampRecordData stampRecordData = new StampRecordData();
@@ -193,7 +337,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                         } else {
                             photoCount = app.getPhotoCount();
                         }
-                        list.add(new RecordData(app.getApplyCount(),app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
+                        list.add(new RecordData(app.getApplyCount(), app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                 , app.getStampCount(), app.getAvailableCount(), photoCount
                                 , failTime, sealTime, app.getLastStampAddress(), app.getApproveStatus(),
                                 app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()
@@ -277,9 +421,9 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
     /**
      * 发送获取查询记录请求
-     *
      */
-    String endTime,startTime;
+//    String endTime, startTime;
+
     private void getSelectData() {
         StampRecordData stampRecordData = new StampRecordData();
         StampRecordData.Param param = new StampRecordData.Param();
@@ -323,7 +467,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                         } else {
                             photoCount = app.getPhotoCount();
                         }
-                        list.add(new RecordData(app.getApplyCount(),app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
+                        list.add(new RecordData(app.getApplyCount(), app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
                                 , app.getApplyCount(), app.getAvailableCount(), photoCount
                                 , failTime, sealTime, app.getLastStampAddress(), app.getApproveStatus(),
                                 app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()

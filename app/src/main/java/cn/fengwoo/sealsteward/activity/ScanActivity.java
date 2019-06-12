@@ -44,7 +44,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        Utils.log("result****" );
+//        Utils.log("result****" );
 
         ButterKnife.bind(this);
         initView();
@@ -93,13 +93,15 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("result", result);
                 startActivity(intent);
                 finish();
-            }else{
+            }else if(result.startsWith("userId")){
                 Utils.log("888result2:" + result);
 //                            Intent intent = new Intent();
                 intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
                 intent.putExtra("result", result);
                 startActivity(intent);
                 finish();
+            } else if (result.startsWith("companyId")) {
+                
             }
 
         }

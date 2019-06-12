@@ -331,5 +331,7 @@
     <string name="general_ok">ok</string>
     <string name="general_cancel">cancel</string>
     <string name="confirm">confirm</string>
+    <string name="search_content">搜索事由/流水号</string>
+    <string name="search_content2">搜索流水号</string>
 
 </resources>

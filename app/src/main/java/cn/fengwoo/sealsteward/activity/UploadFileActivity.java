@@ -68,6 +68,7 @@ import cn.fengwoo.sealsteward.utils.GlideEngineImage;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.MyLayoutManager;
 import cn.fengwoo.sealsteward.utils.RecyclerViewClickListener;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -167,32 +168,30 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     private void initView() {
 
-        useSealApply_Rcv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //设置recyclerView高度
-                ViewGroup.LayoutParams layoutParams = useSealApply_Rcv.getLayoutParams();
-                if (Build.VERSION.SDK_INT >= 16) {
-                    useSealApply_Rcv.getViewTreeObserver()
-                            .removeOnGlobalLayoutListener(this);
-                } else {
-                    useSealApply_Rcv.getViewTreeObserver()
-                            .removeGlobalOnLayoutListener(this);
-                }
-
-                WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-                int height = wm.getDefaultDisplay().getWidth();
-                if (useSealApply_Rcv.getHeight() < height && useSealApply_Rcv.getHeight() > wm.getDefaultDisplay().getWidth() / 3) {
-                    layoutParams.height = useSealApply_Rcv.getHeight();
-                } else {
-                    layoutParams.height = height;
-                }
-                useSealApply_Rcv.setLayoutParams(layoutParams);
-
-            }
-        });
-
-
+//        useSealApply_Rcv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                //设置recyclerView高度
+//                ViewGroup.LayoutParams layoutParams = useSealApply_Rcv.getLayoutParams();
+//                if (Build.VERSION.SDK_INT >= 16) {
+//                    useSealApply_Rcv.getViewTreeObserver()
+//                            .removeOnGlobalLayoutListener(this);
+//                } else {
+//                    useSealApply_Rcv.getViewTreeObserver()
+//                            .removeGlobalOnLayoutListener(this);
+//                }
+//
+//                WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+//                int height = wm.getDefaultDisplay().getWidth();
+//                if (useSealApply_Rcv.getHeight() < height && useSealApply_Rcv.getHeight() > wm.getDefaultDisplay().getWidth() / 3) {
+//                    layoutParams.height = useSealApply_Rcv.getHeight();
+//                } else {
+//                    layoutParams.height = height;
+//                }
+//                useSealApply_Rcv.setLayoutParams(layoutParams);
+//
+//            }
+//        });
 
         subtract.setOnClickListener(this);
         subtractx.setOnClickListener(this);
@@ -209,6 +208,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         useSealApply_iv.setOnClickListener(this);
         //设置布局,列数
         useSealApply_Rcv.setLayoutManager(new GridLayoutManager(this, 3));
+//        useSealApply_Rcv.setLayoutManager(new MyLayoutManager(this, 3));
+
         recycleviewAdapter = new RecycleviewAdapter();
 
         recycleviewAdapter.setOnDeleteListener(new RecycleviewAdapter.OnDeleteListener() {
@@ -506,7 +507,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 //                if (getChildCount() > 0) {
 //                    View firstChildView = recycler.getViewForPosition(0);
 //                    measureChild(firstChildView, widthSpec, heightSpec);
-//                    setMeasuredDimension(View.MeasureSpec.getSize(widthSpec), firstChildView.getMeasuredHeight()*3);
+////                    setMeasuredDimension(View.MeasureSpec.getSize(widthSpec)*3, firstChildView.getMeasuredHeight()*3);
+//                    setMeasuredDimension(firstChildView.getMeasuredHeight()*3, firstChildView.getMeasuredHeight()*3);
 //                } else {
 //                    super.onMeasure(recycler, state, widthSpec, heightSpec);
 //                }

@@ -208,11 +208,13 @@
         <activity android:name=".activity.MyApplyActivity" />
         <activity android:name=".activity.NearbyDeviceActivity" />
         <activity android:name=".activity.MyQRCodeActivity" />
+        <activity android:name=".activity.CompanyQRCodeActivity" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.AboutActivity" />
         <activity android:name=".activity.MyWebViewActivity" />
         <activity android:name=".activity.ScanToLoginActivity" />
         <activity android:name=".activity.RecordSearchActivity" />
+        <activity android:name=".activity.PwdRecordSearchActivity" />
         <activity android:name=".activity.SelectPeopleMultiActivity" />
         <activity android:name=".activity.SelectSealMultiActivity" />
         <activity android:name=".activity.CameraActivity" />

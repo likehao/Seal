@@ -42,6 +42,38 @@
             android:textSize="18sp"
             android:visibility="visible" />
 
+            <LinearLayout
+                android:id="@+id/ll_record"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+
+                >
+                <TextView
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+
+                    android:id="@+id/tv_left"
+                    android:layout_width="wrap_content"
+                    android:text="手机盖章"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+
+                    android:id="@+id/tv_right"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:text="密码盖章"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+
         <LinearLayout
             android:id="@+id/search_ll"
             android:layout_width="match_parent"

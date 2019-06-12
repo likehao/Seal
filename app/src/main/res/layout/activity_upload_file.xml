@@ -79,7 +79,7 @@ android:layout_marginTop="10dp"
         <android.support.v7.widget.RecyclerView
             android:id="@+id/useSealApply_Rcv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:paddingBottom="16dp"

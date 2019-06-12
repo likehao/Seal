@@ -121,7 +121,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         initCheck();
         initData();
         // 不是增加印章的情况时，访问后台拿seal list
-        if (!isAddNewSeal) {
+//        if (!isAddNewSeal) {
+        if (true) {
             getSealList();
         } else {
             scanBle();
@@ -138,7 +139,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
                 Looper.prepare();
-                Toast.makeText(NearbyDeviceActivity.this, e + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NearbyDeviceActivity.this, e + "", Toast.LENGTH_SHORT).show();
                 Looper.loop();
                 Log.e("TAG", "获取个人信息数据失败........");
             }
@@ -172,7 +173,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         });
                         loadingView.cancel();
                         Looper.prepare();
-                        showToast(responseInfo.getMessage());
+//                        showToast(responseInfo.getMessage());
                         Looper.loop();
                         Log.e("TAG", "获取个人信息数据失败........");
                     }
@@ -285,6 +286,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 //        if (true) {
             String itemName = "";
             if (!isAddNewSeal) {
+//            if (true) {
                 // 如果不是增加新设备的情况，如果seal list里存在这个seal，替换掉名字
                 if (hasTheSeal(deviceMac)) {
                     itemName = getNameFromList(deviceMac);
@@ -292,7 +294,13 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                     itemName = deviceName + "->" + deviceMac;
                 }
             } else {
-                itemName = deviceName + "->" + deviceMac;
+//                itemName = deviceName + "->" + deviceMac;
+                if (hasTheSeal(deviceMac)) {
+                    return;
+//                    itemName = getNameFromList(deviceMac);
+                } else {
+                    itemName = deviceName + "->" + deviceMac;
+                }
             }
             if (!arrayList.contains(itemName)) {
                 arrayList.add(itemName);
@@ -409,16 +417,20 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         EasySP.init(this).getString("mac", thisMac);
 //        EasySP.init(this).getString("mac", "00:15:84:00:01:67");
 
-        if (responseInfo!=null&&!hasTheSeal(thisMac)) {
+
+        if (!isAddNewSeal) {
+            if (responseInfo!=null&&!hasTheSeal(thisMac)) {
 //            showToast("你没有权限操作这个印章。");
-            showDialog(thisMac);
-            cancelLoadingView();
-            // 停止扫描
-            if (scanSubscription != null) {
-                scanSubscription.dispose();
+                showDialog(thisMac);
+                cancelLoadingView();
+                // 停止扫描
+                if (scanSubscription != null) {
+                    scanSubscription.dispose();
+                }
+                return;
             }
-            return;
         }
+
 
 
         // 连接ble设备
