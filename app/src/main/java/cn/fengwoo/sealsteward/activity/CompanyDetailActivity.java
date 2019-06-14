@@ -23,6 +23,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.CompanyInfo;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -79,11 +80,17 @@ public class CompanyDetailActivity extends BaseActivity implements View.OnClickL
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("公司详情");
-        check.setVisibility(View.VISIBLE);
+//        check.setVisibility(View.VISIBLE);
         check.setOnCheckedChangeListener(this);
         set_back_ll.setOnClickListener(this);
         companyInfo = new CompanyInfo();
         loadingView = new LoadingView(this);
+        intent = getIntent();
+        String belongUser = intent.getStringExtra("belongUser");
+        //判断点击过来的公司是否是自己的公司，如果是就可以编辑，否则不能编辑
+        if (belongUser != null && belongUser.equals(CommonUtil.getUserData(CompanyDetailActivity.this).getId())){
+            check.setVisibility(View.VISIBLE);
+        }
 
     }
 

@@ -106,8 +106,8 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         wait_me_agree_apply_smartRL.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                i = 1;
                 waitMeAgreeDataList.clear(); //清除数据
+                i = 1;
                 getWaitMeAgreeData();
                 refreshLayout.finishRefresh(); //刷新完成
             }
@@ -169,10 +169,11 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                             waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
                             no_record_ll.setVisibility(View.GONE);
 
-                        } else {
-                            waitMeAgreeDataList.clear();
+                        }else {
                             waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
-                            no_record_ll.setVisibility(View.VISIBLE);
+                            if (waitMeAgreeDataList.size() == 0){
+                                no_record_ll.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });
@@ -233,6 +234,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 88) {
             wait_me_agree_apply_smartRL.autoRefresh();
+            waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
         }
     }
 }

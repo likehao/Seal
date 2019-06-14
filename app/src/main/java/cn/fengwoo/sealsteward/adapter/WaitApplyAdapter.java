@@ -233,6 +233,12 @@ public class WaitApplyAdapter extends BaseAdapter {
                 viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
                 viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                 break;
+            default:   //状态为0的
+                viewHolder.item2_tv.setText("撤销");
+                viewHolder.item2_tv.setEnabled(true);
+                viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
+                viewHolder.item2_tv.setBackgroundResource(R.drawable.suggestion_gray);
+                break;
         }
     }
 

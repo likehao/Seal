@@ -73,6 +73,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private String selectCompanyId, selectCompanyName;
 
     private String targetPermissionJson = "";
+    private String belongUser;   //公司的归属者
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +193,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                 } else {
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
+                    intent.putExtra("belongUser", belongUser);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }
@@ -267,6 +269,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
 
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
+                    intent.putExtra("belongUser", belongUser);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
 
@@ -295,6 +298,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                 } else {
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
+                    intent.putExtra("belongUser", belongUser);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }
@@ -307,7 +311,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         //赋值选择的那一条数据获取它的id
         selectCompanyId = arrayList.get(position).getId();
         selectCompanyName = arrayList.get(position).getCompanyName();
-
+        //判断公司的归属者
+        belongUser = arrayList.get(position).getBelongUser();
         //判断点击的是被选中的还是未选中的公司
         if (!selectCompanyId.equals(pos)) {
             //判断此公司是否有属于哪个用户公司名下,相同则可删除
