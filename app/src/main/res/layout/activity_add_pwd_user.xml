@@ -40,11 +40,15 @@
 
                 <TextView
                     android:id="@+id/tv_user"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="30dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_marginStart="70dp"
+                    android:textDirection="rtl"
                     android:text="@string/please_select" />
 
                 <View
