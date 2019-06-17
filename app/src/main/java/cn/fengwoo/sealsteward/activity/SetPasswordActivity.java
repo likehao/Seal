@@ -137,7 +137,7 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                     if (responseInfo.getData()) {
                         Intent intent = new Intent();
                         intent.putExtra("password",password);
-                        startActivity(intent);
+//                        startActivity(intent);
                         finish();
                         Log.e("TAG", "注册成功!!!!!!!!!!!!!!!!!!!");
                         Looper.prepare();
