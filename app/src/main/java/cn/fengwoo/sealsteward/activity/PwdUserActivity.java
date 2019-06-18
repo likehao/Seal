@@ -103,10 +103,10 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
     private void initData() {
         items = new ArrayList<>();
-        if(!TextUtils.isEmpty(getIntent().getStringExtra("isOnlyRead"))){
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("isOnlyRead"))) {
             isOnlyRead = true;
         }
-        if(isOnlyRead){
+        if (isOnlyRead) {
             add_ll.setVisibility(View.GONE);
         }
     }
@@ -131,7 +131,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                 }
                 Intent intent = new Intent();
                 intent.setClass(this, AddPwdUserActivity.class);
-                startActivityForResult(intent,123);
+                startActivityForResult(intent, 123);
                 break;
         }
     }
@@ -167,7 +167,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         Utils.log("isAdmin:" + isAdmin);
                         if (!isAdmin) {
                             // 如果没有admin权限，过滤items
-                            for(PwdUserListItem pwdUserListItem:items){
+                            for (PwdUserListItem pwdUserListItem : items) {
                                 if (CommonUtil.getUserData(PwdUserActivity.this).getId().equals(pwdUserListItem.getUserId())) {
                                     items.clear();
                                     items.add(pwdUserListItem);
@@ -191,13 +191,19 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     }
                 } else {
                     loadingView.cancel();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            no_record_ll.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
             }
         });
     }
 
     private void setListAdapter() {
-         commonAdapter = new CommonAdapter<PwdUserListItem>(this, items, R.layout.pwd_user_list_item) {
+        commonAdapter = new CommonAdapter<PwdUserListItem>(this, items, R.layout.pwd_user_list_item) {
             @Override
             public void convert(ViewHolder viewHolder, PwdUserListItem pwdUserListItem, int i) {
                 viewHolder.setText(R.id.tv_user, pwdUserListItem.getUserName()); // 名字
@@ -339,14 +345,14 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                 // edit
                 if (!Utils.hasThePermission(PwdUserActivity.this, Constants.permission11)) {
                     viewHolder.getView(R.id.btn_edit).setVisibility(View.GONE);
-                }else{
+                } else {
                     viewHolder.getView(R.id.btn_edit).setVisibility(View.VISIBLE);
                 }
 
                 // delete
                 if (!Utils.hasThePermission(PwdUserActivity.this, Constants.permission12)) {
                     viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
-                }else {
+                } else {
                     viewHolder.getView(R.id.btn_delete).setVisibility(View.VISIBLE);
                 }
 
@@ -401,7 +407,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         items.remove(pwdUserListItem);
                         initData();
                         getDate();
-//                                        commonAdapter.notifyDataSetChanged();
+                        commonAdapter.notifyDataSetChanged();
 //                                        list.getAdapter().notify();
                     }
                 });

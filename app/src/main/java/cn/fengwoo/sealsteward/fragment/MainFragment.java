@@ -382,10 +382,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 intent.putExtra("isAddNewSeal", true);
 
-                startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
+                permissions();
+//                startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
+
                 break;
             case R.id.needSeal_rl:
-                if(!Utils.isLocationEnabled(getActivity())){
+                if (!Utils.isLocationEnabled(getActivity())) {
                     showToast("请确保开启了定位服务");
                     return;
                 }
@@ -398,7 +400,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                     intent.putExtra("isAddNewSeal", false);
 
-                    startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
+                    permissions();
+//                    startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
 
                     return;
                 }
@@ -514,8 +517,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         } else {
                                             msg_num_tv.setVisibility(View.GONE);
                                         }
-                                    }
-                                   else if (type == 6) {
+                                    } else if (type == 6) {
                                         waitId = id;
                                         if (msgNum != 0) {
                                             msg_num_tv_ppl_add.setVisibility(View.VISIBLE);// ppl add
@@ -741,7 +743,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     return;
                 }
 
-                if(!Utils.isLocationEnabled(getActivity())){
+                if (!Utils.isLocationEnabled(getActivity())) {
                     showToast("未能获取到定位信息，请确保打开了定位");
                     // 断开蓝牙
                     ((MyApp) getActivity().getApplication()).removeAllDisposable();
@@ -1523,7 +1525,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private void permissions() {
         RxPermissions rxPermissions = new RxPermissions(this);
         //添加需要的权限
-        rxPermissions.requestEachCombined(Manifest.permission.CAMERA,
+        rxPermissions.requestEachCombined(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe(new Consumer<Permission>() {
@@ -1531,8 +1533,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     public void accept(Permission permission) throws Exception {
                         if (permission.granted) {
                             Utils.log("accept");
-                            startLocate();
-
+//                            startLocate();
+                            startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
                         } else if (permission.shouldShowRequestPermissionRationale) {
                             showToast("您已拒绝权限申请");
                         } else {

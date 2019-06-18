@@ -174,9 +174,18 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     String time;
 
     private void useSealApply() {
+        int mCount = Integer.valueOf(applyCount);
+        if (  mCount > 1000) {
+            showToast("申请次数不能大于1000");
+            return;
+        }
+        if (mCount == 0) {
+            showToast("申请次数不能为0");
+            return;
+        }
         AddUseSealApplyBean useSealApplyBean = new AddUseSealApplyBean();
         useSealApplyBean.setApplyCause(cause);
-        useSealApplyBean.setApplyCount(Integer.valueOf(applyCount));
+        useSealApplyBean.setApplyCount(mCount);
         String userId = CommonUtil.getUserData(this).getId();
         useSealApplyBean.setApplyUser(userId);
 //        if (imgList != null) {
