@@ -528,7 +528,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 int msgNum = messageData.getUnreadCount();
                                 //显示消息数
                                 int type = messageData.getType();
-                                if (type != 5&&type!=4) {
+                                if (type != 5 && type != 4) {
                                     sum += msgNum;
                                 }
                                 if (type == 4) { //显示工作台待我审批总消息数

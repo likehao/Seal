@@ -35,6 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/seal"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_marginEnd="10dp"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -61,6 +64,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/seal"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_marginEnd="10dp"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
         </LinearLayout>

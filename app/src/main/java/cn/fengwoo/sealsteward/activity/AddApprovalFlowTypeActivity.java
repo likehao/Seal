@@ -72,7 +72,8 @@ public class AddApprovalFlowTypeActivity extends BaseActivity implements View.On
             case R.id.approvalPeople_ll:
                 intent = new Intent(this,AddApprovalFlowActivity.class);
                 intent.putExtra("sealId",sealId);
-                startActivity(intent);
+                startActivityForResult(intent,20);
+//                startActivity(intent);
                 break;
             case R.id.copyPeople_ll:
                 intent = new Intent(this, SelectSinglePeopleActivity.class);
