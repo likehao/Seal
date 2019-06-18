@@ -27,6 +27,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserDetailData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -193,9 +194,22 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.permission:
                 Utils.log("click permission");
+
+                boolean isReadOnly = false;
+                String mUserId = CommonUtil.getUserData(this).getId();
+                if (mUserId.equals(uID)) {
+                    isReadOnly = true;
+                }else{
+                    isReadOnly = false;
+                }
+
                 Intent intent = new Intent();
                 intent.putExtra("userId", uID);
-                intent.setClass(this, SetPowerActivity.class);
+                if (isReadOnly) {
+                    intent.setClass(this, SetPowerOnlyReadActivity.class);
+                }else{
+                    intent.setClass(this, SetPowerActivity.class);
+                }
                 intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
                 intent.putExtra("permission", targetPermissionJson);
                 startActivityForResult(intent,12);

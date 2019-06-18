@@ -211,6 +211,10 @@
         <activity android:name=".activity.CompanyQRCodeActivity" />
         <activity android:name=".activity.ScanActivity" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.PplAddAgreeActivity" />
+        <activity android:name=".activity.PplAddActivity" />
+        <activity android:name=".activity.ScannedCompanyActivity" />
+        <activity android:name=".activity.ApplyJoinCompanyActivity" />
         <activity android:name=".activity.MyWebViewActivity" />
         <activity android:name=".activity.ScanToLoginActivity" />
         <activity android:name=".activity.RecordSearchActivity" />
@@ -254,6 +258,7 @@
         <activity android:name=".activity.GeographicalFenceActivity" />
         <activity android:name=".activity.SeeRecordActivity" />
         <activity android:name=".activity.SetPowerActivity" />
+        <activity android:name=".activity.SetPowerOnlyReadActivity" />
         <activity android:name=".activity.SetApprovalActivity" />
         <activity android:name=".activity.PersonInformationActivity" />
         <activity android:name=".activity.RechargeRecordActivity" />
@@ -262,6 +267,7 @@
         <activity android:name=".activity.AddCompanyActivity" />
         <activity android:name=".activity.ChangePasswordActivity" />
         <activity android:name=".activity.OrganizationalManagementActivity" />
+        <activity android:name=".activity.OrganizationalManagementPlusActivity" />
         <activity
             android:name=".activity.AddAutographActivity"
             android:screenOrientation="landscape" />

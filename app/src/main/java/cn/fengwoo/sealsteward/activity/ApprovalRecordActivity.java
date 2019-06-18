@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import cn.fengwoo.sealsteward.fragment.ApplyRecordTwoFragment;
 import cn.fengwoo.sealsteward.fragment.FourthMyApplyFragment;
 import cn.fengwoo.sealsteward.fragment.ThirdMyApplyFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.Utils;
 
 /**
  * 审批记录历史
@@ -61,6 +63,28 @@ public class ApprovalRecordActivity extends BaseActivity implements View.OnClick
         fragmentList.add(new ApplyRecordTwoFragment());
         approval_viewPager.setAdapter(new TabFragmentAdapter(fragmentManager,ApprovalRecordActivity.this,fragmentList,titleList));
         approval_tabLayout.setupWithViewPager(approval_viewPager);//此方法就是让tablayout和ViewPager联动
+
+        approval_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+//                Toast.makeText(ApprovalRecordActivity.this, "选中的"+tab.getText(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+//                Toast.makeText(ApprovalRecordActivity.this, "未选中的"+tab.getText(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+//                Toast.makeText(ApprovalRecordActivity.this, "复选的"+tab.getText(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     @Override
@@ -71,4 +95,22 @@ public class ApprovalRecordActivity extends BaseActivity implements View.OnClick
                 break;
         }
     }
+
+
+    private View.OnClickListener mTabOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position= (int) v.getTag();
+            if (position==0 &&approval_tabLayout.getTabAt(position).isSelected()==true){
+                Toast.makeText(ApprovalRecordActivity.this, "点击了第一个tab", Toast.LENGTH_SHORT).show();
+            }else if (position==1 && approval_tabLayout.getTabAt(position).isSelected()==true){
+                Toast.makeText(ApprovalRecordActivity.this, "点击了第二个tab", Toast.LENGTH_SHORT).show();
+            }else {
+                TabLayout.Tab tab = approval_tabLayout.getTabAt(position);
+                if (tab != null) {
+                    tab.select();
+                }
+            }
+        }
+    };
 }

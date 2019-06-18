@@ -15,6 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +47,7 @@ import cn.fengwoo.sealsteward.utils.SystemUtils;
 import cn.fengwoo.sealsteward.utils.ToastFactory;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.MyApp;
+import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
@@ -176,9 +178,9 @@ public class CameraAutoActivity extends Activity implements SurfaceHolder.Callba
         animHeight = (screenHeight - screenWidth - menuPopviewHeight - SystemUtils.dp2px(context, 44)) / 2;
 
         //这里相机取景框我这是为宽高比3:4 所以限制底部控件的高度是剩余部分
-        RelativeLayout.LayoutParams bottomParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, menuPopviewHeight);
-        bottomParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        homecamera_bottom_relative.setLayoutParams(bottomParam);
+//        RelativeLayout.LayoutParams bottomParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, menuPopviewHeight);
+//        bottomParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//        homecamera_bottom_relative.setLayoutParams(bottomParam);
     }
 
     private Handler mHandler = new Handler() {
@@ -485,12 +487,14 @@ public class CameraAutoActivity extends Activity implements SurfaceHolder.Callba
                 startPreview(mCamera, mHolder);
             }
         }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         releaseCamera();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     /**
@@ -620,8 +624,8 @@ public class CameraAutoActivity extends Activity implements SurfaceHolder.Callba
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(screenWidth, (screenWidth * pictrueSize.width) / pictrueSize.height);
         //这里当然可以设置拍照位置 比如居中 我这里就置顶了
-        //params.gravity = Gravity.CENTER;
-        surfaceView.setLayoutParams(params);
+//        params.gravity = Gravity.CENTER;
+//        surfaceView.setLayoutParams(params);
     }
 
     /**

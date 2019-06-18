@@ -43,6 +43,7 @@ import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SafeActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
 import cn.fengwoo.sealsteward.activity.SetPowerActivity;
+import cn.fengwoo.sealsteward.activity.SetPowerOnlyReadActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
 import cn.fengwoo.sealsteward.activity.UseInstructionsActivity;
 import cn.fengwoo.sealsteward.activity.UserInfoActivity;
@@ -296,7 +297,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 Utils.log("click permission");
                 Intent intent = new Intent();
                 intent.putExtra("userId", CommonUtil.getUserData(getActivity()).getId());
-                intent.setClass(getActivity(), SetPowerActivity.class);
+                intent.setClass(getActivity(), SetPowerOnlyReadActivity.class);
                 intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
                 intent.putExtra("permission", EasySP.init(getActivity()).getString("permission"));
                 startActivityForResult(intent, 12);

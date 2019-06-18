@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AboutActivity"
+    android:background="@color/background">
+
+    <include layout="@layout/head" />
+
+
+    <EditText
+        android:layout_marginTop="55dp"
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="请输入备注信息"
+        android:maxLength="200"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:paddingTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+</RelativeLayout>

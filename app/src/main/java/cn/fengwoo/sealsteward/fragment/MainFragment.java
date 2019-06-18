@@ -77,6 +77,7 @@ import cn.fengwoo.sealsteward.activity.CameraAutoActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
+import cn.fengwoo.sealsteward.activity.PplAddActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.activity.UploadFileActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
@@ -137,6 +138,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     RelativeLayout useSealApply_rl;
     @BindView(R.id.approval_record_rl)
     RelativeLayout approval_record_rl;
+    @BindView(R.id.add_ppl)
+    RelativeLayout add_ppl;
     private Intent intent;
     /*   @BindView(R.id.home_companyName_tv)
        TextView home_companyName_tv;*/
@@ -161,6 +164,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     RelativeLayout wait_me_apply_rl;
     @BindView(R.id.msg_num_tv)
     TextView msg_num_tv;
+
+    @BindView(R.id.msg_num_tv_ppl_add)
+    TextView msg_num_tv_ppl_add;
+
     @BindView(R.id.tv_check_record)
     TextView tv_check_record;
 
@@ -240,6 +247,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     @Override
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Utils.log("00000 00000 onCreateView");
+
         //初始化
         SDKInitializer.initialize(getActivity().getApplicationContext());
         view = inflater.inflate(R.layout.activity_home_fragment, container, false);
@@ -250,7 +259,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         setListener();
 //        permissions();
         getMessage();
-        vibrator=(Vibrator)getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+        vibrator = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
 
         return view;
     }
@@ -267,12 +276,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         approval_record_rl.setOnClickListener(this);
         wait_me_apply_rl.setOnClickListener(this);
         tv_check_record.setOnClickListener(this);
-
+        add_ppl.setOnClickListener(this);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.log("00000 00000 onCreate");
+
     }
 
     /**
@@ -296,7 +307,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                LogUtil.d("333" +result);
+                LogUtil.d("333" + result);
                 ResponseInfo<List<BannerData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<BannerData>>>() {
                 }
                         .getType());
@@ -374,6 +385,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
                 break;
             case R.id.needSeal_rl:
+                if(!Utils.isLocationEnabled(getActivity())){
+                    showToast("请确保开启了定位服务");
+                    return;
+                }
+
                 // 断开蓝牙
                 ((MyApp) getApplication()).setConnectionObservable(null);
                 ((MyApp) getActivity().getApplication()).removeAllDisposable();
@@ -408,9 +424,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 intent.putExtra("msgId", waitId);
                 startActivity(intent);
                 break;
-
             case R.id.tv_check_record:
                 getApplyDetail();
+                break;
+            case R.id.add_ppl:
+                intent = new Intent(getActivity(), PplAddActivity.class);
+//                intent.putExtra("msgId", waitId);
+                startActivity(intent);
                 break;
         }
     }
@@ -495,6 +515,15 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                             msg_num_tv.setVisibility(View.GONE);
                                         }
                                     }
+                                   else if (type == 6) {
+                                        waitId = id;
+                                        if (msgNum != 0) {
+                                            msg_num_tv_ppl_add.setVisibility(View.VISIBLE);// ppl add
+                                            msg_num_tv_ppl_add.setText(msgNum + "");
+                                        } else {
+                                            msg_num_tv_ppl_add.setVisibility(View.GONE);
+                                        }
+                                    }
                                 }
                             });
                         }
@@ -511,6 +540,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     @Override
     public void onResume() {
         super.onResume();
+        Utils.log("00000 00000 onResume");
+
         getMessage();
     }
 
@@ -520,6 +551,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     @Override
     public void onStart() {
         super.onStart();
+        Utils.log("00000 00000 onStart");
+
         EventBus.getDefault().register(this);
         //开始轮播
         banner.startAutoPlay();
@@ -531,6 +564,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     @Override
     public void onStop() {
         super.onStop();
+        Utils.log("00000 00000 onStop");
+
         EventBus.getDefault().unregister(this);
         //结束轮播
         banner.stopAutoPlay();
@@ -541,6 +576,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Utils.log("00000 00000 onDestroy");
+
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
@@ -597,7 +634,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 DfuEntity dfuEntity = responseInfo.getData();
                 Utils.log("dfuEntity" + dfuEntity.getVersion());
                 float latestVersion = Float.parseFloat(dfuEntity.getVersion());
-                EasySP.init(getActivity()).putString("dfu_current_version", version+"");
+                EasySP.init(getActivity()).putString("dfu_current_version", version + "");
                 if (latestVersion > version) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -612,10 +649,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     EasySP.init(getActivity()).putString("dfu_version", dfuEntity.getVersion());
                     EasySP.init(getActivity()).putString("dfu_file_name", dfuEntity.getFileName());
                     EasySP.init(getActivity()).putString("dfu_content", dfuEntity.getContent());
-                    EventBus.getDefault().post(new MessageEvent("dfu", "true"));
-                }else{
+//                    EventBus.getDefault().post(new MessageEvent("dfu", "true"));
+                } else {
 //                    hasDfu = false;
-                    EventBus.getDefault().post(new MessageEvent("dfu", "false"));
+//                    EventBus.getDefault().post(new MessageEvent("dfu", "false"));
                     EasySP.init(getActivity()).putString("hasNewDfuVersion", "0");
                 }
             }
@@ -701,6 +738,22 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
             case Constants.TO_WANT_SEAL:
                 if (resultCode != Constants.TO_WANT_SEAL) {
+                    return;
+                }
+
+                if(!Utils.isLocationEnabled(getActivity())){
+                    showToast("未能获取到定位信息，请确保打开了定位");
+                    // 断开蓝牙
+                    ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                    ((MyApp) getApplication()).setConnectionObservable(null);
+                    return;
+                }
+
+                if (tv_address.getText().toString().trim().equals("暂无定位信息")) {
+                    showToast("未能获取到定位信息，请确保打开了定位");
+                    // 断开蓝牙
+                    ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                    ((MyApp) getApplication()).setConnectionObservable(null);
                     return;
                 }
 
@@ -1043,7 +1096,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         Utils.log("batteryInt:" + batteryInt);
                                         // 刷新ui,赋值电量
                                         electric_ll.setVisibility(View.VISIBLE);
-                                        tv_battery.setText(String.valueOf(batteryInt+"%"));
+                                        tv_battery.setText(String.valueOf(batteryInt + "%"));
                                     } else if (Utils.bytesToHexString(bytes).startsWith("FF 08 A2")) {
                                         // 印章主动上报消息通知手机发生盖章行为
                                         // 盖章序号
@@ -1174,7 +1227,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     Utils.log("notificationObservable: error" + throwable.getLocalizedMessage());
                                 }
                         ));
-            }else {
+            } else {
                 Utils.log("null null null null null null null null null null null null null null ");
             }
         } else {
@@ -1366,16 +1419,16 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
 
     public class MyLocationListener implements BDLocationListener {
+
+
         @Override
         public void onReceiveLocation(BDLocation location) {
             currentLocation = location;
-
-
-            Utils.log("enableEnclosure:" + EasySP.init(getActivity()).getBoolean("enableEnclosure", false) + "");
+            Utils.log("888enableEnclosure:" + EasySP.init(getActivity()).getBoolean("enableEnclosure", false) + "");
             Utils.log("stampTag" + stampTag);
             if (stampTag && EasySP.init(getActivity()).getBoolean("enableEnclosure", false)) {
                 // 正在盖章，计算距离
-                Utils.log("distance:"  + "start");
+                Utils.log("distance:" + "start");
                 double distance = Utils.distanceOfTwoPoints(location.getLatitude(), location.getLongitude(), Double.parseDouble(EasySP.init(getActivity()).getString("latitude")), Double.parseDouble(EasySP.init(getActivity()).getString("longitude")));
                 Utils.log("distance:" + distance + "");
                 double scope = Double.parseDouble(EasySP.init(getActivity()).getString("scope"));
@@ -1561,7 +1614,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
      * @param file
      */
     private void uploadPic(File file) {
-        loadingView.show();
+//        loadingView.show();
         HashMap<String, Object> hashMap = new HashMap<>();
         Utils.log(file.length() + "");
         hashMap.put("category", 5);
@@ -1595,12 +1648,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //                    // 弹出相机
 //                    permissions();
 
+                    if ((allPic.size() - uploadPicIndex - 1) != 0) {
+                        String tipString = "已上传：" + (uploadPicIndex + 1) + "张，还剩：" + (allPic.size() - uploadPicIndex - 1) + "张";
+                        Toast.makeText(getActivity(), tipString, Toast.LENGTH_SHORT).show();
+                    }
+
                     // uploadPicIndex加一
                     uploadPicIndex++;
                     // 继续上传（uploadPicIndex不能大于数组大小）
                     if (uploadPicIndex < allPic.size()) {
                         File file = new File(allPic.get(uploadPicIndex));
                         compressAndUpload(file);
+                    }
+
+                    if (uploadPicIndex == allPic.size()) {
+                        Toast.makeText(getActivity(), "图片上传完毕", Toast.LENGTH_SHORT).show();
                     }
 
                     // 上传最后一张图片后提交
@@ -1702,7 +1764,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     }
 
 
-
     private void tooFastTip() {
         final CommonDialog commonDialog = new CommonDialog(getActivity(), "非法盖章", "您盖得太快了，有点跟不上，印章已被锁定！", "确定");
         commonDialog.showDialog();
@@ -1713,8 +1774,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             }
         });
     }
-
-
 
 
     private void goToDfuPage() {

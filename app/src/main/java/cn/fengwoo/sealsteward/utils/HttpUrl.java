@@ -95,6 +95,12 @@ public class HttpUrl {
      * 组织架构
      */
     public static final String ORGANIZATIONAL_STRUCTURE = "company/companyorgstr";
+
+    /**
+     * 组织架构
+     */
+    public static final String ORGANIZATIONAL_STRUCTURE_PLUS = "company/companyorgstr";
+
     /**
      * 建议
      */
@@ -385,5 +391,18 @@ public class HttpUrl {
      */
     public static final String APPLY_JOIN_COMPANY = "company/applyjoincompany";
 
+    /**
+     * 处理申请
+     */
+    public static final String HANDLE_JOIN_COMPANY = "company/handlejoincompany";
 
+    /**
+     * 更新读取状态
+     */
+    public static final String UPDATE_JOIN_READ_STATUS = "company/updatejoinreadstatus";
+
+    /**
+     * 撤销单据
+     */
+    public static final String CANCEL_APPLY = "apply/applyrevoke";
 }

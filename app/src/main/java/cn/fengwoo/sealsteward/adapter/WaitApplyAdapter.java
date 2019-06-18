@@ -33,6 +33,7 @@ import cn.fengwoo.sealsteward.entity.WaitApplyData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -94,7 +95,26 @@ public class WaitApplyAdapter extends BaseAdapter {
 
         if (code == 1){    //待审批
             statusView(status);
-
+            //关闭单据
+            viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (waitApplyData.get(position).getUploadPhotoNum() == 0){
+                        CommonDialog commonDialog = new CommonDialog(context,"提示",
+                                "此单据还未上传盖章后拍照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
+                        commonDialog.showDialog();
+                        commonDialog.setClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                commonDialog.dialog.dismiss();
+                                commonPostRequest2(id, 2, position);
+                            }
+                        });
+                    }else {
+                        commonPostRequest2(id, 2, position);
+                    }
+                }
+            });
         }else if (code == 2) { //审批中
             viewHolder.item2_tv.setText("审批进度");
             viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
@@ -260,6 +280,7 @@ public class WaitApplyAdapter extends BaseAdapter {
             public void onResponse(Call call, Response response) throws IOException {
 
                 String result = response.body().string();
+                Utils.log("result:" + result);
                 Gson gson = new Gson();
                 ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }
@@ -294,6 +315,58 @@ public class WaitApplyAdapter extends BaseAdapter {
         });
 
     }
+
+
+    private void commonPostRequest2(String id, int code, int position) {
+        //关闭单据
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("applyId", id);
+        HttpUtil.sendDataAsync((Activity) context, HttpUrl.CANCEL_APPLY, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", e + "错误错误错误错误错误错误!!!!!!!!!!!!!!!");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result = response.body().string();
+                Utils.log("result:" + result);
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }
+                        .getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (code == 1) {
+                                    viewHolder.item2_tv.setText("已关闭");
+                                    viewHolder.item2_tv.setEnabled(false);
+                                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                                    waitApplyData.get(position).setApproveStatus(5);
+                                    notifyDataSetChanged();
+                                    EventBus.getDefault().post(new MessageEvent("关闭刷新","关闭刷新"));
+                                } else {
+                                    viewHolder.item2_tv.setText("已撤销");
+                                    viewHolder.item2_tv.setEnabled(false);
+                                    viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
+                                    viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
+                                    waitApplyData.get(position).setApproveStatus(4);
+                                    notifyDataSetChanged();
+                                    EventBus.getDefault().post(new MessageEvent("撤销刷新","撤销刷新"));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+    }
+
 
     public static class ViewHolder {
         private TextView tv_cause;

@@ -85,7 +85,6 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
             Utils.log("result:" + result);
-
             Intent intent = new Intent();
             if(result.startsWith("qrcode")){
                 Utils.log("888result1:" + result);
@@ -95,13 +94,15 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                 finish();
             }else if(result.startsWith("userId")){
                 Utils.log("888result2:" + result);
-//                            Intent intent = new Intent();
                 intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
                 intent.putExtra("result", result);
                 startActivity(intent);
                 finish();
             } else if (result.startsWith("companyId")) {
-                
+                intent.setClass(ScanActivity.this, ScannedCompanyActivity.class);
+                intent.putExtra("result", result);
+                startActivity(intent);
+                finish();
             }
 
         }
@@ -166,10 +167,14 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                             intent.putExtra("result", result);
                             startActivity(intent);
                             finish();
-                        }else{
+                        }else if(result.startsWith("userId")){
                             Utils.log("888result2:" + result);
-//                            Intent intent = new Intent();
                             intent.setClass(ScanActivity.this, AddUserByScanActivity.class);
+                            intent.putExtra("result", result);
+                            startActivity(intent);
+                            finish();
+                        } else if (result.startsWith("companyId")) {
+                            intent.setClass(ScanActivity.this, ScannedCompanyActivity.class);
                             intent.putExtra("result", result);
                             startActivity(intent);
                             finish();

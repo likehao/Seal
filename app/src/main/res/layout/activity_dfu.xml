@@ -15,8 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
-
+        android:visibility="visible">
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/red"
+            android:paddingLeft="25dp"
+            android:text="小部份android手机暂不支持固件升级，例如华为p20 pro等" />
         <TextView
             android:id="@+id/tv_version"
             android:layout_width="match_parent"
@@ -55,6 +63,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_hide_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

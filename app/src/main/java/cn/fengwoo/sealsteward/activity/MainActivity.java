@@ -166,6 +166,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         timer = new Timer();
         timer.schedule(timerTask, 1000, 3000); //延时1s，每隔3秒执行一次run方法
 
+        Utils.log(Utils.isLocationEnabled(this) + "7788");
+        Utils.isLocationEnabled(this);
     }
 
     /**
@@ -491,7 +493,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-//                Utils.log("getMessageNum result:" + result);
+//                Utils.log("000 000:getMessageNum result:" + result);
                 Gson gson = new Gson();
                 ResponseInfo<List<MessageData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<MessageData>>>() {
                 }
@@ -531,6 +533,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 }
                                 if (type == 4) { //显示工作台待我审批总消息数
                                     if (msgNum != 0) {
+                                        main_msg_tv.setVisibility(View.VISIBLE);
+                                        main_msg_tv.setText(msgNum + "");
+                                        EventBus.getDefault().post(new MessageEvent("待我审批消息", "待我审批消息"));
+                                    } else {
+                                        main_msg_tv.setVisibility(View.GONE);
+                                    }
+                                } else if (type == 6) { // ppl add
+                                    if (msgNum != 0) {
+                                        Utils.log("000 000:" + msgNum + "");
                                         main_msg_tv.setVisibility(View.VISIBLE);
                                         main_msg_tv.setText(msgNum + "");
                                         EventBus.getDefault().post(new MessageEvent("待我审批消息", "待我审批消息"));
@@ -602,9 +613,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         long backPressed = System.currentTimeMillis();
         if (backPressed - lastBackPressed > QUIT_INTERVAL) {
             lastBackPressed = backPressed;
-
             showToast("再按一次退出");
         } else {
+//            ((MyApp) this.getApplication()).removeAllDisposable();
+//            ((MyApp) getApplication()).setConnectionObservable(null);
             finish();
             System.exit(0);  //正常结束程序
         }
@@ -658,7 +670,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-   public interface LeftOrRightListener {
+    public interface LeftOrRightListener {
         void whichSide(String side);
     }
 

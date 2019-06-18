@@ -231,6 +231,13 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             add_seal_rl.setVisibility(View.VISIBLE);
         }
 
+/////////////////////////
+        if (!Utils.hasThePermission(getActivity(), Constants.permission5)) {
+            wait_time_rl.setVisibility(View.GONE);
+        } else {
+            wait_time_rl.setVisibility(View.VISIBLE);
+        }
+
         // 组织架构
         if (!Utils.hasThePermission(getActivity(), Constants.permission26)) {
             organizational_structure_rl.setVisibility(View.GONE);

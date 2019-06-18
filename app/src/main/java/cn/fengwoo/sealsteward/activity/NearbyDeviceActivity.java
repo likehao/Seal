@@ -345,6 +345,18 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         return id;
     }
 
+    private SealData getSealDataFromList(String thisMac) {
+//        String id = "";
+        SealData mSealData = new SealData();
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(thisMac)) {
+                mSealData = sealData;
+            }
+        }
+        return mSealData;
+    }
+
+
     private String getSealNameFromList(String thisMac) {
         String name = "";
         for (SealData sealData : responseInfo.getData()) {
@@ -398,7 +410,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 if (scanSubscription != null) {
                     scanSubscription.dispose();
                 }
-                startActivityForResult(new Intent(this, RepairActivity.class),Constants.TO_NEARBY_DEVICE);
+                startActivityForResult(new Intent(this, RepairActivity.class), Constants.TO_NEARBY_DEVICE);
                 break;
         }
     }
@@ -417,9 +429,8 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         EasySP.init(this).getString("mac", thisMac);
 //        EasySP.init(this).getString("mac", "00:15:84:00:01:67");
 
-
         if (!isAddNewSeal) {
-            if (responseInfo!=null&&!hasTheSeal(thisMac)) {
+            if (responseInfo != null && !hasTheSeal(thisMac)) {
 //            showToast("你没有权限操作这个印章。");
                 showDialog(thisMac);
                 cancelLoadingView();
@@ -431,8 +442,25 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             }
         }
 
+        SealData sealData = getSealDataFromList(scanResultsList.get(position).getBleDevice().getMacAddress());
+        long nowTime = System.currentTimeMillis();
+        long expiredTime = sealData.getServiceTime();
+        double dayCount = (double)(expiredTime - nowTime) / (1000 * 3600 * 24);
+//        if(System.currentTimeMillis())
+        if ((sealData.getServiceType()==1)&&(dayCount<7)&&(dayCount>0)) {
+            showServiceTip1(sealData, position);
+            return;
+        }
+
+        if ((sealData.getServiceType()==1)&&(dayCount<0)) {
+            showServiceTip2(sealData, position);
+            return;
+        }
+        connectBle(position);
+    }
 
 
+    private void connectBle(int position) {
         // 连接ble设备
 
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
@@ -442,10 +470,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
         ((MyApp) getApplication()).setRxBleDevice(device);
 
-        if(scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")){
+        if (scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")) {
             // 用三期seal时不自动连接
             connectionObservable = prepareConnectionObservableWithoutAutoConnect(device);
-        }else{
+        } else {
             // 用二期seal时不自动连接
             connectionObservable = prepareConnectionObservable(device);
         }
@@ -506,8 +534,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         }
                 );
         ((MyApp) getApplication()).getDisposableList().add(connectDisposable);
-
-//        ((MyApp) getApplication()).setConnectDisposable(connectDisposable);
     }
 
     @Override
@@ -542,8 +568,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     }
 
 
-
-
     /**
      * 确认是否删除
      */
@@ -554,7 +578,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         commonDialog.setRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             Utils.log("rihgt");
+                Utils.log("rihgt");
                 intent = new Intent(NearbyDeviceActivity.this, MyCompanyActivity.class);
                 startActivity(intent);
                 finish();
@@ -586,5 +610,67 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             setResult(Constants.TO_NEARBY_DEVICE, intent);
             finish();
         }
+    }
+
+    /**
+     *
+     */
+    private void showServiceTip1(SealData sealData, int position) {
+        cancelLoadingView();
+
+        String tipString = "此印章服务，将于" + ""+ Utils.getDateToString(sealData.getServiceTime(), "yyyy-MM-dd HH:mm:ss") + "过期，请及时充值";
+        final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "知道了");
+        commonDialog.cancel.setText("去充值");
+        commonDialog.showDialog();
+        commonDialog.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("rihgt");
+                connectBle(position);
+                commonDialog.dialog.dismiss();
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("left" + "cancel" + "去充值");
+
+                intent = new Intent(NearbyDeviceActivity.this, PayActivity.class);
+                intent.putExtra("sealId", sealData.getId());
+                startActivity(intent);
+                finish();
+                commonDialog.dialog.dismiss();
+            }
+        });
+    }
+    /**
+     *
+     */
+    private void showServiceTip2(SealData sealData, int position) {
+        cancelLoadingView();
+
+        String tipString = "此印章服务，已于" + ""+ Utils.getDateToString(sealData.getServiceTime(), "yyyy-MM-dd HH:mm:ss") + "过期，请充值";
+        final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "知道了");
+        commonDialog.cancel.setText("去充值");
+        commonDialog.showDialog();
+        commonDialog.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("rihgt");
+                commonDialog.dialog.dismiss();
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("left" + "cancel" + "去充值");
+
+                intent = new Intent(NearbyDeviceActivity.this, PayActivity.class);
+                intent.putExtra("sealId", sealData.getId());
+                startActivity(intent);
+                finish();
+                commonDialog.dialog.dismiss();
+            }
+        });
     }
 }

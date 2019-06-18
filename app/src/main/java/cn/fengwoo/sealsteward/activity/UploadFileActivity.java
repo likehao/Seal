@@ -320,9 +320,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             edit_tv.setVisibility(View.VISIBLE);
         }
 
-
-
-
+        ll_tab.setVisibility(View.GONE);
     }
 
     /**

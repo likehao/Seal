@@ -133,9 +133,12 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                 Gson gson = new Gson();
                 ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
                 }.getType());
-                if (responseInfo.getCode() == 0){
+                if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         Intent intent = new Intent();
+//                        intent.setClass(SetPasswordActivity.this, LoginActivity.class);
+                        intent.putExtra("password", password);
+//                        startActivity(intent);
                         intent.putExtra("password",password);
 //                        startActivity(intent);
                         finish();
@@ -143,10 +146,9 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                         Looper.prepare();
                         showToast("注册成功");
                         Looper.loop();
-
                     }
-                }else {
-                    Log.e("TAG","注册失败!!!!!!!!!!!!!");
+                } else {
+                    Log.e("TAG", "注册失败!!!!!!!!!!!!!");
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
                     Looper.loop();
@@ -165,8 +167,8 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
         OkHttpClient okHttpClient = new OkHttpClient();
         //设置请求体
         RequestBody requestBody = new FormBody.Builder()
-                .add("mobilePhone",phone)
-                .add("newPassword",password)
+                .add("mobilePhone", phone)
+                .add("newPassword", password)
                 .build();
         Request request = new Request.Builder()
                 .url(HttpUrl.URL + HttpUrl.FORGETPASSWORD)
@@ -176,7 +178,7 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
             @Override
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
-                showToast(e +"");
+                showToast(e + "");
                 Looper.loop();
             }
 
@@ -184,9 +186,9 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0){
+                if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         finish();
                         Log.e("TAG", "设置密码成功!!!!!!!!!!!!!!!!!!!");
@@ -195,8 +197,8 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                         Looper.loop();
 
                     }
-                }else {
-                    Log.e("TAG","设置密码失败!!!!!!!!!!!!!");
+                } else {
+                    Log.e("TAG", "设置密码失败!!!!!!!!!!!!!");
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
                     Looper.loop();

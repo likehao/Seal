@@ -182,7 +182,7 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     public void getData() {
-        loadingView.show();
+//        loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("sealId", EasySP.init(this).getString("currentSealId"));
 //        hashMap.put("sealId", "735faefbc483452788772daade833705");
@@ -369,18 +369,19 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
             } else {
                 mKeypad.setPasswordState(false, "密码输入错误");
             }
-        } else if (event.msgType.equals("dfu")) {
-            if (event.msg.equals("true")) {
-                // 有新固件
-                goToDfuPage();
-                if (loadingView != null) {
-                    loadingView.cancel();
-                }
-            } else {
-                if (loadingView != null) {
-                    loadingView.cancel();
-                }
-            }
         }
+//        else if (event.msgType.equals("dfu")) {
+//            if (event.msg.equals("true")) {
+//                // 有新固件
+//                goToDfuPage();
+//                if (loadingView != null) {
+//                    loadingView.cancel();
+//                }
+//            } else {
+//                if (loadingView != null) {
+//                    loadingView.cancel();
+//                }
+//            }
+//        }
     }
 }

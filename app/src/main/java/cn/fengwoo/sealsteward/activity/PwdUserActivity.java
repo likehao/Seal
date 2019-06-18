@@ -126,6 +126,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
         switch (view.getId()) {
             case R.id.add_ll:
                 if (!Utils.hasThePermission(this, Constants.permission10)) {
+                    showToast("缺少以下权限：添加脱机用户");
                     return;
                 }
                 Intent intent = new Intent();

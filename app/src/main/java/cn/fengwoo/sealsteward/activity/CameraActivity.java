@@ -17,6 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -474,12 +475,14 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
                 startPreview(mCamera, mHolder);
             }
         }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         releaseCamera();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     /**
@@ -609,8 +612,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(screenWidth, (screenWidth * pictrueSize.width) / pictrueSize.height);
         //这里当然可以设置拍照位置 比如居中 我这里就置顶了
-        params.gravity = Gravity.CENTER;
-        surfaceView.setLayoutParams(params);
+//        params.gravity = Gravity.CENTER;
+//        surfaceView.setLayoutParams(params);
     }
 
     /**
