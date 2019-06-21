@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.mcxtzhang.swipemenulib.SwipeMenuLayout
@@ -13,78 +13,85 @@
         app:ios="false"
         app:leftSwipe="true"
         app:swipeEnable="true">
-    <LinearLayout
-
-        android:weightSum="1"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center_vertical">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/pwd_user" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_userName_tel"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/pwd_user" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="120dp"
+                android:layout_marginStart="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_userName_tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="习大大"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:text="123456789" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_agree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="习大大"
-                android:textColor="@color/black" />
+                android:layout_weight="1"
+                android:text="同意"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tv_content"
+            <Button
+                android:id="@+id/btn_refuse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="123456789"
-                android:textColor="@color/black" />
+                android:layout_weight="1"
+                android:text="拒绝"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="已同意" />
         </LinearLayout>
 
-        <Button
-            android:visibility="gone"
-            android:id="@+id/btn_agree"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="同意"/>
-        <Button
-            android:visibility="gone"
-            android:id="@+id/btn_refuse"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="拒绝"/>
-
-        <View
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tv_status"
-            android:layout_marginEnd="10dp"
-            android:layout_width="wrap_content"
-            android:text="已同意"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
 
         <Button
-            android:focusable="false"
-            android:clickable="false"
             android:id="@+id/btn_delete"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:background="@color/red"
+            android:clickable="false"
+            android:focusable="false"
             android:text="删除"
             android:textColor="@android:color/white" />
     </com.mcxtzhang.swipemenulib.SwipeMenuLayout>

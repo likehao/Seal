@@ -539,10 +539,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                                 //显示消息数
                                 int type = messageData.getType();
-                                if (type != 5 && type != 4&& type != 6) {
+                                if (type != 5 && type != 4 && type != 6) {
                                     sum += msgNum;
                                 }
-                                if(type==4 || type ==6){
+                                if (type == 4 || type == 6) {
                                     msgFourSix += msgNum;
                                 }
 //                                if (type == 4) { //显示工作台待我审批总消息数
@@ -565,7 +565,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                                        main_msg_tv.setVisibility(View.GONE);
 //                                    }
 //                                } else
-                                    if (type == 5) {
+                                if (type == 5) {
                                     if (!firstTag) {
 //                                        msgNum = 320;
 //                                        float appVersionOnServer = (float)msgNum / 100;
@@ -581,14 +581,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             }
 
 //                            if (type == 4) { //显示工作台待我审批总消息数
-                                if (msgFourSix != 0) {
-                                    main_msg_tv.setVisibility(View.VISIBLE);
-                                    main_msg_tv.setText(msgFourSix + "");
-                                    EventBus.getDefault().post(new MessageEvent("待我审批消息", "待我审批消息"));
-                                    msgFourSix = 0;
-                                } else {
-                                    main_msg_tv.setVisibility(View.GONE);
-                                }
+                            if (msgFourSix != 0) {
+                                main_msg_tv.setVisibility(View.VISIBLE);
+                                main_msg_tv.setText(msgFourSix + "");
+                                EventBus.getDefault().post(new MessageEvent("待我审批消息", "待我审批消息"));
+                                msgFourSix = 0;
+                            } else {
+                                main_msg_tv.setVisibility(View.GONE);
+                            }
 //                            } else if (type == 6) { // ppl add
 //                                if (msgFourSix != 0) {
 //                                    Utils.log("000 000:" + msgFourSix + "");

@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/white"
+        android:orientation="horizontal"
         android:gravity="center_vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -15,21 +16,24 @@
             android:id="@+id/iv"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
             android:src="@drawable/pwd_user" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="50dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_userName_tel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="习大大"
+                android:ellipsize="end"
+                android:lines="1"
+                android:singleLine="true"
                 android:textColor="@color/black" />
 
             <TextView
@@ -38,24 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="123456789"
-                android:textColor="@color/black" />
+                android:ellipsize="end"
+                android:lines="1"
+                android:singleLine="true" />
         </LinearLayout>
-
-        <Button
-            android:visibility="gone"
-            android:id="@+id/btn_agree"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="同意"/>
-        <Button
-            android:visibility="gone"
-
-            android:id="@+id/btn_refuse"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="拒绝"/>
 
     </LinearLayout>
 
