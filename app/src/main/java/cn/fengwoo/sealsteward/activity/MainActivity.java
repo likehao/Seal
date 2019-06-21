@@ -222,7 +222,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initFragment();
         title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
 
-        tv_right.setTextColor(Color.argb(50, 255, 255, 255));
+        tv_right.setTextColor(Color.argb(130, 255, 255, 255));
     }
 
     private void setListener() {
@@ -329,14 +329,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tv_left:
                 Utils.log("left");
                 //设置文字透明度
-                tv_right.setTextColor(Color.argb(100, 255, 255, 255));
+                tv_right.setTextColor(Color.argb(130, 255, 255, 255));
                 tv_left.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("left");
                 break;
 
             case R.id.tv_right:
                 Utils.log("right");
-                tv_left.setTextColor(Color.argb(100, 255, 255, 255));
+                tv_left.setTextColor(Color.argb(130, 255, 255, 255));
                 tv_right.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("right");
                 break;
