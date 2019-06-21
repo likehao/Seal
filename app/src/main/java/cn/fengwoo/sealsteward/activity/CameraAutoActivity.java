@@ -41,6 +41,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.engine.GlideImageEngine;
 import cn.fengwoo.sealsteward.utils.AppConstant;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.BitmapUtils;
 import cn.fengwoo.sealsteward.utils.CameraUtil;
 import cn.fengwoo.sealsteward.utils.SystemUtils;
@@ -51,7 +52,7 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
-public class CameraAutoActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener {
+public class CameraAutoActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
     private Camera mCamera;
     private SurfaceView surfaceView;
     private SurfaceHolder mHolder;

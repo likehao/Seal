@@ -381,7 +381,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 ((MyApp) getActivity().getApplication()).removeAllDisposable();
                 intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                 intent.putExtra("isAddNewSeal", true);
-
                 permissions();
 //                startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
 
@@ -399,7 +398,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 if (!Utils.isConnect(getActivity())) {
                     intent = new Intent(getActivity(), NearbyDeviceActivity.class);
                     intent.putExtra("isAddNewSeal", false);
-
                     permissions();
 //                    startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
 
@@ -596,6 +594,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         if (s.equals("待我审批消息")) {
             getMessage();
         }
+        if (s.equals("connect_seal")) {
+            intent = new Intent(getActivity(), NearbyDeviceActivity.class);
+            intent.putExtra("isAddNewSeal", false);
+            permissions();
+        }
     }
 
     private void getSystemTime() {
@@ -636,6 +639,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 DfuEntity dfuEntity = responseInfo.getData();
                 Utils.log("dfuEntity" + dfuEntity.getVersion());
                 float latestVersion = Float.parseFloat(dfuEntity.getVersion());
+                /// test
+//                latestVersion = 5;
                 EasySP.init(getActivity()).putString("dfu_current_version", version + "");
                 if (latestVersion > version) {
                     getActivity().runOnUiThread(new Runnable() {

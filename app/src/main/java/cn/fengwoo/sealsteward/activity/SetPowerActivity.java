@@ -150,6 +150,7 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
         permission25.setOnCheckedChangeListener(this);
         permission26.setOnCheckedChangeListener(this);
         loadingView = new LoadingView(this);
+
     }
 
     private void initData() {
@@ -163,6 +164,10 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
         if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
             // 假如是从用户详情跳过来的，要设置好具有的权限
             setSwitchButtons();
+        }
+
+        if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
+            edit_tv.setVisibility(View.GONE);
         }
     }
 
@@ -282,6 +287,8 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.set_back_ll:
+//                finish();
+                setResult(12);
                 finish();
                 break;
             case R.id.edit_tv:
@@ -484,7 +491,9 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
         }
-
+        if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
+            setPermission();
+        }
     }
 
 
@@ -518,8 +527,12 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setResult(12);
-                                finish();
+                                loadingView.cancel();
+                                if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
+                                }else{
+                                    setResult(12);
+                                    finish();
+                                }
                             }
                         });
                     }

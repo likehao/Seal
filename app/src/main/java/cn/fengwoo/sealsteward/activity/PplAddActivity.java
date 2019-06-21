@@ -94,6 +94,8 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
         ButterKnife.bind(this);
         initData();
         initView();
+        setListAdapter1();
+        setListAdapter2();
         getNetDate();
     }
 

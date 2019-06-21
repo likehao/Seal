@@ -238,6 +238,7 @@
         <activity android:name=".activity.ExamineActivity" />
         <activity android:name=".activity.SealInfoActivity" />
         <activity android:name=".activity.SelectSealActivity" />
+        <activity android:name=".activity.SelectSealToFlowActivity" />
         <activity android:name=".activity.SelectSealTypeOneActivity" />
         <activity android:name=".activity.SelectSinglePeopleTypeOneActivity" />
         <activity android:name=".activity.SelectPeopleActivity" />

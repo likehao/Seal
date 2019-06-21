@@ -382,8 +382,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 .imageEngine(new GlideEngineImage())   //图片加载引擎  原本使用的是GlideEngine
                 .forResult(REQUEST_CODE_CHOOSE);
     }
- 
+
     public void convertToPng(String jpgFilePath, String pngFilePath) {
+        showLoadingView();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -412,6 +413,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
                         File mFile = new File(pngFilePath);
                         uploadPic(mFile);
+                        cancelLoadingView();
                     }
                 });
 

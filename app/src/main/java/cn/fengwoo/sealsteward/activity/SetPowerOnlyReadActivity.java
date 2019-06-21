@@ -144,6 +144,9 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
         permission25.setOnCheckedChangeListener(this);
         permission26.setOnCheckedChangeListener(this);
         loadingView = new LoadingView(this);
+        if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
+            edit_tv.setVisibility(View.GONE);
+        }
     }
 
     private void initData() {
@@ -504,7 +507,9 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
                 }
                 break;
         }
-
+        if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
+            setPermission();
+        }
     }
 
 

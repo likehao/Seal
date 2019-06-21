@@ -51,6 +51,7 @@ import cn.fengwoo.sealsteward.activity.PwdUserActivity;
 import cn.fengwoo.sealsteward.activity.RechargeRecordActivity;
 import cn.fengwoo.sealsteward.activity.ScanSearchAddSealActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealActivity;
+import cn.fengwoo.sealsteward.activity.SelectSealToFlowActivity;
 import cn.fengwoo.sealsteward.activity.StartPasswordActivity;
 import cn.fengwoo.sealsteward.activity.VoiceActivity;
 import cn.fengwoo.sealsteward.activity.WaitHandleActivity;
@@ -91,6 +92,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     RelativeLayout press_time_rl;
     @BindView(R.id.add_person_rl)
     RelativeLayout add_person_rl;
+    @BindView(R.id.flow_rl)
+    RelativeLayout flow_rl;
     private Intent intent;
     private PopupWindow popupWindow;
     private View contentView;
@@ -184,6 +187,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         recharge_record_rl.setOnClickListener(this);
         use_seal_apply_rl.setOnClickListener(this);
         approvalRecord_rl.setOnClickListener(this);
+        flow_rl.setOnClickListener(this);
         //      wait_me_agree_rl.setOnClickListener(this);
         //       wait_handle_rl.setOnClickListener(this);
         wait_time_rl.setOnClickListener(this);
@@ -229,6 +233,12 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             add_seal_rl.setVisibility(View.GONE);
         } else {
             add_seal_rl.setVisibility(View.VISIBLE);
+        }
+
+        if (!Utils.hasThePermission(getActivity(), Constants.permission14)) {
+            flow_rl.setVisibility(View.GONE);
+        } else {
+            flow_rl.setVisibility(View.VISIBLE);
         }
 
 /////////////////////////
@@ -312,6 +322,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("3")) {
@@ -324,6 +338,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.key_psd_rl:   //修改按键密码
                 if (!Utils.hasThePermission(getActivity(), Constants.permission7)) {
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
                     return;
                 }
                 if (!Utils.isConnect(getActivity())) {
@@ -341,6 +359,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
                     return;
                 }
                 setDialog();
@@ -349,7 +371,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 if (!Utils.hasThePermission(getActivity(), Constants.permission4)) {
                     return;
                 }
-
+                if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
                 if (!Utils.isConnect(getActivity())) {
                     return;
                 }
@@ -369,6 +394,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
@@ -383,6 +412,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
                     return;
                 }
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
@@ -394,6 +427,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.rl_pwd_user:
+                if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
                 if (!Utils.isConnect(getActivity())) {
                     return;
                 }
@@ -450,6 +487,13 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 intent = new Intent(getActivity(), WaitHandleActivity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.flow_rl:
+                if (!Utils.hasThePermission(getActivity(), Constants.permission14)) {
+                    return;
+                }
+                startActivity(new Intent(getActivity(), SelectSealToFlowActivity.class));
+                break;
             case R.id.change_seal:
                 if (!Utils.hasThePermission(getActivity(), Constants.permission25)) {
                     return;
@@ -458,6 +502,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.seal_dfu:
+                if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
                 if (!Utils.isConnect(getActivity())) {
                     return;
                 }

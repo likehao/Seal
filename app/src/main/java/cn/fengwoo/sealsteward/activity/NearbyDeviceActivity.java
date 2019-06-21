@@ -442,19 +442,21 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             }
         }
 
-        SealData sealData = getSealDataFromList(scanResultsList.get(position).getBleDevice().getMacAddress());
-        long nowTime = System.currentTimeMillis();
-        long expiredTime = sealData.getServiceTime();
-        double dayCount = (double)(expiredTime - nowTime) / (1000 * 3600 * 24);
+        if(!isAddNewSeal){
+            SealData sealData = getSealDataFromList(scanResultsList.get(position).getBleDevice().getMacAddress());
+            long nowTime = System.currentTimeMillis();
+            long expiredTime = sealData.getServiceTime();
+            double dayCount = (double)(expiredTime - nowTime) / (1000 * 3600 * 24);
 //        if(System.currentTimeMillis())
-        if ((sealData.getServiceType()==1)&&(dayCount<7)&&(dayCount>0)) {
-            showServiceTip1(sealData, position);
-            return;
-        }
+            if ((sealData.getServiceType()==1)&&(dayCount<7)&&(dayCount>0)) {
+                showServiceTip1(sealData, position);
+                return;
+            }
 
-        if ((sealData.getServiceType()==1)&&(dayCount<0)) {
-            showServiceTip2(sealData, position);
-            return;
+            if ((sealData.getServiceType()==1)&&(dayCount<0)) {
+                showServiceTip2(sealData, position);
+                return;
+            }
         }
         connectBle(position);
     }

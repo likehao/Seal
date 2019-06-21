@@ -40,6 +40,7 @@ import java.util.List;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.engine.GlideImageEngine;
 import cn.fengwoo.sealsteward.utils.AppConstant;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.BitmapUtils;
 import cn.fengwoo.sealsteward.utils.CameraUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
@@ -47,7 +48,7 @@ import cn.fengwoo.sealsteward.utils.SystemUtils;
 import cn.fengwoo.sealsteward.utils.ToastFactory;
 import cn.fengwoo.sealsteward.utils.Utils;
 
-public class CameraActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener {
+public class CameraActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
     private Camera mCamera;
     private SurfaceView surfaceView;
     private SurfaceHolder mHolder;
