@@ -75,9 +75,9 @@ public class CompanyQRCodeActivity extends BaseActivity implements View.OnClickL
         company_tv.setText(CommonUtil.getUserData(this).getCompanyName());
 
         // show pic
-        String  headPortrait = CommonUtil.getUserData(this).getHeadPortrait();
-        String headPortraitPath = "file://" + HttpDownloader.path + headPortrait;
-        Picasso.with(this).load(headPortraitPath).into(headImg_cir);
+//        String  headPortrait = CommonUtil.getUserData(this).getHeadPortrait();
+//        String headPortraitPath = "file://" + HttpDownloader.path + headPortrait;
+//        Picasso.with(this).load(headPortraitPath).into(headImg_cir);
     }
 
     /**

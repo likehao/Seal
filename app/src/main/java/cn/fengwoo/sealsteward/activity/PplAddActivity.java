@@ -125,11 +125,21 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getText().equals("待我处理")) {
+                    no_record_ll.setVisibility(View.GONE);
                     list1.setVisibility(View.VISIBLE);
                     list2.setVisibility(View.GONE);
+                    if (items1.size() == 0) {
+                        list1.setVisibility(View.GONE);
+                        no_record_ll.setVisibility(View.VISIBLE);
+                    }
                 } else {
+                    no_record_ll.setVisibility(View.GONE);
                     list1.setVisibility(View.GONE);
                     list2.setVisibility(View.VISIBLE);
+                    if (items2.size() == 0) {
+                        list2.setVisibility(View.GONE);
+                        no_record_ll.setVisibility(View.VISIBLE);
+                    }
                 }
 //                Toast.makeText(ApprovalRecordActivity.this, "选中的"+tab.getText(), Toast.LENGTH_SHORT).show();
             }
@@ -207,23 +217,45 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
                             updateState();
 
                             // left
-                            setListAdapter1();
+//                            setListAdapter1();
                             if (commonAdapter1 != null) {
                                 commonAdapter1.notifyDataSetChanged();
                                 no_record_ll.setVisibility(View.GONE);
                             }
 
                             // right
-                            setListAdapter2();
+//                            setListAdapter2();
                             if (commonAdapter2 != null) {
                                 commonAdapter2.notifyDataSetChanged();
                                 no_record_ll.setVisibility(View.GONE);
                             }
+
                         }
                     });
 
                 } else {
                     loadingView.cancel();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            updateState();
+
+                            // left
+//                            setListAdapter1();
+                            if (commonAdapter1 != null) {
+                                commonAdapter1.notifyDataSetChanged();
+                                no_record_ll.setVisibility(View.VISIBLE);
+                            }
+
+                            // right
+//                            setListAdapter2();
+                            if (commonAdapter2 != null) {
+                                commonAdapter2.notifyDataSetChanged();
+                                no_record_ll.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -365,7 +397,6 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
                     optionBottomDialog.dismiss();
                 } else {
                     refuseOrDelete(pplAddEntity, 2);
-                    getNetDate();
                     optionBottomDialog.dismiss();
                 }
             }
@@ -405,6 +436,8 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                items1.clear();
+                                items2.clear();
                                 getNetDate();
                             }
                         });

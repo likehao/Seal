@@ -129,7 +129,7 @@ public class PplAddAgreeActivity extends BaseActivity implements View.OnClickLis
         }
 
         pplAddEntity.setOrgStructureId(departmentId);
-        pplAddEntity.setJob(departmentId);
+        pplAddEntity.setJob(etJob.getText().toString());
         pplAddEntity.setHandleUser(CommonUtil.getUserData(this).getId());
         pplAddEntity.setStatus(1);
 

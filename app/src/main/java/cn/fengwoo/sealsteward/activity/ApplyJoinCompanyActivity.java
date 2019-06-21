@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -116,6 +117,13 @@ public class ApplyJoinCompanyActivity extends BaseActivity implements View.OnCli
                             }
                         });
                     }
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showToast(responseInfo.getMessage());
+                        }
+                    });
                 }
             }
         });
