@@ -516,7 +516,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                             msg_num_tv.setVisibility(View.GONE);
                                         }
                                     } else if (type == 6) {
-                                        waitId = id;
                                         if (msgNum != 0) {
                                             msg_num_tv_ppl_add.setVisibility(View.VISIBLE);// ppl add
                                             msg_num_tv_ppl_add.setText(msgNum + "");

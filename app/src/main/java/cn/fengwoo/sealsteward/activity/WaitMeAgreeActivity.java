@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -44,6 +45,7 @@ import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -205,6 +207,8 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
     private void updateReadMsg(String msgId) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("messageId", msgId);
+        Utils.log("9999999999msgId:" + msgId);
+
         HttpUtil.sendDataAsync(WaitMeAgreeActivity.this, HttpUrl.UPDATEREADMSG, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -214,6 +218,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
+                Utils.log("9999999999result:" + result);
                 Gson gson = new Gson();
                 ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }
