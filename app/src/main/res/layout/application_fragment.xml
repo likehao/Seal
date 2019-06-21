@@ -536,7 +536,8 @@
 
                                 <TextView
                                     style="@style/application_text"
-                                    android:text="@string/add_person" />
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/add_user" />
 
                             </LinearLayout>
                         </RelativeLayout>

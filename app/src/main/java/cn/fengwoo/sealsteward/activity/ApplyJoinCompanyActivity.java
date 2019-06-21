@@ -1,8 +1,5 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.app.Activity;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,21 +11,14 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.bean.MessageEvent;
-import cn.fengwoo.sealsteward.bean.OfflineRecordData;
-import cn.fengwoo.sealsteward.bean.SeeRecordBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -37,7 +27,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 申请加入
  */
 public class ApplyJoinCompanyActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)
@@ -87,7 +77,7 @@ public class ApplyJoinCompanyActivity extends BaseActivity implements View.OnCli
 
     private void submit() {
         if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
-            showToast("备注不能为空");
+            showToast("验证不能为空");
             return;
         }
         HashMap<String, String> hashMap = new HashMap<>();

@@ -1,10 +1,6 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
@@ -15,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,26 +33,16 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.TabFragmentAdapter;
 import cn.fengwoo.sealsteward.entity.PplAddEntity;
-import cn.fengwoo.sealsteward.entity.PwdUserListItem;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.fragment.ApplyRecordOneFragment;
-import cn.fengwoo.sealsteward.fragment.ApplyRecordTwoFragment;
 import cn.fengwoo.sealsteward.fragment.EmptyFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
-import cn.fengwoo.sealsteward.utils.Constants;
-import cn.fengwoo.sealsteward.utils.DataProtocol;
-import cn.fengwoo.sealsteward.utils.DataTrans;
-import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
-import cn.fengwoo.sealsteward.view.MyApp;
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -120,7 +105,7 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("人员添加");
+        title_tv.setText("申请列表");
         set_back_ll.setOnClickListener(this);
         tv_left.setOnClickListener(this);
         tv_right.setOnClickListener(this);
@@ -199,54 +184,44 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
                 Gson gson = new Gson();
                 ResponseInfo<List<PplAddEntity>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<PplAddEntity>>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0) {
-                    if (responseInfo.getData() != null) {
-                        loadingView.cancel();
-                        items = responseInfo.getData();
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                    loadingView.cancel();
+                    items = responseInfo.getData();
 
-                        // items 处理
-                        String userId = CommonUtil.getUserData(PplAddActivity.this).getId();
-                        for (PplAddEntity pplAddEntity : items) {
-                            if (!pplAddEntity.getUserId().equals(userId)) {
-                                items1.add(pplAddEntity);
-                            } else {
-                                items2.add(pplAddEntity);
-                            }
+                    // items 处理
+                    String userId = CommonUtil.getUserData(PplAddActivity.this).getId();
+                    for (PplAddEntity pplAddEntity : items) {
+                        if (!pplAddEntity.getUserId().equals(userId)) {
+                            items1.add(pplAddEntity);
+                        } else {
+                            items2.add(pplAddEntity);
                         }
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                updateState();
-
-                                // left
-                                setListAdapter1();
-                                if (commonAdapter1 != null) {
-                                    commonAdapter1.notifyDataSetChanged();
-                                    no_record_ll.setVisibility(View.GONE);
-                                }
-
-                                // right
-                                setListAdapter2();
-                                if (commonAdapter2 != null) {
-                                    commonAdapter2.notifyDataSetChanged();
-                                    no_record_ll.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                    } else {
-                        loadingView.cancel();
                     }
-                } else {
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            commonAdapter1.notifyDataSetChanged();
-                            commonAdapter2.notifyDataSetChanged();
-                            loadingView.cancel();
+
+                            updateState();
+
+                            // left
+                            setListAdapter1();
+                            if (commonAdapter1 != null) {
+                                commonAdapter1.notifyDataSetChanged();
+                                no_record_ll.setVisibility(View.GONE);
+                            }
+
+                            // right
+                            setListAdapter2();
+                            if (commonAdapter2 != null) {
+                                commonAdapter2.notifyDataSetChanged();
+                                no_record_ll.setVisibility(View.GONE);
+                            }
                         }
                     });
+
+                } else {
+                    loadingView.cancel();
                 }
             }
         });
@@ -314,11 +289,11 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
                 String nameString = "";
                 if (pplAddEntity.getUserName().length() > 14) {
                     nameString = pplAddEntity.getUserName().substring(0, 14) + "...";
-                }else {
+                } else {
                     nameString = pplAddEntity.getUserName();
                 }
 
-                viewHolder.setText(R.id.tv_userName_tel, nameString  + " " + pplAddEntity.getMobilePhone());
+                viewHolder.setText(R.id.tv_userName_tel, nameString + " " + pplAddEntity.getMobilePhone());
                 viewHolder.setText(R.id.tv_content, pplAddEntity.getContent() + "");
 
                 switch (pplAddEntity.getStatus()) {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -115,7 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.msgSum_tv)
     TextView msgSum_tv;  //消息总数
     private Timer timer;
-    int sum;
+    int sum, addSum;
 
     private boolean firstTag = false; // 弹出过一次，变成true
 
@@ -219,6 +220,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initFragment();
         title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
 
+        tv_right.setTextColor(Color.argb(50, 255, 255, 255));
     }
 
     private void setListener() {
@@ -324,11 +326,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
             case R.id.tv_left:
                 Utils.log("left");
+                //设置文字透明度
+                tv_right.setTextColor(Color.argb(100, 255, 255, 255));
+                tv_left.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("left");
                 break;
 
             case R.id.tv_right:
                 Utils.log("right");
+                tv_left.setTextColor(Color.argb(100, 255, 255, 255));
+                tv_right.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("right");
                 break;
         }
@@ -526,6 +533,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             for (MessageData messageData : responseInfo.getData()) {
 
                                 int msgNum = messageData.getUnreadCount();
+
                                 //显示消息数
                                 int type = messageData.getType();
                                 if (type != 5 && type != 4) {

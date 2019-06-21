@@ -48,7 +48,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 申请用印
+ * 用印申请
  */
 public class ApplyUseSealActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.set_back_ll)
@@ -101,7 +101,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("申请用印");
+        title_tv.setText("用印申请");
         set_back_ll.setOnClickListener(this);
         nextBt.setOnClickListener(this);
         seal_name_rl.setOnClickListener(this);

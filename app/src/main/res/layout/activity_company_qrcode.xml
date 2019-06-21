@@ -19,7 +19,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
@@ -40,7 +39,7 @@
                         android:layout_height="40dp"
                         android:layout_gravity="center"
 
-                        android:background="@drawable/default_head_portrait" />
+                        android:background="@drawable/defaultavatar" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -58,26 +57,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_tel"
+                        android:id="@+id/company_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="13888888888" />
-                    <TextView
-                        android:id="@+id/tv_job"
-                        android:layout_marginLeft="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="董事长" />
+
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_company"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="XXX公司"
-                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -99,7 +85,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:text="扫一扫,申请加入公司"
+            android:text="扫一扫,加入企业"
             android:textSize="12sp" />
     </LinearLayout>
 

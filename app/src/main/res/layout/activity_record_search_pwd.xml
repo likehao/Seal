@@ -44,7 +44,7 @@
 
     <EditText
         android:singleLine="true"
-        android:inputType="text"
+        android:inputType="number"
         android:imeOptions="actionSearch"
         android:id="@+id/et_searchx"
         android:layout_width="match_parent"
@@ -57,6 +57,7 @@
         android:background="@color/white"
         android:drawableStart="@drawable/head_search"
         android:hint="搜索流水号"
+        android:maxLength="18"
         android:textSize="15sp" />
 
 

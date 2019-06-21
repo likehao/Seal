@@ -5,411 +5,412 @@
     android:background="@color/background"
     android:orientation="vertical">
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/mine_smt"
+      <com.scwang.smartrefresh.layout.SmartRefreshLayout
+          android:id="@+id/mine_smt"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+          <com.scwang.smartrefresh.layout.header.ClassicsHeader
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:orientation="vertical">
+
+            <View
+                style="@style/line"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:id="@+id/mine_person_data_ll"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/headImg_cir"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/default_head_portrait" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/realName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="left"
+                        android:singleLine="true"
+                        android:text="@string/company_name"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="13843843838" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/right_arrow" />
+
+            </LinearLayout>
+
+            <View style="@style/line" />
+
+            <View
+                style="@style/line"
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:orientation="vertical">
 
-                <View
-                    style="@style/line"
-                    android:layout_marginTop="10dp" />
+                <RelativeLayout
+                    android:id="@+id/my_company_rl"
+                    style="@style/pressed_effect">
 
-                <LinearLayout
-                    android:id="@+id/mine_person_data_ll"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@color/white"
-                    android:orientation="horizontal">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/headImg_cir"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="15dp"
-                        android:background="@drawable/default_head_portrait" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/my_company"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:id="@+id/realName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:gravity="left"
-                            android:singleLine="true"
-                            android:text="@string/company_name"
-                            android:textColor="@color/black" />
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/phone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:gravity="right"
-                            android:singleLine="true"
-                            android:text="13843843838" />
-                    </LinearLayout>
+                <View style="@style/line_left" />
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="5dp"
-                        android:background="@drawable/right_arrow" />
+                <RelativeLayout
+                    android:id="@+id/my_power_rl"
+                    style="@style/pressed_effect"
+                    android:visibility="visible">
 
-                </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="我的权限"
+                        android:textColor="@color/black" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    android:id="@+id/my_sign_rl"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/my_sign"
+                        android:textColor="@color/black" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    android:id="@+id/my_QRCode_rl"
+                    style="@style/pressed_effect"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/my_QRCode"
+                        android:textColor="@color/black" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+
+                <RelativeLayout
+                    android:id="@+id/company_QRCode_rl"
+                    style="@style/pressed_effect"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="企业二维码"
+                        android:textColor="@color/black" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
 
                 <View style="@style/line" />
+                <!--
+                                               <RelativeLayout
+                                                   android:id="@+id/my_user_rl"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="40dp">
 
-                <View
-                    style="@style/line"
-                    android:layout_marginTop="10dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:id="@+id/my_company_rl"
-                        style="@style/pressed_effect">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="@string/my_company"
-                            android:textColor="@color/black" />
-
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
-
-                    <View style="@style/line_left" />
-
-                    <RelativeLayout
-                        android:id="@+id/my_sign_rl"
-                        style="@style/pressed_effect">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="@string/my_sign"
-                            android:textColor="@color/black" />
-
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
-
-                    <View style="@style/line_left" />
-
-                    <RelativeLayout
-                        android:id="@+id/my_QRCode_rl"
-                        style="@style/pressed_effect"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="@string/my_QRCode"
-                            android:textColor="@color/black" />
-
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
-
-                    <View style="@style/line_left" />
-
-
-                    <RelativeLayout
-                        android:id="@+id/company_QRCode_rl"
-                        style="@style/pressed_effect"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="公司二维码"
-                            android:textColor="@color/black" />
-
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
-
-                    <View style="@style/line_left" />
-
-                    <RelativeLayout
-                        android:id="@+id/my_power_rl"
-                        style="@style/pressed_effect"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="我的权限"
-                            android:textColor="@color/black" />
-
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
-
-
-                    <!--
-                                                   <RelativeLayout
-                                                       android:id="@+id/my_user_rl"
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="40dp">
-
-                                                       <TextView
-                                                           android:layout_width="wrap_content"
-                                                           android:layout_height="wrap_content"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginStart="15dp"
-                                                           android:text="@string/my_user"
-                                                           android:textColor="@color/black" />
-
-                                                       <ImageView
-                                                           android:layout_width="25dp"
-                                                           android:layout_height="25dp"
-                                                           android:layout_alignParentEnd="true"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginEnd="5dp"
-                                                           android:background="@drawable/right_arrow" />
-                                                   </RelativeLayout>
-
-                                                   <View
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="0.5dp"
+                                                   <TextView
+                                                       android:layout_width="wrap_content"
+                                                       android:layout_height="wrap_content"
+                                                       android:layout_centerVertical="true"
                                                        android:layout_marginStart="15dp"
-                                                       android:background="@color/line" />
+                                                       android:text="@string/my_user"
+                                                       android:textColor="@color/black" />
 
-                                                   <RelativeLayout
-                                                       android:id="@+id/my_sealList_rl"
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="40dp">
+                                                   <ImageView
+                                                       android:layout_width="25dp"
+                                                       android:layout_height="25dp"
+                                                       android:layout_alignParentEnd="true"
+                                                       android:layout_centerVertical="true"
+                                                       android:layout_marginEnd="5dp"
+                                                       android:background="@drawable/right_arrow" />
+                                               </RelativeLayout>
 
-                                                       <TextView
-                                                           android:layout_width="wrap_content"
-                                                           android:layout_height="wrap_content"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginStart="15dp"
-                                                           android:text="@string/my_seal"
-                                                           android:textColor="@color/black" />
+                                               <View
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="0.5dp"
+                                                   android:layout_marginStart="15dp"
+                                                   android:background="@color/line" />
 
-                                                       <ImageView
-                                                           android:layout_width="25dp"
-                                                           android:layout_height="25dp"
-                                                           android:layout_alignParentEnd="true"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginEnd="5dp"
-                                                           android:background="@drawable/right_arrow" />
-                                                   </RelativeLayout>
+                                               <RelativeLayout
+                                                   android:id="@+id/my_sealList_rl"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="40dp">
 
-                                                   <View
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="0.5dp"
+                                                   <TextView
+                                                       android:layout_width="wrap_content"
+                                                       android:layout_height="wrap_content"
+                                                       android:layout_centerVertical="true"
                                                        android:layout_marginStart="15dp"
-                                                       android:background="@color/line" />
+                                                       android:text="@string/my_seal"
+                                                       android:textColor="@color/black" />
 
-                                                   <RelativeLayout
-                                                       android:id="@+id/my_apply_rl"
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="40dp">
+                                                   <ImageView
+                                                       android:layout_width="25dp"
+                                                       android:layout_height="25dp"
+                                                       android:layout_alignParentEnd="true"
+                                                       android:layout_centerVertical="true"
+                                                       android:layout_marginEnd="5dp"
+                                                       android:background="@drawable/right_arrow" />
+                                               </RelativeLayout>
 
-                                                       <TextView
-                                                           android:layout_width="wrap_content"
-                                                           android:layout_height="wrap_content"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginStart="15dp"
-                                                           android:text="@string/my_apply"
-                                                           android:textColor="@color/black" />
+                                               <View
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="0.5dp"
+                                                   android:layout_marginStart="15dp"
+                                                   android:background="@color/line" />
 
-                                                       <ImageView
-                                                           android:layout_width="25dp"
-                                                           android:layout_height="25dp"
-                                                           android:layout_alignParentEnd="true"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginEnd="5dp"
-                                                           android:background="@drawable/right_arrow" />
-                                                   </RelativeLayout>
-                                                   <View
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="0.5dp"
-                                                       android:background="@color/line" />
-                                   -->
-                </LinearLayout>
+                                               <RelativeLayout
+                                                   android:id="@+id/my_apply_rl"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="40dp">
 
-                <View
-                    style="@style/line"
-                    android:layout_marginTop="10dp" />
+                                                   <TextView
+                                                       android:layout_width="wrap_content"
+                                                       android:layout_height="wrap_content"
+                                                       android:layout_centerVertical="true"
+                                                       android:layout_marginStart="15dp"
+                                                       android:text="@string/my_apply"
+                                                       android:textColor="@color/black" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical">
-                    <!--
+                                                   <ImageView
+                                                       android:layout_width="25dp"
+                                                       android:layout_height="25dp"
+                                                       android:layout_alignParentEnd="true"
+                                                       android:layout_centerVertical="true"
+                                                       android:layout_marginEnd="5dp"
+                                                       android:background="@drawable/right_arrow" />
+                                               </RelativeLayout>
+                                               <View
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="0.5dp"
+                                                   android:background="@color/line" />
+                               -->
+            </LinearLayout>
 
-                                    <RelativeLayout
-                                        android:id="@+id/nearby_device_rl"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="40dp">
+            <View
+                style="@style/line"
+                android:layout_marginTop="10dp" />
 
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_centerVertical="true"
-                                            android:layout_marginStart="15dp"
-                                            android:text="@string/nearby_device"
-                                            android:textColor="@color/black" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+                <!--
 
-                                        <ImageView
-                                            style="@style/right_arrow" />
-                                    </RelativeLayout>
-                    -->
+                                <RelativeLayout
+                                    android:id="@+id/nearby_device_rl"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp">
 
-                    <RelativeLayout
-                        android:id="@+id/set_rl"
-                        style="@style/pressed_effect">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="15dp"
+                                        android:text="@string/nearby_device"
+                                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="@string/set"
-                            android:textColor="@color/black" />
+                                    <ImageView
+                                        style="@style/right_arrow" />
+                                </RelativeLayout>
+                -->
 
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/set_rl"
+                    style="@style/pressed_effect">
 
-                    <View style="@style/line_left" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/set"
+                        android:textColor="@color/black" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_safe"
-                        style="@style/pressed_effect">
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="账户安全"
-                            android:textColor="@color/black" />
+                <View style="@style/line_left" />
 
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/rl_safe"
+                    style="@style/pressed_effect">
 
-                    <View style="@style/line_left" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="账户安全"
+                        android:textColor="@color/black" />
 
-                    <RelativeLayout
-                        android:id="@+id/suggestion_rl"
-                        style="@style/pressed_effect">
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="@string/Opinion"
-                            android:textColor="@color/black" />
+                <View style="@style/line_left" />
 
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/suggestion_rl"
+                    style="@style/pressed_effect">
 
-                    <View style="@style/line_left" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/Opinion"
+                        android:textColor="@color/black" />
 
-                    <RelativeLayout
-                        android:id="@+id/use_Instructions_rl"
-                        style="@style/pressed_effect">
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="15dp"
-                            android:text="@string/Instructions"
-                            android:textColor="@color/black" />
+                <View style="@style/line_left" />
 
-                        <ImageView style="@style/right_arrow" />
-                    </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/use_Instructions_rl"
+                    style="@style/pressed_effect">
 
-                    <View style="@style/line" />
-                    <!--      <RelativeLayout
-                              android:layout_width="match_parent"
-                              android:layout_height="40dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/Instructions"
+                        android:textColor="@color/black" />
 
-                              <TextView
-                                  android:layout_width="wrap_content"
-                                  android:layout_height="wrap_content"
-                                  android:layout_centerVertical="true"
-                                  android:layout_marginStart="15dp"
-                                  android:text="@string/version"
-                                  android:textColor="@color/black" />
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
 
-                              <TextView
-                                  android:id="@+id/versionName_tv"
-                                  android:layout_width="wrap_content"
-                                  android:layout_height="wrap_content"
-                                  android:layout_alignParentEnd="true"
-                                  android:layout_centerVertical="true"
-                                  android:layout_marginEnd="30dp"
-                                  android:textColor="@color/gray_text" />
-                          </RelativeLayout>-->
+                <View style="@style/line" />
+                <!--      <RelativeLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="40dp">
 
-                </LinearLayout>
+                          <TextView
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_centerVertical="true"
+                              android:layout_marginStart="15dp"
+                              android:text="@string/version"
+                              android:textColor="@color/black" />
 
-                <View
-                    style="@style/line"
-                    android:layout_marginTop="10dp" />
-
-                <Button
-                    android:id="@+id/logout_bt"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/click"
-                    android:text="@string/exit_Login"
-                    android:textColor="@color/red"/>
-
-                <Button
-                    android:id="@+id/dfu"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:text="DFU"
-                    android:visibility="gone" />
-
-                <View style="@style/line"
-                    android:layout_marginBottom="20dp"/>
+                          <TextView
+                              android:id="@+id/versionName_tv"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_alignParentEnd="true"
+                              android:layout_centerVertical="true"
+                              android:layout_marginEnd="30dp"
+                              android:textColor="@color/gray_text" />
+                      </RelativeLayout>-->
 
             </LinearLayout>
-        </ScrollView>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-</LinearLayout>
+            <View
+                style="@style/line"
+                android:layout_marginTop="10dp" />
+
+            <Button
+                android:id="@+id/logout_bt"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/click"
+                android:text="@string/exit_Login"
+                android:textColor="@color/red" />
+
+            <Button
+                android:id="@+id/dfu"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="DFU"
+                android:visibility="gone" />
+
+            <View
+                style="@style/line"
+                android:layout_marginBottom="20dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </LinearLayout>

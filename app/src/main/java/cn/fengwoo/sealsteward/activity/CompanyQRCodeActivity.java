@@ -48,12 +48,8 @@ public class CompanyQRCodeActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.qrcode_photo_ll)
     LinearLayout qrcode_photo_ll;
 
-    @BindView(R.id.tv_tel)
-    TextView tv_tel;
-    @BindView(R.id.tv_job)
-    TextView tv_job;
-    @BindView(R.id.tv_company)
-    TextView tv_company;
+    @BindView(R.id.company_tv)
+    TextView company_tv;
 
     @BindView(R.id.headImg_cir)
     ImageView headImg_cir;
@@ -72,13 +68,11 @@ public class CompanyQRCodeActivity extends BaseActivity implements View.OnClickL
         scan_ll.setVisibility(View.GONE);
         add_ll.setVisibility(View.GONE);
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("公司二维码");
+        title_tv.setText("企业二维码");
         set_back_ll.setOnClickListener(this);
         save_photo_tv.setOnClickListener(this);
 
-        tv_company.setText(CommonUtil.getUserData(this).getCompanyName());
-        tv_tel.setText(CommonUtil.getUserData(this).getMobilePhone());
-        tv_job.setText(CommonUtil.getUserData(this).getJob());
+        company_tv.setText(CommonUtil.getUserData(this).getCompanyName());
 
         // show pic
         String  headPortrait = CommonUtil.getUserData(this).getHeadPortrait();
