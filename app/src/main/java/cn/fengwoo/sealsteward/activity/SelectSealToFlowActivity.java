@@ -1,13 +1,18 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
+import com.white.easysp.EasySP;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +25,13 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Dept;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Node;
@@ -52,6 +62,7 @@ public class SelectSealToFlowActivity extends BaseActivity implements View.OnCli
     private String m_id, m_name;
     LoadingView loadingView;
     Intent intent;
+    ResponseInfo<SealInfoData> responseInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +169,8 @@ public class SelectSealToFlowActivity extends BaseActivity implements View.OnCli
                 finish();
                 break;
             case R.id.edit_tv:
-                getSure();
+                getSealInfo(m_id);
+
                 break;
         }
     }
@@ -190,9 +202,44 @@ public class SelectSealToFlowActivity extends BaseActivity implements View.OnCli
             intent = new Intent(this, ApprovalFlowActivity.class);
             intent.putExtra("sealId", m_id);
             intent.putExtra("sealName", m_name);
+            intent.putExtra("sealApproveFlowList", new Gson().toJson(responseInfo.getData().getSealApproveFlowList()));
 //            intent.putExtra("sealApproveFlowList", new Gson().toJson(responseInfo.getData().getSealApproveFlowList()));
             startActivityForResult(intent, 88);
             finish();
         }
     }
+
+
+    private void getSealInfo(String  sealId) {
+
+        HashMap<String, String> hashMap = new HashMap<>();
+        Intent intent = getIntent();  //获取选中的公司ID
+        hashMap.put("sealIdOrMac", sealId);
+        hashMap.put("type", "1");
+        HttpUtil.sendDataAsync(SelectSealToFlowActivity.this, HttpUrl.SEAL_INFO, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+
+                Utils.log(result);
+
+                Gson gson = new Gson();
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<SealInfoData>>() {
+                }.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSure();
+                    }
+                });
+            }
+        });
+
+    }
+
 }

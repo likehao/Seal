@@ -321,8 +321,8 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
             public void convert(ViewHolder viewHolder, PplAddEntity pplAddEntity, int i) {
                 // 文字
                 String nameString = "";
-                if (pplAddEntity.getUserName().length() > 14) {
-                    nameString = pplAddEntity.getUserName().substring(0, 14) + "...";
+                if (pplAddEntity.getUserName().length() > 6) {
+                    nameString = pplAddEntity.getUserName().substring(0, 6) + "...";
                 } else {
                     nameString = pplAddEntity.getUserName();
                 }

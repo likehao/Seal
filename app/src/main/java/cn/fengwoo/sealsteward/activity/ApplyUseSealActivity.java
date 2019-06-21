@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -29,20 +30,28 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.entity.SealData;
+import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.CustomDialog;
+import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -78,6 +87,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.please_sign_tv)
     TextView please_sign_tv;
     String type, sign;
+    ResponseInfo<SealInfoData> responseInfo;
 
     private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
     private final static int UPLOADREQUESTCODE = 10;
@@ -149,6 +159,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.nextBt:
+//                toSettingFlow();
                 if (checkData()) {
                     useSealApply();
                 }
@@ -175,7 +186,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
 
     private void useSealApply() {
         int mCount = Integer.valueOf(applyCount);
-        if (  mCount > 1000) {
+        if (mCount > 1000) {
             showToast("申请次数不能大于1000");
             return;
         }
@@ -248,15 +259,71 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                 } else {
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
-                    if (responseInfo.getCode() == 106 || responseInfo.getCode() == 108 || responseInfo.getCode() == 109) {
-                        showToast(responseInfo.getMessage());
-                    }
                     Looper.loop();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (responseInfo.getCode() == 106) {
+                                showExpiredTip();
+                            } else if (responseInfo.getCode() == 108 || responseInfo.getCode() == 109) {
+                                if (!Utils.hasThePermission(ApplyUseSealActivity.this, Constants.permission14)) {
+                                    return;
+                                }
+                                toSettingFlow();
+                            }
+                        }
+                    });
                 }
 
             }
         });
     }
+
+
+    /**
+     *
+     */
+    private void showExpiredTip() {
+        cancelLoadingView();
+
+        String tipString = "此印章服务，已过期，请充值";
+        final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "知道了");
+        commonDialog.cancel.setText("去充值");
+        commonDialog.showDialog();
+        commonDialog.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("rihgt");
+                commonDialog.dialog.dismiss();
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("left" + "cancel" + "去充值");
+
+                intent = new Intent(ApplyUseSealActivity.this, PayActivity.class);
+                intent.putExtra("sealId", sealId);
+                startActivity(intent);
+                finish();
+                commonDialog.dialog.dismiss();
+            }
+        });
+    }
+
+    private void toSettingFlow() {
+        final CommonDialog commonDialog = new CommonDialog(this, "提示", "没有设置审批流，是否去设置？", "去设置");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSealInfo(sealId);
+                commonDialog.dialog.dismiss();
+                finish();
+            }
+        });
+    }
+
 
     private Boolean checkData() {
         name = sealName_TV.getText().toString().trim();
@@ -374,5 +441,40 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             please_sign_tv.setVisibility(View.GONE);
             apply_sign_rl.setBackgroundResource(R.color.white);
         }
+    }
+
+    private void getSealInfo(String sealId) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        Intent intent = getIntent();  //获取选中的公司ID
+        hashMap.put("sealIdOrMac", sealId);
+        hashMap.put("type", "1");
+        HttpUtil.sendDataAsync(ApplyUseSealActivity.this, HttpUrl.SEAL_INFO, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+
+                Utils.log(result);
+
+                Gson gson = new Gson();
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<SealInfoData>>() {
+                }.getType());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(ApplyUseSealActivity.this, ApprovalFlowActivity.class);
+                        intent.putExtra("sealId", sealId);
+                        intent.putExtra("sealName", sealName);
+                        intent.putExtra("sealApproveFlowList", new Gson().toJson(responseInfo.getData().getSealApproveFlowList()));
+//            intent.putExtra("sealApproveFlowList", new Gson().toJson(responseInfo.getData().getSealApproveFlowList()));
+                        startActivityForResult(intent, 88);
+                    }
+                });
+            }
+        });
     }
 }
