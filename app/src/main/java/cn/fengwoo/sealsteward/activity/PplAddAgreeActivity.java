@@ -155,6 +155,13 @@ public class PplAddAgreeActivity extends BaseActivity implements View.OnClickLis
                     if (responseInfo.getData()) {
                         setResult(123, intent);
                         finish();                    }
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showToast(responseInfo.getMessage());
+                        }
+                    });
                 }
             }
         });

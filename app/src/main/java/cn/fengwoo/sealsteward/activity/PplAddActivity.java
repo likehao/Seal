@@ -442,6 +442,16 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
                             }
                         });
                     }
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showToast(responseInfo.getMessage());
+                            items1.clear();
+                            items2.clear();
+                            getNetDate();
+                        }
+                    });
                 }
             }
         });

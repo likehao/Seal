@@ -255,14 +255,13 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
 //        startActivity(intent);
 
 
-        String state = EasySP.init(this).getString("hasNewDfuVersion", "0");
-
-        if (state.equals("1")) {
-            goToDfuPage();
-            return;
-        } else {
-
-        }
+//        String state = EasySP.init(this).getString("hasNewDfuVersion", "0");
+//        if (state.equals("1")) {
+//            goToDfuPage();
+//            return;
+//        } else {
+//
+//        }
 
         i = position;
 

@@ -639,7 +639,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 Utils.log("dfuEntity" + dfuEntity.getVersion());
                 float latestVersion = Float.parseFloat(dfuEntity.getVersion());
                 /// test
-                latestVersion = 5;
+//                latestVersion = 5;
                 EasySP.init(getActivity()).putString("dfu_current_version", version + "");
                 if (latestVersion > version) {
                     getActivity().runOnUiThread(new Runnable() {
