@@ -45,7 +45,7 @@ public class SafeActivity extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.switch_voice)
     SwitchButton switchVoice;
 
-    private BiometricPromptManager mManager;
+    private com.nestia.biometriclib.BiometricPromptManager mManager;
     private BiometricPromptManager biometricPromptManager;
 
     @TargetApi(28)
@@ -61,6 +61,8 @@ public class SafeActivity extends BaseActivity implements View.OnClickListener, 
 
     @TargetApi(28)
     private void initView() {
+        mManager = com.nestia.biometriclib.BiometricPromptManager.from(this);
+
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("账户安全");
         set_back_ll.setOnClickListener(this);

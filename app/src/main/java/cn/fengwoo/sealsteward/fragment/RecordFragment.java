@@ -352,7 +352,6 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                             public void run() {
                                 recordAdapter.notifyDataSetChanged(); //刷新数据
                                 no_record_ll.setVisibility(View.GONE);
-
                             }
                         });
                     }

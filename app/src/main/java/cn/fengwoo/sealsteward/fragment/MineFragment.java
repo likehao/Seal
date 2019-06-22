@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nestia.biometriclib.BiometricPromptManager;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -111,6 +112,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         @BindView(R.id.nearby_device_rl)
         RelativeLayout nearby_device_rl; //附近设备*/
     private Intent intent;
+    private BiometricPromptManager mManager;
 
     @Nullable
     @Override
@@ -125,6 +127,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView() {
+        mManager = BiometricPromptManager.from(getActivity());
+        if(mManager.isHardwareDetected()){
+            rl_safe.setVisibility(View.VISIBLE);
+        }else{
+            rl_safe.setVisibility(View.GONE);
+        }
         String headPortrait = CommonUtil.getUserData(getActivity()).getHeadPortrait();
         if (headPortrait != null && !headPortrait.isEmpty()) {
             //先从本地读取，没有则下载
@@ -289,6 +297,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.rl_safe:
+                if(!mManager.hasEnrolledFingerprints()){
+                    showToast("请设置至少一个指纹");
+                    return;
+                }
                 intent = new Intent(getActivity(), SafeActivity.class);
                 startActivity(intent);
                 break;
@@ -362,5 +374,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             realName.setText(CommonUtil.getUserData(Objects.requireNonNull(getActivity())).getRealName());
             phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
         }
+    }
+    public void showToast(String str) {
+        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }
 }
