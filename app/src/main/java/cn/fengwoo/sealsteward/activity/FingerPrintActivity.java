@@ -127,7 +127,7 @@ public class FingerPrintActivity extends Base2Activity {
             case R.id.tv_switch_login:
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
-//                finish();
+                finish();
                 break;
             case R.id.tv_switch_user:
                 intent = new Intent(this, RegisterActivity.class);
