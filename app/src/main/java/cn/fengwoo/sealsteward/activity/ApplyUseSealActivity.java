@@ -287,17 +287,10 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         cancelLoadingView();
 
         String tipString = "此印章服务，已过期，请充值";
-        final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "知道了");
-        commonDialog.cancel.setText("去充值");
+        final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "去充值");
+        commonDialog.cancel.setText("知道了");
         commonDialog.showDialog();
         commonDialog.setRightClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.log("rihgt");
-                commonDialog.dialog.dismiss();
-            }
-        });
-        commonDialog.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.log("left" + "cancel" + "去充值");
@@ -306,6 +299,13 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                 intent.putExtra("sealId", sealId);
                 startActivity(intent);
                 finish();
+                commonDialog.dialog.dismiss();
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.log("rihgt");
                 commonDialog.dialog.dismiss();
             }
         });

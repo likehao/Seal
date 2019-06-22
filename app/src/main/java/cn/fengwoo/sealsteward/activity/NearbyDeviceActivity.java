@@ -621,18 +621,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         cancelLoadingView();
 
         String tipString = "此印章服务，将于" + ""+ Utils.getDateToString(sealData.getServiceTime(), "yyyy-MM-dd HH:mm:ss") + "过期，请及时充值";
-        final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "知道了");
-        commonDialog.cancel.setText("去充值");
+        final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "去充值");
+        commonDialog.cancel.setText("知道了");
         commonDialog.showDialog();
         commonDialog.setRightClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.log("rihgt");
-                connectBle(position);
-                commonDialog.dialog.dismiss();
-            }
-        });
-        commonDialog.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.log("left" + "cancel" + "去充值");
@@ -641,6 +633,17 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 intent.putExtra("sealId", sealData.getId());
                 startActivity(intent);
                 finish();
+                commonDialog.dialog.dismiss();
+
+
+            }
+        });
+        commonDialog.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Utils.log("rihgt");
+                connectBle(position);
                 commonDialog.dialog.dismiss();
             }
         });
