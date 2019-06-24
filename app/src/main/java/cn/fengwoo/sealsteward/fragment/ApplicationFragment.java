@@ -296,9 +296,18 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             rl_voice.setVisibility(View.GONE);
             rl_pwd_user.setVisibility(View.GONE);
             seal_dfu.setVisibility(View.GONE);
+
+            start_psd_rl.setVisibility(View.VISIBLE);
+            key_psd_rl.setVisibility(View.VISIBLE);
         } else {
             start_psd_rl.setVisibility(View.GONE);
             key_psd_rl.setVisibility(View.GONE);
+
+            press_time_rl.setVisibility(View.VISIBLE);
+            wait_time_rl.setVisibility(View.VISIBLE);
+            rl_voice.setVisibility(View.VISIBLE);
+            rl_pwd_user.setVisibility(View.VISIBLE);
+            seal_dfu.setVisibility(View.VISIBLE);
         }
     }
 
