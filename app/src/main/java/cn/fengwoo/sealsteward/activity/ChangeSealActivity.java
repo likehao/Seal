@@ -63,7 +63,7 @@ import okhttp3.Response;
 
 
 /**
- * 附近设备
+ * 选择一个新的印章
  */
 public class ChangeSealActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 

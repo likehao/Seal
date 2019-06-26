@@ -298,7 +298,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.rl_safe:
                 if(!mManager.hasEnrolledFingerprints()){
-                    showToast("请设置至少一个指纹");
+                    showToast("请至少设置一个指纹");
                     return;
                 }
                 intent = new Intent(getActivity(), SafeActivity.class);
@@ -349,9 +349,11 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                                 intent = new Intent(getActivity(), LoginActivity.class);
                                 startActivity(intent);
                                 commonDialog.dialog.dismiss();
+                                System.exit(0);
                                 if (null != getActivity()) {
                                     Objects.requireNonNull(getActivity()).finish();
                                 }
+
                                 //断开蓝牙
                                 ((MyApp) getActivity().getApplication()).removeAllDisposable();
                                 ((MyApp) getActivity().getApplication()).setConnectionObservable(null);

@@ -263,6 +263,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             if (responseInfo.getCode() == 106) {
                                 showExpiredTip();
                             } else if (responseInfo.getCode() == 108 || responseInfo.getCode() == 109) {

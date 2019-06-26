@@ -21,6 +21,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.ApprovalFlowOneAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -55,6 +60,7 @@ public class ApprovalFlowOneFragment extends Fragment {
     private ArrayList<SealInfoData.SealApproveFlowListBean> list;
     private String sealApproveFlowListString;
     private List<SealInfoData.SealApproveFlowListBean> systemFuncListInfo;
+    private String sealId;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -103,9 +109,11 @@ public class ApprovalFlowOneFragment extends Fragment {
                                                 getActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        sealId = list.get(position).getSealId();
                                                         uploadSealInfo(list.get(position).getSealId());
                                                         list.remove(position);
                                                         flowOneAdapter.notifyDataSetChanged();
+
                                                     }
                                                 });
                                             }
@@ -130,6 +138,7 @@ public class ApprovalFlowOneFragment extends Fragment {
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 getApprovalOne();
+//                uploadSealInfo(sealId);
                 refreshLayout.finishRefresh(); //刷新完成
             }
         });
@@ -162,7 +171,6 @@ public class ApprovalFlowOneFragment extends Fragment {
         });
     }
 
-
     /**
      * 获取解析审批流列表数据
      */
@@ -181,6 +189,37 @@ public class ApprovalFlowOneFragment extends Fragment {
             flowOneAdapter.notifyDataSetChanged();
         }
     }
+/*
+    *//**
+     * 处理注册事件
+     *
+     * @param messageEvent
+     *//*
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        if (s.equals("添加审批流刷新")){
+            smartRefreshLayout.autoRefresh();
+        }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);   //注册Eventbus
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);  //解除注册
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }*/
 }

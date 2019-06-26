@@ -213,7 +213,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("连接印章");
+        title_tv.setText("附近设备");
     /*    switchButton = findViewById(R.id.switch_bt);
         switchButton.setChecked(true);*/
 
@@ -249,11 +249,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private void initData() {
 
-
         rxBleClient = RxBleClient.create(this);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         seal_lv.setAdapter(arrayAdapter);
-
 
     }
 

@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealInfoData;
+import cn.fengwoo.sealsteward.entity.SealInfoUpdateData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -55,6 +56,7 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
     Button submit;
     String userId;
     private static final int RESULTCODE = 20;
+    ResponseInfo<SealInfoData> responseInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +203,7 @@ public class AddApprovalFlowActivity extends BaseActivity implements View.OnClic
                 String result = response.body().string();
 
                 Gson gson = new Gson();
-                ResponseInfo<SealInfoData> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<SealInfoData>>() {
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<SealInfoData>>() {
                 }.getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                     setResult(RESULTCODE);

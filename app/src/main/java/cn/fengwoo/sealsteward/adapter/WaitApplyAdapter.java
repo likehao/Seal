@@ -99,7 +99,8 @@ public class WaitApplyAdapter extends BaseAdapter {
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (waitApplyData.get(position).getUploadPhotoNum() == 0){
+                    commonPostRequest2(id, 2, position);
+                   /* if (waitApplyData.get(position).getUploadPhotoNum() == 0){
                         CommonDialog commonDialog = new CommonDialog(context,"提示",
                                 "此单据还未上传盖章后拍照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
                         commonDialog.showDialog();
@@ -112,7 +113,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                         });
                     }else {
                         commonPostRequest2(id, 2, position);
-                    }
+                    }*/
                 }
             });
         }else if (code == 2) { //审批中

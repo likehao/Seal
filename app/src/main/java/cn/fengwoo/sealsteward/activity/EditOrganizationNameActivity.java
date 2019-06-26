@@ -1,10 +1,6 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,18 +15,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.adapter.MessageAdapter;
-import cn.fengwoo.sealsteward.bean.MessageDeatileBean;
-import cn.fengwoo.sealsteward.bean.SeeRecordDetailBean;
 import cn.fengwoo.sealsteward.entity.AddOrg;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -39,7 +30,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 部门
  */
 public class EditOrganizationNameActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.title_tv)TextView title_tv;

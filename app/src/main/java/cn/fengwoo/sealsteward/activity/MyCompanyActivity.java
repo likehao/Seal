@@ -51,7 +51,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 我的公司
+ * 公司
  */
 public class MyCompanyActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -177,6 +177,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         strings.add("切换");
         strings.add("删除");
         strings.add("查看详情");
+        strings.add("公司转让");
         final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(MyCompanyActivity.this, strings);
         optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -190,10 +191,15 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                 } else if (position == 1) {
                     deleteDialog(selectPosition); //提示删除
                     optionBottomDialog.dismiss();
-                } else {
+                } else if (position == 2){
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
                     intent.putExtra("belongUser", belongUser);
+                    startActivity(intent);
+                    optionBottomDialog.dismiss();
+                }else {
+                    intent = new Intent(MyCompanyActivity.this,ChangeCompanyBelongActivity.class);
+                    intent.putExtra("companyId", selectCompanyId);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }
@@ -266,13 +272,40 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-
                     intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
                     intent.putExtra("belongUser", belongUser);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
 
+                }
+            }
+        });
+    }
+    /**
+     * 查看公司详情,公司转让
+     */
+    private void selectDialog2() {
+        strings = new ArrayList<String>();
+        strings.add("查看详情");
+        strings.add("公司转让");
+        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(MyCompanyActivity.this, strings);
+        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
+                    intent.putExtra("belongUser", belongUser);
+                    startActivity(intent);
+                    optionBottomDialog.dismiss();
+
+                }else {
+                    intent = new Intent(MyCompanyActivity.this, ChangeCompanyBelongActivity.class);
+                    intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
+                    intent.putExtra("转让公司下线","转让公司下线");
+                    startActivity(intent);
+                    optionBottomDialog.dismiss();
                 }
             }
         });
@@ -322,7 +355,11 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                 selectDialog(selectCompanyId);
             }
         } else {
-            selectDialog();
+            if (arrayList.get(position).getBelongUser().equals(userId)) {
+                selectDialog2();   //点击的是选中的公司，并且是自己的公司
+            }else {
+                selectDialog();   //点击的是选中的公司
+            }
         }
     }
 

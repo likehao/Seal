@@ -330,7 +330,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         }
         if (password.length() < 6 || password.length() > 18) {
             isOk = true;
-            Toast.makeText(LoginActivity.this, "请输入至少6位数至多18位数的密码", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
             return isOk;
         }
         return isOk;

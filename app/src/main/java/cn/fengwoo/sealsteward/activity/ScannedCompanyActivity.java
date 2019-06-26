@@ -28,7 +28,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-
+/**
+ * 公司详情
+ */
 public class ScannedCompanyActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)
     TextView title_tv;

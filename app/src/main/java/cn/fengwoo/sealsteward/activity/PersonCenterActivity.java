@@ -306,9 +306,9 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.phone_rl:
-                intent = new Intent(this, ChangeInformationActivity.class);
-                intent.putExtra("mobilePhone", mobilePhone_tv.getText().toString());
-                intent.putExtra("TAG", 2);
+                intent = new Intent(this, ChangePhoneActivity.class);
+//                intent.putExtra("mobilePhone", mobilePhone_tv.getText().toString());
+//                intent.putExtra("TAG", 2);
                 startActivity(intent);
                 finish();
                 break;

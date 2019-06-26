@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,8 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
     RelativeLayout clear_cache_rl;
     @BindView(R.id.cache_tv)
     TextView cache_tv;
+    @BindView(R.id.call_phone_rl)
+    RelativeLayout call_phone_rl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
         about_rl.setOnClickListener(this);
         recommend_seal_rl.setOnClickListener(this);
         clear_cache_rl.setOnClickListener(this);
+        call_phone_rl.setOnClickListener(this);
         try {
             cache_tv.setText(CleanMessageUtil.getTotalCacheSize(this));  //获取缓存
         } catch (Exception e) {
@@ -82,6 +86,9 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.clear_cache_rl:
                 clearCache();
+                break;
+            case R.id.call_phone_rl:
+                callPhone("4008508187");
                 break;
         }
     }
@@ -175,5 +182,17 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
                 commonDialog.dialog.dismiss();
             }
         });
+    }
+
+    /**
+     * 拨打电话(跳转到拨号界面，用户手动点击拨打)
+     * @param phoneNum
+     */
+    public void callPhone(String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        //Intent intent = new Intent(Intent.ACTION_CALL);  //直接拨打
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        startActivity(intent);
     }
 }

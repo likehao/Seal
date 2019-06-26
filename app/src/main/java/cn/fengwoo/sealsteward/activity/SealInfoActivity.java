@@ -90,7 +90,7 @@ import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 /**
- *
+ * 印章详情
  */
 public class SealInfoActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)

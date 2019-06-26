@@ -95,7 +95,7 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
                 OkHttpClient okHttpClient = new OkHttpClient();
                 //创建请求
                 Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 1)
+                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 2)
                         .get()
                         .build();
                 //设置回调

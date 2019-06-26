@@ -14,11 +14,14 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
@@ -92,6 +95,7 @@ public class AddApprovalFlowTypeActivity extends BaseActivity implements View.On
             }
         }
         if (resultCode == 20){
+//            EventBus.getDefault().post(new MessageEvent("添加审批流刷新","添加审批流刷新"));
             finish();
         }
     }
