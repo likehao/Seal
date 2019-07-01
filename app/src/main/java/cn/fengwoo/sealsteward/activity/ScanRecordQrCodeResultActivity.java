@@ -66,6 +66,7 @@ public class ScanRecordQrCodeResultActivity extends BaseActivity implements View
         setContentView(R.layout.activity_scan_record_qr_code_result);
 
         ButterKnife.bind(this);
+        
         initView();
         getScanRecordResult();
     }

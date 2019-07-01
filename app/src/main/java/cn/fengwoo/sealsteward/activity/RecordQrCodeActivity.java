@@ -64,6 +64,7 @@ public class RecordQrCodeActivity extends BaseActivity implements View.OnClickLi
     /**
      * 生成带LOGO二维码图片
      */
+
     private void recordQRcode() {
         Intent intent = getIntent();
         String cause = intent.getStringExtra("cause");
