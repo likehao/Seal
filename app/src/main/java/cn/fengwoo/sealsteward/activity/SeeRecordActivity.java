@@ -98,6 +98,8 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     LinearLayout photoNum_ll;
     @BindView(R.id.photo_tip)
     TextView photo_tip;
+    @BindView(R.id.detail_cause_tv)
+    TextView detail_cause_tv;
     private SeeRecordAdapter seeRecordAdapter;
     private List<SeeRecordBean> list;
     String id;
@@ -151,6 +153,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         String sealPerson = intent.getStringExtra("sealPerson");
         String headPortrait = intent.getStringExtra("headPortrait");
         String orgStructureName = intent.getStringExtra("orgStructureName");
+        String cause = intent.getStringExtra("cause");
 //        int approveStatus = intent.getIntExtra("approveStatus",0);
 
 
@@ -190,6 +193,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         detail_photoNum_tv.setText(photoNum+"");
         title_tv.setText(sealName);
         department_tv.setText(orgStructureName);
+        detail_cause_tv.setText(cause);
         list = new ArrayList<>();
         setSmartDetail();
         seeRecordAdapter = new SeeRecordAdapter(SeeRecordActivity.this,list);

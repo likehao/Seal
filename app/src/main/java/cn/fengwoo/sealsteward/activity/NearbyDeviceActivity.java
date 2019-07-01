@@ -19,11 +19,11 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
+import com.mcxtzhang.commonadapter.lvgv.ViewHolder;
 import com.polidea.rxandroidble2.RxBleClient;
 import com.polidea.rxandroidble2.RxBleConnection;
 import com.polidea.rxandroidble2.RxBleDevice;
@@ -37,7 +37,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,13 +45,13 @@ import cn.fengwoo.sealsteward.adapter.SealAdapter;
 import cn.fengwoo.sealsteward.database.SealItemBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealData;
+import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.ReplayingShare;
 import cn.fengwoo.sealsteward.utils.Utils;
-import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.CustomDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.Observable;
@@ -104,10 +103,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private Disposable connectDisposable;
     private boolean isAddNewSeal;
     private ResponseInfo<List<SealData>> responseInfo;
-
     private PublishSubject<Boolean> disconnectTriggerSubject = PublishSubject.create();
-
     private Observable<RxBleConnection> connectionObservable;
+    private CommonAdapter commonAdapter;
 
 
     @Override
@@ -250,9 +248,17 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private void initData() {
 
         rxBleClient = RxBleClient.create(this);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-        seal_lv.setAdapter(arrayAdapter);
+ /*       arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+        seal_lv.setAdapter(arrayAdapter);*/
 
+        commonAdapter = new CommonAdapter<String>(this,arrayList,R.layout.near_bluetooth_item) {
+            @Override
+            public void convert(ViewHolder viewHolder, String s, int i) {
+                viewHolder.setText(R.id.bluetooth_tv,s);
+            }
+
+        };
+        seal_lv.setAdapter(commonAdapter);
     }
 
     /**
@@ -303,7 +309,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             if (!arrayList.contains(itemName)) {
                 arrayList.add(itemName);
                 scanResultsList.add(scanResult);
-                arrayAdapter.notifyDataSetChanged();
+                commonAdapter.notifyDataSetChanged();
             }
         }
     }

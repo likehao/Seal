@@ -49,6 +49,7 @@ import com.tianma.netdetector.lib.NetStateChangeReceiver;
 import com.tianma.netdetector.lib.NetworkType;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -478,7 +479,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
             }
         });
-
 
     }
 

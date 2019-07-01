@@ -133,6 +133,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                         record_refreshLayout.autoRefresh(); //自动刷新
                         ll_pwdRecord.setVisibility(View.GONE);
                         record_ll.setVisibility(View.VISIBLE);
+                        select_record_ll.setVisibility(View.GONE);
                         break;
                     case "right":
                         isLeftClick = false;
@@ -140,6 +141,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                         pwdRecordSmt.autoRefresh();
                         ll_pwdRecord.setVisibility(View.VISIBLE);
                         record_ll.setVisibility(View.GONE);
+                        select_record_ll.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -529,6 +531,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         intent.putExtra("headPortrait", list.get(position).getHeadPortrait());
         intent.putExtra("orgStructureName", list.get(position).getOrgStructureName());
         intent.putExtra("photoList", (Serializable) list.get(position).getStampRecordImgList());
+        intent.putExtra("cause", list.get(position).getCause());
         //     intent.putStringArrayListExtra("photoList", (ArrayList<String>) list.get(position).getStampRecordImgList());
         startActivityForResult(intent, REQUESTCODE);
 

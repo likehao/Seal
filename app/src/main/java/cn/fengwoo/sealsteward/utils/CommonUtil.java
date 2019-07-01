@@ -1,13 +1,8 @@
 package cn.fengwoo.sealsteward.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.service.autofill.DateTransformation;
 
-import com.google.gson.Gson;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

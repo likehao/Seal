@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.RecordQrCodeActivity;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.StampRecordList;
@@ -85,6 +88,7 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder.sealAddress = view.findViewById(R.id.record_seal_address_tv);
             viewHolder.close = view.findViewById(R.id.close_documents_tv);
             viewHolder.ygcs = view.findViewById(R.id.ygcs);
+            viewHolder.qrcode = view.findViewById(R.id.record_qrcode_iv);  //记录二维码
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -137,6 +141,17 @@ public class RecordAdapter extends BaseAdapter {
                     applyClose(position);
                 }
 
+            }
+        });
+
+        //记录二维码
+        viewHolder.qrcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, RecordQrCodeActivity.class);
+                intent.putExtra("applyId",recordData.get(position).getId());
+                intent.putExtra("cause",recordData.get(position).getCause());
+                context.startActivity(intent);
             }
         });
         return view;
@@ -196,6 +211,7 @@ public class RecordAdapter extends BaseAdapter {
         private TextView sealAddress;
         private TextView close;
         private TextView ygcs;
+        private ImageView qrcode;
     }
 
 }

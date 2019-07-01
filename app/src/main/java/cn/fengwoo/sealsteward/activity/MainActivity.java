@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     ImageView msg_iv;
     @BindView(R.id.main_msg_tv)
     TextView main_msg_tv;    //工作台消息数
-    @BindView(R.id.ll_record)
+    @BindView(R.id.ll_record_title)
     LinearLayout ll_record;
     @BindView(R.id.tv_left)
     TextView tv_left;

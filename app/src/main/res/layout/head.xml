@@ -32,10 +32,9 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@+id/msg_rl"
-            android:layout_toRightOf="@+id/scan_ll"
             android:ellipsize="end"
             android:gravity="center"
+            android:layout_centerHorizontal="true"
             android:singleLine="true"
             android:text="@string/home_page"
             android:textColor="@color/white"
@@ -43,7 +42,7 @@
             android:visibility="visible" />
 
         <LinearLayout
-            android:id="@+id/ll_record"
+            android:id="@+id/ll_record_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
@@ -53,7 +52,6 @@
             <TextView
                 android:id="@+id/tv_left"
                 android:layout_width="wrap_content"
-
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="手机盖章"
@@ -63,7 +61,6 @@
             <TextView
                 android:id="@+id/tv_right"
                 android:layout_width="wrap_content"
-
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:gravity="center"
@@ -123,18 +120,18 @@
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/msg" />
 
             <ImageView
                 android:id="@+id/msg_iv"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/message_circle"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

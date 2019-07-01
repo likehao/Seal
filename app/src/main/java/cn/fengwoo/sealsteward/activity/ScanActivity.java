@@ -103,6 +103,11 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("result", result);
                 startActivity(intent);
                 finish();
+            } else if (result.startsWith("applyId")) {
+                intent.setClass(ScanActivity.this, ScanRecordQrCodeResultActivity.class);
+                intent.putExtra("result", result);
+                startActivity(intent);
+                finish();
             }
 
         }
@@ -175,6 +180,11 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                             finish();
                         } else if (result.startsWith("companyId")) {
                             intent.setClass(ScanActivity.this, ScannedCompanyActivity.class);
+                            intent.putExtra("result", result);
+                            startActivity(intent);
+                            finish();
+                        } else if (result.startsWith("applyId")) {
+                            intent.setClass(ScanActivity.this, ScanRecordQrCodeResultActivity.class);
                             intent.putExtra("result", result);
                             startActivity(intent);
                             finish();

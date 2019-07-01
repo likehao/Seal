@@ -36,6 +36,15 @@ public class SealInfoData {
     private SealEnclosureBean sealEnclosure;
     private List<SealApproveFlowListBean> sealApproveFlowList;
 
+    private String macName;  //额外添加的一个
+    public String getMacName() {
+        return macName;
+    }
+
+    public void setMacName(String macName) {
+        this.macName = macName;
+    }
+
     public String getId() {
         return id;
     }

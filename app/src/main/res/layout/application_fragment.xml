@@ -25,8 +25,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@drawable/corners_bg"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -43,13 +45,14 @@
                             android:textColor="@color/black"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/ll_tip1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingStart="15dp"
-                        android:paddingTop="5dp">
+                        android:paddingTop="5dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -65,11 +68,11 @@
                         android:id="@+id/qmuidemo_floatlayout1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:qmui_maxNumber="12"
-                        android:padding="20dp"
                         android:gravity="left"
-                        app:qmui_childHorizontalSpacing="40dp"
-                        app:qmui_childVerticalSpacing="20dp">
+                        android:padding="20dp"
+                        app:qmui_childHorizontalSpacing="35dp"
+                        app:qmui_childVerticalSpacing="20dp"
+                        app:qmui_maxNumber="12">
 
                         <RelativeLayout
                             android:id="@+id/press_time_rl"
@@ -108,7 +111,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_waitingtime"/>
+                                    android:background="@drawable/application_waitingtime" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -116,6 +119,7 @@
 
                             </LinearLayout>
                         </RelativeLayout>
+
                         <RelativeLayout
                             android:id="@+id/start_psd_rl"
                             android:layout_width="wrap_content"
@@ -130,7 +134,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_bootpassword"/>
+                                    android:background="@drawable/application_bootpassword" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -153,7 +157,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_keypassword"/>
+                                    android:background="@drawable/application_keypassword" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -161,10 +165,6 @@
 
                             </LinearLayout>
                         </RelativeLayout>
-
-
-
-
 
                         <RelativeLayout
                             android:id="@+id/reset_device_rl"
@@ -203,7 +203,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_passworduser"/>
+                                    android:background="@drawable/application_passworduser" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -226,7 +226,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_voiceswitch"/>
+                                    android:background="@drawable/application_voiceswitch" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -250,15 +250,12 @@
 
                                 <RelativeLayout
                                     style="@style/imageView"
-
-
-
                                     android:visibility="visible">
 
                                     <ImageView
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
-                                        android:background="@drawable/application_firmwareupdate"/>
+                                        android:background="@drawable/application_firmwareupdate" />
 
                                     <ImageView
                                         android:id="@+id/iv_red_dot"
@@ -279,7 +276,6 @@
                         </RelativeLayout>
 
 
-
                     </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
 
                 </LinearLayout>
@@ -288,7 +284,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/corners_bg"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
@@ -309,12 +307,12 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/ll_tip2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="15dp"
-                    android:paddingTop="5dp">
+                    android:paddingTop="5dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -330,13 +328,11 @@
                     android:id="@+id/qmuidemo_floatlayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:qmui_maxNumber="12"
-
-                    android:padding="20dp"
                     android:gravity="left"
-                    app:qmui_childHorizontalSpacing="40dp"
-
-                    app:qmui_childVerticalSpacing="20dp">
+                    android:padding="20dp"
+                    app:qmui_childHorizontalSpacing="35dp"
+                    app:qmui_childVerticalSpacing="20dp"
+                    app:qmui_maxNumber="12">
 
                     <RelativeLayout
                         android:id="@+id/use_seal_apply_rl"
@@ -352,7 +348,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/application_applicationrecord"/>
+                                android:background="@drawable/application_applicationrecord" />
 
                             <TextView
                                 style="@style/application_text"
@@ -376,7 +372,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/application_approvalrecord"/>
+                                android:background="@drawable/application_approvalrecord" />
 
                             <TextView
                                 style="@style/application_text"
@@ -400,7 +396,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/application_approvalprocess"/>
+                                android:background="@drawable/application_approvalprocess" />
 
                             <TextView
                                 style="@style/application_text"
@@ -413,8 +409,8 @@
                         android:id="@+id/wait_me_agree_rl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -424,7 +420,7 @@
 
                             <ImageView
                                 style="@style/imageView"
-                                android:background="@drawable/wait_apply"/>
+                                android:background="@drawable/wait_apply" />
 
                             <TextView
                                 style="@style/application_text"
@@ -436,10 +432,10 @@
                     <RelativeLayout
                         android:id="@+id/wait_handle_rl"
                         android:layout_width="wrap_content"
-                        android:visibility="gone"
-
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
+
+                        android:layout_weight="1"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -462,17 +458,19 @@
             </LinearLayout>
             <!--第二个卡片结束！！！！！！！！！！！！！！！！！！！！！！！！！-->
 
-           <!--第三个卡片开始！！！！！！！！！！！！！！！！！-->
+            <!--第三个卡片开始！！！！！！！！！！！！！！！！！-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@drawable/corners_bg"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -490,13 +488,14 @@
                             android:textColor="@color/black"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/ll_tip3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingStart="15dp"
-                        android:paddingTop="5dp">
+                        android:paddingTop="5dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -507,17 +506,17 @@
                             android:textColor="@color/black_3"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <cn.fengwoo.sealsteward.view.QMUIFloatLayout
                         android:id="@+id/qmuidemo_floatlayout3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:qmui_maxNumber="12"
-
-                        android:padding="20dp"
                         android:gravity="left"
-                        app:qmui_childHorizontalSpacing="40dp"
+                        android:padding="20dp"
+                        app:qmui_childHorizontalSpacing="35dp"
+                        app:qmui_childVerticalSpacing="20dp"
 
-                        app:qmui_childVerticalSpacing="20dp">
+                        app:qmui_maxNumber="12">
 
                         <RelativeLayout
                             android:id="@+id/organizational_structure_rl"
@@ -533,7 +532,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_organizationalstructure"/>
+                                    android:background="@drawable/application_organizationalstructure" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -556,7 +555,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_addpersonnel"/>
+                                    android:background="@drawable/application_addpersonnel" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -568,11 +567,11 @@
 
 
                         <RelativeLayout
-                            android:visibility="gone"
                             android:id="@+id/add_seal_rl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:visibility="gone">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -582,7 +581,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_addseal"/>
+                                    android:background="@drawable/application_addseal" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -606,7 +605,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_sealchange"/>
+                                    android:background="@drawable/application_sealchange" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -620,17 +619,20 @@
 
                 </LinearLayout>
             </LinearLayout>
-          <!--第三个卡片结束！！！！！！！！！！！！！！！！-->
+            <!--第三个卡片结束！！！！！！！！！！！！！！！！-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
+                    android:background="@drawable/corners_bg"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -648,13 +650,14 @@
                             android:textColor="@color/black"
                             android:textSize="16sp" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/ll_tip4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingStart="15dp"
-                        android:paddingTop="5dp">
+                        android:paddingTop="5dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -670,13 +673,11 @@
                         android:id="@+id/qmuidemo_floatlayout4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:qmui_maxNumber="12"
-
-                        android:padding="20dp"
                         android:gravity="left"
-                        app:qmui_childHorizontalSpacing="40dp"
-
-                        app:qmui_childVerticalSpacing="20dp">
+                        android:padding="20dp"
+                        app:qmui_childHorizontalSpacing="35dp"
+                        app:qmui_childVerticalSpacing="20dp"
+                        app:qmui_maxNumber="12">
 
                         <RelativeLayout
                             android:id="@+id/service_charge_rl"
@@ -692,7 +693,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_servicechargerecharge"/>
+                                    android:background="@drawable/application_servicechargerecharge" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -715,7 +716,7 @@
 
                                 <ImageView
                                     style="@style/imageView"
-                                    android:background="@drawable/application_rechargerecord"/>
+                                    android:background="@drawable/application_rechargerecord" />
 
                                 <TextView
                                     style="@style/application_text"
@@ -723,9 +724,6 @@
 
                             </LinearLayout>
                         </RelativeLayout>
-
-
-
 
 
                     </cn.fengwoo.sealsteward.view.QMUIFloatLayout>

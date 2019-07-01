@@ -295,7 +295,9 @@
         <activity android:name=".activity.AddApprovalFlowTypeActivity" />
         <activity android:name=".activity.FingerPrintActivity" />
         <activity android:name=".activity.ChangePhoneActivity" />
-        <activity android:name=".activity.ChangeCompanyBelongActivity"/>
+        <activity android:name=".activity.ChangeCompanyBelongActivity" />
+        <activity android:name=".activity.RecordQrCodeActivity" />
+        <activity android:name=".activity.ScanRecordQrCodeResultActivity"/>
     </application>
 
 </manifest>

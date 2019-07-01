@@ -99,7 +99,8 @@ public class WaitApplyAdapter extends BaseAdapter {
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    commonPostRequest2(id, 2, position);
+                    revokeDialog(id, 2, position);
+
                    /* if (waitApplyData.get(position).getUploadPhotoNum() == 0){
                         CommonDialog commonDialog = new CommonDialog(context,"提示",
                                 "此单据还未上传盖章后拍照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
@@ -155,6 +156,21 @@ public class WaitApplyAdapter extends BaseAdapter {
 
         return view;
 
+    }
+
+    /**
+     *  待审批撤销
+     */
+    private void revokeDialog(String id,int code,int position){
+        final CommonDialog commonDialog = new CommonDialog(context, "提示", "您是否确认撤销此单据？", "撤销");
+        commonDialog.showDialog();
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialog.dialog.dismiss();
+                commonPostRequest2(id, code, position);
+            }
+        });
     }
 
     /**

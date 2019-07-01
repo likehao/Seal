@@ -87,6 +87,8 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
 
     @BindView(R.id.iv_sec)
     ImageView iv_sec;
+    @BindView(R.id.ll_record_title)
+    LinearLayout ll_record_title;
 
     private List<RecordData> list;
     private int i = 1, j = 1;
@@ -119,6 +121,7 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("搜索");
+        ll_record_title.setVisibility(View.GONE);
         set_back_ll.setOnClickListener(this);
         rl_first.setOnClickListener(this);
         rl_sec.setOnClickListener(this);
