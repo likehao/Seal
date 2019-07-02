@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--1.阴影边框效果-->
+    <!--第一层阴影-->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/style" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <!--第二层前景-->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white"/>
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+
+
+    <!--2.层叠效果-->
+<!--
+    &lt;!&ndash; 第一层阴影 层叠&ndash;&gt;
+    <item>
+        <shape>
+            <solid android:color="@android:color/darker_gray" />
+            &lt;!&ndash;圆角&ndash;&gt;
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    &lt;!&ndash; 第二层前景 层叠&ndash;&gt;
+    <item>
+        <shape>
+            <solid android:color="@android:color/white" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>-->
+
+
+
+    <!--3.底部偏移效果-->
+
+<!--    &lt;!&ndash; 第一层阴影 &ndash;&gt;
+    <item>
+        <shape>
+            <solid android:color="@android:color/darker_gray" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    &lt;!&ndash;第二层前景 底偏移1dp &ndash;&gt;
+    <item android:bottom="1dp">
+        <shape>
+            <solid android:color="@android:color/white" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>-->
+
+
+    <!--4.右下偏移效果-->
+
+    <!-- 第一层阴影：左偏移2dp，上偏移4dp -->
+<!--    <item
+        android:left="2dp"
+        android:top="4dp">
+        <shape>
+            <solid android:color="@android:color/darker_gray" />
+            &lt;!&ndash;圆角&ndash;&gt;
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    &lt;!&ndash; 第二层前景：：底偏移4dp，右偏移2dp &ndash;&gt;
+    <item
+        android:bottom="4dp"
+        android:right="2dp">
+        <shape>
+            <solid android:color="@android:color/white" />
+            &lt;!&ndash;圆角&ndash;&gt;
+            <corners android:radius="10dp" />
+        </shape>
+    </item>-->
+</layer-list>

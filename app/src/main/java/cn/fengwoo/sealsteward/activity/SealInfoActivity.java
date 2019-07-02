@@ -243,7 +243,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                                                 public void run() {
                                                     String sealPrintPath = "file://" + HttpDownloader.path + fileName;
                                                     Picasso.with(SealInfoActivity.this).load(sealPrintPath).into(sealPrint_cir);
-                                                    sealPrint_cir.setBackgroundDrawable(getResources().getDrawable(R.color.white));
+                                                    sealPrint_cir.setBackgroundResource(R.color.white);
                                                 }
                                             });
                                         }
@@ -252,8 +252,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             } else {
                                 String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
                                 Picasso.with(SealInfoActivity.this).load(sealPrintPath).into(sealPrint_cir);
-                                sealPrint_cir.setBackgroundDrawable(getResources().getDrawable(R.color.white));
+                                sealPrint_cir.setBackgroundResource(R.color.white);
                             }
+
                             etSealName.setText(responseInfo.getData().getName());
                             tvMac.setText(responseInfo.getData().getMac());
                             etSealNumber.setText(responseInfo.getData().getSealNo());

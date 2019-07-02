@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,8 +40,8 @@ import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hjq.toast.ToastUtils;
-import com.polidea.rxandroidble2.RxBleClient;
 import com.polidea.rxandroidble2.RxBleConnection;
+import com.squareup.picasso.Picasso;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tianma.netdetector.lib.NetStateChangeObserver;
@@ -49,13 +49,10 @@ import com.tianma.netdetector.lib.NetStateChangeReceiver;
 import com.tianma.netdetector.lib.NetworkType;
 import com.white.easysp.EasySP;
 import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,19 +65,15 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.activity.AddSealActivity;
-import cn.fengwoo.sealsteward.activity.AddSealSecStepActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
-import cn.fengwoo.sealsteward.activity.CameraActivity;
 import cn.fengwoo.sealsteward.activity.CameraAutoActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
-import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.PplAddActivity;
+import cn.fengwoo.sealsteward.activity.SealInfoActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
-import cn.fengwoo.sealsteward.activity.UploadFileActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
@@ -102,7 +95,6 @@ import cn.fengwoo.sealsteward.utils.GlideImageLoader;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-//import cn.fengwoo.sealsteward.utils.NetUtil;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -110,19 +102,19 @@ import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.CustomDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import rx.Scheduler;
 import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
+
+//import cn.fengwoo.sealsteward.utils.NetUtil;
 
 public class MainFragment extends Fragment implements View.OnClickListener, NetStateChangeObserver {
 
@@ -165,12 +157,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     RelativeLayout wait_me_apply_rl;
     @BindView(R.id.msg_num_tv)
     TextView msg_num_tv;
-
     @BindView(R.id.msg_num_tv_ppl_add)
     TextView msg_num_tv_ppl_add;
-
     @BindView(R.id.tv_check_record)
     TextView tv_check_record;
+    @BindView(R.id.sealImg_iv)
+    ImageView sealImg_iv;  //印模
 
     LoadingView loadingView;
     private RxBleConnection rxBleConnection;
@@ -470,6 +462,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     intent.putExtra("stampRecordPdf", responseInfo.getData().getStampRecordPdf());
                     intent.putExtra("status", responseInfo.getData().getApproveStatus());
                     intent.putExtra("photoList", (Serializable) responseInfo.getData().getStampRecordImgList());
+                    intent.putExtra("cause", (Serializable) responseInfo.getData().getApplyCause());
                     Utils.log("status:" + responseInfo.getData().getApproveStatus());
                     startActivity(intent);
                 } else {
@@ -708,6 +701,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                 // 显示ble设备名字
                 String bleName = data.getStringExtra("bleName");
+//                String sealPrint = data.getStringExtra("sealPrint");
                 tv_ble_name.setText(bleName);
 
 //                // 开启定位
@@ -1412,7 +1406,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //        tv_times_done.setText("0");
 //        tv_times_left.setText("0");
         electric_ll.setVisibility(View.GONE);
-        tv_ble_name.setText("暂无连接印章");
+        tv_ble_name.setText("暂未连接印章");
 //        tv_stamp_reason.setText("暂无用印申请事由");
 //        tv_expired_time.setText("暂无");
         tv_address.setText("暂无定位信息");

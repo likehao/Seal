@@ -321,6 +321,14 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         }
 
         ll_tab.setVisibility(View.GONE);
+
+        //如果是扫描记录二维码进入则不现实上传照片和提交
+        int scan = intent.getIntExtra("scan",0);
+        if (scan == 1){
+            upload_photo_ll.setVisibility(View.GONE);
+            edit_tv.setVisibility(View.GONE);
+        }
+
     }
 
     /**

@@ -5,28 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
+    android:background="@color/background"
     android:orientation="vertical"
-    tools:context=".activity.RepairActivity"
-    android:background="@color/background">
+    tools:context=".activity.RepairActivity">
 
     <include layout="@layout/head" />
 
-<EditText
-    android:id="@+id/et_filter"
-    android:background="@drawable/suggestion"
-    android:layout_margin="23dp"
-    android:hint="请输入印章名称"
-    android:paddingLeft="33dp"
-    android:textSize="13sp"
-    android:text=""
-    android:layout_width="match_parent"
-    android:layout_height="35dp" />
+    <EditText
+        android:id="@+id/et_filter"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_margin="23dp"
+        android:background="@drawable/suggestion"
+        android:hint="请输入印章名称"
+        android:paddingLeft="33dp"
+        android:text=""
+        android:textSize="13sp" />
 
     <TextView
-        android:layout_marginLeft="23dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="请打开要连接的印章电源开关"/>
+        android:layout_marginLeft="23dp"
+        android:text="请打开要连接的印章电源开关" />
 
 
     <ListView
@@ -34,6 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:background="@color/white"/>
+        android:background="@color/white" />
 
 </LinearLayout>

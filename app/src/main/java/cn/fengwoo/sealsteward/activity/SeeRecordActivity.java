@@ -110,7 +110,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     private int i = 1;
     ResponseInfo<List<RecordListBean>> responseInfo;
     private boolean isRead = false;
-    private int type;
+    private int type,scan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,6 +202,9 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         if (count - restCount > 0) {
             seeRecordAdapter.setRedCount(count - restCount);
         }
+
+        scan = intent.getIntExtra("scan",0);
+
     }
     /**
      * 刷新盖章详情
@@ -300,6 +303,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 intent.putExtra("isRead", isRead);
                 intent.putStringArrayListExtra("photoList",listImg);
                 intent.putExtra("type",type);
+                intent.putExtra("scan",scan);
                 startActivityForResult(intent,REQUESTCODE);
                 break;
         }

@@ -66,7 +66,7 @@ public class ScanRecordQrCodeResultActivity extends BaseActivity implements View
         setContentView(R.layout.activity_scan_record_qr_code_result);
 
         ButterKnife.bind(this);
-        
+
         initView();
         getScanRecordResult();
     }
@@ -170,6 +170,7 @@ public class ScanRecordQrCodeResultActivity extends BaseActivity implements View
         intent.putExtra("photoList", (Serializable) responseInfo.getData().getStampRecordImgList());
         intent.putExtra("cause", (Serializable) responseInfo.getData().getApplyCause());
         Utils.log("status:" + responseInfo.getData().getApproveStatus());
+        intent.putExtra("scan",1);
         startActivity(intent);
     }
 }

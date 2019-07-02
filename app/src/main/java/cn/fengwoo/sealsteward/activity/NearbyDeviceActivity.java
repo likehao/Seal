@@ -31,6 +31,7 @@ import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
 import com.white.easysp.EasySP;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.SealAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.database.SealItemBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealData;
@@ -503,7 +505,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 EasySP.init(this).putString("dataProtocolVersion", "2");
                             }
 
-
                             // save mac & seal id
                             EasySP.init(this).putString("mac", scanResultsList.get(position).getBleDevice().getMacAddress());
 //                            EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
@@ -530,6 +531,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 Intent intent = new Intent();
                                 intent.putExtra("bleName", getNameFromList(macAddress));
+//                                intent.putExtra("sealPrint", "sealPrint");
                                 setResult(Constants.TO_NEARBY_DEVICE, intent);
                                 finish();
                             }

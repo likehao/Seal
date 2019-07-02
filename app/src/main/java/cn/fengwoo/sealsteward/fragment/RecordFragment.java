@@ -1,8 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,7 +40,6 @@ import cn.fengwoo.sealsteward.activity.MainActivity;
 import cn.fengwoo.sealsteward.activity.PwdRecordSearchActivity;
 import cn.fengwoo.sealsteward.activity.RecordSearchActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
-import cn.fengwoo.sealsteward.activity.SelectPwdRecordActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealRecodeActivity;
 import cn.fengwoo.sealsteward.adapter.PwdRecordAdapter;
 import cn.fengwoo.sealsteward.adapter.RecordAdapter;
@@ -283,8 +279,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 i = 1;
-                getData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getData(refreshLayout);
+//                refreshLayout.finishRefresh(); //刷新完成
 
             }
         });
@@ -295,13 +291,13 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 i += 1;
                 record_refreshLayout.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getData();
+                getData(refreshLayout);
                 //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+/*                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     refreshLayout.finishLoadMore(2000);
                 } else {
                     refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                }*/
 
             }
         });
@@ -310,7 +306,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     /**
      * 获取记录请求
      */
-    private void getData() {
+    private void getData(RefreshLayout refreshLayout) {
         StampRecordData stampRecordData = new StampRecordData();
         stampRecordData.setCurPage(i);
         stampRecordData.setHasPage(true);
@@ -352,12 +348,25 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore(); //加载完成
                                 recordAdapter.notifyDataSetChanged(); //刷新数据
                                 no_record_ll.setVisibility(View.GONE);
                             }
                         });
                     }
 
+                }else {
+                    if (null != getActivity()) {
+                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore();//结束加载
+                                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                            }
+                        });
+                    }
                 }
 
             }
