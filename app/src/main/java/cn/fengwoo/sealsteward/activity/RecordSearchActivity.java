@@ -235,8 +235,7 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 i = 1;
-                getData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getData(refreshLayout);
 
             }
         });
@@ -247,20 +246,13 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
                 i += 1;
                 record_refreshLayout.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getData();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
-
+                getData(refreshLayout);
             }
         });
     }
 
 
-    private void getData() {
+    private void getData(RefreshLayout refreshLayout) {
         StampRecordDataxx stampRecordData = new StampRecordDataxx();
         stampRecordData.setCurPage(i);
         stampRecordData.setHasPage(true);
@@ -305,6 +297,8 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
                             recordAdapter.notifyDataSetChanged(); //刷新数据
                             no_record_ll.setVisibility(View.GONE);
                         }
@@ -320,6 +314,9 @@ public class RecordSearchActivity extends BaseActivity implements View.OnClickLi
                             }
                             no_record_ll.setVisibility(View.VISIBLE);
                             ll_record.setVisibility(View.GONE);
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
+                            refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                         }
                     });
                 }

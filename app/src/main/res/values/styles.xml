@@ -9,7 +9,7 @@
     </style>
     <!--账号选择下拉箭头-->
     <style name="checkboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/down_up_arrow</item>
+        <item name="android:button">@drawable/arrow</item>
     </style>
 
     <!--小圆圈消息数-->

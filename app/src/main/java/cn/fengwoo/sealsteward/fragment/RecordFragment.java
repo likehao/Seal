@@ -163,8 +163,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 iP = 1;
                 pList.clear();
-                getPwdRecordData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getPwdRecordData(refreshLayout);
 
             }
         });
@@ -175,13 +174,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 iP += 1;
                 pwdRecordSmt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getPwdRecordData();
-                //如果成功有数据就加载
-                if (responseInfoP.getData() != null && responseInfoP.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getPwdRecordData(refreshLayout);
             }
         });
     }
@@ -190,7 +183,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     /**
      * 获取密码盖章记录请求数据
      */
-    private void getPwdRecordData() {
+    private void getPwdRecordData(RefreshLayout refreshLayout) {
         StampRecordData stampRecordData = new StampRecordData();
         StampRecordData.Param param = new StampRecordData.Param();
         stampRecordData.setCurPage(iP);
@@ -228,11 +221,22 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                         pList.add(new SeeRecordBean(app.getFlowNumber(),app.getSealName(),app.getUserName(),stampTime));
                     }
                     //请求数据
-                   getActivity().runOnUiThread(new Runnable() {
+                   Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
                             adapter.notifyDataSetChanged(); //刷新数据
                             no_record_ll.setVisibility(View.GONE);
+                        }
+                    });
+                }else {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
+                            refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                         }
                     });
                 }
@@ -409,8 +413,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 j = 1;
-                getSelectData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getSelectData(refreshLayout);
             }
         });
         select_record_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -419,13 +422,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 j += 1;
                 select_record_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getSelectData();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);//延迟2000毫秒后结束加载
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getSelectData(refreshLayout);
             }
         });
     }
@@ -435,7 +432,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
      */
 //    String endTime, startTime;
 
-    private void getSelectData() {
+    private void getSelectData(RefreshLayout refreshLayout) {
         StampRecordData stampRecordData = new StampRecordData();
         StampRecordData.Param param = new StampRecordData.Param();
         stampRecordData.setCurPage(j);
@@ -479,7 +476,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                             photoCount = app.getPhotoCount();
                         }
                         list.add(new RecordData(app.getApplyCount(), app.getId(), app.getApplyCause(), app.getSealName(), app.getApplyUserName()
-                                , app.getApplyCount(), app.getAvailableCount(), photoCount
+                                , app.getStampCount(), app.getAvailableCount(), photoCount
                                 , failTime, sealTime, app.getLastStampAddress(), app.getApproveStatus(),
                                 app.getApplyPdf(), app.getStampPdf(), app.getStampRecordPdf(), app.getHeadPortrait(), app.getOrgStructureName()
                                 , app.getStampRecordImgList()));
@@ -491,8 +488,21 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore();//结束加载
                                 recordAdapter.notifyDataSetChanged(); //刷新数据
                                 no_record_ll.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }else {
+                    if (null != getActivity()) {
+                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore();//结束加载
+                                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                             }
                         });
                     }
@@ -549,7 +559,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 100) {
+        if (resultCode == 100) {  //接收查询记录返回的结果
             end = data.getStringExtra("end");
             begin = data.getStringExtra("begin");
             personId = data.getStringExtra("personId");
@@ -560,6 +570,9 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             }else {
                 type = 0;
             }*/
+           //查询记录时候隐藏现有的手机盖章和密码盖章记录
+            ll_pwdRecord.setVisibility(View.GONE);
+            record_ll.setVisibility(View.GONE);
             getRecordList();   //获取查询记录列表
         }
         if (resultCode == REQUESTCODE) {

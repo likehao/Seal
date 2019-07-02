@@ -110,8 +110,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitMeAgreeDataList.clear(); //清除数据
                 i = 1;
-                getWaitMeAgreeData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getWaitMeAgreeData(refreshLayout);
             }
         });
         wait_me_agree_apply_smartRL.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -121,13 +120,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                 i += 1;
                 wait_me_agree_apply_smartRL.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getWaitMeAgreeData();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getWaitMeAgreeData(refreshLayout);
             }
         });
 
@@ -136,7 +129,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
     /**
      * 获取待我审批记录请求
      */
-    private void getWaitMeAgreeData() {
+    private void getWaitMeAgreeData(RefreshLayout refreshLayout) {
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasExportPdf(false);
@@ -168,6 +161,8 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                                         app.getExpireTime(), app.getId(), app.getApplyPdf(),app.getAutoGraph()));
                             }
                             //请求数据
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
                             waitMeAgreeAdapter.notifyDataSetChanged(); //刷新数据
                             no_record_ll.setVisibility(View.GONE);
 
@@ -176,6 +171,9 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                             if (waitMeAgreeDataList.size() == 0){
                                 no_record_ll.setVisibility(View.VISIBLE);
                             }
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
+                            refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                         }
                     }
                 });

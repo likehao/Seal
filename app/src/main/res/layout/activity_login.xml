@@ -6,22 +6,36 @@
     android:background="@color/white"
     tools:context=".activity.LoginActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_bg" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="170dp"
+        android:background="@drawable/logo" />
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/head_civ"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="170dp"
         android:src="@drawable/default_head_portrait"
-        android:layout_marginTop="80dp"
-        android:layout_centerHorizontal="true"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/account_ll"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/head_civ"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="10dp">
+        android:layout_marginEnd="45dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="300dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,23 +52,33 @@
                     android:layout_height="wrap_content"
                     android:text="@string/phone"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/iphone" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6">
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="6"
+                android:gravity="center">
 
                 <EditText
                     android:id="@+id/phone_et"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="17dp"
+                    android:background="@null"
                     android:digits="0123456789"
                     android:hint="@string/phone_et"
                     android:inputType="phone"
                     android:maxLength="11"
-                    android:textCursorDrawable="@drawable/login_edit_focus_color" />
+                    android:textCursorDrawable="@drawable/login_edit_focus_color"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -64,77 +88,138 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/line" />
 
     </RelativeLayout>
 
 
-        <RelativeLayout
-            android:id="@+id/password_rl"
+    <RelativeLayout
+        android:id="@+id/password_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/account_ll"
+        android:layout_marginTop="5dp"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/account_ll">
+            android:layout_marginEnd="45dp"
+            android:layout_marginStart="45dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/password"
-                        android:textColor="@color/black"
-                        android:textSize="18dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:layout_marginEnd="10dp">
-                    <EditText
-                        android:id="@+id/psd_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textCursorDrawable="@drawable/login_edit_focus_color"
-                        android:inputType="textPassword"
-                        android:hint="@string/password_et"/>
-                </LinearLayout>
+                    android:text="@string/password"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/password" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/login_bt"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="90dp"
-                android:textColor="@color/white"
-                android:background="@drawable/login_circle_bg"
-                android:text="@string/login_bt"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="6"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/tv_finger_print_login"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/blue"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/login_bt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="指纹登录"/>
+                <EditText
+                    android:id="@+id/psd_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="@string/password_et"
+                    android:inputType="textPassword"
+                    android:textCursorDrawable="@drawable/login_edit_focus_color"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
-        </RelativeLayout>
-            <TextView
-                android:id="@+id/more_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/more"
-                android:textColor="@color/black"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="50dp"
-                android:layout_alignParentBottom="true"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line"
+            android:layout_marginEnd="45dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="40dp"/>
+
+        <Button
+            android:id="@+id/login_bt"
+            android:layout_width="280dp"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/login_bt"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_finger_print_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_bt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="指纹ID登录"
+            android:textColor="@color/blue" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="500dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="立即注册"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="12dp"
+            android:background="#999999"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忘记密码"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/more_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="50dp"
+        android:text="@string/more"
+        android:visibility="gone"
+        android:textColor="@color/black" />
 
 </RelativeLayout>

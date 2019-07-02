@@ -88,8 +88,7 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitApplyDataList.clear();
                 i = 1;
-                getRecordOne();
-                refreshLayout.finishRefresh(); //刷新完成
+                getRecordOne(refreshLayout);
             }
         });
         apply_record_one_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -98,20 +97,14 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                 i += 1;
                 apply_record_one_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getRecordOne();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getRecordOne(refreshLayout);
             }
         });
 
     }
 
 
-    private void getRecordOne(){
+    private void getRecordOne(RefreshLayout refreshLayout){
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasExportPdf(false);
@@ -147,8 +140,22 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore();//结束加载
                                 waitApplyAdapter.notifyDataSetChanged(); //刷新数据
                                 no_record_ll.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                }else {
+                    if (null != getActivity()) {
+                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore();//结束加载
+                                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                             }
                         });
                     }

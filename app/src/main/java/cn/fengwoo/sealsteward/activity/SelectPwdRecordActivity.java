@@ -101,8 +101,7 @@ public class SelectPwdRecordActivity extends BaseActivity implements View.OnClic
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 i = 1;
                 list.clear();
-                getPwdRecordData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getPwdRecordData(refreshLayout);
 
             }
         });
@@ -113,13 +112,7 @@ public class SelectPwdRecordActivity extends BaseActivity implements View.OnClic
                 i += 1;
                 pwdRecordSmt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getPwdRecordData();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getPwdRecordData(refreshLayout);
             }
         });
     }
@@ -128,7 +121,7 @@ public class SelectPwdRecordActivity extends BaseActivity implements View.OnClic
     /**
      * 获取密码盖章记录请求数据
      */
-    private void getPwdRecordData() {
+    private void getPwdRecordData(RefreshLayout refreshLayout) {
         StampRecordData stampRecordData = new StampRecordData();
         StampRecordData.Param param = new StampRecordData.Param();
         stampRecordData.setCurPage(i);
@@ -168,8 +161,19 @@ public class SelectPwdRecordActivity extends BaseActivity implements View.OnClic
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
                             adapter.notifyDataSetChanged(); //刷新数据
                             no_record_ll.setVisibility(View.GONE);
+                        }
+                    });
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
+                            refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                         }
                     });
                 }

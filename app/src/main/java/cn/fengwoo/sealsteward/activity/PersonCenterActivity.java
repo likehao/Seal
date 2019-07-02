@@ -243,8 +243,13 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                                             @Override
                                             public void onResult(final String fileName) {
                                                 if (fileName != null) {
-                                                    String path = "file://" + HttpDownloader.path + fileName;
-                                                    Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            String path = "file://" + HttpDownloader.path + fileName;
+                                                            Picasso.with(PersonCenterActivity.this).load(path).into(headImg_iv);
+                                                        }
+                                                    });
                                                 }
                                             }
                                         });

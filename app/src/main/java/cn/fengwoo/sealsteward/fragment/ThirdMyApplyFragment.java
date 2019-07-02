@@ -91,8 +91,7 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 waitApplyDataList.clear();
                 i = 1;
-                getThirdData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getThirdData(refreshLayout);
             }
         });
         finish_apply_smartRL.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -101,19 +100,14 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
                 i += 1;
                 finish_apply_smartRL.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getThirdData();
+                getThirdData(refreshLayout);
                 //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
             }
         });
 
     }
 
-    private void getThirdData(){
+    private void getThirdData(RefreshLayout refreshLayout){
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasExportPdf(false);
@@ -148,8 +142,21 @@ public class ThirdMyApplyFragment extends Fragment implements AdapterView.OnItem
                         (getActivity()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore();//结束加载
                                 waitApplyAdapter.notifyDataSetChanged(); //刷新数据
                                 no_record_ll.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }else {
+                    if (getActivity() != null) {
+                        (getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshLayout.finishRefresh(); //刷新完成
+                                refreshLayout.finishLoadMore();//结束加载
+                                refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                             }
                         });
                     }

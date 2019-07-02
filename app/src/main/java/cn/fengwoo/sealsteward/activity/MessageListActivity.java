@@ -96,8 +96,7 @@ public class MessageListActivity extends BaseActivity{
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 i = 1;
-                getMsgData();
-                refreshLayout.finishRefresh(); //刷新完成
+                getMsgData(refreshLayout);
             }
         });
         message_list_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -106,18 +105,12 @@ public class MessageListActivity extends BaseActivity{
                 i += 1;
                 message_list_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getMsgData();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getMsgData(refreshLayout);
             }
         });
     }
 
-    private void getMsgData(){
+    private void getMsgData(RefreshLayout refreshLayout){
         SeeRecordDetailBean msgData = new SeeRecordDetailBean();
         msgData.setCurPage(i);
         msgData.setHasPage(true);
@@ -147,6 +140,8 @@ public class MessageListActivity extends BaseActivity{
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
                             messageAdapter.notifyDataSetChanged(); //刷新数据
                             Log.e("TAG","获取消息列表成功!!!!!!!!!!!!!!!!!!!!");
                             updateReadMsg(param);
@@ -154,6 +149,14 @@ public class MessageListActivity extends BaseActivity{
                     });
 
                 }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
+                            refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                        }
+                    });
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
                     Looper.loop();

@@ -36,7 +36,8 @@ import okhttp3.Response;
  */
 public class HttpDownloader {
 
-    public static final String path = "/sdcard/SealDownImage/";// sd路径
+//    public static final String path = "/sdcard/SealDownImage/";// sd路径
+    public static final String path = "/sdcard/Android/data/cn.fengwoo.sealsteward/cache/";// sd路径
 
     public static void downloadImage(Activity activity, Integer category, final String fileName,final DownloadImageCallback callback){
         HashMap<String, String> hashMap = new HashMap<>();

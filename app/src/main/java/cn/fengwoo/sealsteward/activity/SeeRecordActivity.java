@@ -215,8 +215,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
                 i = 1;
-                getDetail();
-                refreshLayout.finishRefresh(); //刷新完成
+                getDetail(refreshLayout);
             }
         });
         see_RecordDetail_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -225,13 +224,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 i += 1;
                 see_RecordDetail_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getDetail();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);//延迟2000毫秒后结束加载
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getDetail(refreshLayout);
             }
         });
 
@@ -240,7 +233,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     /**
      * 获取详情请求
      */
-    private void getDetail(){
+    private void getDetail(RefreshLayout refreshLayout){
         SeeRecordDetailBean seeRecordDetailBean = new SeeRecordDetailBean();
         seeRecordDetailBean.setCurPage(i);
         seeRecordDetailBean.setHasPage(true);
@@ -269,11 +262,22 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
                             setListViewHeightBasedOnChildren(see_record_lv);
                             seeRecordAdapter.notifyDataSetChanged(); //刷新数据
                         }
                     });
 
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
+                            refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                        }
+                    });
                 }
 
             }

@@ -94,8 +94,7 @@ public class RechargeRecordActivity extends BaseActivity {
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 recordDataList.clear();
                 i = 1;
-                getRecharge();
-                refreshLayout.finishRefresh(); //刷新完成
+                getRecharge(refreshLayout);
             }
         });
         recharge_smt.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -105,13 +104,7 @@ public class RechargeRecordActivity extends BaseActivity {
                 i += 1;
                 recharge_smt.setEnableLoadMore(true);
                 refreshLayout.setEnableOverScrollDrag(true);//是否启用越界拖动
-                getRecharge();
-                //如果成功有数据就加载
-                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    refreshLayout.finishLoadMore(2000);
-                } else {
-                    refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                }
+                getRecharge(refreshLayout);
             }
         });
     }
@@ -119,7 +112,7 @@ public class RechargeRecordActivity extends BaseActivity {
     /**
      * 获取充值记录请求
      */
-    private void getRecharge(){
+    private void getRecharge(RefreshLayout refreshLayout){
         ApplyListData applyListData = new ApplyListData();
         applyListData.setCurPage(i);
         applyListData.setHasPage(true);
@@ -155,11 +148,23 @@ public class RechargeRecordActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
                             recordAdapter.notifyDataSetChanged(); //刷新数据
                             no_record_ll.setVisibility(View.GONE);
                         }
                     });
 
+                }else {
+                    //请求数据
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.finishRefresh(); //刷新完成
+                            refreshLayout.finishLoadMore();//结束加载
+                            refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                        }
+                    });
                 }
             }
         });
