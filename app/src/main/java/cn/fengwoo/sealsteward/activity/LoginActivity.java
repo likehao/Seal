@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -90,7 +91,12 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
 
     @BindView(R.id.tv_finger_print_login)
     TextView tv_finger_print_login;
-
+    @BindView(R.id.register_tv)
+    TextView register;
+    @BindView(R.id.forget_pwd_tv)
+    TextView forgetPwd;
+    @BindView(R.id.register_forgetPwd_ll)
+    LinearLayout register_forgetPwd;
     private List<String> stringList;
     private CheckBox check_down_up;  //弹出账号列表上下箭头
     private AccountDao accountDao;
@@ -146,6 +152,8 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
         accountDao = new AccountDao(this);
         loadingView = new LoadingView(this);
         tv_finger_print_login.setOnClickListener(this);
+        register.setOnClickListener(this);
+        forgetPwd.setOnClickListener(this);
         String state = EasySP.init(this).getString("finger_print");
         if (state.equals("1")) {
         } else {
@@ -185,12 +193,15 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     hintKbTwo();
                     if (historyList.size() == 0) {
                         password_rl.setVisibility(View.VISIBLE);
+                        register_forgetPwd.setVisibility(View.VISIBLE);
                     } else {
                         password_rl.setVisibility(View.GONE);
+                        register_forgetPwd.setVisibility(View.GONE);
                     }
                 } else {
                     selectPopuwindow.dismiss(); //隐藏列表
                     password_rl.setVisibility(View.VISIBLE);
+                    register_forgetPwd.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -261,6 +272,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                 selectPopuwindow.dismiss();
                 check_down_up.setChecked(false);
                 password_rl.setVisibility(View.VISIBLE);
+                register_forgetPwd.setVisibility(View.VISIBLE);
                 optionsAdapter.notifyDataSetChanged();
                 psd_et.getText().clear(); //清空密码
             }
@@ -296,6 +308,14 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
                     showToast("没有打开指纹登录");
                 }
                 identify();
+                break;
+            case R.id.register_tv:
+                intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.forget_pwd_tv:
+                intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -480,6 +500,7 @@ public class LoginActivity extends Base2Activity implements View.OnClickListener
     public void setView() {
         if (datas.size() == 0) {
             password_rl.setVisibility(View.VISIBLE);
+            register_forgetPwd.setVisibility(View.VISIBLE);
             check_down_up.setChecked(false);
         }
     }

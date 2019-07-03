@@ -99,7 +99,6 @@
 
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/password_rl"
         android:layout_width="match_parent"
@@ -165,12 +164,15 @@
 
         <Button
             android:id="@+id/login_bt"
-            android:layout_width="280dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="90dp"
-            android:background="@drawable/login_bt"
-            android:textColor="@color/white" />
+            android:background="@drawable/click_bt_press"
+            android:textColor="@color/white"
+            android:text="@string/login_bt"
+            android:gravity="center"
+            android:paddingBottom="11dp"/>
 
         <TextView
             android:id="@+id/tv_finger_print_login"
@@ -178,22 +180,24 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/login_bt"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:text="指纹ID登录"
-            android:textColor="@color/blue" />
+            android:textColor="@color/style" />
 
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/register_forgetPwd_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="500dp">
 
         <TextView
+            android:id="@+id/register_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="立即注册"
+            android:text="@string/register"
             android:textSize="12sp"/>
 
         <View
@@ -205,9 +209,10 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/forget_pwd_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="忘记密码"
+            android:text="@string/forget_password"
             android:textSize="12sp"/>
     </LinearLayout>
 

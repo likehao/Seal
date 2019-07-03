@@ -6,6 +6,7 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="style">#3399FF</color>
+    <color name="bt_press">#0080FF</color>
     <color name="style1">#6897BB</color>
     <color name="line">#e6e6e6</color>
     <color name="gray_text">#888888</color>
