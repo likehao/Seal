@@ -1,12 +1,17 @@
 package cn.fengwoo.sealsteward.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +32,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.picasso.Picasso;
 import com.white.easysp.EasySP;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -48,6 +56,7 @@ import cn.fengwoo.sealsteward.activity.SetPowerOnlyReadActivity;
 import cn.fengwoo.sealsteward.activity.SuggestionActivity;
 import cn.fengwoo.sealsteward.activity.UseInstructionsActivity;
 import cn.fengwoo.sealsteward.activity.UserInfoActivity;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -57,6 +66,7 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.IOSScrollView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -113,6 +123,13 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         RelativeLayout nearby_device_rl; //附近设备*/
     private Intent intent;
     private BiometricPromptManager mManager;
+    @BindView(R.id.my_scrollView)
+    NestedScrollView scrollView;
+//    IOSScrollView scrollView;
+    @BindView(R.id.head_ll)
+    LinearLayout head_ll;
+    @BindView(R.id.title_tv)
+    TextView title_tv;
 
     @Nullable
     @Override
@@ -127,6 +144,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView() {
+        head_ll.setAlpha(0);  //设置title初始为透明
+        title_tv.setText("我的");
         mManager = BiometricPromptManager.from(getActivity());
         if(mManager.isHardwareDetected()){
             rl_safe.setVisibility(View.VISIBLE);
@@ -158,7 +177,47 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+        /**
+         *  第一个参数NestedScrollView v:是NestedScrollView的对象
+             第二个参数:scrollX是目前的（滑动后）的X轴坐标
+             第三个参数:ScrollY是目前的（滑动后）的Y轴坐标
+             第四个参数:oldScrollX是之前的（滑动前）的X轴坐标
+             第五个参数:oldScrollY是之前的（滑动前）的Y轴坐标
+         */
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView nestedScrollView, int i, int i1, int i2, int i3) {
+              /*  int scrollY = scrollView.getScrollY();
+                int height = scrollView.getHeight();
+                int scrollViewMeasuredHeight = scrollView.getChildAt(0).getMeasuredHeight();
+                if (i1 - i3 > 1 || (scrollY + height) == scrollViewMeasuredHeight) {//往下滑动或者滑动到底部
+                    EventBus.getDefault().post(new MessageEvent("滑动监听","滑动监听"));
+
+                } else if (scrollY == 0) {//滑动到顶部
+
+                }*/
+                int high = dip2px(getActivity(),46);
+                if (i1 <= 0){
+                    head_ll.setAlpha(0);
+                }else if (i1>0 && i1< high){
+                    //获取渐变率
+                    float scale = (float) i1 / high;
+                    //获取渐变数值
+                    float alpha = (1.0f * scale);
+                    head_ll.setAlpha(alpha);
+                }else {
+                    head_ll.setAlpha(1f);
+                }
+            }
+        });
     }
+
+    //将像素转换为px
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
 
     private void setListener() {
         set_rl.setOnClickListener(this);

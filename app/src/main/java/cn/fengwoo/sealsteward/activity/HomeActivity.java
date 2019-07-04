@@ -1,23 +1,17 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.tbruyelle.rxpermissions2.Permission;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
-import io.reactivex.functions.Consumer;
 
 public class HomeActivity extends Base2Activity {
 

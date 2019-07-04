@@ -59,6 +59,7 @@ import cn.fengwoo.sealsteward.entity.HistoryInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
+import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HideKeyBroadUtils;
@@ -77,7 +78,7 @@ import okhttp3.Response;
 /**
  * 登录
  */
-public class LoginActivity extends Base2Activity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.more_tv)
     TextView more_tv;
     @BindView(R.id.phone_et)

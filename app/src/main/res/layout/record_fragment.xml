@@ -16,13 +16,14 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:paddingStart="5dp"
+        android:paddingStart="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="@color/white"
+        android:background="@drawable/corners_bg"
         android:cursorVisible="false"
-        android:drawableStart="@drawable/head_search"
+        android:drawableStart="@drawable/search"
         android:hint="搜索事由/流水号"
-        android:textSize="15sp" />
+        android:drawablePadding="5dp"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:clickable="true"
@@ -33,7 +34,6 @@
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
         android:layout_marginTop="10dp">
-
 
     </LinearLayout>
 
@@ -70,8 +70,7 @@
         android:id="@+id/record_ll"
         android:layout_marginTop="55dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/record_refreshLayout"
@@ -89,6 +88,8 @@
                 android:layout_marginTop="10dp"
                 android:divider="#00000000"
                 android:dividerHeight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:scrollbars="none" />
 
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>

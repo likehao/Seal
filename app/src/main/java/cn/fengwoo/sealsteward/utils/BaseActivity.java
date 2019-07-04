@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.gyf.barlibrary.ImmersionBar;
@@ -28,7 +29,7 @@ public class BaseActivity extends AppCompatActivity{
         application = (MyApp) getApplication();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //保持竖屏
         immersionBar = ImmersionBar.with(this)
-        .statusBarDarkFont(true,0.2f)   //状态栏字体是深色，不写默认为亮色,如果当前设备不支持状态栏字体变色，会使当前状态栏加上透明度，否则不执行透明度
+        .statusBarDarkFont(false,0.2f)   //状态栏字体是深色，不写默认为亮色,如果当前设备不支持状态栏字体变色，会使当前状态栏加上透明度，否则不执行透明度
         .fitsSystemWindows(true, R.color.style);  //解决状态栏和布局重叠问题,指定颜色修改状态栏与标题栏之间存在的白色间隙
         immersionBar.init();
         loadingView = new LoadingView(this);

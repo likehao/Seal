@@ -100,7 +100,7 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".activity.WelcomeActivity">
+        <activity android:name=".activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -117,7 +117,7 @@
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.WelcomeActivity"
             android:screenOrientation="portrait" />
 
         <!-- JPUSH推送！！！！！！！！！！！！！！！！ -->

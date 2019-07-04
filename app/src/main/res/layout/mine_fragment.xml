@@ -4,463 +4,487 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/mine_smt"
+
+  <!--  <cn.fengwoo.sealsteward.view.IOSScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/mine_smt"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-            <LinearLayout
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/my_scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:scrollbars="none">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/mine_person_data_ll"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_bg"
-                        android:orientation="horizontal">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/headImg_cir"
-                            android:layout_width="55dp"
-                            android:layout_height="55dp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="36dp"
-                            android:background="@drawable/head_portrait" />
+                        android:background="@color/white">
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:id="@+id/mine_person_data_ll"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="36dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:background="@drawable/my_bg"
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/realName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:gravity="left"
-                                android:singleLine="true"
-                                android:text="@string/company_name"
-                                android:textColor="@color/white" />
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/headImg_cir"
+                                android:layout_width="55dp"
+                                android:layout_height="55dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="36dp"
+                                android:background="@drawable/head_portrait" />
 
-                            <TextView
-                                android:id="@+id/phone"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="18dp"
-                                android:ellipsize="end"
-                                android:gravity="right"
-                                android:singleLine="true"
-                                android:text="13843843838"
-                                android:textColor="@color/white" />
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="36dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/realName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:gravity="left"
+                                    android:singleLine="true"
+                                    android:text="@string/company_name"
+                                    android:textColor="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/phone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="7dp"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="13843843838"
+                                    android:textColor="@color/white" />
+                            </LinearLayout>
+
                         </LinearLayout>
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="157dp"
-                        android:background="@drawable/my_white_bg">
-
-                        <RelativeLayout
-                            android:id="@+id/my_company_rl"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:gravity="center">
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="157dp"
+                            android:background="@drawable/my_white_bg">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    style="@style/my_imageView"
-                                    android:background="@drawable/my_company" />
-
-                                <TextView
-                                    style="@style/application_text"
-                                    android:text="@string/my_company"
-                                    android:textColor="#666666" />
-
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="0.5dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@color/line" />
-
-                        <RelativeLayout
-                            android:id="@+id/my_sign_rl"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:gravity="center">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    style="@style/my_imageView"
-                                    android:background="@drawable/my_signature" />
-
-                                <TextView
-                                    style="@style/application_text"
-                                    android:text="@string/my_sign"
-                                    android:textColor="#666666" />
-
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="0.5dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@color/line" />
-
-                        <RelativeLayout
-                            android:id="@+id/my_power_rl"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:gravity="center">
-
-                            <LinearLayout
+                            <RelativeLayout
+                                android:id="@+id/my_company_rl"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:gravity="center">
 
-                                <ImageView
-                                    style="@style/my_imageView"
-                                    android:background="@drawable/my_authority" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
 
-                                <TextView
-                                    style="@style/application_text"
-                                    android:text="@string/my_power"
-                                    android:textColor="#666666" />
+                                    <ImageView
+                                        style="@style/my_imageView"
+                                        android:background="@drawable/my_company" />
 
-                            </LinearLayout>
+                                    <TextView
+                                        style="@style/application_text"
+                                        android:text="@string/my_company"
+                                        android:textColor="#666666" />
+
+                                </LinearLayout>
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@color/line" />
+
+                            <RelativeLayout
+                                android:id="@+id/my_sign_rl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="center">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        style="@style/my_imageView"
+                                        android:background="@drawable/my_signature" />
+
+                                    <TextView
+                                        style="@style/application_text"
+                                        android:text="@string/my_sign"
+                                        android:textColor="#666666" />
+
+                                </LinearLayout>
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="0.5dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@color/line" />
+
+                            <RelativeLayout
+                                android:id="@+id/my_power_rl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="center">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        style="@style/my_imageView"
+                                        android:background="@drawable/my_authority" />
+
+                                    <TextView
+                                        style="@style/application_text"
+                                        android:text="@string/my_power"
+                                        android:textColor="#666666" />
+
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/my_QRCode_rl"
+                            style="@style/pressed_effect"
+                            android:visibility="visible">
+
+                            <ImageView
+                                style="@style/my_small_img"
+                                android:background="@drawable/my_code" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="50dp"
+                                android:text="@string/my_QRCode"
+                                android:textColor="@color/dark_gray" />
+
+                            <ImageView
+                                style="@style/right_arrow"
+                                android:layout_marginEnd="15dp" />
                         </RelativeLayout>
+
+                        <View
+                            style="@style/line_left"
+                            android:layout_marginEnd="22dp"
+                            android:layout_marginStart="22dp" />
+
+                        <RelativeLayout
+                            android:id="@+id/company_QRCode_rl"
+                            style="@style/pressed_effect"
+                            android:visibility="visible">
+
+                            <ImageView
+                                style="@style/my_small_img"
+                                android:background="@drawable/company_code" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="50dp"
+                                android:text="企业二维码"
+                                android:textColor="@color/dark_gray" />
+
+                            <ImageView
+                                style="@style/right_arrow"
+                                android:layout_marginEnd="15dp" />
+                        </RelativeLayout>
+
+                        <!--
+                                                       <RelativeLayout
+                                                           android:id="@+id/my_user_rl"
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="40dp">
+
+                                                           <TextView
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               android:layout_centerVertical="true"
+                                                               android:layout_marginStart="15dp"
+                                                               android:text="@string/my_user"
+                                                               android:textColor="@color/black" />
+
+                                                           <ImageView
+                                                               android:layout_width="25dp"
+                                                               android:layout_height="25dp"
+                                                               android:layout_alignParentEnd="true"
+                                                               android:layout_centerVertical="true"
+                                                               android:layout_marginEnd="5dp"
+                                                               android:background="@drawable/right_arrow" />
+                                                       </RelativeLayout>
+
+                                                       <View
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="0.5dp"
+                                                           android:layout_marginStart="15dp"
+                                                           android:background="@color/line" />
+
+                                                       <RelativeLayout
+                                                           android:id="@+id/my_sealList_rl"
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="40dp">
+
+                                                           <TextView
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               android:layout_centerVertical="true"
+                                                               android:layout_marginStart="15dp"
+                                                               android:text="@string/my_seal"
+                                                               android:textColor="@color/black" />
+
+                                                           <ImageView
+                                                               android:layout_width="25dp"
+                                                               android:layout_height="25dp"
+                                                               android:layout_alignParentEnd="true"
+                                                               android:layout_centerVertical="true"
+                                                               android:layout_marginEnd="5dp"
+                                                               android:background="@drawable/right_arrow" />
+                                                       </RelativeLayout>
+
+                                                       <View
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="0.5dp"
+                                                           android:layout_marginStart="15dp"
+                                                           android:background="@color/line" />
+
+                                                       <RelativeLayout
+                                                           android:id="@+id/my_apply_rl"
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="40dp">
+
+                                                           <TextView
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               android:layout_centerVertical="true"
+                                                               android:layout_marginStart="15dp"
+                                                               android:text="@string/my_apply"
+                                                               android:textColor="@color/black" />
+
+                                                           <ImageView
+                                                               android:layout_width="25dp"
+                                                               android:layout_height="25dp"
+                                                               android:layout_alignParentEnd="true"
+                                                               android:layout_centerVertical="true"
+                                                               android:layout_marginEnd="5dp"
+                                                               android:background="@drawable/right_arrow" />
+                                                       </RelativeLayout>
+                                                       <View
+                                                           android:layout_width="match_parent"
+                                                           android:layout_height="0.5dp"
+                                                           android:background="@color/line" />
+                                       -->
                     </LinearLayout>
 
-                </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+                        <!--
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+                                        <RelativeLayout
+                                            android:id="@+id/nearby_device_rl"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="40dp">
 
-                    <RelativeLayout
-                        android:id="@+id/my_QRCode_rl"
-                        style="@style/pressed_effect"
-                        android:visibility="visible">
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_centerVertical="true"
+                                                android:layout_marginStart="15dp"
+                                                android:text="@string/nearby_device"
+                                                android:textColor="@color/black" />
 
-                        <ImageView
-                            style="@style/my_small_img"
-                            android:background="@drawable/my_code" />
+                                            <ImageView
+                                                style="@style/right_arrow" />
+                                        </RelativeLayout>
+                        -->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="50dp"
-                            android:text="@string/my_QRCode"
-                            android:textColor="@color/dark_gray" />
+                        <RelativeLayout
+                            android:id="@+id/set_rl"
+                            style="@style/pressed_effect">
 
-                        <ImageView style="@style/right_arrow"
-                            android:layout_marginEnd="15dp"/>
-                    </RelativeLayout>
+                            <ImageView
+                                style="@style/my_small_img"
+                                android:background="@drawable/set_up" />
 
-                    <View
-                        style="@style/line_left"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginStart="22dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="50dp"
+                                android:text="@string/set"
+                                android:textColor="@color/dark_gray" />
 
-                    <RelativeLayout
-                        android:id="@+id/company_QRCode_rl"
-                        style="@style/pressed_effect"
-                        android:visibility="visible">
+                            <ImageView
+                                style="@style/right_arrow"
+                                android:layout_marginEnd="15dp" />
+                        </RelativeLayout>
 
-                        <ImageView
-                            style="@style/my_small_img"
-                            android:background="@drawable/company_code" />
+                        <View
+                            style="@style/line_left"
+                            android:layout_marginEnd="22dp"
+                            android:layout_marginStart="22dp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="50dp"
-                            android:text="企业二维码"
-                            android:textColor="@color/dark_gray" />
+                        <RelativeLayout
+                            android:id="@+id/rl_safe"
+                            style="@style/pressed_effect">
 
-                        <ImageView style="@style/right_arrow"
-                            android:layout_marginEnd="15dp"/>
-                    </RelativeLayout>
+                            <ImageView
+                                style="@style/my_small_img"
+                                android:background="@drawable/account_security" />
 
-                    <!--
-                                                   <RelativeLayout
-                                                       android:id="@+id/my_user_rl"
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="40dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="50dp"
+                                android:text="账户安全"
+                                android:textColor="@color/dark_gray" />
 
-                                                       <TextView
-                                                           android:layout_width="wrap_content"
-                                                           android:layout_height="wrap_content"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginStart="15dp"
-                                                           android:text="@string/my_user"
-                                                           android:textColor="@color/black" />
+                            <ImageView
+                                style="@style/right_arrow"
+                                android:layout_marginEnd="15dp" />
 
-                                                       <ImageView
-                                                           android:layout_width="25dp"
-                                                           android:layout_height="25dp"
-                                                           android:layout_alignParentEnd="true"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginEnd="5dp"
-                                                           android:background="@drawable/right_arrow" />
-                                                   </RelativeLayout>
+                        </RelativeLayout>
 
-                                                   <View
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="0.5dp"
-                                                       android:layout_marginStart="15dp"
-                                                       android:background="@color/line" />
+                        <View
+                            style="@style/line_left"
+                            android:layout_marginEnd="22dp"
+                            android:layout_marginStart="22dp" />
 
-                                                   <RelativeLayout
-                                                       android:id="@+id/my_sealList_rl"
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="40dp">
+                        <RelativeLayout
+                            android:id="@+id/suggestion_rl"
+                            style="@style/pressed_effect">
 
-                                                       <TextView
-                                                           android:layout_width="wrap_content"
-                                                           android:layout_height="wrap_content"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginStart="15dp"
-                                                           android:text="@string/my_seal"
-                                                           android:textColor="@color/black" />
+                            <ImageView
+                                style="@style/my_small_img"
+                                android:background="@drawable/feedback" />
 
-                                                       <ImageView
-                                                           android:layout_width="25dp"
-                                                           android:layout_height="25dp"
-                                                           android:layout_alignParentEnd="true"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginEnd="5dp"
-                                                           android:background="@drawable/right_arrow" />
-                                                   </RelativeLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="50dp"
+                                android:text="@string/Opinion"
+                                android:textColor="@color/dark_gray" />
 
-                                                   <View
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="0.5dp"
-                                                       android:layout_marginStart="15dp"
-                                                       android:background="@color/line" />
+                            <ImageView
+                                style="@style/right_arrow"
+                                android:layout_marginEnd="15dp" />
+                        </RelativeLayout>
 
-                                                   <RelativeLayout
-                                                       android:id="@+id/my_apply_rl"
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="40dp">
+                        <View
+                            style="@style/line_left"
+                            android:layout_marginEnd="22dp"
+                            android:layout_marginStart="22dp" />
 
-                                                       <TextView
-                                                           android:layout_width="wrap_content"
-                                                           android:layout_height="wrap_content"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginStart="15dp"
-                                                           android:text="@string/my_apply"
-                                                           android:textColor="@color/black" />
+                        <RelativeLayout
+                            android:id="@+id/use_Instructions_rl"
+                            style="@style/pressed_effect">
 
-                                                       <ImageView
-                                                           android:layout_width="25dp"
-                                                           android:layout_height="25dp"
-                                                           android:layout_alignParentEnd="true"
-                                                           android:layout_centerVertical="true"
-                                                           android:layout_marginEnd="5dp"
-                                                           android:background="@drawable/right_arrow" />
-                                                   </RelativeLayout>
-                                                   <View
-                                                       android:layout_width="match_parent"
-                                                       android:layout_height="0.5dp"
-                                                       android:background="@color/line" />
-                                   -->
-                </LinearLayout>
+                            <ImageView
+                                style="@style/my_small_img"
+                                android:background="@drawable/instructions" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp">
-                    <!--
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="50dp"
+                                android:text="@string/Instructions"
+                                android:textColor="@color/dark_gray" />
 
-                                    <RelativeLayout
-                                        android:id="@+id/nearby_device_rl"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="40dp">
+                            <ImageView
+                                style="@style/right_arrow"
+                                android:layout_marginEnd="15dp" />
+                        </RelativeLayout>
 
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_centerVertical="true"
-                                            android:layout_marginStart="15dp"
-                                            android:text="@string/nearby_device"
-                                            android:textColor="@color/black" />
+                    </LinearLayout>
 
-                                        <ImageView
-                                            style="@style/right_arrow" />
-                                    </RelativeLayout>
-                    -->
+                    <Button
+                        android:id="@+id/logout_bt"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="9dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/click_bt_press"
+                        android:paddingBottom="11dp"
+                        android:text="@string/exit_Login"
+                        android:textColor="@color/white" />
 
-                    <RelativeLayout
-                        android:id="@+id/set_rl"
-                        style="@style/pressed_effect">
-
-                        <ImageView
-                            style="@style/my_small_img"
-                            android:background="@drawable/set_up" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="50dp"
-                            android:text="@string/set"
-                            android:textColor="@color/dark_gray" />
-
-                        <ImageView style="@style/right_arrow"
-                            android:layout_marginEnd="15dp"/>
-                    </RelativeLayout>
-
-                    <View
-                        style="@style/line_left"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginStart="22dp" />
-
-                    <RelativeLayout
-                        android:id="@+id/rl_safe"
-                        style="@style/pressed_effect">
-
-                        <ImageView
-                            style="@style/my_small_img"
-                            android:background="@drawable/account_security" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="50dp"
-                            android:text="账户安全"
-                            android:textColor="@color/dark_gray" />
-
-                        <ImageView style="@style/right_arrow"
-                            android:layout_marginEnd="15dp"/>
-
-                    </RelativeLayout>
-
-                    <View
-                        style="@style/line_left"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginStart="22dp" />
-
-                    <RelativeLayout
-                        android:id="@+id/suggestion_rl"
-                        style="@style/pressed_effect">
-
-                        <ImageView
-                            style="@style/my_small_img"
-                            android:background="@drawable/feedback" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="50dp"
-                            android:text="@string/Opinion"
-                            android:textColor="@color/dark_gray" />
-
-                        <ImageView style="@style/right_arrow"
-                            android:layout_marginEnd="15dp"/>
-                    </RelativeLayout>
-
-                    <View
-                        style="@style/line_left"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginStart="22dp" />
-
-                    <RelativeLayout
-                        android:id="@+id/use_Instructions_rl"
-                        style="@style/pressed_effect">
-
-                        <ImageView
-                            style="@style/my_small_img"
-                            android:background="@drawable/instructions" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="50dp"
-                            android:text="@string/Instructions"
-                            android:textColor="@color/dark_gray" />
-
-                        <ImageView style="@style/right_arrow"
-                            android:layout_marginEnd="15dp"/>
-                    </RelativeLayout>
+                    <Button
+                        android:id="@+id/dfu"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:text="DFU"
+                        android:visibility="gone" />
 
                 </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-                <Button
-                    android:id="@+id/logout_bt"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/click_bt_press"
-                    android:text="@string/exit_Login"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="9dp"
-                    android:layout_gravity="center"
-                    android:paddingBottom="11dp"/>
+        <LinearLayout
+            android:id="@+id/head_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/dfu"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:text="DFU"
-                    android:visibility="gone" />
+            <include layout="@layout/head" />
+        </LinearLayout>
 
-            </LinearLayout>
-        </ScrollView>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
+    </RelativeLayout>
+    <!--</cn.fengwoo.sealsteward.view.IOSScrollView>-->
 </LinearLayout>
