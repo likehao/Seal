@@ -8,151 +8,153 @@
     android:orientation="vertical"
     tools:context=".activity.RegisterActivity">
 
-    <ImageView
-        android:id="@+id/register_back_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/back_black" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:text="@string/register"
-        android:textColor="@color/black"
-        android:textSize="40sp" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
+        android:layout_height="56dp">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/register_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="29dp"
+            android:background="@drawable/left_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:text="@string/register"
+            android:textColor="@color/black_3"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="140dp"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
-            <TextView
-                android:id="@+id/phone_tv"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_centerVertical="true"
-                android:text="@string/phone_number"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:layout_gravity="center"
+                android:background="@drawable/iphone" />
 
             <EditText
                 android:id="@+id/register_phone_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_marginStart="10dp"
                 android:background="@null"
-                android:layout_toEndOf="@+id/phone_tv"
                 android:hint="@string/please_input_phone"
-                android:layout_toStartOf="@+id/send_code_bt"
-                android:layout_marginStart="20dp"
                 android:inputType="phone"
                 android:maxLength="11"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/send_code_bt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="15dp"
-                android:text="@string/get_Code"
-                android:background="@null"
-                android:textColor="@color/style"/>
-        </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@color/line" />
+        android:background="@color/line"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginTop="5dp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_height="45dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
-            <TextView
-                android:id="@+id/code_tv"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="@string/Verification_Code"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:layout_gravity="center"
+                android:background="@drawable/icon_verification_code" />
 
             <EditText
                 android:id="@+id/verificationCode_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_marginStart="10dp"
                 android:background="@null"
                 android:hint="@string/please_input_Code"
-                android:layout_toEndOf="@+id/code_tv"
-                android:layout_marginStart="20dp"
                 android:inputType="phone"
                 android:maxLength="6"
-                android:textSize="15sp" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/send_code_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/login_circle_bg"
+            android:text="@string/get_Code"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="5dp"
         android:background="@color/line" />
-
-
-
-    <LinearLayout
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="注册即表示已阅读并同意"/>
-        <TextView
-            android:id="@+id/tv_items"
-            android:textColor="@color/dodgerblue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="《印章管家条款》"/>
-
-    </LinearLayout>
-
 
     <Button
         android:id="@+id/register_next_bt"
-        android:layout_width="280dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="80dp"
-        android:textColor="@color/white"
-        android:background="@drawable/login_circle_bg"
-        android:text="@string/Next_step"/>
+        android:background="@drawable/click_bt_press"
+        android:paddingBottom="11dp"
+        android:text="@string/Next_step"
+        android:textColor="@color/white" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="注册即表示已阅读并同意"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《印章管家条款》"
+            android:textSize="12sp"
+            android:textColor="@color/style" />
+
+    </LinearLayout>
 
 </LinearLayout>

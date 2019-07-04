@@ -57,7 +57,7 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
         Intent intent = getIntent();
         String foreget_next = intent.getStringExtra("foreget_next");
         if ("foreget".equals(foreget_next)) {
-            register_bt.setText("提交");
+//            register_bt.setText("完成");
             open = true;
         }
     }

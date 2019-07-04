@@ -29,6 +29,7 @@
     <string name="my_seal">我的印章</string>
     <string name="my_file">我的文件</string>
     <string name="my_user">我的用户</string>
+    <string name="my_power">我的权限</string>
     <string name="organizational">组织架构</string>
     <string name="organizational2">组织架构:</string>
     <string name="identity_authentication">身份认证</string>
@@ -41,7 +42,7 @@
     <string name="Opinion">意见反馈</string>
     <string name="about">关于</string>
     <string name="Scavenging_caching">清除缓存</string>
-    <string name="exit_Login">退出</string>
+    <string name="exit_Login">退出登录</string>
     <string name="edit">编辑</string>
     <string name="Head_portrait">头像</string>
     <string name="name">姓名</string>
@@ -129,14 +130,16 @@
     <string name="Stamp_affair">用印事由:</string>
     <string name="use_seal_position">用印位置:</string>
     <string name="login_address">用印详细地址:</string>
-    <string name="register">立即注册</string>
-    <string name="please_input_phone">请输入手机号码</string>
+    <string name="register">注册</string>
+    <string name="please_input_phone">请输入手机号</string>
     <string name="Verification_Code">验证码</string>
     <string name="please_input_verification_code">请输入验证码</string>
     <string name="please_input_Code">请输入验证码</string>
     <string name="get_Code">获取验证码</string>
     <string name="set_password">设置密码</string>
     <string name="please_set_password">请设置密码</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="please_confirm_password_again">请再次输入密码</string>
     <string name="confirm_password">确认密码</string>
     <string name="confirm_password_again">请再次确认密码</string>
     <string name="forget_password">忘记密码</string>

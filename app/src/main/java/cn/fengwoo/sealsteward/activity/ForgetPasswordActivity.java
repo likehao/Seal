@@ -41,7 +41,7 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
     ImageView forget_password_iv;
     @BindView(R.id.register_phone_et)
     EditText register_phone_et;   //手机号
-    @BindView(R.id.verificationCode_et)
+    @BindView(R.id.forgetPwd_verificationCode_et)
     EditText verificationCode_et;   //验证码
     @BindView(R.id.forget_pwd_getCode_bt)
     Button forget_pwd_getCode_bt;   //获取验证码按钮
@@ -147,7 +147,7 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
         }
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(HttpUrl.URL + HttpUrl.CHECKVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 1 + "&code=" + verificationCode_et.getText().toString().trim())
+                .url(HttpUrl.URL + HttpUrl.CHECKVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 2 + "&code=" + verificationCode_et.getText().toString().trim())
                 .get()
                 .build();
         okHttpClient.newCall(request).enqueue(new Callback() {

@@ -68,6 +68,13 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <!--imageview-->
+    <style name="my_imageView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <!--应用圆形图下文字-->
     <style name="application_text">
         <item name="android:layout_width">wrap_content</item>
@@ -226,4 +233,12 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="my_small_img">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginStart">22dp</item>
+    </style>
+
 </resources>

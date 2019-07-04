@@ -75,6 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout home_page, record_page, application_page, message_page, mine;
     private TextView title_tv;  //头标题
     private LinearLayout scan_ll;  //扫一扫
+
     @BindView(R.id.add_ll)
     LinearLayout add_ll;  //添加
     @BindView(R.id.msg_rl)
@@ -123,6 +124,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LeftOrRightListener leftOrRightListener;
 
     int msgFourSix = 0;
+    @BindView(R.id.title_ll)
+    LinearLayout title_ll;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -251,6 +254,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //    add_ll.setVisibility(View.VISIBLE);
                 msg_ll.setVisibility(View.VISIBLE);
                 scan_ll.setVisibility(View.VISIBLE);
+                title_ll.setVisibility(View.VISIBLE);
                 changeView(0);
                 break;
             case R.id.record_page:
@@ -265,6 +269,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.VISIBLE);
                 msg_ll.setVisibility(View.GONE);
+                title_ll.setVisibility(View.VISIBLE);
                 changeView(1);
                 break;
             case R.id.message_page:
@@ -273,6 +278,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 msg_ll.setVisibility(View.GONE);
+                title_ll.setVisibility(View.VISIBLE);
                 changeView(2);
                 break;
             case R.id.mine:
@@ -284,6 +290,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 msg_ll.setVisibility(View.GONE);
+                title_ll.setVisibility(View.GONE);
                 changeView(3);
                 break;
             case R.id.application_page:
@@ -295,6 +302,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 msg_ll.setVisibility(View.GONE);
+                title_ll.setVisibility(View.VISIBLE);
                 changeView(4);
                 break;
             case R.id.record_more_iv:
