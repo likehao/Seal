@@ -701,7 +701,29 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                 // 显示ble设备名字
                 String bleName = data.getStringExtra("bleName");
-//                String sealPrint = data.getStringExtra("sealPrint");
+                String sealPrint = data.getStringExtra("sealPrint");
+                Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (bitmap == null) {
+                            HttpDownloader.downloadImage(getActivity(), 3, sealPrint, new DownloadImageCallback() {
+                                @Override
+                                public void onResult(final String fileName) {
+                                    if (fileName != null) {
+                                        String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                        Picasso.with(getContext()).load(sealPrintPath).into(sealImg_iv);
+                                        sealImg_iv.setBackgroundResource(R.color.white);
+                                    }
+                                }
+                            });
+                        } else {
+                            String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
+                            Picasso.with(getActivity()).load(sealPrintPath).into(sealImg_iv);
+                            sealImg_iv.setBackgroundResource(R.color.white);
+                        }
+                    }
+                });
                 tv_ble_name.setText(bleName);
 
 //                // 开启定位
@@ -1407,6 +1429,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //        tv_times_left.setText("0");
         electric_ll.setVisibility(View.GONE);
         tv_ble_name.setText("暂未连接印章");
+        //断开蓝牙时候清空图片再放入初始化图片
+        sealImg_iv.setImageDrawable(null);
+        sealImg_iv.setBackgroundResource(R.drawable.seal_img);
 //        tv_stamp_reason.setText("暂无用印申请事由");
 //        tv_expired_time.setText("暂无");
         tv_address.setText("暂无定位信息");

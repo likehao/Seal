@@ -531,7 +531,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 Intent intent = new Intent();
                                 intent.putExtra("bleName", getNameFromList(macAddress));
-//                                intent.putExtra("sealPrint", "sealPrint");
+                                intent.putExtra("sealPrint", responseInfo.getData().get(position).getSealPrint());
                                 setResult(Constants.TO_NEARBY_DEVICE, intent);
                                 finish();
                             }
