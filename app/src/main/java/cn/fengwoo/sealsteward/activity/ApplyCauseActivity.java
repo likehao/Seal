@@ -236,8 +236,10 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         if (isFromApplyUseSealActivity) {
             return;
         }
-        CommonDialog commonDialog = new CommonDialog(this, "您暂无可用申请单", "", "去申请");
-        commonDialog.showDialog();
+        CommonDialog commonDialog = new CommonDialog(ApplyCauseActivity.this, "您暂无可用申请单", "", "去申请");
+        if (!isFinishing()) {
+            commonDialog.showDialog();
+        }
         Utils.log("commonDialog.showDialog()");
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override

@@ -703,7 +703,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 String bleName = data.getStringExtra("bleName");
                 String sealPrint = data.getStringExtra("sealPrint");
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
-                getActivity().runOnUiThread(new Runnable() {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (bitmap == null) {

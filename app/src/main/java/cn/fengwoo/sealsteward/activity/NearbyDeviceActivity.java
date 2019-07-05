@@ -341,6 +341,22 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         return name;
     }
 
+    /**
+     * 遍历MAC拿到印模传回带到首页工作台
+     * @param mac
+     * @return
+     */
+    private String getSealPrint(String mac){
+        String sealPrint = "";
+        for (SealData sealData : responseInfo.getData()){
+            if (sealData.getMac().equals(mac)){
+                sealPrint = sealData.getSealPrint();
+                break;
+            }
+        }
+        return sealPrint;
+    }
+
     private String getSealIdFromList(String thisMac) {
         String id = "";
         for (SealData sealData : responseInfo.getData()) {
@@ -531,7 +547,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 Intent intent = new Intent();
                                 intent.putExtra("bleName", getNameFromList(macAddress));
-                                intent.putExtra("sealPrint", responseInfo.getData().get(position).getSealPrint());
+                                intent.putExtra("sealPrint", getSealPrint(macAddress));
                                 setResult(Constants.TO_NEARBY_DEVICE, intent);
                                 finish();
                             }
