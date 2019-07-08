@@ -10,172 +10,225 @@
 
     <include layout="@layout/head" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:fillViewport="true">
 
-        <RelativeLayout
-            android:id="@+id/select_person_rl"
-            style="@style/pressed_effect">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:text="@string/person"
-                android:textColor="@color/black" />
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/select_person_tv"
-                android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/select_person_rl"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="盖章人员"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/select_person_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="50dp"
+                        android:ellipsize="end"
+                        android:singleLine="true" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    android:id="@+id/select_seal_rl"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="印章名称"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/select_seal_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="50dp"
+                        android:ellipsize="end"
+                        android:singleLine="true" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    android:id="@+id/select_sealType_rl"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/seal_type"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/select_sealType_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    android:id="@+id/select_nearTime_rl"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/nearest"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/select_nearTime_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    android:id="@+id/select_beginTime_rl"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/begin_time"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/select_beginTime_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout
+                    android:id="@+id/select_endTime_rl"
+                    style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/over_time"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/select_endTime_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="30dp" />
+
+                    <ImageView style="@style/right_arrow" />
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="15dp"
+                        android:gravity="center_vertical"
+                        android:text="盖章事由"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/select_cause_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:background="@drawable/border"
+                        android:gravity="top"
+                        android:hint="请填写事由"
+                        android:maxLength="200"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:paddingTop="5dp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <View style="@style/line"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/select_bt"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp" />
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/login_circle_bg"
+                android:text="@string/select"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
 
-            <ImageView style="@style/right_arrow" />
-        </RelativeLayout>
-
-        <View style="@style/line_left" />
-
-        <RelativeLayout
-            android:id="@+id/select_seal_rl"
-            style="@style/pressed_effect">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:text="@string/seal"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/select_seal_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp" />
-
-            <ImageView style="@style/right_arrow" />
-        </RelativeLayout>
-
-        <View style="@style/line_left" />
-
-        <RelativeLayout
-            android:id="@+id/select_sealType_rl"
-            style="@style/pressed_effect">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:text="@string/seal_type"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/select_sealType_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp" />
-
-            <ImageView style="@style/right_arrow" />
-        </RelativeLayout>
-
-        <View style="@style/line_left" />
-
-        <RelativeLayout
-            android:id="@+id/select_nearTime_rl"
-            style="@style/pressed_effect">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:text="@string/nearest"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/select_nearTime_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp" />
-
-            <ImageView style="@style/right_arrow" />
-        </RelativeLayout>
-
-        <View style="@style/line_left" />
-
-        <RelativeLayout
-            android:id="@+id/select_beginTime_rl"
-            style="@style/pressed_effect">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:text="@string/begin_time"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/select_beginTime_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp" />
-
-            <ImageView style="@style/right_arrow" />
-        </RelativeLayout>
-
-        <View style="@style/line_left" />
-
-        <RelativeLayout
-            android:id="@+id/select_endTime_rl"
-            style="@style/pressed_effect">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:text="@string/over_time"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/select_endTime_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp" />
-
-            <ImageView style="@style/right_arrow" />
-        </RelativeLayout>
-
-        <View style="@style/line" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/select_bt"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/login_circle_bg"
-        android:text="@string/select"
-        android:textColor="@color/white" />
 </LinearLayout>

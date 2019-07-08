@@ -71,7 +71,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     SmartRefreshLayout record_refreshLayout;
     @BindView(R.id.record_lv)
     ListView record_lv;
-    String begin, end, personId, sealId;
+    String begin, end, personId, sealId,cause;
     int type;
     @BindView(R.id.select_record_smt)  //单独用来放置查询出来的记录
             SmartRefreshLayout select_record_smt;
@@ -448,7 +448,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        param.Param(personId, endTime, sealId, 1, startTime);     // 1为APP盖章，2为密码盖章
+        param.Param(personId, endTime, sealId, 1, startTime,"1",cause);     // 1为APP盖章，2为密码盖章
         stampRecordData.setParam(param);
 
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.STAMPRECORDAPPLYLIST, 2, null, stampRecordData, new Callback() {
@@ -564,6 +564,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             begin = data.getStringExtra("begin");
             personId = data.getStringExtra("personId");
             sealId = data.getStringExtra("sealId");
+            cause = data.getStringExtra("cause");
             String sealType = data.getStringExtra("type");
            /* if (sealType != null && sealType.equals("密码盖章")){
                 type = 1;

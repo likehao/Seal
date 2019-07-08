@@ -32,6 +32,7 @@
     <color name="Transparent">#00000000</color>
     <color name="short_video_red">#ff4747</color>
     <color name="Gray">#eeeeee</color>
+    <color name="upload_photo">#FFBA00</color>
 
 
     <color name="lvDividerLine">#d9e3e8</color>

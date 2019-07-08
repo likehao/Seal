@@ -15,8 +15,13 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.white.easysp.EasySP;
+
+import org.greenrobot.eventbus.EventBus;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.LoginActivity;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.utils.Constants;
 
 /**
@@ -52,6 +57,7 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
             builder.show();*/
 
             int errCord = resp.errCode;
+            EventBus.getDefault().post(new MessageEvent("errCord",errCord+""));
             if (errCord == 0) {
                 Toast.makeText(this,"支付成功",Toast.LENGTH_SHORT).show();
             } else {

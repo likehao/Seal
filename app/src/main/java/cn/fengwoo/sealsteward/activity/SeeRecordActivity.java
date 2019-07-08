@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -59,6 +60,7 @@ import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.ListViewForScrollView;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MessagePopuwindow;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -95,7 +97,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.record_detail_department_tv)
     TextView department_tv;
     @BindView(R.id.photoNum_ll)
-    LinearLayout photoNum_ll;
+    Button photoNum_ll;
     @BindView(R.id.photo_tip)
     TextView photo_tip;
     @BindView(R.id.detail_cause_tv)
@@ -193,7 +195,9 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         detail_photoNum_tv.setText(photoNum+"");
         title_tv.setText(sealName);
         department_tv.setText(orgStructureName);
-        detail_cause_tv.setText(cause);
+        if (cause != null) {
+            detail_cause_tv.setText(cause);
+        }
         list = new ArrayList<>();
         setSmartDetail();
         seeRecordAdapter = new SeeRecordAdapter(SeeRecordActivity.this,list);

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.JsonObject;
@@ -22,6 +23,11 @@ import com.google.gson.JsonParser;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.white.easysp.EasySP;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +36,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -53,6 +60,7 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
     private String servicePackageId, sealId;
     private Integer type;
     private static final int SDK_PAY_FLAG = 1;
+    private static final int PAYFINISH = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +83,7 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
         type = intent.getIntExtra("type", 0);  //type: 1为微信,2为支付宝
         sealId = intent.getStringExtra("sealId");
         money_tv.setText(String.valueOf(money));  //显示金额
+
     }
 
     @Override
@@ -135,7 +144,8 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
                         req.packageValue = "Sign=WXPay";//固定值Sign=WXPay
                         req.sign = sign;//签名
                         api.sendReq(req);//将订单信息对象发送给微信服务器，即发送支付请求
-                        finish();
+//                        setResult(PAYFINISH);
+//                        finish();
                     } else {
                         String orderStr = data.get("orderString").getAsString();
                         if (orderStr != null) {
@@ -174,6 +184,7 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SDK_PAY_FLAG:
+                    setResult(PAYFINISH);
                     finish();
                     break;
                 default:
@@ -239,4 +250,39 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
     }
 
 
+    /**
+     * 判断支付是否成功，拿到结果码   (WXPayEntryActivity设置EventBus)
+     */
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        String result = messageEvent.msg;
+        if (s.equals("errCord")){
+            if (result.equals("0")){
+                setResult(PAYFINISH);
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);   //注册Eventbus
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);  //解除注册
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

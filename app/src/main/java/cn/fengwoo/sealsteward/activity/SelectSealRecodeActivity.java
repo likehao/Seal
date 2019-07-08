@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -68,6 +71,8 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
     RelativeLayout select_sealType_rl;
     @BindView(R.id.select_sealType_tv)
     TextView select_sealType_tv;
+    @BindView(R.id.select_cause_et)
+    EditText select_cause_et;
     Intent intent;
     private String person, personId, sealId;
     private final static int SELECTPERSONREQUESTCODE = 123;
@@ -78,6 +83,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_seal_recode);
         ButterKnife.bind(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         initView();
     }
@@ -93,6 +99,8 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
         selectEndTimeRl.setOnClickListener(this);
         selectBt.setOnClickListener(this);
         select_sealType_rl.setOnClickListener(this);
+//        selectPersonTv.setText(CommonUtil.getUserData(this).getRealName());  //查询人员默认为自己
+
     }
 
     @Override
@@ -103,6 +111,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.select_person_rl:
                 if (!Utils.hasThePermission(this, Constants.permission19)) {
+                    showToast("抱歉，您暂无查看其他成员使用记录的权限");
                     return;
                 }
                 intent = new Intent(this, SelectSinglePeopleTypeOneActivity.class);
@@ -128,6 +137,8 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
             case R.id.select_bt:
                 if (check()) {
                     selectRecord();
+                }else {
+                    showToast("请选择查询条件");
                 }
                 break;
             case R.id.select_sealType_rl:
@@ -145,7 +156,8 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
     private boolean check() {
         if (TextUtils.isEmpty(selectPersonTv.getText().toString()) && TextUtils.isEmpty(selectSealTv.getText().toString())
                 && TextUtils.isEmpty(select_sealType_tv.getText().toString()) && TextUtils.isEmpty(selectNearTimeTv.getText().toString())
-                && TextUtils.isEmpty(selectBeginTimeTv.getText().toString()) && TextUtils.isEmpty(selectEndTimeTv.getText().toString())) {
+                && TextUtils.isEmpty(selectBeginTimeTv.getText().toString()) && TextUtils.isEmpty(selectEndTimeTv.getText().toString())
+                && TextUtils.isEmpty(select_cause_et.getText().toString().trim())) {
             return false;
         }
         return true;
@@ -156,6 +168,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
      */
     private void selectRecord() {
         String type = select_sealType_tv.getText().toString();
+        String cause = select_cause_et.getText().toString();
         if (type.equals("密码盖章")) {
             intent = new Intent(this, SelectPwdRecordActivity.class);
             intent.putExtra("end", end);
@@ -170,6 +183,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
             intent.putExtra("begin", begin);
             intent.putExtra("personId", personId);
             intent.putExtra("sealId", sealId);
+            intent.putExtra("cause", cause);
             //    intent.putExtra("type", select_sealType_tv.getText().toString());
             setResult(100, intent);
             finish();

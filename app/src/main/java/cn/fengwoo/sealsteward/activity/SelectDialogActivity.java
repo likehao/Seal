@@ -25,7 +25,6 @@ public class SelectDialogActivity extends Activity {
 
     private boolean isManual = true;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

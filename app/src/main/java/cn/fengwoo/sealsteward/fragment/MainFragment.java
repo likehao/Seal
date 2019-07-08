@@ -701,29 +701,34 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                 // 显示ble设备名字
                 String bleName = data.getStringExtra("bleName");
+                //显示印模
                 String sealPrint = data.getStringExtra("sealPrint");
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
-                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bitmap == null) {
-                            HttpDownloader.downloadImage(getActivity(), 3, sealPrint, new DownloadImageCallback() {
-                                @Override
-                                public void onResult(final String fileName) {
-                                    if (fileName != null) {
-                                        String sealPrintPath = "file://" + HttpDownloader.path + fileName;
-                                        Picasso.with(getContext()).load(sealPrintPath).into(sealImg_iv);
-                                        sealImg_iv.setBackgroundResource(R.color.white);
-                                    }
+
+                if (bitmap == null) {
+                    HttpDownloader.downloadImage(getActivity(), 3, sealPrint, new DownloadImageCallback() {
+                        @Override
+                        public void onResult(final String fileName) {
+                            if (fileName != null) {
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                            Picasso.with(getContext()).load(sealPrintPath).into(sealImg_iv);
+                                            sealImg_iv.setBackgroundResource(R.color.white);
+                                        }
+                                    });
                                 }
-                            });
-                        } else {
-                            String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
-                            Picasso.with(getActivity()).load(sealPrintPath).into(sealImg_iv);
-                            sealImg_iv.setBackgroundResource(R.color.white);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    String sealPrintPath = "file://" + HttpDownloader.path + sealPrint;
+                    Picasso.with(getActivity()).load(sealPrintPath).into(sealImg_iv);
+                    sealImg_iv.setBackgroundResource(R.color.white);
+                }
+
                 tv_ble_name.setText(bleName);
 
 //                // 开启定位

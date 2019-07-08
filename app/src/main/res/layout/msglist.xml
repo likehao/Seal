@@ -4,44 +4,51 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/msg_list_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1111"
-        android:background="@color/dark_gray"
-        android:textColor="@color/white"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="center_horizontal"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:paddingStart="5dp"
+        android:background="@drawable/corners_bg"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/msg_title_tv"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/service_cost_reset"
-            android:textColor="@color/black"
-            android:layout_marginTop="5dp"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/msg_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/service_cost_reset"
+                android:layout_weight="1"
+                android:textSize="15sp"
+                android:textColor="@color/black_3"/>
+
+            <TextView
+                android:id="@+id/msg_list_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019-06-11 13:10:37"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/dark_gray"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/msg_list_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textColor="@color/black"
+            android:textColor="@color/black_6"
             android:textSize="12sp"
-            android:paddingEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="1111111"/>
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="15dp"
+            android:text="您已成功充值服务费0.01元，服务周期为12个月"/>
     </LinearLayout>
 
 </LinearLayout>

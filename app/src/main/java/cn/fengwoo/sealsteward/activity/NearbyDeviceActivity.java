@@ -48,6 +48,7 @@ import cn.fengwoo.sealsteward.database.SealItemBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealData;
 import cn.fengwoo.sealsteward.entity.SealInfoData;
+import cn.fengwoo.sealsteward.fragment.MineFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -336,6 +337,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         for (SealData sealData : responseInfo.getData()) {
             if (sealData.getMac().equals(thisMac)) {
                 name = sealData.getName();
+                break;
             }
         }
         return name;
@@ -362,6 +364,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         for (SealData sealData : responseInfo.getData()) {
             if (sealData.getMac().equals(thisMac)) {
                 id = sealData.getId();
+                break;
             }
         }
         return id;
@@ -373,6 +376,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         for (SealData sealData : responseInfo.getData()) {
             if (sealData.getMac().equals(thisMac)) {
                 mSealData = sealData;
+                break;
             }
         }
         return mSealData;
@@ -384,6 +388,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         for (SealData sealData : responseInfo.getData()) {
             if (sealData.getMac().equals(thisMac)) {
                 name = sealData.getName();
+                break;
             }
         }
         return name;
@@ -395,6 +400,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             if (sealData.getMac().equals(thisMac)) {
                 if (sealData != null) {
                     sealEnclosureBean = sealData.getSealEnclosure();
+                    break;
                 }
             }
         }
@@ -407,6 +413,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             if (sealData.getMac().equals(thisMac)) {
                 if (sealData != null) {
                     enableEnclosure = sealData.isEnableEnclosure();
+                    break;
                 }
             }
         }

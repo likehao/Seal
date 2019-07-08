@@ -84,12 +84,25 @@ public class StampRecordData implements Serializable {
         private String startTime;
         private Integer stampType;
 
+        private String searchType;
+        private String searchContent;
+
         public void Param(String applyUser, String endTime, String sealId, Integer stampType,String startTime) {
             this.applyUser = applyUser;
             this.endTime = endTime;
             this.sealId = sealId;
             this.stampType = stampType;
             this.startTime = startTime;
+        }
+
+        public void Param(String applyUser, String endTime, String sealId, Integer stampType,String startTime,String searchType,String searchContent) {
+            this.applyUser = applyUser;
+            this.endTime = endTime;
+            this.sealId = sealId;
+            this.stampType = stampType;
+            this.startTime = startTime;
+            this.searchType = searchType;
+            this.searchContent = searchContent;
         }
 
         public String getApplyUser() {
@@ -131,6 +144,23 @@ public class StampRecordData implements Serializable {
         public void setStampType(Integer stampType) {
             this.stampType = stampType;
         }
+
+        public String getSearchContent() {
+            return searchContent;
+        }
+
+        public void setSearchContent(String searchContent) {
+            this.searchContent = searchContent;
+        }
+
+        public String getSearchType() {
+            return searchType;
+        }
+
+        public void setSearchType(String searchType) {
+            this.searchType = searchType;
+        }
+
 
         @Override
         public String toString() {

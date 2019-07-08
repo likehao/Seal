@@ -520,12 +520,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 //                    sealPringString = responseInfo.getData().getFileName();
                     //添加印章
 //                    addSeal();
-                    //更新缓存
-                    LoginData loginData = CommonUtil.getUserData(SealInfoActivity.this);
-                    if (loginData != null) {
-                        loginData.setHeadPortrait(sealPring);
-                        CommonUtil.setUserData(SealInfoActivity.this, loginData);
-                    }
 
                 } else {
                     Looper.prepare();

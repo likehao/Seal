@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -52,6 +53,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     private String m_id, m_name;
     LoadingView loadingView;
     Intent intent;
+    private static final int PAYFINISH = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +177,8 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
             if (m_id != null) {
                 intent = new Intent(this, PayActivity.class);
                 intent.putExtra("sealId", m_id);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent,PAYFINISH);
             } else {
                 showToast("请选择需要充值的印章");
             }
@@ -185,6 +188,16 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
             intent.putExtra("name", m_name);
             setResult(123, intent);
             finish();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1){
+            if (resultCode == 1){
+                finish();
+            }
         }
     }
 }

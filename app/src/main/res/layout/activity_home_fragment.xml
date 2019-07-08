@@ -383,9 +383,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal">
 
-                                <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:paddingTop="10dp"
                                     android:src="@drawable/home_residualtimes" />
 
@@ -421,9 +421,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal">
 
-                                <de.hdodenhof.circleimageview.CircleImageView
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:paddingTop="10dp"
                                     android:src="@drawable/home_timesofcover" />
 

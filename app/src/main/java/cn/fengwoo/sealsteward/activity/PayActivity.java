@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,6 +66,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
     private Intent intent;
     Double amountOfMoney;
     String packageId;
+    private static final int PAYFINISH = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +179,6 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
      * @param type
      */
     private void selectWay(Integer type){
-        intent = new Intent();
         intent = getIntent();
         String sealId = intent.getStringExtra("sealId");   //获取选择的印章ID
         intent.setClass(this,SurePayActivity.class);
@@ -185,6 +186,18 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
         intent.putExtra("servicePackageId",packageId);
         intent.putExtra("type",type);
         intent.putExtra("sealId",sealId);
-        startActivity(intent);
+//        startActivity(intent);
+        startActivityForResult(intent,PAYFINISH);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PAYFINISH){
+            if (resultCode == 10) {
+                setResult(PAYFINISH);
+                finish();
+            }
+        }
     }
 }
