@@ -87,6 +87,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
         wechatPay_rl.setOnClickListener(this);
         alipay_rl.setOnClickListener(this);
         pay_bt.setOnClickListener(this);
+        changeView(0);
     }
 
     /**
@@ -158,13 +159,15 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
                 finish();
                 break;
             case R.id.wechatPay_rl:
-                wechat_select_iv.setVisibility(View.VISIBLE);
-                alipay_select_iv.setVisibility(View.GONE);
+                changeView(0);
+//                wechat_select_iv.setVisibility(View.VISIBLE);
+//                alipay_select_iv.setVisibility(View.GONE);
                 payWay = 1;
                 break;
             case R.id.alipay_rl:
-                alipay_select_iv.setVisibility(View.VISIBLE);
-                wechat_select_iv.setVisibility(View.GONE);
+                changeView(1);
+//                alipay_select_iv.setVisibility(View.VISIBLE);
+//                wechat_select_iv.setVisibility(View.GONE);
                 payWay = 2;
                 break;
             case R.id.pay_bt:
@@ -199,5 +202,14 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
                 finish();
             }
         }
+    }
+
+    /**
+     * 支付方式选中状态
+     * @param i
+     */
+    private void changeView(int i){
+        wechat_select_iv.setImageResource(i == 0 ? R.drawable.pay_way : R.drawable.unchecked);
+        alipay_select_iv.setImageResource(i == 1 ? R.drawable.pay_way : R.drawable.unchecked);
     }
 }

@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ public class RechargePackagesAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
@@ -50,7 +52,7 @@ public class RechargePackagesAdapter extends BaseAdapter {
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.payMoney.setText(String.valueOf(list.get(position).getContent()));
+        viewHolder.payMoney.setText("￥"+String.valueOf(list.get(position).getAmountOfMoney()));
 
         //选中状态
         if (mSelect == position){

@@ -8,15 +8,16 @@
         android:id="@+id/select_packages_rl"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/white">
+        android:background="@drawable/border_blue"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
 
         <TextView
-            android:id="@+id/pay_money_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pay_money"
+            android:text="一年服务费"
             android:layout_centerVertical="true"
-            android:textColor="@color/black"
+            android:textColor="@color/black_3"
             android:textSize="15sp"
             android:layout_marginStart="20dp"/>
 
@@ -29,8 +30,17 @@
             android:layout_marginEnd="10dp"
             android:visibility="gone"
             android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/pay_money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:textSize="15sp"
+            android:textColor="@color/black_6"
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
-    <View
-        style="@style/line"/>
 </LinearLayout>
