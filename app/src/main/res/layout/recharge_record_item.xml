@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@color/white"
+        android:background="@drawable/corners_bg"
         android:orientation="vertical">
-
-        <View style="@style/line" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -25,7 +22,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
                 android:text="2019-02-21 14:00:00"
-                android:textColor="@color/black" />
+                android:textSize="15sp"
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/recharge_result_tv"
@@ -35,11 +33,14 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="15dp"
                 android:text="充值成功"
-                android:textColor="@color/black" />
+                android:textSize="15sp"
+                android:textColor="@color/black_3" />
 
         </RelativeLayout>
 
-        <View style="@style/line" />
+        <View style="@style/line"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,14 +52,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/seal_name"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/recharge_seal_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="研发章"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_6" />
 
         </LinearLayout>
 
@@ -72,14 +75,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/department"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_3"/>
 
             <TextView
                 android:id="@+id/recharge_department_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="研发部"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_6" />
 
         </LinearLayout>
 
@@ -93,14 +98,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/set_meal"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/recharge_set_meal_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="包月"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_6"  />
 
         </LinearLayout>
 
@@ -114,16 +121,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/recharge_way"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/recharge_way_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="支付宝"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_6" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -134,23 +144,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/service_fee_time"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/recharge_end_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2020-01-01 00:00:00"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_6"/>
 
         </LinearLayout>
-
-        <View style="@style/line" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="@drawable/corners_left_right_bottom">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -158,7 +169,8 @@
                 android:layout_marginStart="15dp"
                 android:layout_toLeftOf="@+id/recharge_money_tv"
                 android:text="@string/pay_money"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/recharge_money_tv"
@@ -167,11 +179,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="15dp"
                 android:text="240.00"
-                android:textColor="@color/black" />
+                android:textSize="13sp"
+                android:textColor="@color/black_3"/>
 
         </RelativeLayout>
-
-        <View style="@style/line" />
 
     </LinearLayout>
 </LinearLayout>

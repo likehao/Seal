@@ -63,7 +63,7 @@ public class ApproveProgressAdapter extends BaseAdapter {
             statusStr = "正在审批...";
         }else if (status == 2){
             statusStr = "同意";
-        }else {
+        }else if (status == 3){
             statusStr = "驳回";
         }
         viewHolder.result.setText(statusStr);

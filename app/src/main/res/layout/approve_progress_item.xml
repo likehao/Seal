@@ -1,57 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+
+    android:background="@drawable/border_blue">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="审批人:"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/progress_person_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_marginStart="10dp"
-            android:textColor="@color/black" />
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp">
 
-        <TextView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="审批人-"
+                android:textColor="@color/black_3" />
+
+            <TextView
+                android:id="@+id/progress_person_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black_3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="部门-"
+                android:textColor="@color/black_3" />
+
+            <TextView
+                android:id="@+id/progress_org_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black_3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="审批结果-"
+                android:textColor="@color/black_3" />
+
+            <TextView
+                android:id="@+id/progress_result_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black_3" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="部门:"
-            android:textColor="@color/black" />
+            android:layout_gravity="end"
+            android:layout_marginBottom="17dp"
+            android:layout_marginEnd="16dp">
 
-        <TextView
-            android:id="@+id/progress_org_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用时:"
+                android:textColor="@color/black_6" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="结果:"
-            android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="1小时10分钟"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black_6" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/progress_result_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black" />
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:background="@drawable/login_circle_bg"
+            android:text="催促审批"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+            android:layout_marginBottom="17dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

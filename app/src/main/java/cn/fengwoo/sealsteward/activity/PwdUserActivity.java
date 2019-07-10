@@ -274,11 +274,11 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     public void onClick(View v) {
                         if (!isEyeOpen) { // 睁开眼时
                             viewHolder.setText(R.id.tv_pwd, pwdUserListItem.getPassword());
-                            viewHolder.setBackgroundRes(R.id.iv_eye, R.drawable.eyeopen);
+                            viewHolder.setBackgroundRes(R.id.iv_eye, R.drawable.open_eye);
                             isEyeOpen = true;
                         } else {
                             viewHolder.setText(R.id.tv_pwd, "******");
-                            viewHolder.setBackgroundRes(R.id.iv_eye, R.drawable.eyeclose);
+                            viewHolder.setBackgroundRes(R.id.iv_eye, R.drawable.close_eye);
                             isEyeOpen = false;
                         }
                     }
