@@ -241,4 +241,8 @@
         <item name="android:layout_marginStart">22dp</item>
     </style>
 
+    <!--tab字体大小-->
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

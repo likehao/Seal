@@ -59,6 +59,8 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
     ImageView alipay_select_iv;
     @BindView(R.id.pay_bt)
     Button pay_bt;
+    @BindView(R.id.sureMoney_tv)
+    TextView sureMoney_tv;
     private LoadingView loadingView;
     private RechargePackagesAdapter rechargeAdapter;
     private ArrayList<PayRechargePackages> arrayList;
@@ -150,6 +152,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
         rechargeAdapter.changeSelected(position);
         amountOfMoney = arrayList.get(position).getAmountOfMoney();
         packageId = arrayList.get(position).getId();
+        sureMoney_tv.setText(amountOfMoney+"");
     }
 
     @Override
@@ -212,4 +215,5 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
         wechat_select_iv.setImageResource(i == 0 ? R.drawable.pay_way : R.drawable.unchecked);
         alipay_select_iv.setImageResource(i == 1 ? R.drawable.pay_way : R.drawable.unchecked);
     }
+
 }

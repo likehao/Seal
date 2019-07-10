@@ -38,7 +38,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 组织管理
  */
 public class EditOrganizationActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)

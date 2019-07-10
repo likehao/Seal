@@ -6,13 +6,13 @@
 
     <com.mcxtzhang.swipemenulib.SwipeMenuLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:background="@drawable/corners_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +29,11 @@
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                android:background="@color/LightGrey" />
+
             <TextView
                 android:id="@+id/approvalFlow_name_tv"
                 android:layout_width="0dp"
@@ -39,6 +44,7 @@
                 android:singleLine="true"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/black"
+                android:layout_marginStart="20dp"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -58,6 +64,11 @@
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                android:background="@color/LightGrey" />
+
             <TextView
                 android:id="@+id/approvalFlow_department_tv"
                 android:layout_width="0dp"
@@ -68,6 +79,7 @@
                 android:singleLine="true"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/black"
+                android:layout_marginStart="20dp"
                 android:textSize="12sp" />
         </LinearLayout>
 

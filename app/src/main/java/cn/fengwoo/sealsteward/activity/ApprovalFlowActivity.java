@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -68,6 +69,14 @@ public class ApprovalFlowActivity extends BaseActivity implements View.OnClickLi
         fragmentList.add(new ApprovalFlowTwoFragment());
         approval_flow_vp.setAdapter(new TabFragmentAdapter(fragmentManager,ApprovalFlowActivity.this,fragmentList,titleList));
         approval_flow_tab.setupWithViewPager(approval_flow_vp);//此方法就是让tablayout和ViewPager联动
+
+        /**
+         * TabLayout中间的分界线
+         */
+        LinearLayout linearLayout= (LinearLayout) approval_flow_tab.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,R.drawable.line));
+        linearLayout.setDividerPadding(55);  //设置分割线高度
     }
 
     @Override

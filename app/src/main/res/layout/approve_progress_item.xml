@@ -6,48 +6,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:gravity="center"
-        android:background="@color/white"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="审批人:"/>
+            android:text="审批人:"
+            android:textColor="@color/black" />
+
         <TextView
             android:id="@+id/progress_person_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            android:textColor="@color/black"
-            android:layout_marginEnd="10dp"/>
+            android:textColor="@color/black" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="部门:"/>
+            android:text="部门:"
+            android:textColor="@color/black" />
+
         <TextView
             android:id="@+id/progress_org_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            android:textColor="@color/black"
-            android:layout_marginEnd="10dp"/>
+            android:textColor="@color/black" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="结果:"/>
+            android:text="结果:"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/progress_result_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            android:textColor="@color/black"
-            android:layout_marginEnd="10dp"/>
+            android:textColor="@color/black" />
     </LinearLayout>
 </LinearLayout>

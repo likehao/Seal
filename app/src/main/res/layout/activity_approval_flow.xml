@@ -14,15 +14,17 @@
         android:id="@+id/approval_flow_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:background="@color/white"
         app:tabTextColor="@color/black"
         app:tabSelectedTextColor="@color/style"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabIndicatorColor="@color/style"/>
 
     <cn.fengwoo.sealsteward.utils.NoSrcollViewPage
         android:id="@+id/approval_flow_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"/>
 </LinearLayout>

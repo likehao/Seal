@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +53,8 @@ import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.qqtheme.framework.picker.SinglePicker;
+import cn.qqtheme.framework.widget.WheelView;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -83,13 +88,12 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     private Intent intent;
     @BindView(R.id.edit_tv)
     TextView edit_tv;
-    @BindView(R.id.spinner_job)
-    BetterSpinner spinner_job;
+//    @BindView(R.id.spinner_job)
+//    Spinner spinner_job;
     @BindView(R.id.et_job)
     EditText et_job;
     @BindView(R.id.add_user_next_Bt)
     Button add_user_next_Bt;
-
     private String departmentId;
     private String departmentName;
     private LoadingView loadingView;
@@ -98,6 +102,8 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             "经理", "普通员工"
     };
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    @BindView(R.id.down_ll)
+    LinearLayout down_ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,17 +125,19 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         mail_list_rl.setOnClickListener(this);
         select_organizational_rl.setOnClickListener(this);
         add_user_next_Bt.setOnClickListener(this);
+        down_ll.setOnClickListener(this);
         loadingView = new LoadingView(this);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+/*        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         spinner_job.setAdapter(adapter);
         spinner_job.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 et_job.setText(COUNTRIES[position]);
-                spinner_job.setText("");
+//                spinner_job.setText("");
             }
-        });
+        });*/
+
     }
 
     @Override
@@ -162,9 +170,38 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
 //                intent = new Intent(this, SetPowerActivity.class);
 //                startActivity(intent);
                 break;
+            case R.id.down_ll:
+                selectJob();
+                break;
+
         }
     }
 
+    /**
+     * 选择职位
+     */
+    private void selectJob(){
+        List<String> list = new ArrayList<>();
+        list.add("经理");
+        list.add("普通员工");
+        SinglePicker<String> picker;picker = new SinglePicker<String>(this, list);
+        picker.setCanceledOnTouchOutside(true);
+        picker.setDividerRatio(WheelView.DividerConfig.FILL);
+        picker.setTextColor(0xFF000000);
+//        picker.setSubmitTextColor(0xFFFB2C3C);
+//        picker.setCancelTextColor(0xFFFB2C3C);
+        picker.setTextSize(15);
+        picker.setLineSpaceMultiplier(2);   //设置每项的高度，范围为2-4
+        picker.setContentPadding(0, 10);
+        picker.setCycleDisable(true);
+        picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
+            @Override
+            public void onItemPicked(int index, String item) {
+                et_job.setText(COUNTRIES[index]);
+            }
+        });
+        picker.show();
+    }
     private void addUser() {
 
         if(TextUtils.isEmpty(et_job.getText().toString())){

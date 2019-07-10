@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -216,6 +217,7 @@ public class NodeTreeAdapter extends BaseAdapter {
             }
         });
 
+//        holder.checkBox.setButtonDrawable(R.drawable.unchecked);
 
         // 如果node.get_type()为3或者4，显示出iv_mark
         if (node.get_type() == 3 || node.get_type() == 4) {

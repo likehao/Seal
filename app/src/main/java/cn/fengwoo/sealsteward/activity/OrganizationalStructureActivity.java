@@ -110,8 +110,6 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
      * 判断是否是服务费充值还是组织架构进入
      */
 
-
-
     private void changeView(int index) {
         changeBg(index);
         //开启事物
@@ -162,9 +160,9 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeBg(int index){
-        textViews[0].setTextColor(index == 0 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
+        textViews[0].setTextColor(index == 0 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black_3));
         linearLayouts[0].setBackground(index == 0 ? getResources().getDrawable(R.drawable.select_user_organizational) : getResources().getDrawable(R.drawable.user_organizational));
-        textViews[1].setTextColor(index == 1 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
+        textViews[1].setTextColor(index == 1 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black_3));
         linearLayouts[1].setBackground(index == 1 ? getResources().getDrawable(R.drawable.select_seal_organizational) : getResources().getDrawable(R.drawable.seal_organizational));
     }
 

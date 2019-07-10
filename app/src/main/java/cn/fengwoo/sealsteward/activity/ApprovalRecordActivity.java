@@ -1,15 +1,19 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +88,63 @@ public class ApprovalRecordActivity extends BaseActivity implements View.OnClick
 
             }
         });
+ /*       approval_tabLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                setIndicator(approval_tabLayout,60,60);
+            }
+        });*/
+        /**
+         * TabLayout中间的分界线
+         */
+        LinearLayout linearLayout= (LinearLayout) approval_tabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        linearLayout.setDividerDrawable(ContextCompat.getDrawable(this,R.drawable.line));
+        linearLayout.setDividerPadding(55);  //设置分割线高度
 
+    }
+
+    /**
+     * 改变tabLayout下划线的长度
+     * @param tabs
+     * @param leftDip
+     * @param rightDip
+     */
+    public void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
+        Class tabLayout = tabs.getClass();
+        Field tabStrip = null;
+        try {
+            tabStrip = tabLayout.getDeclaredField("mTabStrip");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        if (tabStrip != null) {
+            tabStrip.setAccessible(true);
+        }
+        LinearLayout llTab = null;
+        try {
+            if (tabStrip != null) {
+                llTab = (LinearLayout) tabStrip.get(tabs);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        int left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, leftDip, Resources.getSystem().getDisplayMetrics());
+        int right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rightDip, Resources.getSystem().getDisplayMetrics());
+        if (llTab != null) {
+            for (int i = 0; i < llTab.getChildCount(); i++) {
+                View child = llTab.getChildAt(i);
+                child.setPadding(0, 0, 0, 0);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                params.leftMargin = left;
+                params.rightMargin = right;
+                child.setLayoutParams(params);
+                child.invalidate();
+            }
+
+        }
     }
 
     @Override

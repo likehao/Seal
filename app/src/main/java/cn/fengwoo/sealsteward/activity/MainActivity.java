@@ -83,7 +83,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.tv_right)
     TextView tv_right;
     private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
-    private TextView[] textViews = new TextView[5];   //底部导航文字集合
+    private TextView[] textViews = new TextView[7];   //底部导航文字集合
+    private LinearLayout[] linearLayouts = new LinearLayout[7];
     private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
     AddPopuwindow popuwindow;
     MessagePopuwindow messagePopuwindow;
@@ -118,6 +119,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     int msgFourSix = 0;
     @BindView(R.id.title_ll)
     LinearLayout title_ll;
+    @BindView(R.id.phone_seal_ll)
+    LinearLayout phoneSeal;  //手机盖章
+    @BindView(R.id.pwd_seal_ll)
+    LinearLayout pwdSeal;   //密码盖章
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -158,6 +163,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //初始化扫描
         ZXingLibrary.initDisplayOpinion(this);
         changeView(0);  //启动默认显示主页面
+        changeTitleView(5);
         setListener();
 
         timer = new Timer();
@@ -205,18 +211,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         textViews[2] = findViewById(R.id.matter_tv);
         textViews[3] = findViewById(R.id.mine_tv);
         textViews[4] = findViewById(R.id.application_tv);
+
         imageViews[0] = findViewById(R.id.seal_iv);
         imageViews[1] = findViewById(R.id.record_iv);
         imageViews[2] = findViewById(R.id.matter_iv);
         imageViews[3] = findViewById(R.id.mine_iv);
         imageViews[4] = findViewById(R.id.application_iv);
+
+        textViews[5] = tv_left;
+        textViews[6] = tv_right;
+        linearLayouts[5] = phoneSeal;
+        linearLayouts[6] = pwdSeal;
+
         record_more_iv = findViewById(R.id.record_more_iv);
         message_more_iv = findViewById(R.id.message_more_iv);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
         title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
 
-        tv_right.setTextColor(Color.argb(130, 255, 255, 255));
+//        tv_right.setTextColor(Color.argb(130, 255, 255, 255));
     }
 
     private void setListener() {
@@ -328,15 +341,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tv_left:
                 Utils.log("left");
                 //设置文字透明度
-                tv_right.setTextColor(Color.argb(130, 255, 255, 255));
-                tv_left.setTextColor(Color.argb(255, 255, 255, 255));
+                changeTitleView(5);
+//                tv_right.setTextColor(Color.argb(130, 255, 255, 255));
+//                tv_left.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("left");
                 break;
 
             case R.id.tv_right:
                 Utils.log("right");
-                tv_left.setTextColor(Color.argb(130, 255, 255, 255));
-                tv_right.setTextColor(Color.argb(255, 255, 255, 255));
+                changeTitleView(6);
+
+//                tv_left.setTextColor(Color.argb(130, 255, 255, 255));
+//                tv_right.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("right");
                 break;
         }
@@ -409,6 +425,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         imageViews[3].setImageResource(index == 3 ? R.drawable.mian_select : R.drawable.mine);
         imageViews[4].setImageResource(index == 4 ? R.drawable.application_select : R.drawable.application);
         textViews[4].setTextColor(index == 4 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.gray_text));
+
+    }
+
+    /**
+     * 记录页面头部手机盖章和密码盖章按钮的选中状态
+     * @param code
+     */
+    private void changeTitleView(int code){
+        textViews[5].setTextColor(code == 5 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.white));
+        linearLayouts[5].setBackground(code == 5 ? getResources().getDrawable(R.drawable.select_phone_seal1) : getResources().getDrawable(R.drawable.select_phone_seal));
+        textViews[6].setTextColor(code == 6 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.white));
+        linearLayouts[6].setBackground(code == 6 ? getResources().getDrawable(R.drawable.select_pwd_seal1) : getResources().getDrawable(R.drawable.select_pwd_seal));
 
     }
 

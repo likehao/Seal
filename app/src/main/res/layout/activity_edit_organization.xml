@@ -12,16 +12,17 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:text="@string/click_company_edit"
-        android:textColor="@color/pink"
+        android:textColor="@color/red"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"/>
+        android:gravity="center_vertical"/>
     <ListView
         android:id="@+id/id_tree"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:divider="#aaa"
+        android:divider="@drawable/listview_divider"
+        android:background="@color/white"
         android:dividerHeight="1px"/>
 
 </LinearLayout>

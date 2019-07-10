@@ -10,122 +10,173 @@
 
     <include layout="@layout/head" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white"
-        android:paddingBottom="10dp">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/select_packages"
+                        android:textSize="12sp" />
+
+                    <ListView
+                        android:id="@+id/pay_recharge_lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/select_recharge_way"
+                    android:textSize="12sp" />
+
+                <View
+                    style="@style/line"
+                    android:layout_marginTop="5dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/wechatPay_rl"
+                        style="@style/pressed_effect">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="23dp"
+                            android:background="@drawable/wechat" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="50dp"
+                            android:text="@string/WeChat"
+                            android:textColor="@color/black_3"
+                            android:textSize="13sp" />
+
+                        <ImageView
+                            android:id="@+id/wechat_select_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="23dp" />
+                    </RelativeLayout>
+
+                    <View
+                        style="@style/line"
+                        android:layout_marginEnd="23dp"
+                        android:layout_marginStart="23dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/alipay_rl"
+                        style="@style/pressed_effect">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="23dp"
+                            android:background="@drawable/alipay_app" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="50dp"
+                            android:text="@string/alipay"
+                            android:textColor="@color/black_3"
+                            android:textSize="13sp" />
+
+                        <ImageView
+                            android:id="@+id/alipay_select_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="23dp"
+                            android:background="@drawable/unchecked" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View style="@style/line" />
+
+         <!--       <Button
+                    android:id="@+id/pay_bt"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/login_circle_bg"
+                    android:text="@string/sure"
+                    android:textColor="@color/white" />-->
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/select_packages"
-            android:textSize="12sp" />
+            android:background="@drawable/shadow_up"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingTop="27dp">
 
-        <ListView
-            android:id="@+id/pay_recharge_lv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/select_recharge_way"
-        android:textSize="12sp" />
-
-    <View
-        style="@style/line"
-        android:layout_marginTop="5dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/wechatPay_rl"
-            style="@style/pressed_effect">
-
-            <ImageView
+            <TextView
+                android:id="@+id/sureMoney_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="23dp"
-                android:background="@drawable/wechat" />
+                android:text="6.00"
+                android:textSize="24sp"
+                android:textColor="@color/black_3"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="50dp"
-                android:text="@string/WeChat"
+                android:text="元"
+                android:layout_marginEnd="168dp"
                 android:textColor="@color/black_3"
-                android:textSize="13sp" />
-
-            <ImageView
-                android:id="@+id/wechat_select_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="23dp" />
-        </RelativeLayout>
-
-        <View
-            style="@style/line"
-            android:layout_marginEnd="23dp"
-            android:layout_marginStart="23dp" />
-
-        <RelativeLayout
-            android:id="@+id/alipay_rl"
-            style="@style/pressed_effect">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="23dp"
-                android:background="@drawable/alipay_app" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="50dp"
-                android:text="@string/alipay"
-                android:textColor="@color/black_3"
-                android:textSize="13sp" />
-
-            <ImageView
-                android:id="@+id/alipay_select_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="23dp"
-                android:background="@drawable/unchecked"/>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <View style="@style/line" />
-
-    <Button
-        android:id="@+id/pay_bt"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/login_circle_bg"
-        android:text="@string/sure"
-        android:textColor="@color/white" />
-
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="5dp"/>
+            <Button
+                android:id="@+id/pay_bt"
+                android:layout_width="82dp"
+                android:layout_height="40dp"
+                android:background="@drawable/login_circle_bg"
+                android:text="支付"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

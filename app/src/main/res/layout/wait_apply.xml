@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/corners_bg"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
@@ -10,12 +10,19 @@
         android:id="@+id/tv_cause"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:ellipsize="end"
         android:gravity="center_vertical"
-        android:paddingLeft="10dp"
+        android:maxLines="2"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
         android:text="@string/please_apply"
-        android:textColor="@color/black" />
+        android:textColor="@color/black_3"
+        android:textSize="15sp" />
 
-    <View style="@style/line" />
+    <View
+        style="@style/line"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/seal_name"
-            android:textColor="@color/black"
+            android:textColor="@color/black_3"
             android:textSize="12sp" />
 
         <View
@@ -45,7 +52,7 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:text="@string/seal"
-            android:textColor="@color/black"
+            android:textColor="@color/black_6"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -62,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/Failure_time"
-            android:textColor="@color/black"
+            android:textColor="@color/black_3"
             android:textSize="12sp" />
 
         <View
@@ -76,8 +83,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="10dp"
-            android:textColor="@color/black"
             android:text="2017-05-10 10:10:10"
+            android:textColor="@color/black_6"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -94,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/apply_time"
-            android:textColor="@color/black"
+            android:textColor="@color/black_3"
             android:textSize="12sp" />
 
         <View
@@ -109,7 +116,7 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:text="20"
-            android:textColor="@color/black"
+            android:textColor="@color/black_6"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -127,7 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/apply_person"
-            android:textColor="@color/black"
+            android:textColor="@color/black_3"
             android:textSize="12sp" />
 
         <View
@@ -136,17 +143,16 @@
             android:background="@color/LightGrey" />
 
         <TextView
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:layout_marginEnd="5dp"
-
             android:id="@+id/apply_person_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
+            android:ellipsize="end"
             android:paddingStart="10dp"
+            android:singleLine="true"
             android:text="20"
-            android:textColor="@color/black"
+            android:textColor="@color/black_6"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -164,7 +170,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:text="@string/department"
-            android:textColor="@color/black"
+            android:textColor="@color/black_3"
             android:textSize="12sp" />
 
         <View
@@ -179,13 +185,15 @@
             android:layout_weight="1"
             android:paddingStart="10dp"
             android:text="20"
-            android:textColor="@color/black"
+            android:textColor="@color/black_6"
             android:textSize="12sp" />
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/corners_left_right_bottom">
 
         <TextView
             android:id="@+id/applyTime_tv"
@@ -194,36 +202,35 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:text="01/01 01:01:01"
-            android:textColor="@color/black"
+            android:textColor="@color/black_3"
             android:textSize="12sp" />
+
         <TextView
             android:id="@+id/item1_tv"
-            android:layout_width="60dp"
-            android:layout_height="26dp"
+            android:layout_width="69dp"
+            android:layout_height="29dp"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/item2_tv"
             android:background="@drawable/suggestion_gray"
             android:gravity="center"
-            android:layout_centerInParent="true"
-            android:layout_toStartOf="@+id/item2_tv"
-            android:layout_marginEnd="10dp"
-            android:visibility="gone"
             android:text="@string/see_record"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textColor="@color/black_3"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/item2_tv"
-            android:layout_width="60dp"
-            android:layout_height="26dp"
+            android:layout_width="69dp"
+            android:layout_height="29dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
             android:layout_marginEnd="10dp"
             android:background="@drawable/suggestion_gray"
             android:gravity="center"
-            android:layout_centerInParent="true"
             android:text="@string/revoke"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
 </LinearLayout>

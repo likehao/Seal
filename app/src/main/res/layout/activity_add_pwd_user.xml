@@ -4,21 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AboutActivity"
+    android:background="@color/background"
     android:orientation="vertical"
-    android:background="@color/background">
+    tools:context=".activity.AboutActivity">
 
     <include layout="@layout/head" />
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@color/white"
-        android:layout_marginTop="10dp">
-        <View
-            style="@style/line"/>
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,10 +29,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="15dp"
                     android:text="使用人"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black_3"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tv_user"
@@ -45,20 +42,21 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="30dp"
+                    android:layout_marginStart="70dp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:layout_marginStart="70dp"
+                    android:text="@string/please_select"
                     android:textDirection="rtl"
-                    android:text="@string/please_select" />
+                    android:textSize="12sp" />
 
-                <View
-                    style="@style/right_arrow" />
+                <View style="@style/right_arrow" />
             </RelativeLayout>
         </LinearLayout>
 
         <View
-            android:layout_marginTop="10dp"
-            style="@style/line_left" />
+            style="@style/line_left"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,31 +73,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:text="次数"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black_3"
+                    android:textSize="13sp" />
 
                 <EditText
-                    android:gravity="right"
                     android:id="@+id/et_use_times"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="250dp"
                     android:background="@null"
+                    android:gravity="right"
                     android:hint="请输入次数"
                     android:inputType="number"
-                    android:paddingEnd="10dp"
+                    android:paddingEnd="15dp"
                     android:textSize="12sp" />
 
             </RelativeLayout>
         </LinearLayout>
 
         <View
-            android:layout_marginTop="10dp"
-            style="@style/line_left" />
+            style="@style/line_left"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:paddingBottom="10dp">
 
             <RelativeLayout
                 android:id="@+id/expired_time"
@@ -109,10 +110,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="15dp"
                     android:text="失效时间"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black_3"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tv_expired_time"
@@ -121,26 +123,23 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="30dp"
-                    android:text="@string/please_select" />
+                    android:text="@string/please_select"
+                    android:textSize="12sp" />
 
-                <View
-                    style="@style/right_arrow" />
+                <View style="@style/right_arrow" />
             </RelativeLayout>
         </LinearLayout>
-
-        <View
-            android:layout_marginTop="10dp"
-            style="@style/line" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_submit"
-        android:layout_width="280dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:background="@drawable/login_circle_bg"
+        android:background="@drawable/click_bt_press"
+        android:paddingBottom="11dp"
         android:text="提交"
         android:textColor="@color/white" />
 

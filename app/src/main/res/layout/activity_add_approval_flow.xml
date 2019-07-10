@@ -10,10 +10,6 @@
 
     <include layout="@layout/head"/>
 
-    <View
-        style="@style/line"
-        android:layout_marginTop="10dp"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +29,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
                 android:text="@string/approval_people"
-                android:textColor="@color/black" />
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/approval_people_tv"
@@ -45,6 +41,7 @@
                 android:gravity="right"
                 android:ellipsize="end"
                 android:singleLine="true"
+                android:textSize="12sp"
                 android:layout_marginStart="70dp"
                 android:hint="请选择审批人" />
 
@@ -53,7 +50,8 @@
         </RelativeLayout>
 
         <View
-            style="@style/line_left"/>
+            style="@style/line_left"
+            android:layout_marginEnd="15dp"/>
         <RelativeLayout
             android:id="@+id/select_approvalType_rl"
             style="@style/pressed_effect"
@@ -68,7 +66,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
                 android:text="@string/approval_type"
-                android:textColor="@color/black" />
+                android:textColor="@color/black_3" />
 
             <TextView
                 android:id="@+id/approval_type_tv"
@@ -78,6 +76,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="35dp"
                 android:textDirection="rtl"
+                android:textSize="12sp"
                 android:hint="请选择审批类型" />
 
             <View style="@style/right_arrow" />
@@ -99,7 +98,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
                 android:text="@string/approval_level"
-                android:textColor="@color/black" />
+                android:textColor="@color/black_3" />
 
             <EditText
                 android:id="@+id/input_level_et"
@@ -108,7 +107,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="35dp"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:background="@null"
                 android:gravity="right"
                 android:inputType="number"
@@ -126,18 +125,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/approval_flow_tips"
-        android:textSize="10sp"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="10dp"
-        android:textColor="@color/short_video_red"/>
+        android:textSize="12sp"
+        android:layout_marginTop="9dp"
+        android:layout_marginStart="14dp"
+        android:textColor="@color/red"/>
 
     <Button
         android:id="@+id/submit_approval_bt"
-        android:layout_width="280dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/login_circle_bg"
+        android:background="@drawable/click_bt_press"
+        android:paddingBottom="11dp"
         android:layout_gravity="center"
         android:text="@string/submit"
         android:textColor="@color/white"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="100dp"/>
 </LinearLayout>
