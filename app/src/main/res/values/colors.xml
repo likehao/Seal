@@ -34,6 +34,7 @@
     <color name="Gray">#eeeeee</color>
     <color name="upload_photo">#FFBA00</color>
     <color name="org">#FCF9FC</color>
+    <color name="gray_line">#DDDDDD</color>
 
 
     <color name="lvDividerLine">#d9e3e8</color>

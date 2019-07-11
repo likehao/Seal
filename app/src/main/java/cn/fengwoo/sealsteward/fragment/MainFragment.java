@@ -53,6 +53,8 @@ import com.youth.banner.Banner;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -883,6 +885,22 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String dataString = jsonObject.getString("data");
+
+                    JSONObject jsonObject1 = new JSONObject(dataString);
+                    Boolean applyClosed = jsonObject1.getBoolean("applyClosed");
+                    //如果单据关闭再次盖章时直接断开蓝牙
+                    if (applyClosed){
+                        // 断开蓝牙
+                        ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                        ((MyApp) getApplication()).setConnectionObservable(null);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Utils.log(result);
 //                currentStampTimes++;
 //                Utils.log(String.valueOf(currentStampTimes));

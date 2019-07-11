@@ -9,11 +9,13 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
@@ -61,7 +63,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 密码用户
  */
 public class PwdUserActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)
@@ -75,7 +77,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
     ListView list;
     @BindView(R.id.no_record_ll)
     LinearLayout no_record_ll;
-
     private List<PwdUserListItem> items;
     private boolean isEyeOpen = false;
     private CommonAdapter commonAdapter;
@@ -274,6 +275,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                     public void onClick(View v) {
                         if (!isEyeOpen) { // 睁开眼时
                             viewHolder.setText(R.id.tv_pwd, pwdUserListItem.getPassword());
+                            viewHolder.setImageDrawable(R.id.iv_eye,null);
                             viewHolder.setBackgroundRes(R.id.iv_eye, R.drawable.open_eye);
                             isEyeOpen = true;
                         } else {

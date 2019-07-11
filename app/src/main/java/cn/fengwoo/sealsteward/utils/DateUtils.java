@@ -1,5 +1,7 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.annotation.SuppressLint;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,7 +55,8 @@ public class DateUtils {
 
     /**
      * 时间戳转换成字符串
-     * @param time  1541569323155
+     *
+     * @param time 1541569323155
      */
     public static String getDateString(long time) {
         Date date = new Date(time);
@@ -63,11 +66,12 @@ public class DateUtils {
 
     /**
      * 时间转为时间戳
+     *
      * @param s
      * @return
      * @throws ParseException
      */
-    public static String dateToStamp(String s) throws ParseException{
+    public static String dateToStamp(String s) throws ParseException {
         String res;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse(s);
@@ -76,7 +80,7 @@ public class DateUtils {
         return res;
     }
 
-    public static String dateToStamp2(String s) throws ParseException{
+    public static String dateToStamp2(String s) throws ParseException {
         String res;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = simpleDateFormat.parse(s);
@@ -85,18 +89,51 @@ public class DateUtils {
         return res;
     }
 
-    public static String hexTimeToTimeStamp (String hexString)throws ParseException {
+    public static String hexTimeToTimeStamp(String hexString) throws ParseException {
         String str = "";
         String[] times = hexString.split(" ");
         String years = "20" + Integer.valueOf(times[0], 16);
-        String month = Integer.valueOf(times[1],16) + "";
-        String day = Integer.valueOf(times[2],16) + "";
-        String hour = Integer.valueOf(times[3],16) + "";
-        String min = Integer.valueOf(times[4],16) + "";
-        String sec = Integer.valueOf(times[5],16) + "";
-        String all = years + "-" + month + "-" + day  + " " + hour + ":" + min + ":" + sec;
+        String month = Integer.valueOf(times[1], 16) + "";
+        String day = Integer.valueOf(times[2], 16) + "";
+        String hour = Integer.valueOf(times[3], 16) + "";
+        String min = Integer.valueOf(times[4], 16) + "";
+        String sec = Integer.valueOf(times[5], 16) + "";
+        String all = years + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
         str = dateToStamp(all);
         return str;
+    }
+
+    //传入开始时间和结束时间字符串来计算消耗时长
+    @SuppressLint("SimpleDateFormat")
+    public static String getTimeExpend(String startTime, String endTime) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date1 = simpleDateFormat.parse(startTime);
+        Date date2 = simpleDateFormat.parse(endTime);
+        String difTime = printDifference(date1, date2);
+        return difTime;
+    }
+
+    public static String printDifference(Date startDate, Date endDate) {
+
+        long different = endDate.getTime() - startDate.getTime();
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+
+        return elapsedDays + ":" + elapsedHours + ":" + elapsedMinutes;
     }
 
 }

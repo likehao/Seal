@@ -95,7 +95,8 @@ public class ApprovalActivity extends BaseActivity {
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                     loadingView.cancel();
                     for (ApproveProgress approveProgress : responseInfo.getData()) {
-                        list.add(new ApproveProgress(approveProgress.getApproveStatus(), approveProgress.getApproveUserName(), approveProgress.getOrgStructureName()));
+                        list.add(new ApproveProgress(approveProgress.getApproveStatus(), approveProgress.getApproveUserName(), approveProgress.getOrgStructureName()
+                        ,approveProgress.getApproveOpinion(),approveProgress.getApproveTime(),approveProgress.getCreateTime()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override

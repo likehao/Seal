@@ -11,7 +11,7 @@ public class ApproveProgress implements Serializable{
      "approveLevel": 0,
      "approveOpinion": "string",
      "approveStatus": 0,
-     "approveTime": "2019-04-22T01:08:39.231Z",
+     "approveTime": "2019-04-22T01:08:39.231Z",   //批准时间
      "approveUser": "string",
      "approveUserName": "string",
      "id": "string",
@@ -28,12 +28,16 @@ public class ApproveProgress implements Serializable{
     private String approveUserName;
     private String id;
     private String orgStructureName;
+    private String createTime;
 
 
-    public ApproveProgress(Integer approveStatus, String approveUserName, String orgStructureName) {
+    public ApproveProgress(Integer approveStatus, String approveUserName, String orgStructureName,String approveOpinion,String approveTime,String createTime) {
         this.approveStatus = approveStatus;
         this.approveUserName = approveUserName;
         this.orgStructureName = orgStructureName;
+        this.approveOpinion = approveOpinion;
+        this.approveTime = approveTime;
+        this.createTime = createTime;
     }
 
     public Integer getApproveLevel() {
@@ -100,6 +104,15 @@ public class ApproveProgress implements Serializable{
         this.orgStructureName = orgStructureName;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+
     @Override
     public String toString() {
         return "ApproveProgress{" +
@@ -111,6 +124,7 @@ public class ApproveProgress implements Serializable{
                 ", approveUserName='" + approveUserName + '\'' +
                 ", id='" + id + '\'' +
                 ", orgStructureName='" + orgStructureName + '\'' +
+                ", createTime='" + createTime + '\'' +
                 '}';
     }
 
