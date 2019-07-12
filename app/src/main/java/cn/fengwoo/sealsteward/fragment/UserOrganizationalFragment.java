@@ -5,17 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
 
 import java.io.IOException;
@@ -25,21 +22,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.activity.ChangeInformationActivity;
-import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
 import cn.fengwoo.sealsteward.activity.SelectPeopleMultiActivity;
-import cn.fengwoo.sealsteward.activity.SelectSealMultiActivity;
 import cn.fengwoo.sealsteward.activity.UserInfoActivity;
-import cn.fengwoo.sealsteward.adapter.ExpandListViewAdapter;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
-import cn.fengwoo.sealsteward.entity.FirstModel;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
-import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.SecondModel;
-import cn.fengwoo.sealsteward.entity.ThirdModel;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.Dept;
@@ -71,10 +59,10 @@ public class UserOrganizationalFragment extends Fragment {
         view = inflater.inflate(R.layout.user_organizational_fragment, container, false);
         ButterKnife.bind(this, view);
         mListView = (ListView) view.findViewById(R.id.id_tree);
-        mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList,0,0);
+        mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList, 0, 0);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
-            public void clicked(String id,int type,String parentName) {
+            public void clicked(String id, int type, String parentName) {
                 Utils.log("id:" + id);
                 if (type == 3) {
                     selectDialog(id);
@@ -113,19 +101,17 @@ public class UserOrganizationalFragment extends Fragment {
 //                Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(),dataBean.getType(),2,false,dataBean.getPortrait()));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false, dataBean.getPortrait()));
                     }
                 }
-                if(null != getActivity()){
+                if (null != getActivity()) {
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-
-                            mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList,0,0);
+                            mAdapter = new NodeTreeAdapter(getActivity(), mListView, mLinkedList, 0, 0);
                             mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
                                 @Override
-                                public void clicked(String id,int type,String parentName) {
+                                public void clicked(String id, int type, String parentName) {
                                     Utils.log("id:" + id);
                                     if (type == 3) {
                                         selectDialog(id);
@@ -144,8 +130,8 @@ public class UserOrganizationalFragment extends Fragment {
         });
     }
 
-    private void selectDialog( String uid) {
-        Utils.log("**********"+CommonUtil.getUserData(getActivity()).getId());
+    private void selectDialog(String uid) {
+        Utils.log("**********" + CommonUtil.getUserData(getActivity()).getId());
 
         ArrayList strings = new ArrayList<String>();
 //        strings.add("切换");
@@ -157,10 +143,10 @@ public class UserOrganizationalFragment extends Fragment {
         optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Utils.log("position"+position);
+                Utils.log("position" + position);
                 if (position == 0) {
                     optionBottomDialog.dismiss();
-                    CommonDialog commonDialog = new CommonDialog(getActivity(),"确定删除该用户？","删除后该用户将被移除此公司,请谨慎操作!","删除");
+                    CommonDialog commonDialog = new CommonDialog(getActivity(), "确定删除该用户？", "删除后该用户将被移除此公司,请谨慎操作!", "删除");
                     commonDialog.showDialog();
                     commonDialog.setClickListener(new View.OnClickListener() {
                         @Override
@@ -169,7 +155,7 @@ public class UserOrganizationalFragment extends Fragment {
                             // 判断自己在判断权限之前
                             if (uID.equals(uid)) {
 
-                                Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "不能删除自己", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             // 判断权限
@@ -180,8 +166,8 @@ public class UserOrganizationalFragment extends Fragment {
                             // delete
 
                             if (uID.equals(uid)) {
-                                Toast.makeText(getActivity(),"不能删除自己",Toast.LENGTH_SHORT).show();
-                            }else {
+                                Toast.makeText(getActivity(), "不能删除自己", Toast.LENGTH_SHORT).show();
+                            } else {
                                 // delete user
                                 Utils.log("delete user");
                                 HashMap<String, String> hashMap = new HashMap<>();
@@ -199,18 +185,18 @@ public class UserOrganizationalFragment extends Fragment {
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
                                                 commonDialog.dialog.dismiss();
                                             }
                                         });
 
                                         // init
 
-                                        data .clear();
+                                        data.clear();
 
                                         mLinkedList.clear();
 
-                                        if(null != getActivity()){
+                                        if (null != getActivity()) {
                                             Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -234,7 +220,7 @@ public class UserOrganizationalFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                     intent.putExtra("uid", uid);
                     startActivity(intent);
-                    if(null != getActivity()){
+                    if (null != getActivity()) {
                         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -242,8 +228,7 @@ public class UserOrganizationalFragment extends Fragment {
                             }
                         });
                     }
-                }
-                else if (position == 2) {
+                } else if (position == 2) {
 //                    loadingView.show();
 //                    deleteDialog(); //提示删除
 
@@ -255,7 +240,7 @@ public class UserOrganizationalFragment extends Fragment {
                     Utils.log("sealID:" + uid);
 //                    intent.putExtra("departmentName", departmentName);
 //                    intent.putExtra("sealID", uid);
-                    startActivityForResult(intent,123);
+                    startActivityForResult(intent, 123);
                     optionBottomDialog.dismiss();
                 }
             }
@@ -266,7 +251,7 @@ public class UserOrganizationalFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.log("" + requestCode);
-        mLinkedList =  new LinkedList<>();
+        mLinkedList = new LinkedList<>();
         initData();
         getDate();
     }

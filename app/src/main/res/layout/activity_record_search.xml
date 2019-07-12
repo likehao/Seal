@@ -4,16 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AboutActivity"
+    android:background="@color/background"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@color/background">
+    tools:context=".activity.AboutActivity">
 
     <include layout="@layout/head" />
 
-
     <include layout="@layout/no_record" />
-
 
     <LinearLayout
         android:id="@+id/ll_record"
@@ -43,31 +41,30 @@
     </LinearLayout>
 
     <EditText
-        android:singleLine="true"
-        android:inputType="text"
-        android:imeOptions="actionSearch"
         android:id="@+id/et_searchx"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="55dp"
-        android:paddingStart="5dp"
-        android:layout_gravity="center_horizontal"
         android:background="@color/white"
         android:drawableStart="@drawable/head_search"
         android:hint="搜索事由/流水号"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:paddingStart="5dp"
+        android:singleLine="true"
         android:textSize="15sp" />
 
-
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/ll_choice"
-        android:layout_marginTop="110dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_first"
@@ -103,17 +100,9 @@
             <ImageView
                 android:id="@+id/iv_sec"
                 style="@style/right_icon"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
-
-
-
-
-
-
-
     </LinearLayout>
-
 
 </FrameLayout>

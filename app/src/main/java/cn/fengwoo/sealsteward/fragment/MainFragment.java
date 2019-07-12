@@ -74,7 +74,6 @@ import cn.fengwoo.sealsteward.activity.CameraAutoActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.PplAddActivity;
-import cn.fengwoo.sealsteward.activity.SealInfoActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
@@ -892,10 +891,25 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     JSONObject jsonObject1 = new JSONObject(dataString);
                     Boolean applyClosed = jsonObject1.getBoolean("applyClosed");
                     //如果单据关闭再次盖章时直接断开蓝牙
-                    if (applyClosed){
+                    if (applyClosed) {
                         // 断开蓝牙
                         ((MyApp) getActivity().getApplication()).removeAllDisposable();
                         ((MyApp) getApplication()).setConnectionObservable(null);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                CommonDialog commonDialog = new CommonDialog(getActivity(), "您当前使用的单据已被关闭", "", "确定");
+                                commonDialog.cancel.setVisibility(View.GONE);
+                                commonDialog.showDialog();
+                                commonDialog.setClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        commonDialog.dialog.dismiss();
+                                    }
+                                });
+
+                            }
+                        });
                     }
 
                 } catch (JSONException e) {

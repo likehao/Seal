@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SearchOrgUserAndSealActivity"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <include layout="@layout/head"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:layout_marginTop="46dp">
+
+        <EditText
+            android:id="@+id/search_et"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="10dp"
+            android:background="@drawable/corners_bg"
+            android:drawableStart="@drawable/search"
+            android:hint="搜索用户/印章"
+            android:drawablePadding="5dp"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/user_seal_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/listview_divider"
+        android:dividerHeight="1px"
+        android:background="@color/white"
+        android:layout_marginTop="111dp"/>
+
+    <include layout="@layout/no_record" />
+
+</FrameLayout>

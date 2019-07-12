@@ -11,9 +11,7 @@
 
     <include layout="@layout/head" />
 
-
     <include layout="@layout/no_record" />
-
 
     <LinearLayout
         android:id="@+id/ll_record"

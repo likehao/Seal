@@ -29,15 +29,17 @@ public class ApproveProgress implements Serializable{
     private String id;
     private String orgStructureName;
     private String createTime;
+    private String mobilePhone;
 
 
-    public ApproveProgress(Integer approveStatus, String approveUserName, String orgStructureName,String approveOpinion,String approveTime,String createTime) {
+    public ApproveProgress(Integer approveStatus, String approveUserName, String orgStructureName,String approveOpinion,String approveTime,String createTime,String mobilePhone) {
         this.approveStatus = approveStatus;
         this.approveUserName = approveUserName;
         this.orgStructureName = orgStructureName;
         this.approveOpinion = approveOpinion;
         this.approveTime = approveTime;
         this.createTime = createTime;
+        this.mobilePhone = mobilePhone;
     }
 
     public Integer getApproveLevel() {
@@ -112,6 +114,14 @@ public class ApproveProgress implements Serializable{
         this.createTime = createTime;
     }
 
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
+
 
     @Override
     public String toString() {
@@ -125,6 +135,7 @@ public class ApproveProgress implements Serializable{
                 ", id='" + id + '\'' +
                 ", orgStructureName='" + orgStructureName + '\'' +
                 ", createTime='" + createTime + '\'' +
+                ", mobilePhone='" + mobilePhone + '\'' +
                 '}';
     }
 

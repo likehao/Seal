@@ -297,7 +297,8 @@
         <activity android:name=".activity.ChangePhoneActivity" />
         <activity android:name=".activity.ChangeCompanyBelongActivity" />
         <activity android:name=".activity.RecordQrCodeActivity" />
-        <activity android:name=".activity.ScanRecordQrCodeResultActivity"/>
+        <activity android:name=".activity.ScanRecordQrCodeResultActivity" />
+        <activity android:name=".activity.SearchOrgUserAndSealActivity"></activity>
     </application>
 
 </manifest>

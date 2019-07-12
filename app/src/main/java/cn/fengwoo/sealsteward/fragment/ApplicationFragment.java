@@ -275,18 +275,26 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         if (Utils.isAllInvisible(qmuidemo_floatlayout1)) {
             // 所有子view不可见，显示tip
             ll_tip1.setVisibility(View.VISIBLE);
+        }else {
+            ll_tip1.setVisibility(View.GONE);
         }
         if (Utils.isAllInvisible(qmuidemo_floatlayout2)) {
             // 所有子view不可见，显示tip
             ll_tip2.setVisibility(View.VISIBLE);
+        }else {
+            ll_tip2.setVisibility(View.GONE);
         }
         if (Utils.isAllInvisible(qmuidemo_floatlayout3)) {
             // 所有子view不可见，显示tip
             ll_tip3.setVisibility(View.VISIBLE);
+        }else {
+            ll_tip3.setVisibility(View.GONE);
         }
         if (Utils.isAllInvisible(qmuidemo_floatlayout4)) {
             // 所有子view不可见，显示tip
             ll_tip4.setVisibility(View.VISIBLE);
+        }else {
+            ll_tip4.setVisibility(View.GONE);
         }
 
         // seal 管理

@@ -8,11 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -47,12 +48,15 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
     private TextView[] textViews = new TextView[2];   //底部导航文字集合
     @BindView(R.id.edit_tv)
     TextView edite_tv;
+    @BindView(R.id.search_user_seal_ll)
+    LinearLayout search_ll;
 
     //页面集合
     List<Fragment> fragmentList;
     UserOrganizationalFragment userOrganizationalFragment;
     SealOrganizationalFragment sealOrganizationalFragment;
     private FragmentManager fragmentManager;
+    private String select;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
         tab1_tv.setOnClickListener(this);
         tab2_tv.setOnClickListener(this);
         edite_tv.setOnClickListener(this);
+        search_ll.setOnClickListener(this);
     }
 
     @Override
@@ -94,13 +99,20 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
                 break;
             case R.id.tab1_tv:
                 changeView(0);
+                select = "user";
                 break;
             case R.id.tab2_tv:
                 changeView(1);
+                select = "seal";
                 break;
             case R.id.edit_tv:
           //      Intent intent = new Intent(this,GeographicalFenceActivity.class);  //跳转电子围栏
                 Intent intent = new Intent(this,EditOrganizationActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.search_user_seal_ll:
+                intent = new Intent(this,SearchOrgUserAndSealActivity.class);
+                intent.putExtra("select",select);
                 startActivity(intent);
                 break;
         }
@@ -160,6 +172,7 @@ public class OrganizationalStructureActivity extends BaseActivity implements Vie
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void changeBg(int index){
+        select = "user";
         textViews[0].setTextColor(index == 0 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black_3));
         linearLayouts[0].setBackground(index == 0 ? getResources().getDrawable(R.drawable.select_user_organizational) : getResources().getDrawable(R.drawable.user_organizational));
         textViews[1].setTextColor(index == 1 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black_3));

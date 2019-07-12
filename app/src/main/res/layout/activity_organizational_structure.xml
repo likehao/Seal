@@ -14,22 +14,31 @@
         android:layout_height="wrap_content"
         android:background="@color/background">
 
-        <EditText
-            android:clickable="false"
-            android:focusable="false"
+        <LinearLayout
+            android:id="@+id/search_user_seal_ll"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:background="@drawable/corners_bg"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:paddingStart="10dp"
-            android:background="@drawable/corners_bg"
-            android:cursorVisible="false"
-            android:drawableStart="@drawable/search"
-            android:hint="搜索事由/流水号"
-            android:drawablePadding="5dp"
-            android:textSize="12sp" />
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search"
+                android:layout_marginStart="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="搜索用户/印章"
+                android:layout_marginStart="5dp"
+                android:textSize="12sp"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

@@ -96,7 +96,7 @@ public class ApprovalActivity extends BaseActivity {
                     loadingView.cancel();
                     for (ApproveProgress approveProgress : responseInfo.getData()) {
                         list.add(new ApproveProgress(approveProgress.getApproveStatus(), approveProgress.getApproveUserName(), approveProgress.getOrgStructureName()
-                        ,approveProgress.getApproveOpinion(),approveProgress.getApproveTime(),approveProgress.getCreateTime()));
+                        ,approveProgress.getApproveOpinion(),approveProgress.getApproveTime(),approveProgress.getCreateTime(),approveProgress.getMobilePhone()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
