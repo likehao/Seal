@@ -4,18 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.AboutActivity"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".activity.AboutActivity">
 
     <include layout="@layout/head" />
 
-
     <EditText
-        android:layout_marginTop="55dp"
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@null"
+        android:layout_marginTop="55dp"
+        android:background="@color/white"
         android:gravity="top"
         android:hint="请输入验证信息"
         android:maxLength="200"

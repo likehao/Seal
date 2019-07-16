@@ -55,7 +55,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 编辑密码用户
  */
 public class AddPwdUserActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)
@@ -87,6 +87,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
 
     ResponseInfo<AddPwdUserUploadReturn> responseInfo;
     PwdUserListItem pwdUserListItem;
+    private Boolean timeB = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +112,11 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
         tvUser.setText(pwdUserListItem.getUserName());
         tvExpiredTime.setText(DateUtils.getDateString(pwdUserListItem.getExpireTime()));
         etUseTimes.setText(pwdUserListItem.getStampCount() + "");
-        title_tv.setText("修改密码用户");
+        title_tv.setText("编辑密码用户");
+        Date nowTime = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = dateFormat.format(nowTime);
+        timeB = DateUtils.isDateOneBigger(tvExpiredTime.getText().toString(), time);
 
     }
 
@@ -139,35 +144,39 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.btn_submit:
                 // 如果pwdUserListItem为空，执行原来逻辑
-                if (pwdUserListItem == null) {
-                    submit();
-                }else{
-                    // 发送命令给ble设备改变次数
+                if (timeB) {
+                    if (pwdUserListItem == null) {
+                        submit();
+                    } else {
+                        // 发送命令给ble设备改变次数
 //                    updateUser(pwdUserListItem.getUserNumber() + "");
 
-                    String sealCount = etUseTimes.getText().toString().trim();
-                    if (TextUtils.isEmpty(format)) {
-                        format = tvExpiredTime.getText().toString().trim();
-                    }
-                    try {
-                        updateCountByte = CommonUtil.changeTimes(pwdUserListItem.getUserNumber()+"", Integer.valueOf(sealCount), DateUtils.dateToStamp(format));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                        String sealCount = etUseTimes.getText().toString().trim();
+                        if (TextUtils.isEmpty(format)) {
+                            format = tvExpiredTime.getText().toString().trim();
+                        }
+                        try {
+                            updateCountByte = CommonUtil.changeTimes(pwdUserListItem.getUserNumber() + "", Integer.valueOf(sealCount), DateUtils.dateToStamp(format));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
-                    ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
-                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.CHANGEPWDPOWER, updateCountByte).getBytes()))
-                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    characteristicValue -> {
-                                        // Characteristic value confirmed.
-                                         Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+                        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
+                                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.CHANGEPWDPOWER, updateCountByte).getBytes()))
+                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        characteristicValue -> {
+                                            // Characteristic value confirmed.
+                                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
 
-                                    },
-                                    throwable -> {
-                                        // Handle an error here.
-                                    }
-                            ));
+                                        },
+                                        throwable -> {
+                                            // Handle an error here.
+                                        }
+                                ));
+                    }
+                } else {
+                    showToast("您选择的时间已过期");
                 }
 
                 break;
@@ -320,7 +329,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
             updateUser(pwdCode);
         } else if (event.msgType.equals("ble_change_stamp_count")) {
             // 修改次数成功，发送网络请求通知服务器
-            updateUser(pwdUserListItem.getUserNumber()+"");
+            updateUser(pwdUserListItem.getUserNumber() + "");
         }
     }
 
@@ -333,7 +342,7 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
         } else {
             // 把通过选择改的值赋值
             try {
-                pwdUserListItem.setExpireTime(Long.parseLong(DateUtils.dateToStamp( tvExpiredTime.getText().toString())));
+                pwdUserListItem.setExpireTime(Long.parseLong(DateUtils.dateToStamp(tvExpiredTime.getText().toString())));
                 pwdUserListItem.setStampCount(Integer.parseInt(etUseTimes.getText().toString()));
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -373,7 +382,6 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                         finish();
                     }
                 });
-
 
 
 //                Gson gson = new Gson();

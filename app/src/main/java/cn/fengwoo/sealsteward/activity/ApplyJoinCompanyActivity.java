@@ -40,6 +40,8 @@ public class ApplyJoinCompanyActivity extends BaseActivity implements View.OnCli
     @BindView(R.id.et_content)
     EditText et_content;
     private String companyId = "";
+    private String companyName = "";
+    private String realName = "";
 
 
     @Override
@@ -54,6 +56,9 @@ public class ApplyJoinCompanyActivity extends BaseActivity implements View.OnCli
         // get company id
         companyId= getIntent().getStringExtra("companyId");
         Utils.log("companyId:" + companyId);
+        companyName= getIntent().getStringExtra("companyName");
+        realName= getIntent().getStringExtra("realName");
+
     }
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
@@ -62,6 +67,7 @@ public class ApplyJoinCompanyActivity extends BaseActivity implements View.OnCli
         edit_tv.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
+        et_content.setText(realName+"申请加入"+companyName);
     }
 
     @Override

@@ -48,7 +48,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 新员工加入
  */
 public class PplAddActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)
@@ -107,7 +107,7 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("申请列表");
+        title_tv.setText("新员工加入");
         set_back_ll.setOnClickListener(this);
         tv_left.setOnClickListener(this);
         tv_right.setOnClickListener(this);

@@ -17,11 +17,11 @@
         app:inner_width="200dp"
         app:inner_height="200dp"
         app:inner_margintop="150dp"
-        app:inner_corner_color="@color/red"
-        app:inner_corner_length="30dp"
-        app:inner_corner_width="5dp"
-        app:inner_scan_bitmap="@drawable/ic_launcher"
-        app:inner_scan_speed="10"
-        app:inner_scan_iscircle="false"
-        />
+        app:inner_corner_color="@color/style"
+        app:inner_corner_length="20dp"
+        app:inner_corner_width="2dp"
+        app:inner_scan_bitmap="@drawable/scanline"
+        app:inner_scan_speed="30"
+        app:inner_scan_iscircle="false" />
+
 </FrameLayout>

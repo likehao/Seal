@@ -154,7 +154,6 @@ public class UserOrganizationalFragment extends Fragment {
                             String uID = CommonUtil.getUserData(getActivity()).getId();
                             // 判断自己在判断权限之前
                             if (uID.equals(uid)) {
-
                                 Toast.makeText(getActivity(), "不能删除自己", Toast.LENGTH_SHORT).show();
                                 return;
                             }

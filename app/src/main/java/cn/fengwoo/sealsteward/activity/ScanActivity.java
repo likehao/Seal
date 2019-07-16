@@ -69,7 +69,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
          */
         captureFragment = new CaptureFragment();
         // 为二维码扫描界面设置定制化界面,修改扫描框与透明框的相对位置等UI效果,不调用显示默认效果
-        // CodeUtils.setFragmentArgs(captureFragment, R.layout.my_camera);
+         CodeUtils.setFragmentArgs(captureFragment, R.layout.my_camera);
 
         captureFragment.setAnalyzeCallback(analyzeCallback);
         /**

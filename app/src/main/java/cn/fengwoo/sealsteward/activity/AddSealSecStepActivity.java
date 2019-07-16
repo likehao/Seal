@@ -121,7 +121,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("添加印章");
+        title_tv.setText("上传印模");
         set_back_ll.setOnClickListener(this);
         imageView.setOnClickListener(this);
         add_secStep_bt.setOnClickListener(this);

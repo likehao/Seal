@@ -53,17 +53,23 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:text="@string/seal_name"
             android:textColor="@color/black"
             android:textSize="12sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
 
         <TextView
             android:id="@+id/record_seal_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/seal"
+            android:layout_marginStart="20dp"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -77,12 +83,15 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:text="@string/seal_people"
             android:textColor="@color/black"
             android:textSize="12sp" />
-
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
         <TextView
             android:gravity="left"
             android:ellipsize="end"
@@ -91,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/seal"
+            android:layout_marginStart="20dp"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -112,17 +122,21 @@
 
                 <TextView
                     android:id="@+id/ygcs"
-                    android:layout_width="100dp"
+                    android:layout_width="77dp"
                     android:layout_height="wrap_content"
                     android:text="@string/finish_time"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
-
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="10dp"
+                    android:background="@color/LightGrey" />
                 <TextView
                     android:id="@+id/record_seal_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/seal"
+                    android:layout_marginStart="20dp"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -135,18 +149,22 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="77dp"
                     android:layout_height="wrap_content"
                     android:text="@string/Remainder"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
-
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="10dp"
+                    android:background="@color/LightGrey" />
                 <TextView
                     android:id="@+id/rest_count_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/seal"
+                    android:layout_marginStart="20dp"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -159,17 +177,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="77dp"
                     android:layout_height="wrap_content"
                     android:text="@string/upload_photo_number"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
-
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="10dp"
+                    android:background="@color/LightGrey" />
                 <TextView
                     android:id="@+id/upload_photoNum_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/seal"
+                    android:layout_marginStart="20dp"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -193,17 +215,21 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:text="@string/deadline"
             android:textColor="@color/black"
             android:textSize="12sp" />
-
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
         <TextView
             android:id="@+id/record_failTime_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2017-05-10 10:10:10"
+            android:layout_marginStart="20dp"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -216,17 +242,21 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:text="@string/lately_seal_time"
             android:textColor="@color/black"
             android:textSize="12sp" />
-
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
         <TextView
             android:id="@+id/record_seal_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="20"
+            android:layout_marginStart="20dp"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -240,18 +270,22 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:text="@string/lately_seal_address"
             android:textColor="@color/black"
             android:textSize="12sp" />
-
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
         <TextView
             android:id="@+id/record_seal_address_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:text="环球物流"
+            android:layout_marginStart="20dp"
             android:textSize="12sp" />
     </LinearLayout>
 

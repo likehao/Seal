@@ -2,10 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/corners_bg"
     android:orientation="vertical">
-
-    <View style="@style/line"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +20,10 @@
             android:textColor="@color/black" />
     </LinearLayout>
 
-    <View style="@style/line" />
+    <View
+        style="@style/line"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,15 +37,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="申请人:"
+            android:text="申请人"
             android:textSize="12sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
 
         <TextView
             android:id="@+id/wait_agree_person_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
             android:text="XXX"
             android:textSize="12sp" />
     </LinearLayout>
@@ -61,15 +67,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="部门:"
+            android:text="部门"
             android:textSize="12sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
 
         <TextView
             android:id="@+id/wait_agree_department_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
             android:text="XXX"
             android:textSize="12sp" />
     </LinearLayout>
@@ -86,15 +97,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="申请时间:"
+            android:text="申请时间"
             android:textSize="12sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
 
         <TextView
             android:id="@+id/wait_agree_time_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
             android:text="2017-05-10 10:10:10"
             android:textSize="12sp" />
     </LinearLayout>
@@ -111,15 +127,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="印章名称:"
+            android:text="印章名称"
             android:textSize="12sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:background="@color/LightGrey" />
 
         <TextView
             android:id="@+id/wait_agree_sealName_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
             android:text="公章"
             android:textSize="12sp" />
     </LinearLayout>
@@ -128,5 +149,4 @@
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
-    <View style="@style/line" />
 </LinearLayout>

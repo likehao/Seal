@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="46dp"/>
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,8 +22,9 @@
         android:layout_centerHorizontal="true"
         android:textSize="13sp"
         android:textColor="@color/white"
-        android:layout_marginBottom="113dp"
-        android:text="将二维码放入框内即可扫描" />
+        android:layout_marginTop="370dp"
+        android:layout_marginBottom="200dp"
+        android:text="将二维码放入框内,即可扫描" />
 
     <ImageView
         android:id="@+id/flashlight_iv"

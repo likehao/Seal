@@ -21,6 +21,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.CompanyInfo;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -41,6 +42,8 @@ public class ScannedCompanyActivity extends BaseActivity implements View.OnClick
     @BindView(R.id.btn_submit)
     TextView btn_submit;
     private String companyId = "";
+    private String companyName = "";
+    private String realName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class ScannedCompanyActivity extends BaseActivity implements View.OnClick
         String result = getIntent().getStringExtra("result");
         companyId = result.split("=")[1];
         Utils.log("companyId:" + companyId);
+        realName = CommonUtil.getUserData(this).getRealName();
     }
 
     private void initView() {
@@ -64,6 +68,7 @@ public class ScannedCompanyActivity extends BaseActivity implements View.OnClick
         title_tv.setText("公司详情");
         set_back_ll.setOnClickListener(this);
         btn_submit.setOnClickListener(this);
+
     }
 
     @Override
@@ -76,6 +81,8 @@ public class ScannedCompanyActivity extends BaseActivity implements View.OnClick
                 Intent intent = new Intent();
                 intent.setClass(this, ApplyJoinCompanyActivity.class);
                 intent.putExtra("companyId", companyId);
+                intent.putExtra("companyName", companyName);
+                intent.putExtra("realName", realName);
                 startActivity(intent);
                 finish();
                 break;
@@ -110,7 +117,8 @@ public class ScannedCompanyActivity extends BaseActivity implements View.OnClick
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            tv_company_name.setText(responseInfo.getData().getCompanyName());
+                            companyName = responseInfo.getData().getCompanyName();
+                            tv_company_name.setText(companyName);
 //                            detail_companyCode.setText(responseInfo.getData().getSocialCreditCode());
 //                            detail_companyLegalPerson.setText(responseInfo.getData().getLegalPersonName());
                         }

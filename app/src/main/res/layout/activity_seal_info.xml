@@ -15,422 +15,416 @@
         android:layout_marginTop="60dp"
         android:scrollbars="none">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical">
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/line" />
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/rl_pic"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/white">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <RelativeLayout
+                android:id="@+id/rl_pic"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="印模图像"
+                    android:textColor="@color/black" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/sealPrint_cir"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/default_head_portrait" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="印模图像"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/sealPrint_cir"
-                android:layout_width="40dp"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/default_head_portrait" />
+                android:background="@color/white">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="印章名称"
+                    android:textColor="@color/black" />
 
-        </RelativeLayout>
+                <EditText
+                    android:id="@+id/et_seal_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:background="@null"
+                    android:hint=""
+                    android:singleLine="true"
+                    android:textSize="12sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
+            </RelativeLayout>
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="印章名称"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
 
-            <EditText
-                android:id="@+id/et_seal_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:hint=""
-                android:textSize="12sp"
-                android:layout_marginEnd="15dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="MAC地址"
+                    android:textColor="@color/black" />
 
+                <TextView
+                    android:id="@+id/tv_mac"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:text="" />
 
+            </RelativeLayout>
 
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="MAC地址"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <TextView
-                android:id="@+id/tv_mac"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
-                android:text="" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="印章编号"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/et_seal_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:hint="@string/please_input_seal_number"
+                    android:singleLine="true"
+                    android:textSize="12sp" />
 
 
+            </RelativeLayout>
 
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="印章编号"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <EditText
-                android:id="@+id/et_seal_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:gravity="right"
-                android:hint="@string/please_input_seal_number"
-                android:textSize="12sp"
-                android:layout_marginEnd="15dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tv_company_namex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="所属公司"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_company"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="60dp"
+                    android:ellipsize="end"
+                    android:singleLine="true" />
 
 
+            </RelativeLayout>
 
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:id="@+id/tv_company_namex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="所属公司"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <TextView
-                android:layout_marginStart="60dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:id="@+id/tv_company"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp" />
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="所属部门"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_department"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="right"
+                    android:text="@string/select_belong_department" />
 
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
-
-        <RelativeLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="所属部门"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <TextView
-                android:gravity="right"
+            <RelativeLayout
+                android:id="@+id/rl_examine"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
 
-                android:id="@+id/tv_department"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
-                android:text="@string/select_belong_department" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="审批流程"
+                    android:textColor="@color/black" />
 
+                <View style="@style/right_arrow" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
-
-        <RelativeLayout
-            android:id="@+id/rl_examine"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="审批流程"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <View style="@style/right_arrow" />
+            <RelativeLayout
+                android:id="@+id/rl_pwd_user"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="密码用户"
+                    android:textColor="@color/black" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
+                <View style="@style/right_arrow" />
 
-        <RelativeLayout
-            android:id="@+id/rl_pwd_user"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="密码用户"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <View style="@style/right_arrow" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="是否启用地理围栏"
+                    android:textColor="@color/black" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/sb_limit"
+                    style="@style/set_power_bt" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="是否启用地理围栏"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
+            <RelativeLayout
+                android:id="@+id/rl_set_limit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
 
-            <com.suke.widget.SwitchButton
-                android:id="@+id/sb_limit"
-                style="@style/set_power_bt" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="地理围栏"
+                    android:textColor="@color/black" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="35dp"
+                    android:text="请设置地理围栏（可选）" />
 
-        </RelativeLayout>
+                <View style="@style/right_arrow" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
+            </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_set_limit"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="地理围栏"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="35dp"
-                android:text="请设置地理围栏（可选）" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
 
-            <View style="@style/right_arrow" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="使用范围"
+                    android:textColor="@color/black" />
 
-        </RelativeLayout>
+                <EditText
+                    android:id="@+id/et_use_range"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:background="@null"
+                    android:hint=""
+                    android:singleLine="true"
+                    android:gravity="end"
+                    android:layout_marginStart="100dp"
+                    android:textSize="12sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="使用范围"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="允许跨部门申请"
+                    android:textColor="@color/black" />
 
 
-            <EditText
-                android:id="@+id/et_use_range"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:hint=""
-                android:textSize="12sp"
-                android:layout_marginEnd="15dp" />
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/sb_trans_department"
+                    style="@style/set_power_bt" />
 
+            </RelativeLayout>
 
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
-                android:text="允许跨部门申请"
-                android:textColor="@color/black" />
+                android:background="@color/line" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="服务费到期时间"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:text="" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line" />
 
 
-
-            <com.suke.widget.SwitchButton
-                android:id="@+id/sb_trans_department"
-                style="@style/set_power_bt" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/line" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:text="服务费到期时间"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
-                android:text="" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/line" />
-
-
-    </LinearLayout>
+        </LinearLayout>
 
     </ScrollView>
 </RelativeLayout>

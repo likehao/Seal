@@ -2,35 +2,24 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v7.content.res.AppCompatResources;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.longsh.optionframelibrary.OptionBottomDialog;
 import com.lxj.matisse.Matisse;
 import com.lxj.matisse.MimeType;
 import com.lxj.matisse.filter.Filter;
@@ -40,19 +29,12 @@ import com.suke.widget.SwitchButton;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.white.easysp.EasySP;
-//import com.zhihu.matisse.Matisse;
-//import com.zhihu.matisse.MimeType;
-//import com.zhihu.matisse.filter.Filter;
-//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
-import org.devio.takephoto.compress.CompressConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,10 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.entity.AddUserInfo;
-import cn.fengwoo.sealsteward.entity.CompanyInfo;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
-import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.entity.SealInfoUpdateData;
@@ -72,13 +51,11 @@ import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.FileUtil;
-import cn.fengwoo.sealsteward.utils.FileUtils;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
 import cn.fengwoo.sealsteward.utils.GlideEngineImage;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.utils.ImageUtils;
 import cn.fengwoo.sealsteward.utils.ReqCallBack;
 import cn.fengwoo.sealsteward.utils.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -89,6 +66,11 @@ import okhttp3.Response;
 import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
+
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.filter.Filter;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 /**
  * 印章详情
@@ -150,10 +132,13 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
     private String sealPring = "";
     private static final int REQUEST_CODE_CHOOSE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seal_info);
+        //软键盘弹出使其页面布局上移
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ButterKnife.bind(this);
         initView();
         getData();
@@ -167,6 +152,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         edit_tv.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
         sealPrint_cir.setOnClickListener(this);
+        setUneditable();
     }
 
     private void getData() {
@@ -210,11 +196,11 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onFailure(Call call, IOException e) {
                 cancelLoadingView();
-                if (isEditable) {
-                    setEditable();
-                } else {
-                    setUneditable();
-                }
+//                if (isEditable) {
+//                    setEditable();
+//                } else {
+//                    setUneditable();
+//                }
             }
 
             @Override
@@ -267,18 +253,18 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             // 两个开关状态
                             sbLimit.setChecked(responseInfo.getData().isEnableEnclosure());
                             sbTransDepartment.setChecked(responseInfo.getData().isCrossDepartmentApply());
-                            if (isEditable) {
-                                setEditable();
-                            } else {
-                                setUneditable();
-                            }
+//                            if (isEditable) {
+//                                setEditable();
+//                            } else {
+//                                setUneditable();
+//                            }
 
                             // 存入本地状态
                             EasySP.init(SealInfoActivity.this).putBoolean("enableEnclosure", responseInfo.getData().isEnableEnclosure());
 
                             if (responseInfo.getData().getSealEnclosure() != null) {
                                 EasySP.init(SealInfoActivity.this).putString("scope", responseInfo.getData().getSealEnclosure().getScope() + "");
-                                EasySP.init(SealInfoActivity.this).putString("latitude", responseInfo.getData().getSealEnclosure().getLatitude()+"");
+                                EasySP.init(SealInfoActivity.this).putString("latitude", responseInfo.getData().getSealEnclosure().getLatitude() + "");
                                 EasySP.init(SealInfoActivity.this).putString("longitude", responseInfo.getData().getSealEnclosure().getLongitude() + "");
                             }
 
@@ -304,11 +290,11 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.sealPrint_cir:
-                intent = new Intent(this,BigImgActivity.class);
+                intent = new Intent(this, BigImgActivity.class);
                 //加载印模
                 String sealPrint = responseInfo.getData().getSealPrint();
                 String sealImg = "file://" + HttpDownloader.path + sealPrint;
-                intent.putExtra("photo",sealImg);
+                intent.putExtra("photo", sealImg);
                 startActivity(intent);
                 break;
         }
@@ -429,7 +415,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -540,35 +525,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
-
-//    private void selectDialog() {
-////        Utils.log("**********"+ CommonUtil.getUserData(this).getId());
-//        ArrayList<String> strings = new ArrayList<String>();
-//        strings.add("从相册选");
-//        strings.add("拍照");
-//        final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(this, strings);
-//        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //设置压缩规则，最大500kb
-////                takePhoto.onEnableCompress(new CompressConfig.Builder().setMaxSize(500 * 1024).create(), true);
-//                if (position == 0) {
-//                    // 从相册选
-//
-//
-//                    optionBottomDialog.dismiss();
-//
-//                } else if (position == 1) {
-//                    // 拍照
-//
-//                    optionBottomDialog.dismiss();
-//
-//                }
-//            }
-//        });
-//    }
-
-
     /**
      * 申请权限
      */
@@ -597,7 +553,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 });
     }
 
-
     /**
      * 图片选择器
      */
@@ -616,4 +571,5 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 .imageEngine(new GlideEngineImage())   //图片加载引擎  原本使用的是GlideEngine
                 .forResult(REQUEST_CODE_CHOOSE);
     }
+
 }

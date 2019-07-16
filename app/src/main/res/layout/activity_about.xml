@@ -10,11 +10,11 @@
     <include layout="@layout/head" />
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        android:background="@drawable/ic_launcher" />
+        android:background="@drawable/about" />
 
     <TextView
         android:layout_width="wrap_content"
