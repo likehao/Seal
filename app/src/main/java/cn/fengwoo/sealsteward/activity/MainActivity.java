@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -742,5 +743,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     public void setLeftOrRightListener(LeftOrRightListener leftOrRightListener) {
         this.leftOrRightListener = leftOrRightListener;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

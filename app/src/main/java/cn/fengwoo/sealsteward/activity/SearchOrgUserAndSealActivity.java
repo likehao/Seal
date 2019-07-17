@@ -56,6 +56,8 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
     ListView mListView;
     @BindView(R.id.no_record_ll)
     LinearLayout no_record_ll;
+    @BindView(R.id.edit_tv)
+    TextView edit_tv;
 
     OrganizationalStructureActivity org;
     private NodeTreeAdapter mAdapter;
@@ -67,6 +69,8 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
 
     private String idString;
     private String departmentName;
+    private String m_id, m_name;
+    private final static int SEARCHSELECTSEAL = 123;  //选择印章结果码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +87,13 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("搜索");
         set_back_ll.setOnClickListener(this);
+        edit_tv.setOnClickListener(this);
 
     }
 
     private void initData() {
         data = new ArrayList<>();
         list = new ArrayList<>();
-        mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 0, 0);
 
         Intent intent = getIntent();
         String select = intent.getStringExtra("select");
@@ -100,6 +104,15 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
             search_et.setHint("搜索印章");
             filterType = 4;
         }
+
+        String selectApplySeal = intent.getStringExtra("selectApplySeal");  //申请用印传递过来的，选择印章
+        if (selectApplySeal != null && selectApplySeal.equals("selectApplySeal")) {
+            mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 4);
+            selectApplySeal();
+        } else {
+            mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 0, 0);
+        }
+
         search_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -118,17 +131,20 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
                 return false;
             }
         });
+
         //点击搜索到的结果，人和章
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override
             public void clicked(String id, int type, String parentName) {
                 Utils.log("id:" + id);
-                if (type == 3) {
-                    selectUser(id);
-                } else if (type == 4) {
-                    idString = id;
-                    selectSeal(id);
-                    departmentName = parentName;
+                if (selectApplySeal == null) {
+                    if (type == 3) {
+                        selectUser(id);
+                    } else if (type == 4) {
+                        idString = id;
+                        selectSeal(id);
+                        departmentName = parentName;
+                    }
                 }
             }
         });
@@ -140,7 +156,40 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
             case R.id.set_back_ll:
                 finish();
                 break;
+            case R.id.edit_tv:
+                getSure();
+                break;
         }
+    }
+
+    /**
+     * 用印申请搜索之后选择印章
+     */
+
+    private void selectApplySeal() {
+        edit_tv.setVisibility(View.VISIBLE);
+        edit_tv.setText("确定");
+        mAdapter.setCheckBoxCheckedlistener(new NodeTreeAdapter.CheckBoxCheckedlistener() {
+            @Override
+            public void checked(String id, String name) {
+                Utils.log("***id:" + id + "  ***name:" + name);
+                m_id = id;
+                m_name = name;
+            }
+
+            @Override
+            public void unchecked(String id, String name) {
+
+            }
+        });
+    }
+
+    private void getSure() {
+        Intent intent = new Intent();
+        intent.putExtra("id", m_id);
+        intent.putExtra("name", m_name);
+        setResult(123, intent);
+        finish();
     }
 
     /**
@@ -153,22 +202,15 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
         // 当前搜索
         if (organizationalStructureData.getData() != null && organizationalStructureData.getCode() == 0) {
             for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
-                if (dataBean.getType() == 1) {
-                    //把公司添加到搜索的结果里面
-                    if (!searchResult.contains(dataBean)) {
-                        searchResult.add(dataBean);
-                    }
-                } else {
-                    //如果搜索人就排除印章type为4，反正搜索印章时候排除人type为3，并且排除type为1和2的部门
-                    if (filterType == 3 ? dataBean.getType() != 4 : dataBean.getType() != 3) {
-                        if (dataBean.getName().contains(string)) {
-                            if (!searchResult.contains(dataBean)) {
-                                searchResult.add(dataBean);
-                            }
+                //如果搜索人就排除印章type为4，搜索印章时候排除人type为3，并且排除type为1和2的部门
+                if (filterType == 3 ? dataBean.getType() == 3 : dataBean.getType() == 4) {
+                    if (dataBean.getName().contains(string)) {
+                        if (!searchResult.contains(dataBean)) {
+                            searchResult.add(dataBean);
                         }
-
                     }
                 }
+
             }
         }
         //查找遍历部门
@@ -182,12 +224,17 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
                         list.add(dataBean); // 部门对象
                     }
                 }
+                if (dataBean.getParentId() == null) {
+                    if (!list.contains(dataBean)) {  //公司对象
+                        list.add(dataBean);
+                    }
+                }
+
             }
         }
         // 整合数据
         for (OrganizationalStructureData.DataBean dataBean : list) {
             data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false, dataBean.getPortrait()));
-
         }
         runOnUiThread(new Runnable() {
             @Override
@@ -196,9 +243,12 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
                 mLinkedList.addAll(NodeHelper.sortNodes(data));
                 mAdapter.notifyDataSetChanged();
                 no_record_ll.setVisibility(View.GONE);
+
             }
         });
-
+        if (searchResult.size() == 0) {
+            showToast("未查询到结果");
+        }
     }
 
     /**

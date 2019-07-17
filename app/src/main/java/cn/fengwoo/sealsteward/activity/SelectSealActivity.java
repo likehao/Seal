@@ -3,7 +3,9 @@ package cn.fengwoo.sealsteward.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +46,8 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     TextView edit_tv;
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
+    @BindView(R.id.select_seal_ll)
+    LinearLayout select_seal_et;
     private ListView mListView;
     private NodeTreeAdapter mAdapter;
     private LinkedList<Node> mLinkedList = new LinkedList<>();
@@ -54,6 +58,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     LoadingView loadingView;
     Intent intent;
     private static final int PAYFINISH = 1;
+    private final static int SEARCHSELECTSEAL = 123;  //选择印章结果码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +132,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 assert organizationalStructureData != null;
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
                     if (dataBean.getType() != filterType1) {
-                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false,dataBean.getPortrait()));
+                        data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false, dataBean.getPortrait()));
                     }
                 }
                 runOnUiThread(new Runnable() {
@@ -151,6 +156,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         edit_tv.setOnClickListener(this);
         loadingView = new LoadingView(this);
         loadingView.show();
+        select_seal_et.setOnClickListener(this);
     }
 
     @Override
@@ -161,6 +167,12 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.edit_tv:
                 getSure();
+                break;
+            case R.id.select_seal_ll:
+                Intent intent = new Intent(this, SearchOrgUserAndSealActivity.class);
+                intent.putExtra("select", "seal");
+                intent.putExtra("selectApplySeal","selectApplySeal");
+                startActivityForResult(intent, SEARCHSELECTSEAL);
                 break;
         }
     }
@@ -178,7 +190,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 intent = new Intent(this, PayActivity.class);
                 intent.putExtra("sealId", m_id);
 //                startActivity(intent);
-                startActivityForResult(intent,PAYFINISH);
+                startActivityForResult(intent, PAYFINISH);
             } else {
                 showToast("请选择需要充值的印章");
             }
@@ -194,10 +206,24 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
-            if (resultCode == 1){
+        if (requestCode == 1) {
+            if (resultCode == 1) {
                 finish();
             }
+        }
+        switch (requestCode){
+            case SEARCHSELECTSEAL:
+            if (data != null) {
+                //获取搜索到的印章数据再传递到申请页面
+                String sealId = data.getStringExtra("id");
+                String sealName = data.getStringExtra("name");
+                intent = new Intent();
+                intent.putExtra("id", sealId);
+                intent.putExtra("name", sealName);
+                setResult(123, intent);
+                finish();
+            }
+            break;
         }
     }
 }

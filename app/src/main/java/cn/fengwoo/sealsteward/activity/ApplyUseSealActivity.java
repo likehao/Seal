@@ -95,7 +95,6 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     private String name, failTime, cause;
     private String applyCount;
     private Intent intent;
-    private String url;
     private String applyId;
 //    private ArrayList<String> imgList = new ArrayList<>();
 
@@ -131,7 +130,6 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         sign = intent.getStringExtra("sign");
         sealId = intent.getStringExtra("sealId");
 //        imgList = intent.getStringArrayListExtra("imgList");
-        url = HttpUrl.CHECKUSESEAL;
         if (type != null && type.equals("重提")) {
             sealName_TV.setText(sealName);
             apply_time_et.setText(applyCount + "");
@@ -221,7 +219,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         if (!TextUtils.isEmpty(sealId)) {
             useSealApplyBean.setSealId(sealId);
         }
-        HttpUtil.sendDataAsync(ApplyUseSealActivity.this, url, 2, null, useSealApplyBean, new Callback() {
+        HttpUtil.sendDataAsync(ApplyUseSealActivity.this, HttpUrl.CHECKUSESEAL, 2, null, useSealApplyBean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", e + "用印申请错误!!!!!!!!!!!!!!!!!!!!");

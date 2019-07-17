@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ public class ApprovalRecordActivity extends BaseActivity implements View.OnClick
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("审批历史");
+        title_tv.setText("审批记录");
         set_back_ll.setOnClickListener(this);
         titleList = new ArrayList<String>();
         fragmentList = new ArrayList<Fragment>();
@@ -173,4 +174,14 @@ public class ApprovalRecordActivity extends BaseActivity implements View.OnClick
             }
         }
     };
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

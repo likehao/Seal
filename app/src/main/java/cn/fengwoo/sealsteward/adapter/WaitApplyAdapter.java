@@ -91,9 +91,14 @@ public class WaitApplyAdapter extends BaseAdapter {
         int status = waitApplyData.get(position).getApproveStatus();
         String id = waitApplyData.get(position).getId();
         String applyUser = waitApplyData.get(position).getApplyUser();
-        String userId = CommonUtil.getUserData((Activity)context).getId();
+        String userId = CommonUtil.getUserData((Activity) context).getId();
 
-        if (code == 1){    //待审批
+        if (code == 1) {    //待审批
+            if (applyUser.equals(userId)){
+                viewHolder.item2_tv.setVisibility(View.VISIBLE);
+            }else {
+                viewHolder.item2_tv.setVisibility(View.GONE);
+            }
             statusView(status);
             //关闭单据
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
@@ -117,14 +122,14 @@ public class WaitApplyAdapter extends BaseAdapter {
                     }*/
                 }
             });
-        }else if (code == 2) { //审批中
+        } else if (code == 2) { //审批中
             viewHolder.item2_tv.setText("审批进度");
             viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.black));
             viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     intent = new Intent(context, ApprovalActivity.class);
-                    intent.putExtra("applyId",waitApplyData.get(position).getId());
+                    intent.putExtra("applyId", waitApplyData.get(position).getId());
                     context.startActivity(intent);
                 }
             });
@@ -132,7 +137,7 @@ public class WaitApplyAdapter extends BaseAdapter {
             seeRecordCloseBill(status, position, id);
 
         } else if (code == 4) {  //已驳回（我的申请）
-            if (applyUser.equals(userId))  {   //判断此单据是否是登陆者本人来显示是否可以重提
+            if (applyUser.equals(userId)) {   //判断此单据是否是登陆者本人来显示是否可以重提
 
                 viewHolder.item2_tv.setVisibility(View.VISIBLE);
                 viewHolder.item2_tv.setText("重提");
@@ -159,9 +164,9 @@ public class WaitApplyAdapter extends BaseAdapter {
     }
 
     /**
-     *  待审批撤销
+     * 待审批撤销
      */
-    private void revokeDialog(String id,int code,int position){
+    private void revokeDialog(String id, int code, int position) {
         final CommonDialog commonDialog = new CommonDialog(context, "提示", "您是否确认撤销此单据？", "撤销");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
@@ -175,21 +180,23 @@ public class WaitApplyAdapter extends BaseAdapter {
 
     /**
      * 重提传值
+     *
      * @param position
      */
-    private void putValue(int position){
+    private void putValue(int position) {
         intent = new Intent(context, ApplyUseSealActivity.class);
-        intent.putExtra("重提","重提");
-        intent.putExtra("sealName",waitApplyData.get(position).getSealName());
-        intent.putExtra("applyCount",waitApplyData.get(position).getApplyCount());
-        intent.putExtra("failTime",waitApplyData.get(position).getFailTime());
-        intent.putExtra("cause",waitApplyData.get(position).getCause());
-        intent.putExtra("sign",waitApplyData.get(position).getAutoGraph());
-        intent.putExtra("sealId",waitApplyData.get(position).getSealId());
-        intent.putExtra("applyId",waitApplyData.get(position).getId());
+        intent.putExtra("重提", "重提");
+        intent.putExtra("sealName", waitApplyData.get(position).getSealName());
+        intent.putExtra("applyCount", waitApplyData.get(position).getApplyCount());
+        intent.putExtra("failTime", waitApplyData.get(position).getFailTime());
+        intent.putExtra("cause", waitApplyData.get(position).getCause());
+        intent.putExtra("sign", waitApplyData.get(position).getAutoGraph());
+        intent.putExtra("sealId", waitApplyData.get(position).getSealId());
+        intent.putExtra("applyId", waitApplyData.get(position).getId());
 //        intent.putStringArrayListExtra("imgList", (ArrayList<String>) waitApplyData.get(position).getStampRecordImgList());
         context.startActivity(intent);
     }
+
     /**
      * 查看记录关闭单据（已审批,已驳回）
      */
@@ -231,9 +238,9 @@ public class WaitApplyAdapter extends BaseAdapter {
         viewHolder.item2_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (waitApplyData.get(position).getUploadPhotoNum() == 0){
-                    CommonDialog commonDialog = new CommonDialog(context,"提示",
-                            "此单据还未上传盖章后拍照,将无法在记录详情查看到盖章文件,是否继续关闭？","关闭");
+                if (waitApplyData.get(position).getUploadPhotoNum() == 0) {
+                    CommonDialog commonDialog = new CommonDialog(context, "提示",
+                            "此单据还未上传盖章后拍照,将无法在记录详情查看到盖章文件,是否继续关闭？", "关闭");
                     commonDialog.showDialog();
                     commonDialog.setClickListener(new View.OnClickListener() {
                         @Override
@@ -242,7 +249,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                             commonPostRequest(id, code == 1 ? 2 : 1, position);
                         }
                     });
-                }else {
+                } else {
                     commonPostRequest(id, code == 1 ? 2 : 1, position);
                 }
             }
@@ -265,6 +272,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                 viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                 break;
             case 4:
+                viewHolder.item2_tv.setVisibility(View.VISIBLE);
                 viewHolder.item2_tv.setText("已撤销");
                 viewHolder.item2_tv.setEnabled(false);
                 viewHolder.item2_tv.setTextColor(context.getResources().getColor(R.color.gray_text));
@@ -314,7 +322,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                                     waitApplyData.get(position).setApproveStatus(5);
                                     notifyDataSetChanged();
-                                    EventBus.getDefault().post(new MessageEvent("关闭刷新","关闭刷新"));
+                                    EventBus.getDefault().post(new MessageEvent("关闭刷新", "关闭刷新"));
                                 } else {
                                     viewHolder.item2_tv.setText("已撤销");
                                     viewHolder.item2_tv.setEnabled(false);
@@ -322,7 +330,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                                     waitApplyData.get(position).setApproveStatus(4);
                                     notifyDataSetChanged();
-                                    EventBus.getDefault().post(new MessageEvent("撤销刷新","撤销刷新"));
+                                    EventBus.getDefault().post(new MessageEvent("撤销刷新", "撤销刷新"));
                                 }
                             }
                         });
@@ -365,7 +373,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                                     waitApplyData.get(position).setApproveStatus(5);
                                     notifyDataSetChanged();
-                                    EventBus.getDefault().post(new MessageEvent("关闭刷新","关闭刷新"));
+                                    EventBus.getDefault().post(new MessageEvent("关闭刷新", "关闭刷新"));
                                 } else {
                                     viewHolder.item2_tv.setText("已撤销");
                                     viewHolder.item2_tv.setEnabled(false);
@@ -373,7 +381,7 @@ public class WaitApplyAdapter extends BaseAdapter {
                                     viewHolder.item2_tv.setBackgroundResource(R.drawable.record_off);
                                     waitApplyData.get(position).setApproveStatus(4);
                                     notifyDataSetChanged();
-                                    EventBus.getDefault().post(new MessageEvent("撤销刷新","撤销刷新"));
+                                    EventBus.getDefault().post(new MessageEvent("撤销刷新", "撤销刷新"));
                                 }
                             }
                         });

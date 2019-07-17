@@ -23,6 +23,7 @@ public class BaseActivity extends AppCompatActivity{
     public ImmersionBar immersionBar;
     protected LoadingView loadingView;
     protected MyApp application;
+    private long lastClickTime;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,5 +67,16 @@ public class BaseActivity extends AppCompatActivity{
     }
     protected void cancelLoadingView() {
         loadingView.cancel();
+    }
+
+    /**
+     * 时间间隔不超过300ms，此时activity拦截click事件，防止出现两个相同页面
+     * @return
+     */
+    public boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        lastClickTime = time;
+        return timeD <= 300;
     }
 }
