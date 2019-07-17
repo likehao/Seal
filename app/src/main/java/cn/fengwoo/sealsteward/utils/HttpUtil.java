@@ -80,7 +80,7 @@ public class HttpUtil {
      *  type 5 put
      *
      * @param url      地址
-     * @param type     1,get 2,post 3,patch ,4delete
+     * @param type     1,get 2,post 3,patch ,4delete,5put
      * @param params   字典
      * @param data     发送的JSON对象
      * @param callback 回调

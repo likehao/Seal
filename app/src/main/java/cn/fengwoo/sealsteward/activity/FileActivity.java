@@ -93,7 +93,9 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         settings.setJavaScriptEnabled(true);
         settings.setAllowFileAccessFromFileURLs(true);
         settings.setAllowUniversalAccessFromFileURLs(true);
-  //      settings.setBuiltInZoomControls(true); //导致触摸缩放退出时候异常,可在onDestroy设置visibility
+        settings.setBuiltInZoomControls(true); //导致触摸缩放退出时候异常,可在onDestroy设置visibility
+        settings.setSupportZoom(true);
+//        settings.setDisplayZoomControls(false);  //不显示缩放按钮
         webView.setWebChromeClient(new WebChromeClient());
         if (!"".equals(pdfUrl)) {
             byte[] bytes = null;
@@ -201,7 +203,7 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         super.onDestroy();
         if (webView != null){
             webView.destroy();
-    //        webView.setVisibility(View.GONE);
+            webView.setVisibility(View.GONE);
         }
     }
 }
