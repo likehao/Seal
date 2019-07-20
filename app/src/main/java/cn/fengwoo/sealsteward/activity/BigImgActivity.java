@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
+
 import cn.fengwoo.sealsteward.R;
 
 /**
@@ -15,14 +17,19 @@ import cn.fengwoo.sealsteward.R;
 public class BigImgActivity extends Activity {
 
     private Activity activity;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_photo_entry);
-        ImageView img = this.findViewById(R.id.large_image );
+        ImageView img = this.findViewById(R.id.large_image);
         activity = this;
         String photo = getIntent().getStringExtra("photo");
-        Glide.with(this).load(photo).into(img);
+        if (photo.contains("png")|| photo.contains("jpg") || photo.contains("jpeg")) {
+            Glide.with(this).load(photo).into(img);
+        } else {
+            Glide.with(this).load(R.drawable.default_head_portrait).into(img);
+        }
         Toast.makeText(this, "点击图片即可返回", Toast.LENGTH_SHORT).show();
         img.setOnClickListener(new View.OnClickListener() { // 点击返回
             public void onClick(View paramView) {

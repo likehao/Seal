@@ -68,7 +68,7 @@ public class SelectReplaceSealActivity extends BaseActivity implements View.OnCl
         ButterKnife.bind(this);
         loadingView = new LoadingView(this);
         initView();
-        mListView = findViewById(R.id.id_tree);
+        mListView = (ListView) findViewById(R.id.id_tree);
         mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 4);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override

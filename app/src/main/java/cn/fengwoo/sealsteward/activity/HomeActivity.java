@@ -21,7 +21,8 @@ public class HomeActivity extends Base2Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        home_iv = findViewById(R.id.home_iv);
+        setSwipeBackEnable(false);// 禁止撤滑返回
+        home_iv = (ImageView) findViewById(R.id.home_iv);
         //获取屏幕宽度
         WindowManager wm = this.getWindowManager();
         DisplayMetrics displayMetrics = new DisplayMetrics();

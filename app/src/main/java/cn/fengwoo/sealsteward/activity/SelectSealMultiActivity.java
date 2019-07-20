@@ -64,7 +64,7 @@ public class SelectSealMultiActivity extends BaseActivity implements View.OnClic
         selectedUidsMap = new HashMap<>();
 //        getIntentData();
         initView();
-        mListView = findViewById(R.id.id_tree);
+        mListView = (ListView) findViewById(R.id.id_tree);
         mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 2, 4);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override

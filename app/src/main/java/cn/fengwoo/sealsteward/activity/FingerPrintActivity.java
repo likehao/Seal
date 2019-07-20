@@ -58,6 +58,8 @@ public class FingerPrintActivity extends Base2Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finger_print);
+
+        setSwipeBackEnable(false); //禁止撤滑返回
         ButterKnife.bind(this);
 
         mManager = BiometricPromptManager.from(this);

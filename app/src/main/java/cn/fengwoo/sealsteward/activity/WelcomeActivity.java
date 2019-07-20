@@ -60,7 +60,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
             iv.setImageResource(imgs[i]);
             views.add(iv);
         }
-        viewpager = findViewById(R.id.viewpager);
+        viewpager = (ViewPager) findViewById(R.id.viewpager);
         //初始化adapter
         startViewPagerAdapter = new StartViewPagerAdapter(views);
         viewpager.setAdapter(startViewPagerAdapter);
@@ -68,7 +68,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
        /* viewpager.setAdapter(new StartAdapter());
         viewpager.addOnPageChangeListener(this);*/
         //欢迎按钮
-        welcome_bt = findViewById(R.id.welcome_bt);
+        welcome_bt = (Button) findViewById(R.id.welcome_bt);
         welcome_bt.setOnClickListener(this);
 
     }

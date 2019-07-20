@@ -156,13 +156,13 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
 
         homecamera_bottom_relative = (RelativeLayout) findViewById(R.id.homecamera_bottom_relative);
 
-        tv_cancel = findViewById(R.id.tv_cancel);
+        tv_cancel = (TextView) findViewById(R.id.tv_cancel);
         tv_cancel.setOnClickListener(this);
 
-        tv_complete = findViewById(R.id.tv_complete);
+        tv_complete = (TextView) findViewById(R.id.tv_complete);
         tv_complete.setOnClickListener(this);
 
-        iv_little_pic = findViewById(R.id.iv_little_pic);
+        iv_little_pic = (ImageView) findViewById(R.id.iv_little_pic);
         iv_little_pic.setOnClickListener(this);
 
     }

@@ -130,7 +130,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     private static final int REQUESTCODE_CUTTING = 222;    // 图片裁切标记
     private static final String IMAGE_FILE_NAME = "seal.jpg";
 
-    private String sealPring = "";
+    private String sealPrint = "";
     private static final int REQUEST_CODE_CHOOSE = 1;
 
     @Override
@@ -218,7 +218,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                         @Override
                         public void run() {
                             //加载印模
-                            String sealPrint = responseInfo.getData().getSealPrint();
+                            sealPrint = responseInfo.getData().getSealPrint();
                             Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
                             if (bitmap == null) {
                                 HttpDownloader.downloadImage(SealInfoActivity.this, 3, sealPrint, new DownloadImageCallback() {
@@ -292,7 +292,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.sealPrint_cir:
                 intent = new Intent(this, BigImgActivity.class);
                 //加载印模
-                String sealPrint = responseInfo.getData().getSealPrint();
+//                sealPrint = responseInfo.getData().getSealPrint();
                 String sealImg = "file://" + HttpDownloader.path + sealPrint;
                 intent.putExtra("photo", sealImg);
                 startActivity(intent);
@@ -375,7 +375,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         sealInfoUpdateData.setOrgStructrueId(departmentId);
         sealInfoUpdateData.setScope(etUseRange.getText().toString().trim());
         sealInfoUpdateData.setSealNo(responseInfo.getData().getSealNo());
-        sealInfoUpdateData.setSealPrint(sealPring);
+        sealInfoUpdateData.setSealPrint(sealPrint);
         sealInfoUpdateData.setServiceTime(responseInfo.getData().getServiceTime());
         sealInfoUpdateData.setCrossDepartmentApply(sbTransDepartment.isChecked());
         sealInfoUpdateData.setEnableEnclosure(sbLimit.isChecked());
@@ -403,6 +403,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                //更新印模
                                 cancelLoadingView();
                             }
                         });
@@ -482,7 +483,10 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-
+    /**
+     * 更新印模图片
+     * @param file
+     */
     private void uploadPic(File file) {
         HashMap<String, Object> hashMap = new HashMap<>();
         Utils.log(file.length() + "");
@@ -499,8 +503,26 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     Log.e("ATG", "发送图片至服务器成功..........");
                     Utils.log(responseInfo.getCode() + "");
-                    sealPring = responseInfo.getData().getFileName();
-
+                    sealPrint = responseInfo.getData().getFileName();
+                    Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
+                    if (bitmap == null) {
+                        HttpDownloader.downloadImage(SealInfoActivity.this, 3, sealPrint, new DownloadImageCallback() {
+                            @Override
+                            public void onResult(final String fileName) {
+                                if (fileName != null) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            sealPrint = fileName;
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    setUneditable();
+                    edit_tv.setText("编辑");
+                    updateInfo();
                     // 保存 印模 名字
 //                    sealPringString = responseInfo.getData().getFileName();
                     //添加印章

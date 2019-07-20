@@ -71,7 +71,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     SmartRefreshLayout record_refreshLayout;
     @BindView(R.id.record_lv)
     ListView record_lv;
-    String begin, end, personId, sealId,cause;
+    String begin, end, personId, sealId, cause;
     int type;
     @BindView(R.id.select_record_smt)  //单独用来放置查询出来的记录
             SmartRefreshLayout select_record_smt;
@@ -98,6 +98,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
 
     @BindView(R.id.no_record_ll)
     LinearLayout no_record_ll;
+    @BindView(R.id.no_record_ll2)
+    LinearLayout no_record_ll2;
 
     @BindView(R.id.pwdRecord_smt)
     SmartRefreshLayout pwdRecordSmt;
@@ -112,11 +114,12 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     ResponseInfo<List<OfflineRecordData>> responseInfoP;
 
     private boolean isLeftClick = true;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.record_fragment, container, false);
-
+        EventBus.getDefault().register(this);   //注册Eventbus
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setLeftOrRightListener(new MainActivity.LeftOrRightListener() {
             @Override
@@ -179,7 +182,8 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         });
     }
 
-    String endTime,startTime;
+    String endTime, startTime;
+
     /**
      * 获取密码盖章记录请求数据
      */
@@ -200,7 +204,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             e.printStackTrace();
         }
 //        param.Param(applyUser, endTime, sealId, 2,startTime);  // type 1.APP盖章   2.密码盖章
-        param.Param(null, null, null, 2,null);  // type 1.APP盖章   2.密码盖章
+        param.Param(null, null, null, 2, null);  // type 1.APP盖章   2.密码盖章
         stampRecordData.setParam(param);
 
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.OFFLINERECORD, 2, null, stampRecordData, new Callback() {
@@ -218,25 +222,27 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 if (responseInfoP.getData() != null && responseInfoP.getCode() == 0) {
                     for (OfflineRecordData app : responseInfoP.getData()) {
                         String stampTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));
-                        pList.add(new SeeRecordBean(app.getFlowNumber(),app.getSealName(),app.getUserName(),stampTime));
+                        pList.add(new SeeRecordBean(app.getFlowNumber(), app.getSealName(), app.getUserName(), stampTime));
                     }
                     //请求数据
-                   Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             refreshLayout.finishRefresh(); //刷新完成
                             refreshLayout.finishLoadMore();//结束加载
                             adapter.notifyDataSetChanged(); //刷新数据
+                            no_record_ll2.setVisibility(View.GONE);
                             no_record_ll.setVisibility(View.GONE);
                         }
                     });
-                }else {
+                } else {
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             refreshLayout.finishRefresh(); //刷新完成
                             refreshLayout.finishLoadMore();//结束加载
                             refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
+                            no_record_ll2.setVisibility(View.VISIBLE);
                         }
                     });
                 }
@@ -267,7 +273,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 Utils.log("onclick");
                 if (isLeftClick) {
                     startActivity(new Intent(getActivity(), RecordSearchActivity.class));
-                }else{
+                } else {
                     startActivity(new Intent(getActivity(), PwdRecordSearchActivity.class));
                 }
             }
@@ -356,15 +362,18 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 refreshLayout.finishLoadMore(); //加载完成
                                 recordAdapter.notifyDataSetChanged(); //刷新数据
                                 no_record_ll.setVisibility(View.GONE);
+                                no_record_ll2.setVisibility(View.GONE);
                             }
                         });
                     }
 
-                }else {
+                } else {
                     if (null != getActivity()) {
                         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                recordAdapter.notifyDataSetChanged(); //刷新数据
+                                no_record_ll.setVisibility(View.VISIBLE);
                                 refreshLayout.finishRefresh(); //刷新完成
                                 refreshLayout.finishLoadMore();//结束加载
                                 refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
@@ -386,19 +395,44 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent) {
         String s = messageEvent.msgType;
-        if (s.equals("1")) {
-            select_record_ll.setVisibility(View.GONE);
-            record_ll.setVisibility(View.VISIBLE);
-            record_refreshLayout.autoRefresh();  //自动刷新
+        switch (s) {
+            case "1":
+                select_record_ll.setVisibility(View.GONE);
+                record_ll.setVisibility(View.VISIBLE);
+                record_refreshLayout.autoRefresh();  //自动刷新
+                break;
+            case "筛选":
+                Intent intent = new Intent(getActivity(), SelectSealRecodeActivity.class);
+                startActivityForResult(intent, 100);
+                break;
+            case "关闭刷新":
+                record_refreshLayout.autoRefresh();
+                break;
+            case "切换公司":
+                record_refreshLayout.autoRefresh();
+                pwdRecordSmt.autoRefresh();
+                break;
         }
-        if (s.equals("筛选")) {
-            Intent intent = new Intent(getActivity(), SelectSealRecodeActivity.class);
-            startActivityForResult(intent, 100);
-        }
-        if (s.equals("关闭刷新")) {
-            record_refreshLayout.autoRefresh();
-        }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+//        EventBus.getDefault().register(this);   //注册Eventbus
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+//        EventBus.getDefault().unregister(this);  //解除注册
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     /**
@@ -431,7 +465,6 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
      * 发送获取查询记录请求
      */
 //    String endTime, startTime;
-
     private void getSelectData(RefreshLayout refreshLayout) {
         StampRecordData stampRecordData = new StampRecordData();
         StampRecordData.Param param = new StampRecordData.Param();
@@ -448,7 +481,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        param.Param(personId, endTime, sealId, 1, startTime,"1",cause);     // 1为APP盖章，2为密码盖章
+        param.Param(personId, endTime, sealId, 1, startTime, "1", cause);     // 1为APP盖章，2为密码盖章
         stampRecordData.setParam(param);
 
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.STAMPRECORDAPPLYLIST, 2, null, stampRecordData, new Callback() {
@@ -492,10 +525,11 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                                 refreshLayout.finishLoadMore();//结束加载
                                 recordAdapter.notifyDataSetChanged(); //刷新数据
                                 no_record_ll.setVisibility(View.GONE);
+                                no_record_ll2.setVisibility(View.GONE);
                             }
                         });
                     }
-                }else {
+                } else {
                     if (null != getActivity()) {
                         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                             @Override
@@ -509,26 +543,6 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 }
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);   //注册Eventbus
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);  //解除注册
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     @Override
@@ -571,7 +585,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             }else {
                 type = 0;
             }*/
-           //查询记录时候隐藏现有的手机盖章和密码盖章记录
+            //查询记录时候隐藏现有的手机盖章和密码盖章记录
             ll_pwdRecord.setVisibility(View.GONE);
             record_ll.setVisibility(View.GONE);
             getRecordList();   //获取查询记录列表

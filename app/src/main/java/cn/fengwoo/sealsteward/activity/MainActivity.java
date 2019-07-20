@@ -3,7 +3,6 @@ package cn.fengwoo.sealsteward.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,17 +24,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.white.easysp.EasySP;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -130,6 +133,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setSwipeBackEnable(false);//禁止滑动退出
         Utils.log("onCreateonCreate");
         ButterKnife.bind(this);
         String state = EasySP.init(this).getString("finger_print");
@@ -197,35 +202,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     };
 
     private void initView() {
-        title_tv = findViewById(R.id.title_tv);
-        scan_ll = findViewById(R.id.scan_ll);
+        title_tv = (TextView) findViewById(R.id.title_tv);
+        scan_ll = (LinearLayout) findViewById(R.id.scan_ll);
         scan_ll.setVisibility(View.VISIBLE);
         add_ll.setVisibility(View.GONE);
         msg_ll.setVisibility(View.VISIBLE);
-        home_page = findViewById(R.id.home_page);
-        record_page = findViewById(R.id.record_page);
-        application_page = findViewById(R.id.application_page);
-        message_page = findViewById(R.id.message_page);
-        mine = findViewById(R.id.mine);
-        textViews[0] = findViewById(R.id.seal_tv);
-        textViews[1] = findViewById(R.id.record_tv);
-        textViews[2] = findViewById(R.id.matter_tv);
-        textViews[3] = findViewById(R.id.mine_tv);
-        textViews[4] = findViewById(R.id.application_tv);
+        home_page = (LinearLayout) findViewById(R.id.home_page);
+        record_page = (LinearLayout) findViewById(R.id.record_page);
+        application_page = (LinearLayout) findViewById(R.id.application_page);
+        message_page = (LinearLayout) findViewById(R.id.message_page);
+        mine = (LinearLayout) findViewById(R.id.mine);
+        textViews[0] = (TextView) findViewById(R.id.seal_tv);
+        textViews[1] = (TextView) findViewById(R.id.record_tv);
+        textViews[2] = (TextView) findViewById(R.id.matter_tv);
+        textViews[3] = (TextView) findViewById(R.id.mine_tv);
+        textViews[4] = (TextView) findViewById(R.id.application_tv);
 
-        imageViews[0] = findViewById(R.id.seal_iv);
-        imageViews[1] = findViewById(R.id.record_iv);
-        imageViews[2] = findViewById(R.id.matter_iv);
-        imageViews[3] = findViewById(R.id.mine_iv);
-        imageViews[4] = findViewById(R.id.application_iv);
+        imageViews[0] = (ImageView) findViewById(R.id.seal_iv);
+        imageViews[1] = (ImageView) findViewById(R.id.record_iv);
+        imageViews[2] = (ImageView) findViewById(R.id.matter_iv);
+        imageViews[3] = (ImageView) findViewById(R.id.mine_iv);
+        imageViews[4] = (ImageView) findViewById(R.id.application_iv);
 
         textViews[5] = tv_left;
         textViews[6] = tv_right;
         linearLayouts[5] = phoneSeal;
         linearLayouts[6] = pwdSeal;
 
-        record_more_iv = findViewById(R.id.record_more_iv);
-        message_more_iv = findViewById(R.id.message_more_iv);
+        record_more_iv = (ImageView) findViewById(R.id.record_more_iv);
+        message_more_iv = (ImageView) findViewById(R.id.message_more_iv);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
         title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
@@ -745,6 +750,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         this.leftOrRightListener = leftOrRightListener;
     }
 
+    /**
+     * 防止点击过快出现两个页面
+     * @param ev
+     * @return
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {

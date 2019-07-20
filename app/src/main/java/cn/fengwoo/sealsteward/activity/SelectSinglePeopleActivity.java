@@ -64,7 +64,7 @@ public class SelectSinglePeopleActivity extends BaseActivity implements View.OnC
         ButterKnife.bind(this);
 //        getIntentData();
         initView();
-        mListView = findViewById(R.id.id_tree);
+        mListView = (ListView) findViewById(R.id.id_tree);
         mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 3);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override

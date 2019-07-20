@@ -590,6 +590,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         if (s.equals("connect_seal")) {
             intent = new Intent(getActivity(), NearbyDeviceActivity.class);
             intent.putExtra("isAddNewSeal", false);
+            intent.putExtra("应用模块连上就finish", "应用模块连上就finish");
             permissions();
         }
     }
@@ -608,9 +609,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 ResponseInfo<String> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<String>>() {
                 }
                         .getType());
-                systemTimeStampString = responseInfo.getData();
-                Utils.log("timeStampString" + systemTimeStampString);
-                setNotification();
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                    systemTimeStampString = responseInfo.getData();
+                    Utils.log("timeStampString" + systemTimeStampString);
+                    setNotification();
+                }
             }
         });
     }
@@ -702,6 +705,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                 // 显示ble设备名字
                 String bleName = data.getStringExtra("bleName");
+                //应用模块点击选择的印章之后传递过来
+                String applicationConnect = data.getStringExtra("applicationConnect");
                 //显示印模
                 String sealPrint = data.getStringExtra("sealPrint");
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
@@ -754,15 +759,17 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //                            return;
 //                        }
                         Utils.log("UUUUUUUUUU:jump");
-                        // 跳转到 启动印章 页面
-                        intent = new Intent(getActivity(), ApplyCauseActivity.class);
-                        startActivityForResult(intent, Constants.TO_WANT_SEAL);
+                        // 跳转到 启动印章 页面。。。。    是否是应用模块进入
+                        if (applicationConnect != null && applicationConnect.equals("applicationConnect")) {
+
+                        } else {
+                            intent = new Intent(getActivity(), ApplyCauseActivity.class);
+                            startActivityForResult(intent, Constants.TO_WANT_SEAL);
+                        }
                     }
                 }, 50);
 
-
                 break;
-
 
             case Constants.TO_WANT_SEAL:
                 if (resultCode != Constants.TO_WANT_SEAL) {

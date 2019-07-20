@@ -258,4 +258,10 @@
         <attr name="inner_scan_speed" format="integer" /><!-- 控制扫描速度 -->
         <attr name="inner_scan_iscircle" format="boolean" /><!-- 控制小圆点是否展示 -->
     </declare-styleable>
+
+    <!--撤滑返回样式-->
+    <style name="NoTitleTranslucentTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>

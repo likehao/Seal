@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CleanMessageUtil;
+import cn.fengwoo.sealsteward.utils.DeviceUuidFactory;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -30,11 +31,15 @@ import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
 /**
  * 设置
  */
-public class SetActivity extends BaseActivity implements View.OnClickListener{
-    @BindView(R.id.scan_ll)LinearLayout scan_ll;
-    @BindView(R.id.title_tv)TextView title_tv;
-    @BindView(R.id.set_back_ll)LinearLayout set_back_ll;
-    @BindView(R.id.about_rl)RelativeLayout about_rl;
+public class SetActivity extends BaseActivity implements View.OnClickListener {
+    @BindView(R.id.scan_ll)
+    LinearLayout scan_ll;
+    @BindView(R.id.title_tv)
+    TextView title_tv;
+    @BindView(R.id.set_back_ll)
+    LinearLayout set_back_ll;
+    @BindView(R.id.about_rl)
+    RelativeLayout about_rl;
     @BindView(R.id.recommend_seal_rl)
     RelativeLayout recommend_seal_rl;
     @BindView(R.id.clear_cache_rl)
@@ -43,6 +48,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
     TextView cache_tv;
     @BindView(R.id.call_phone_rl)
     RelativeLayout call_phone_rl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,12 +77,12 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.set_back_ll:
                 finish();
                 break;
             case R.id.about_rl:
-                Intent intent = new Intent(SetActivity.this,AboutActivity.class);
+                Intent intent = new Intent(SetActivity.this, AboutActivity.class);
                 startActivity(intent);
                 break;
             case R.id.recommend_seal_rl:
@@ -91,7 +97,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
-    private void shareSeal(){
+    private void shareSeal() {
         String url = "https://sj.qq.com/myapp/detail.htm?apkName=cn.fengwoo.sealsteward";
         OnekeyShare oks = new OnekeyShare();
         /*oks.addHiddenPlatform(QQ.NAME);
@@ -166,9 +172,9 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
     /**
      * 清除缓存
      */
-    private void clearCache(){
-        CommonDialog commonDialog = new CommonDialog(this,"提示","缓存"+ cache_tv.getText().toString()+",清除后缓存记录将消失,继续清除？"
-        ,"确定");
+    private void clearCache() {
+        CommonDialog commonDialog = new CommonDialog(this, "提示", "缓存" + cache_tv.getText().toString() + ",清除后缓存记录将消失,继续清除？"
+                , "确定");
         commonDialog.showDialog();
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +190,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
 
     /**
      * 拨打电话(跳转到拨号界面，用户手动点击拨打)
+     *
      * @param phoneNum
      */
     public void callPhone(String phoneNum) {
@@ -193,4 +200,5 @@ public class SetActivity extends BaseActivity implements View.OnClickListener{
         intent.setData(data);
         startActivity(intent);
     }
+
 }

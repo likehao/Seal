@@ -110,9 +110,9 @@ public class SuggestionActivity extends BaseActivity implements View.OnClickList
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("意见反馈");
-        textViews[0] = findViewById(R.id.function_suggestion_tv);
-        textViews[1] = findViewById(R.id.use_question_tv);
-        textViews[2] = findViewById(R.id.content_tv);
+        textViews[0] = (TextView) findViewById(R.id.function_suggestion_tv);
+        textViews[1] = (TextView) findViewById(R.id.use_question_tv);
+        textViews[2] = (TextView) findViewById(R.id.content_tv);
            //更改按钮颜色保持按钮圆角,不可点击
      /*   submitBt.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
         submitBt.setClickable(false);

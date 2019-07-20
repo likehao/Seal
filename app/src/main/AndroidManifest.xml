@@ -188,7 +188,7 @@
             android:exported="false" />
         <!-- JPUSH结束！！！！！！！！！！！！！！！！！ -->
 
-        <activity android:name=".activity.SetActivity" />
+        <activity android:name=".activity.SetActivity"/>
         <activity android:name=".activity.PersonCenterActivity" />
         <activity android:name=".activity.MyCompanyActivity" />
         <activity android:name=".activity.MySignActivity" />
@@ -298,7 +298,7 @@
         <activity android:name=".activity.ChangeCompanyBelongActivity" />
         <activity android:name=".activity.RecordQrCodeActivity" />
         <activity android:name=".activity.ScanRecordQrCodeResultActivity" />
-        <activity android:name=".activity.SearchOrgUserAndSealActivity"></activity>
+        <activity android:name=".activity.SearchOrgUserAndSealActivity"/>
     </application>
 
 </manifest>

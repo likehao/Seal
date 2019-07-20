@@ -29,9 +29,9 @@ public class MyWebViewActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_mywebview);
-		set_back_ll = findViewById(R.id.set_back_ll);
+		set_back_ll = (LinearLayout) findViewById(R.id.set_back_ll);
 		set_back_ll.setVisibility(View.VISIBLE);
-		title = findViewById(R.id.title_tv);
+		title = (TextView) findViewById(R.id.title_tv);
 		//operator = (TextView) findViewById(R.id.operator);
 		set_back_ll.setOnClickListener(new OnClickListener() {
 			@Override
@@ -40,7 +40,7 @@ public class MyWebViewActivity extends BaseActivity {
 			}
 		});
 
-		myWebView = findViewById(R.id.webview);
+		myWebView = (WebView) findViewById(R.id.webview);
 		myWebView.setWebViewClient(new WebViewClient());
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);

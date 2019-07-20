@@ -1,32 +1,40 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Toast;
-
 import com.gyf.barlibrary.ImmersionBar;
-
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 
 /**
  * 沉浸式状态栏
  */
 
-public class BaseActivity extends AppCompatActivity{
+@SuppressLint("Registered")
+public class BaseActivity extends SwipeBackActivity{
     public ImmersionBar immersionBar;
     protected LoadingView loadingView;
     protected MyApp application;
     private long lastClickTime;
+    private SwipeBackLayout swipeBackLayout;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        swipeBackLayout = getSwipeBackLayout();
+        //设置滑动方向，可设置EDGE_LEFT, EDGE_RIGHT, EDGE_ALL, EDGE_BOTTOM
+        swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+        swipeBackLayout.setEdgeSize(200);//滑动删除的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
+
         application = (MyApp) getApplication();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //保持竖屏
         immersionBar = ImmersionBar.with(this)

@@ -109,6 +109,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private PublishSubject<Boolean> disconnectTriggerSubject = PublishSubject.create();
     private Observable<RxBleConnection> connectionObservable;
     private CommonAdapter commonAdapter;
+    private String sealConnect;
 
 
     @Override
@@ -187,6 +188,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     private void getIntentData() {
         isAddNewSeal = getIntent().getBooleanExtra("isAddNewSeal", false);
+        sealConnect = getIntent().getStringExtra("应用模块连上就finish");
         if (isAddNewSeal) {
             title_tv.setText("添加印章");
             tv_repair.setVisibility(View.GONE);
@@ -254,10 +256,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
  /*       arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         seal_lv.setAdapter(arrayAdapter);*/
 
-        commonAdapter = new CommonAdapter<String>(this,arrayList,R.layout.near_bluetooth_item) {
+        commonAdapter = new CommonAdapter<String>(this, arrayList, R.layout.near_bluetooth_item) {
             @Override
             public void convert(ViewHolder viewHolder, String s, int i) {
-                viewHolder.setText(R.id.bluetooth_tv,s);
+                viewHolder.setText(R.id.bluetooth_tv, s);
             }
 
         };
@@ -345,13 +347,14 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     /**
      * 遍历MAC拿到印模传回带到首页工作台
+     *
      * @param mac
      * @return
      */
-    private String getSealPrint(String mac){
+    private String getSealPrint(String mac) {
         String sealPrint = "";
-        for (SealData sealData : responseInfo.getData()){
-            if (sealData.getMac().equals(mac)){
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(mac)) {
                 sealPrint = sealData.getSealPrint();
                 break;
             }
@@ -471,18 +474,18 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             }
         }
 
-        if(!isAddNewSeal){
+        if (!isAddNewSeal) {
             SealData sealData = getSealDataFromList(scanResultsList.get(position).getBleDevice().getMacAddress());
             long nowTime = System.currentTimeMillis();
             long expiredTime = sealData.getServiceTime();
-            double dayCount = (double)(expiredTime - nowTime) / (1000 * 3600 * 24);
+            double dayCount = (double) (expiredTime - nowTime) / (1000 * 3600 * 24);
 //        if(System.currentTimeMillis())
-            if ((sealData.getServiceType()==1)&&(dayCount<7)&&(dayCount>0)) {
+            if ((sealData.getServiceType() == 1) && (dayCount < 7) && (dayCount > 0)) {
                 showServiceTip1(sealData, position);
                 return;
             }
 
-            if ((sealData.getServiceType()==1)&&(dayCount<0)) {
+            if ((sealData.getServiceType() == 1) && (dayCount < 0)) {
                 showServiceTip2(sealData, position);
                 return;
             }
@@ -532,6 +535,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             EasySP.init(this).putString("mac", scanResultsList.get(position).getBleDevice().getMacAddress());
 //                            EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
                             if (!isAddNewSeal) {
+
                                 // 不是添加新的印章，就是连接原来的seal,保存sealId
                                 EasySP.init(this).putString("currentSealId", getSealIdFromList(scanResultsList.get(position).getBleDevice().getMacAddress()));
 
@@ -544,6 +548,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                     EasySP.init(this).putString("latitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLatitude() + "");
                                     EasySP.init(this).putString("longitude", getSealEnclosure(scanResultsList.get(position).getBleDevice().getMacAddress()).getLongitude() + "");
                                 }
+
                             }
 
                             if (isAddNewSeal) {
@@ -552,12 +557,25 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 startActivity(intent);
                                 finish();
                             } else {
-                                Intent intent = new Intent();
-                                intent.putExtra("bleName", getNameFromList(macAddress));
-                                intent.putExtra("sealPrint", getSealPrint(macAddress));
-                                setResult(Constants.TO_NEARBY_DEVICE, intent);
-                                finish();
+
+                                //应用模块功能连上后直接finish
+                                if (sealConnect != null && sealConnect.equals("应用模块连上就finish")) {
+                                    Intent intent = new Intent();
+                                    intent.putExtra("bleName", getNameFromList(macAddress));
+                                    intent.putExtra("sealPrint", getSealPrint(macAddress));
+                                    intent.putExtra("applicationConnect","applicationConnect");
+                                    setResult(Constants.TO_NEARBY_DEVICE, intent);
+                                    finish();
+                                }else {
+
+                                    Intent intent = new Intent();
+                                    intent.putExtra("bleName", getNameFromList(macAddress));
+                                    intent.putExtra("sealPrint", getSealPrint(macAddress));
+                                    setResult(Constants.TO_NEARBY_DEVICE, intent);
+                                    finish();
+                                }
                             }
+
                         },
                         throwable -> {
                             // Handle an error here.
@@ -565,6 +583,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         }
                 );
         ((MyApp) getApplication()).getDisposableList().add(connectDisposable);
+
     }
 
     @Override
@@ -574,8 +593,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             scanSubscription.dispose();
         }
         super.onDestroy();
-
-
         rxBleClient = null;
     }
 
@@ -649,7 +666,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     private void showServiceTip1(SealData sealData, int position) {
         cancelLoadingView();
 
-        String tipString = "此印章服务，将于" + ""+ Utils.getDateToString(sealData.getServiceTime(), "yyyy-MM-dd HH:mm:ss") + "过期，请及时充值";
+        String tipString = "此印章服务，将于" + "" + Utils.getDateToString(sealData.getServiceTime(), "yyyy-MM-dd HH:mm:ss") + "过期，请及时充值";
         final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "去充值");
         commonDialog.cancel.setText("知道了");
         commonDialog.showDialog();
@@ -677,13 +694,14 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             }
         });
     }
+
     /**
      *
      */
     private void showServiceTip2(SealData sealData, int position) {
         cancelLoadingView();
 
-        String tipString = "此印章服务，已于" + ""+ Utils.getDateToString(sealData.getServiceTime(), "yyyy-MM-dd HH:mm:ss") + "过期，请充值";
+        String tipString = "此印章服务，已于" + "" + Utils.getDateToString(sealData.getServiceTime(), "yyyy-MM-dd HH:mm:ss") + "过期，请充值";
         final CustomDialog commonDialog = new CustomDialog(this, "提示", tipString, "知道了");
         commonDialog.cancel.setText("去充值");
         commonDialog.showDialog();

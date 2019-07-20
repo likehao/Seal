@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
 import com.white.easysp.EasySP;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -32,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.CompanyListAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.CompanyInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
@@ -242,9 +245,9 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                                 companyListAdapter.changeSelected(select);
                                 pos = select;
 
-
                                 // 更新本地权限信息
                                 getUserInfoData(CommonUtil.getUserData(MyCompanyActivity.this).getId());
+                                EventBus.getDefault().post(new MessageEvent("切换公司","切换公司"));
 
                             }
                         });
@@ -460,6 +463,14 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN){
+            if (isFastDoubleClick()){
+                return false;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
 
-
+    }
 }

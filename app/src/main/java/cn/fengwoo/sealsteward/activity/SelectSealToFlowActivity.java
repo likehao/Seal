@@ -70,7 +70,7 @@ public class SelectSealToFlowActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_organizational_management);
         ButterKnife.bind(this);
         initView();
-        mListView = findViewById(R.id.id_tree);
+        mListView = (ListView) findViewById(R.id.id_tree);
         mAdapter = new NodeTreeAdapter(this, mListView, mLinkedList, 1, 4);
         mAdapter.setClickItemListener(new NodeTreeAdapter.ClickItemListener() {
             @Override

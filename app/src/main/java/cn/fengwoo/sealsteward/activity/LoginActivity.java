@@ -119,6 +119,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        setSwipeBackEnable(false);//禁止撤滑返回
         //软键盘弹出使其页面布局上移
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         //注解
@@ -148,8 +150,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initView() {
-        check_down_up = findViewById(R.id.check_down_up);
-        password_rl = findViewById(R.id.password_rl);
+        check_down_up = (CheckBox) findViewById(R.id.check_down_up);
+        password_rl = (RelativeLayout) findViewById(R.id.password_rl);
         login_bt.setOnClickListener(this);
         more_tv.setOnClickListener(this);
         phone_et.setOnClickListener(this);

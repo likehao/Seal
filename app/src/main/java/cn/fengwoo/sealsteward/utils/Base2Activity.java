@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Looper;
@@ -13,16 +14,24 @@ import com.gyf.barlibrary.ImmersionBar;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.HideKeyBroadUtils;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 /**
  * 使用于全屏无title页面布局
  */
-public class Base2Activity extends AppCompatActivity {
+@SuppressLint("Registered")
+public class Base2Activity extends SwipeBackActivity {
     public ImmersionBar immersionBar;
-
+    private SwipeBackLayout swipeBackLayout;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        swipeBackLayout = getSwipeBackLayout();
+        //设置滑动方向，可设置EDGE_LEFT, EDGE_RIGHT, EDGE_ALL, EDGE_BOTTOM
+        swipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+        swipeBackLayout.setEdgeSize(200);//滑动删除的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //保持竖屏
         immersionBar = ImmersionBar.with(this)

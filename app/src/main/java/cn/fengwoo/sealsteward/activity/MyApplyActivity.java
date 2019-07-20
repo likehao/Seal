@@ -176,6 +176,11 @@ public class MyApplyActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    /**
+     * 防止点击过快出现两个页面
+     * @param ev
+     * @return
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
