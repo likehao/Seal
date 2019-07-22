@@ -239,10 +239,11 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            no_record_ll2.setVisibility(View.VISIBLE);
+                            no_record_ll.setVisibility(View.VISIBLE);
                             refreshLayout.finishRefresh(); //刷新完成
                             refreshLayout.finishLoadMore();//结束加载
                             refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
-                            no_record_ll2.setVisibility(View.VISIBLE);
                         }
                     });
                 }
