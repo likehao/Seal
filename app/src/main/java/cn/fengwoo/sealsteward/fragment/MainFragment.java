@@ -1230,10 +1230,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         // 告诉后台有非法盖章
                                         sendIllegalToServer();
 
-                                        // 盖章次数加一
-                                        refreshTimes();
-
                                         if (firmwareVersion <= 3.02) {
+                                            // 盖章次数加一
+                                            refreshTimes();
                                             // 把这次非法盖章的盖章记录也上传到后台
                                             sendIllegalRecordToServer();
                                         }
@@ -1488,8 +1487,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
 
     public class MyLocationListener implements BDLocationListener {
-
-
         @Override
         public void onReceiveLocation(BDLocation location) {
             currentLocation = location;

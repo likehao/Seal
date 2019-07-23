@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,6 +32,8 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.white.easysp.EasySP;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -438,9 +441,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 记录页面头部手机盖章和密码盖章按钮的选中状态
      * @param code
      */
-    private void changeTitleView(int code){
-        textViews[5].setTextColor(code == 5 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.white));
-        linearLayouts[5].setBackground(code == 5 ? getResources().getDrawable(R.drawable.select_phone_seal1) : getResources().getDrawable(R.drawable.select_phone_seal));
+    public void changeTitleView(int code){
+        textViews[5].setTextColor(code == 5 ? ContextCompat.getColor(this,R.color.style) : ContextCompat.getColor(this,R.color.white));
+        linearLayouts[5].setBackground(code == 5 ? ContextCompat.getDrawable(this,R.drawable.select_phone_seal1) : ContextCompat.getDrawable(this,R.drawable.select_phone_seal));
         textViews[6].setTextColor(code == 6 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.white));
         linearLayouts[6].setBackground(code == 6 ? getResources().getDrawable(R.drawable.select_pwd_seal1) : getResources().getDrawable(R.drawable.select_pwd_seal));
 
@@ -763,5 +766,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * 处理注册事件
+     *
+     * @param messageEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        if (s.equals("title_ui")){   //记录筛选改变头UI
+            changeTitleView(5);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);   //注册Eventbus
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);  //解除注册
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 }

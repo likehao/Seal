@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.MapViewActivity;
 import cn.fengwoo.sealsteward.activity.RecordQrCodeActivity;
 import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
@@ -89,6 +91,7 @@ public class RecordAdapter extends BaseAdapter {
             viewHolder.close = view.findViewById(R.id.close_documents_tv);
             viewHolder.ygcs = view.findViewById(R.id.ygcs);
             viewHolder.qrcode = view.findViewById(R.id.record_qrcode_iv);  //记录二维码
+            viewHolder.address_ll = view.findViewById(R.id.address_ll);  //地址
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -154,6 +157,15 @@ public class RecordAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
+
+//        //查看地位地址地图
+//        viewHolder.address_ll.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, MapViewActivity.class);
+//                context.startActivity(intent);
+//            }
+//        });
         return view;
     }
 
@@ -212,6 +224,7 @@ public class RecordAdapter extends BaseAdapter {
         private TextView close;
         private TextView ygcs;
         private ImageView qrcode;
+        private LinearLayout address_ll;
     }
 
 }
