@@ -112,7 +112,6 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" /> <!-- 点击edittext搜索防止键盘将底部导航顶上来 -->
-
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -299,7 +298,7 @@
         <activity android:name=".activity.RecordQrCodeActivity" />
         <activity android:name=".activity.ScanRecordQrCodeResultActivity" />
         <activity android:name=".activity.SearchOrgUserAndSealActivity" />
-        <activity android:name=".activity.MapViewActivity"></activity>
+        <activity android:name=".activity.MapViewActivity"/>
     </application>
 
 </manifest>

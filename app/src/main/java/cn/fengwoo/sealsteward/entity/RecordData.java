@@ -22,7 +22,6 @@ public class RecordData {
     private String orgStructureName;
     private Integer applyCount;
 
-
     public Integer getApplyCount() {
         return applyCount;
     }
@@ -41,10 +40,11 @@ public class RecordData {
 
     private List<String> stampRecordImgList;
 
-    public RecordData(Integer applyCount,String id, String cause, String sealName, String sealPeople,
+    public RecordData(Integer applyCount, String id, String cause, String sealName, String sealPeople,
                       Integer sealCount, Integer restCount, Integer uploadPhotoNum,
                       String failTime, String sealTime, String sealAddress, Integer approveStatus
-    , String applyPdf , String stampPdf , String stampRecordPdf, String headPortrait, String orgStructureName ,List<String> stampRecordImgList) {
+            , String applyPdf, String stampPdf, String stampRecordPdf, String headPortrait,
+                      String orgStructureName, List<String> stampRecordImgList) {
         this.applyCount = applyCount;
         this.id = id;
         this.cause = cause;
@@ -62,7 +62,7 @@ public class RecordData {
         this.stampRecordPdf = stampRecordPdf;
         this.headPortrait = headPortrait;
         this.orgStructureName = orgStructureName;
-        this.stampRecordImgList =stampRecordImgList;
+        this.stampRecordImgList = stampRecordImgList;
 
     }
 
@@ -73,6 +73,7 @@ public class RecordData {
     public void setCause(String cause) {
         this.cause = cause;
     }
+
     public Integer getSealCount() {
         return sealCount;
     }
@@ -192,5 +193,4 @@ public class RecordData {
     public void setOrgStructureName(String orgStructureName) {
         this.orgStructureName = orgStructureName;
     }
-
 }

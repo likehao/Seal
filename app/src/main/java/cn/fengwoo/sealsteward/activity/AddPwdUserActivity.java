@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
-import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.AddPwdUserUpload;
 import cn.fengwoo.sealsteward.entity.AddPwdUserUploadReturn;
 import cn.fengwoo.sealsteward.entity.PwdUserListItem;
@@ -113,11 +112,6 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
         tvExpiredTime.setText(DateUtils.getDateString(pwdUserListItem.getExpireTime()));
         etUseTimes.setText(pwdUserListItem.getStampCount() + "");
         title_tv.setText("编辑密码用户");
-        Date nowTime = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = dateFormat.format(nowTime);
-        timeB = DateUtils.isDateOneBigger(tvExpiredTime.getText().toString(), time);
-
     }
 
     @Override
@@ -143,8 +137,8 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                 selectTime();
                 break;
             case R.id.btn_submit:
-                // 如果pwdUserListItem为空，执行原来逻辑
-                if (timeB) {
+                if (check()) {
+                    // 如果pwdUserListItem为空，执行原来逻辑
                     if (pwdUserListItem == null) {
                         submit();
                     } else {
@@ -160,7 +154,8 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-
+                        //发送b指令
+                        byte[] b = new DataProtocol(CommonUtil.CHANGEPWDPOWER, updateCountByte).getBytes();
                         ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.CHANGEPWDPOWER, updateCountByte).getBytes()))
                                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -175,15 +170,44 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                                         }
                                 ));
                     }
-                } else {
-                    showToast("您选择的时间已过期");
                 }
-
                 break;
         }
     }
 
+    /**
+     * 检查数据是否为空
+     * @return
+     */
+    private boolean check() {
+        Date nowTime = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = dateFormat.format(nowTime);
+        if (TextUtils.isEmpty(tvUser.getText().toString())) {
+            showToast("请选择使用人");
+            return false;
+        }
+        if (TextUtils.isEmpty(etUseTimes.getText().toString())) {
+            showToast("请输入使用次数");
+            return false;
+        }
+        if (TextUtils.isEmpty(tvExpiredTime.getText().toString())) {
+            showToast("请选择失效时间");
+            return false;
+        } else{
+            timeB = DateUtils.isDateOneBigger(tvExpiredTime.getText().toString(), time);
+            if (!timeB) {
+                showToast("您选择的时间已过期");
+                return false;
+            }
+        }
 
+        return true;
+    }
+
+    /**
+     * 提交添加密码用户
+     */
     private void submit() {
         loadingView.show();
         AddPwdUserUpload addPwdUserUpload = new AddPwdUserUpload();

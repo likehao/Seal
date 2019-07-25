@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +11,16 @@ import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMapOptions;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.SupportMapFragment;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.CoordinateConverter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,18 +57,31 @@ public class MapViewActivity extends BaseActivity {
 
     private void initView() {
         back.setVisibility(View.VISIBLE);
+        title.setText("盖章地址");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         baiduMap = look_mapView.getMap();
-        //设置地图缩放级别
-        MapStatus.Builder builder = new MapStatus.Builder();
-        builder.zoom(18.0f);
-        baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-        BaiduMapOptions options = new BaiduMapOptions();
-        //设置地图模式为卫星地图
-        options.mapType(BaiduMap.MAP_TYPE_SATELLITE);
-        //创建mapview对象
-        MapView mapView = new MapView(this,options);
-        //设置mapview
-        setContentView(mapView);
+        LatLng latLng = new LatLng(31.227, 121.481);
+        //坐标转换
+        CoordinateConverter converter= new CoordinateConverter();
+        converter.coord(latLng);
+        converter.from(CoordinateConverter.CoordType.COMMON);
+        LatLng convertLatLng = converter.convert();
+        //覆盖物
+        OverlayOptions options = new MarkerOptions()
+                .position(convertLatLng)  //设置marker的位置
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.location))  //设置marker图标
+                .zIndex(4)           //设置marker所在层级
+                .draggable(true);    //设置手势拖拽
+        //在地图上添加Marker，并显示
+        baiduMap.addOverlay(options);
+        MapStatusUpdate statusUpdate = MapStatusUpdateFactory.newLatLngZoom(convertLatLng, 17.0f);
+        baiduMap.animateMapStatus(statusUpdate);
+
     }
 
     @Override

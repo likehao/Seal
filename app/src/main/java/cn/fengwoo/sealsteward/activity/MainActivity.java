@@ -89,6 +89,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView tv_left;
     @BindView(R.id.tv_right)
     TextView tv_right;
+    @BindView(R.id.welcome_tv)
+    TextView welcome;
     private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
     private TextView[] textViews = new TextView[7];   //底部导航文字集合
     private LinearLayout[] linearLayouts = new LinearLayout[7];
@@ -236,9 +238,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         message_more_iv = (ImageView) findViewById(R.id.message_more_iv);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
-        title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
+//        title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
 
 //        tv_right.setTextColor(Color.argb(130, 255, 255, 255));
+        welcome.setVisibility(View.VISIBLE);
+        title_tv.setVisibility(View.GONE);
     }
 
     private void setListener() {
@@ -260,14 +264,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.home_page:
                 ll_record.setVisibility(View.GONE);
-                title_tv.setVisibility(View.VISIBLE);
-
-                title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
+                title_tv.setVisibility(View.GONE);
+//                title_tv.setText(CommonUtil.getUserData(this).getCompanyName());
                 record_more_iv.setVisibility(View.GONE);
                 //    add_ll.setVisibility(View.VISIBLE);
                 msg_ll.setVisibility(View.VISIBLE);
                 scan_ll.setVisibility(View.VISIBLE);
                 title_ll.setVisibility(View.VISIBLE);
+                welcome.setVisibility(View.VISIBLE);
                 changeView(0);
                 break;
             case R.id.record_page:
@@ -275,7 +279,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 tv_left.setOnClickListener(this);
                 tv_right.setOnClickListener(this);
-
                 ll_record.setVisibility(View.VISIBLE);
                 title_tv.setVisibility(View.GONE);
                 scan_ll.setVisibility(View.GONE);
@@ -283,6 +286,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 record_more_iv.setVisibility(View.VISIBLE);
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.VISIBLE);
+                welcome.setVisibility(View.GONE);
                 changeView(1);
                 break;
             case R.id.message_page:
@@ -292,30 +296,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 record_more_iv.setVisibility(View.GONE);
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.VISIBLE);
+                welcome.setVisibility(View.GONE);
                 changeView(2);
                 break;
             case R.id.mine:
                 ll_record.setVisibility(View.GONE);
                 title_tv.setVisibility(View.VISIBLE);
-
                 title_tv.setText("我的");
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.GONE);
+                welcome.setVisibility(View.GONE);
                 changeView(3);
                 break;
             case R.id.application_page:
                 ll_record.setVisibility(View.GONE);
                 title_tv.setVisibility(View.VISIBLE);
-
                 title_tv.setText("应用");
                 scan_ll.setVisibility(View.GONE);
                 add_ll.setVisibility(View.GONE);
                 record_more_iv.setVisibility(View.GONE);
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.VISIBLE);
+                welcome.setVisibility(View.GONE);
                 changeView(4);
                 break;
             case R.id.record_more_iv:

@@ -18,6 +18,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,6 +56,7 @@ public class RecordAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context context;
     ViewHolder viewHolder;
+    private double latitude,longitude;
 
     public RecordAdapter(List<RecordData> recordData, Context context) {
         this.recordData = recordData;
@@ -157,11 +164,12 @@ public class RecordAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
-
+//
 //        //查看地位地址地图
 //        viewHolder.address_ll.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
+//                search(position);
 //                Intent intent = new Intent(context, MapViewActivity.class);
 //                context.startActivity(intent);
 //            }
@@ -169,6 +177,39 @@ public class RecordAdapter extends BaseAdapter {
         return view;
     }
 
+    private void search(int position){
+        //创建地理编码检索
+        GeoCoder coder = GeoCoder.newInstance();
+        //创建地理编码检索监听
+        @SuppressLint("DefaultLocale")
+        OnGetGeoCoderResultListener listener = new OnGetGeoCoderResultListener() {
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+                if (geoCodeResult == null || geoCodeResult.error != SearchResult.ERRORNO.NO_ERROR){
+                    //没有检索到结果
+                    Toast.makeText(context, "抱歉，未能找到结果", Toast.LENGTH_LONG)
+                            .show();
+                    return;
+                }
+                //获取地理编码结果
+                latitude = geoCodeResult.getLocation().latitude;
+                longitude = geoCodeResult.getLocation().longitude;
+            }
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+
+            }
+        };
+        //设置监听
+        coder.setOnGetGeoCodeResultListener(listener);
+        //发起地理编码检索
+        coder.geocode(new GeoCodeOption()
+                .city("深圳")
+                .address(recordData.get(position).getSealAddress()));
+        //释放地理编码检索
+        coder.destroy();
+    }
     /**
      * 关闭单据
      */

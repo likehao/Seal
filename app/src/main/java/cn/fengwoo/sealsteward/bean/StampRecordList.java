@@ -58,7 +58,6 @@ public class StampRecordList implements Serializable {
     private List<String> stampRecordImgList;
     private String stampRecordPdf;
 
-
     public String getApplyCause() {
         return applyCause;
     }

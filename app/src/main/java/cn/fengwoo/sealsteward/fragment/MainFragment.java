@@ -84,6 +84,7 @@ import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
 import cn.fengwoo.sealsteward.entity.BannerData;
 import cn.fengwoo.sealsteward.entity.DfuEntity;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
+import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.StampUploadRecordData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -164,7 +165,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     TextView tv_check_record;
     @BindView(R.id.sealImg_iv)
     ImageView sealImg_iv;  //印模
-
+    @BindView(R.id.company)
+    TextView company_name;
     LoadingView loadingView;
     private RxBleConnection rxBleConnection;
     private String availableCount = "0"; // 剩余次数
@@ -246,7 +248,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         //初始化
         SDKInitializer.initialize(getActivity().getApplicationContext());
         view = inflater.inflate(R.layout.activity_home_fragment, container, false);
-
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this, view);
         initView();
         initBanner();
@@ -261,6 +263,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private void initView() {
         loadingView = new LoadingView(getActivity());
         //  title_tv.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+        company_name.setVisibility(View.VISIBLE);
+        company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
     }
 
     private void setListener() {
@@ -546,7 +550,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         super.onStart();
         Utils.log("00000 00000 onStart");
 
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         //开始轮播
         banner.startAutoPlay();
 //        NetUtil.registerNetConnChangedReceiver(getActivity());
@@ -559,7 +563,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         super.onStop();
         Utils.log("00000 00000 onStop");
 
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
         //结束轮播
         banner.stopAutoPlay();
 //        NetUtil.unregisterNetConnChangedReceiver(getActivity());
@@ -592,6 +596,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             intent.putExtra("isAddNewSeal", false);
             intent.putExtra("应用模块连上就finish", "应用模块连上就finish");
             permissions();
+        }
+        if (s.equals("切换公司")){
+            company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
         }
     }
 
@@ -837,7 +844,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 tv_stamp_reason.setText(stampReason);
                 tv_expired_time.setText(DateUtils.getDateString(Long.parseLong(expireTime)));
 
-
                 // 初始化首页的已盖次数和剩余次数
                 currentStampTimes = 0;
                 tv_times_done.setText(currentStampTimes + "");
@@ -892,9 +898,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 try {
+                    //   {"code":0,"message":"成功","data":{"result":true,"applyClosed":false}}
                     JSONObject jsonObject = new JSONObject(result);
                     String dataString = jsonObject.getString("data");
-
                     JSONObject jsonObject1 = new JSONObject(dataString);
                     Boolean applyClosed = jsonObject1.getBoolean("applyClosed");
                     //如果单据关闭再次盖章时直接断开蓝牙

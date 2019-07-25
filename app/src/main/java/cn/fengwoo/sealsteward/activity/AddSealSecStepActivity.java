@@ -9,10 +9,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,10 +29,7 @@ import com.lxj.matisse.internal.entity.CaptureStrategy;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.white.easysp.EasySP;
-//import com.zhihu.matisse.Matisse;
-//import com.zhihu.matisse.MimeType;
-//import com.zhihu.matisse.filter.Filter;
-//import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.model.InvokeParam;
 
@@ -52,7 +47,6 @@ import cn.fengwoo.sealsteward.entity.AddSealData;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.FileUtil;
 import cn.fengwoo.sealsteward.utils.GifSizeFilter;
 import cn.fengwoo.sealsteward.utils.GlideEngineImage;
@@ -67,9 +61,11 @@ import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import top.zibin.luban.CompressionPredicate;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
+
+//import com.zhihu.matisse.Matisse;
+//import com.zhihu.matisse.MimeType;
+//import com.zhihu.matisse.filter.Filter;
+//import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 /**
  * 添加印模
@@ -156,7 +152,11 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 permissions();
                 break;
             case R.id.add_secStep_bt:
-                addSeal();
+                if (img.getDrawable() != null){
+                    addSeal();
+                }else {
+                    showToast("请添加印模");
+                }
                 break;
             case R.id.img:
                 permissions();
