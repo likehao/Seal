@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class FingerPrintActivity extends Base2Activity {
     @BindView(R.id.tv_tel)
     TextView tvTel;
     @BindView(R.id.tv_login)
-    TextView tvLogin;
+    LinearLayout tvLogin;
     private BiometricPromptManager mManager;
 
     /**
@@ -68,7 +69,7 @@ public class FingerPrintActivity extends Base2Activity {
     }
 
     private void initView() {
-        tvTel.setText(CommonUtil.getUserData(this).getMobilePhone());
+        tvTel.setText(CommonUtil.getUserData(this).getRealName());
         String headPortrait = CommonUtil.getUserData(this).getHeadPortrait();
         String headPortraitPath = "file://" + HttpDownloader.path + headPortrait;
         Picasso.with(this).load(headPortraitPath).into(headImgCir);

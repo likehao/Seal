@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public class RechargePackagesAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.pay_recharge_packages_item,null);
             viewHolder.payMoney = convertView.findViewById(R.id.pay_money_tv);
             viewHolder.select_package = convertView.findViewById(R.id.select_money_iv);
+            viewHolder.select_packages_rl = convertView.findViewById(R.id.select_packages_rl);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -56,9 +58,11 @@ public class RechargePackagesAdapter extends BaseAdapter {
 
         //选中状态
         if (mSelect == position){
-            viewHolder.select_package.setVisibility(View.VISIBLE);
+//            viewHolder.select_package.setVisibility(View.VISIBLE);
+            viewHolder.select_packages_rl.setBackgroundResource(R.drawable.border_blue);
         }else {
-            viewHolder.select_package.setVisibility(View.GONE);
+            viewHolder.select_packages_rl.setBackgroundResource(R.drawable.border_gray);
+//            viewHolder.select_package.setVisibility(View.GONE);
         }
 
         return convertView;
@@ -66,6 +70,7 @@ public class RechargePackagesAdapter extends BaseAdapter {
     class ViewHolder{
         private TextView payMoney;
         private ImageView select_package;
+        private RelativeLayout select_packages_rl;
     }
     /**
      * 监听选中

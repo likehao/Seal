@@ -24,7 +24,7 @@
             android:layout_marginStart="10dp"
             android:layout_toStartOf="@+id/close_documents_tv"
             android:layout_marginEnd="5dp"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/close_documents_tv"
@@ -53,11 +53,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="77dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/seal_name"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <View
             android:layout_width="1dp"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:text="@string/seal"
             android:layout_marginStart="20dp"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -83,11 +83,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="77dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/seal_people"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
         <View
             android:layout_width="1dp"
             android:layout_height="10dp"
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:text="@string/seal"
             android:layout_marginStart="20dp"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -122,11 +122,11 @@
 
                 <TextView
                     android:id="@+id/ygcs"
-                    android:layout_width="77dp"
+                    android:layout_width="85dp"
                     android:layout_height="wrap_content"
                     android:text="@string/finish_time"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="10dp"
@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/seal"
                     android:layout_marginStart="20dp"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -149,11 +149,11 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="77dp"
+                    android:layout_width="85dp"
                     android:layout_height="wrap_content"
                     android:text="@string/Remainder"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="10dp"
@@ -165,7 +165,7 @@
                     android:layout_weight="1"
                     android:text="@string/seal"
                     android:layout_marginStart="20dp"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -177,11 +177,11 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="77dp"
+                    android:layout_width="85dp"
                     android:layout_height="wrap_content"
                     android:text="@string/upload_photo_number"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
                 <View
                     android:layout_width="1dp"
                     android:layout_height="10dp"
@@ -192,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/seal"
                     android:layout_marginStart="20dp"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -215,11 +215,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="77dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/deadline"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
         <View
             android:layout_width="1dp"
             android:layout_height="10dp"
@@ -230,7 +230,7 @@
             android:layout_height="wrap_content"
             android:text="2017-05-10 10:10:10"
             android:layout_marginStart="20dp"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -242,11 +242,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="77dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/lately_seal_time"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
         <View
             android:layout_width="1dp"
             android:layout_height="10dp"
@@ -257,7 +257,7 @@
             android:layout_height="wrap_content"
             android:text="20"
             android:layout_marginStart="20dp"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -271,11 +271,11 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="77dp"
+            android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:text="@string/lately_seal_address"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
         <View
             android:layout_width="1dp"
             android:layout_height="10dp"
@@ -287,7 +287,7 @@
             android:layout_marginEnd="10dp"
             android:text="环球物流"
             android:layout_marginStart="20dp"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
 </LinearLayout>

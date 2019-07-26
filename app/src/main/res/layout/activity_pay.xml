@@ -10,40 +10,43 @@
 
     <include layout="@layout/head" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/select_packages"
+            android:textSize="12sp" />
+
+        <ListView
+            android:id="@+id/pay_recharge_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:listSelector="@android:color/transparent" />
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/select_packages"
-                        android:textSize="12sp" />
-
-                    <ListView
-                        android:id="@+id/pay_recharge_lv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp" />
-                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -131,16 +134,6 @@
 
                 <View style="@style/line" />
 
-         <!--       <Button
-                    android:id="@+id/pay_bt"
-                    android:layout_width="280dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="30dp"
-                    android:background="@drawable/login_circle_bg"
-                    android:text="@string/sure"
-                    android:textColor="@color/white" />-->
-
             </LinearLayout>
 
         </ScrollView>
@@ -148,8 +141,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shadow_up"
             android:layout_alignParentBottom="true"
+            android:background="@drawable/shadow_up"
             android:gravity="center"
             android:paddingTop="27dp">
 
@@ -157,26 +150,27 @@
                 android:id="@+id/sureMoney_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="6.00"
-                android:textSize="24sp"
-                android:textColor="@color/black_3"/>
+                android:text="0.01"
+                android:textColor="@color/black_3"
+                android:textSize="24sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元"
                 android:layout_marginEnd="168dp"
-                android:textColor="@color/black_3"
-                android:textSize="12sp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginStart="5dp"/>
+                android:text="元"
+                android:textColor="@color/black_3"
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/pay_bt"
                 android:layout_width="82dp"
                 android:layout_height="40dp"
                 android:background="@drawable/login_circle_bg"
                 android:text="支付"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

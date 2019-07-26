@@ -102,6 +102,7 @@ import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.CustomDialog;
+import cn.fengwoo.sealsteward.view.IOSScrollView;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -178,16 +179,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
      */
     public LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyLocationListener();
-
     private BDLocation currentLocation;
     private String currentAddress = "";
     private OnGetGeoCoderResultListener listener;
-
     private int unuploadedQuantity; // 未上传的盖章记录数量
-
     private UploadHistoryRecord mUploadHistoryRecord = new UploadHistoryRecord();
     private List<UploadHistoryRecord.RecordListBean> recordListBeanList = new ArrayList<>();
-
     private String stampTime; // 盖章时间
     private int stampSeqNumber; // 盖章序号
     private int stampType; // 启动类型
@@ -195,25 +192,15 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private String systemTimeStampString;
     private String waitId;
     private boolean stampTag = false;
-
     private boolean isConnect = false; // 是否连接蓝牙
-
     private RxTimerUtil rxTimerUtil;
-
     private int stampNumber;
-
     private List<String> picsList;
-
     private int uploadPicIndex = 0;
-
     private List<String> allPic;
-
     private String causeId = ""; // 事由id
-
     private float firmwareVersion;
-
     private Long lastTime;
-
     private Vibrator vibrator;
 
 //    private boolean hasDfu = false;
@@ -1875,6 +1862,4 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         });
 
     }
-
-
 }
