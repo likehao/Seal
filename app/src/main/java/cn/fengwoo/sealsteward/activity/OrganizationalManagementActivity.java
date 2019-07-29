@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,8 +25,11 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.ChangeOrgEntity;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -224,8 +228,21 @@ public class OrganizationalManagementActivity extends BaseActivity implements Vi
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Utils.log(result);
-                loadingView.cancel();
-                finish();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        loadingView.cancel();
+                        //更新存储的部门id
+                        LoginData data = CommonUtil.getUserData(OrganizationalManagementActivity.this);
+                        if (data != null) {
+                            data.setOrgStructureId(m_id);
+                            CommonUtil.setUserData(OrganizationalManagementActivity.this, data);
+                        }
+                        finish();
+                    }
+                }
 
 //                Gson gson = new Gson();
 //                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddPwdUserUploadReturn>>() {

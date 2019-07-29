@@ -55,12 +55,14 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
 
     private String idString;
     private String departmentName;
+    private String orgID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_organization);
+        Utils.log("goood:" + CommonUtil.getUserData(this).getId());
         ButterKnife.bind(this);
         initView();
 
@@ -111,6 +113,9 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
                 OrganizationalStructureData organizationalStructureData = gson.fromJson(result, OrganizationalStructureData.class);
                 Utils.log(organizationalStructureData.getData().get(0).getName());
                 for (OrganizationalStructureData.DataBean dataBean : organizationalStructureData.getData()) {
+                    if (CommonUtil.getUserData(EditOrganizationActivity.this).getId().equals(dataBean.getId())) {
+                        orgID = (String) dataBean.getParentId();
+                    }
                     if (dataBean.getType() != filterType1 && dataBean.getType() != filterType2) {
                         data.add(new Dept(dataBean.getId(), (String) dataBean.getParentId(), dataBean.getName(), dataBean.getType(), 2, false, dataBean.getPortrait()));
                     }
@@ -161,7 +166,7 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
                     }
 
                     // delete
-                    String orgID =  CommonUtil.getUserData(EditOrganizationActivity.this).getOrgStructureId();
+//                    String orgID =  CommonUtil.getUserData(EditOrganizationActivity.this).getOrgStructureId();
 
                    if(orgID.equals(uid)){
                        Toast.makeText(EditOrganizationActivity.this,"不能删除自己",Toast.LENGTH_SHORT).show();
@@ -204,9 +209,6 @@ public class EditOrganizationActivity extends BaseActivity implements View.OnCli
                            }
                        });
                    }
-
-
-
 
                 } else if (position == 1) {
                     if (!Utils.hasThePermission(EditOrganizationActivity.this, Constants.permission21)) {

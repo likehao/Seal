@@ -292,6 +292,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 list.clear();
+                recordAdapter.notifyDataSetChanged(); //刷新数据
                 i = 1;
                 getData(refreshLayout);
 //                refreshLayout.finishRefresh(); //刷新完成
