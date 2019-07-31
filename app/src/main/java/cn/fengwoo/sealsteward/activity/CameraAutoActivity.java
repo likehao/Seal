@@ -168,6 +168,13 @@ public class CameraAutoActivity extends BaseActivity implements SurfaceHolder.Ca
         iv_little_pic = (ImageView) findViewById(R.id.iv_little_pic);
         iv_little_pic.setOnClickListener(this);
 
+        //自动拍照时候隐藏取消按钮
+        Intent intent = getIntent();
+        String cancel = intent.getStringExtra("cancel");
+        if (cancel.equals("cancel")){
+            tv_cancel.setVisibility(View.GONE);
+        }
+
     }
 
     private void initData() {

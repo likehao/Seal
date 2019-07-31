@@ -59,6 +59,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
     Intent intent;
     private static final int PAYFINISH = 1;
     private final static int SEARCHSELECTSEAL = 123;  //选择印章结果码
+    private String search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         if (code != 0 && code == 1) {
             title_tv.setVisibility(View.GONE);
         }
+        search = intent.getStringExtra("服务费充值搜索印章");
     }
 
     private void getDate() {
@@ -172,6 +174,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
                 Intent intent = new Intent(this, SearchOrgUserAndSealActivity.class);
                 intent.putExtra("select", "seal");
                 intent.putExtra("selectApplySeal","selectApplySeal");
+                intent.putExtra("服务费充值搜索印章",search);
                 startActivityForResult(intent, SEARCHSELECTSEAL);
                 break;
         }
@@ -213,16 +216,28 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         }
         switch (requestCode){
             case SEARCHSELECTSEAL:
-            if (data != null) {
-                //获取搜索到的印章数据再传递到申请页面
-                String sealId = data.getStringExtra("id");
-                String sealName = data.getStringExtra("name");
-                intent = new Intent();
-                intent.putExtra("id", sealId);
-                intent.putExtra("name", sealName);
-                setResult(123, intent);
-                finish();
-            }
+                if (data != null) {
+                    //获取搜索到的印章数据再传递到申请页面
+                    String sealId = data.getStringExtra("id");
+                    String sealName = data.getStringExtra("name");
+                    String searchPay = data.getStringExtra("服务费充值搜索印章");
+                    if (searchPay != null && searchPay.equals("服务费充值搜索印章")){
+                        intent.putExtra("id", sealId);
+                        if (sealId != null) {
+                            intent = new Intent(this, PayActivity.class);
+                            intent.putExtra("sealId", sealId);
+                            startActivityForResult(intent, PAYFINISH);
+                        } else {
+                            showToast("请选择需要充值的印章");
+                        }
+                    }else {
+                        intent = new Intent();
+                        intent.putExtra("id", sealId);
+                        intent.putExtra("name", sealName);
+                        setResult(123, intent);
+                        finish();
+                    }
+                }
             break;
         }
     }

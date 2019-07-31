@@ -71,7 +71,7 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
     private String departmentName;
     private String m_id, m_name;
     private final static int SEARCHSELECTSEAL = 123;  //选择印章结果码
-
+    private String searchPay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +104,7 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
             search_et.setHint("搜索印章");
             filterType = 4;
         }
+        searchPay = intent.getStringExtra("服务费充值搜索印章");
 
         String selectApplySeal = intent.getStringExtra("selectApplySeal");  //申请用印传递过来的，选择印章
         if (selectApplySeal != null && selectApplySeal.equals("selectApplySeal")) {
@@ -188,6 +189,7 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
         Intent intent = new Intent();
         intent.putExtra("id", m_id);
         intent.putExtra("name", m_name);
+        intent.putExtra("服务费充值搜索印章", searchPay);
         setResult(123, intent);
         finish();
     }

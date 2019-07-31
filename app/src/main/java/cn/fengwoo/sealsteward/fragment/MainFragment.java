@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Observable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -251,7 +252,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         loadingView = new LoadingView(getActivity());
         //  title_tv.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
         company_name.setVisibility(View.VISIBLE);
-        company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+        if (getActivity() != null) {
+            company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+        }
     }
 
     private void setListener() {
@@ -525,7 +528,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     public void onResume() {
         super.onResume();
         Utils.log("00000 00000 onResume");
-
+        if (getActivity() != null) {
+            company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+        }
         getMessage();
     }
 
@@ -822,6 +827,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                         @Override
                         public void run() {
                             intent.setClass(getActivity(), CameraAutoActivity.class);
+                            intent.putExtra("cancel","cancel");
                             startActivityForResult(intent, 678);
                         }
                     }, 1000);

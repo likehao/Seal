@@ -482,6 +482,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 intent = new Intent(getActivity(), SelectSealActivity.class);
                 //   intent.putExtra("electronic", 1);
                 intent.putExtra("serviceRecharge", "pay");
+                intent.putExtra("服务费充值搜索印章", "服务费充值搜索印章");
                 startActivity(intent);
                 break;
             case R.id.recharge_record_rl:

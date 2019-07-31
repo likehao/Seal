@@ -17,7 +17,7 @@
         <LinearLayout
             android:id="@+id/search_user_seal_ll"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:orientation="horizontal"
             android:background="@drawable/corners_bg"
             android:layout_marginLeft="10dp"
