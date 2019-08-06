@@ -65,6 +65,8 @@ public class MessageListActivity extends BaseActivity{
     private MessageAdapter messageAdapter;
     private int i = 1;
     ResponseInfo<List<MessageDeatileBean>> responseInfo;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +145,7 @@ public class MessageListActivity extends BaseActivity{
                             refreshLayout.finishRefresh(); //刷新完成
                             refreshLayout.finishLoadMore();//结束加载
                             messageAdapter.notifyDataSetChanged(); //刷新数据
+                            no_record.setVisibility(View.GONE);
                             Log.e("TAG","获取消息列表成功!!!!!!!!!!!!!!!!!!!!");
                             updateReadMsg(param);
                         }
@@ -157,9 +160,6 @@ public class MessageListActivity extends BaseActivity{
                             refreshLayout.finishLoadMoreWithNoMoreData();  //全部加载完成,没有数据了调用此方法
                         }
                     });
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
                 }
 
             }

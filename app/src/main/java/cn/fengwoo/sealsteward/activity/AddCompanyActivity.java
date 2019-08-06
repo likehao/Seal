@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -20,6 +23,8 @@ import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.qqtheme.framework.picker.SinglePicker;
+import cn.qqtheme.framework.widget.WheelView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -41,8 +46,10 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
     EditText social_credit_code_et;
     @BindView(R.id.legal_person_et)
     EditText legal_person_et;*/
-    private String companyName,socialCode,legalPerson;   //公司名,社会信用代码,法人
+    private String companyName,socialCode,legalPerson,trade;   //公司名,社会信用代码,法人
     LoadingView loadingView;
+    @BindView(R.id.trade_tv)
+    TextView trade_tv;  //行业
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,7 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
         title_tv.setText("添加公司");
         set_back_ll.setOnClickListener(this);
         addCompany_bt.setOnClickListener(this);
+        trade_tv.setOnClickListener(this);
         loadingView = new LoadingView(this);
     }
 
@@ -73,6 +81,9 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
                     addCompany();
                 }
                 break;
+            case R.id.trade_tv:
+                selectTrade();
+                break;
 
         }
     }
@@ -83,6 +94,7 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
      */
     private boolean checkData(){
         companyName = company_name_et.getText().toString();
+        trade = trade_tv.getText().toString();
  /*       socialCode = social_credit_code_et.getText().toString();
         legalPerson = legal_person_et.getText().toString();*/
         if (companyName.length() == 0) {
@@ -97,6 +109,10 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
             showToast("法人不能为空");
             return false;
         }*/
+        if (trade.length() == 0){
+            showToast("行业不能为空");
+            return false;
+        }
         return true;
     }
 
@@ -145,5 +161,40 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
 
             }
         });
+    }
+
+    /**
+     * 行业选择
+     */
+    private void selectTrade(){
+        List<String> list = new ArrayList<>();
+        list.add("计算机/互联网/通信/电子");
+        list.add("会计/金融/银行/保险");
+        list.add("贸易/消费/制造/营运");
+        list.add("制药/医疗");
+        list.add("广告/媒体");
+        list.add("房地产/建筑");
+        list.add("专业服务/教育/培训");
+        list.add("服务业");
+        list.add("物流/运输");
+        list.add("能源/原材料");
+        list.add("政府/非营利组织/其他");
+        SinglePicker<String> picker = new SinglePicker<String>(this, list);
+        picker.setCanceledOnTouchOutside(true);
+        picker.setDividerRatio(WheelView.DividerConfig.FILL);
+        picker.setTextColor(0xFF000000);
+//        picker.setSubmitTextColor(0xFFFB2C3C);
+//        picker.setCancelTextColor(0xFFFB2C3C);
+        picker.setTextSize(15);
+        picker.setLineSpaceMultiplier(3);   //设置每项的高度，范围为2-4
+        picker.setContentPadding(0, 10);
+        picker.setCycleDisable(true);
+        picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
+            @Override
+            public void onItemPicked(int index, String item) {
+                trade_tv.setText(item);
+            }
+        });
+        picker.show();
     }
 }

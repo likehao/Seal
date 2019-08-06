@@ -20,178 +20,277 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp"
-            android:background="@color/white"
             android:orientation="vertical">
 
-            <RelativeLayout style="@style/set_power_rl">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
-                    style="@style/set_power_tv"
-                    android:text="添加印章" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="盖章记录查询"
+                    android:textColor="@color/black_6"
+                    android:textSize="12sp" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission1"
-                    style="@style/set_power_bt" />
+                <View style="@style/line" />
 
-            </RelativeLayout>
+                <RelativeLayout
+                    style="@style/set_power_rl"
+                    android:background="@color/white">
 
-            <View style="@style/line_left" />
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="查询公司人员盖章记录" />
 
-            <RelativeLayout style="@style/set_power_rl">
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission19"
+                        style="@style/set_power_bt" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="编辑印章信息" />
+                </RelativeLayout>
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission2"
-                    style="@style/set_power_bt" />
+                <View style="@style/line" />
+            </LinearLayout>
 
-            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="组织架构管理"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
 
-            <View style="@style/line_left" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            <RelativeLayout style="@style/set_power_rl">
+                <View style="@style/line" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="删除印章" />
+                <RelativeLayout style="@style/set_power_rl">
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission3"
-                    style="@style/set_power_bt" />
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="添加组织架构" />
 
-            </RelativeLayout>
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission20"
+                        style="@style/set_power_bt" />
 
-            <View style="@style/line_left" />
+                </RelativeLayout>
 
-            <RelativeLayout style="@style/set_power_rl">
+                <View style="@style/line_left" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="设置印章长按时间" />
+                <RelativeLayout style="@style/set_power_rl">
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission4"
-                    style="@style/set_power_bt" />
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="编辑组织架构" />
 
-            </RelativeLayout>
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission21"
+                        style="@style/set_power_bt" />
+                </RelativeLayout>
 
-            <View style="@style/line_left" />
+                <View style="@style/line_left" />
 
-            <RelativeLayout style="@style/set_power_rl">
+                <RelativeLayout
+                    style="@style/set_power_rl">
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="设置盖章延时时间" />
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="查看公司组织架构" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission5"
-                    style="@style/set_power_bt" />
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission26"
+                        style="@style/set_power_bt" />
 
-            </RelativeLayout>
+                </RelativeLayout>
 
-            <View style="@style/line_left" />
+                <View style="@style/line_left" />
 
-            <RelativeLayout style="@style/set_power_rl">
+                <RelativeLayout style="@style/set_power_rl">
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="设置印章启动密码" />
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="移动用户或印章到其他部门权限" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission6"
-                    style="@style/set_power_bt" />
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission23"
+                        style="@style/set_power_bt" />
 
-            </RelativeLayout>
+                </RelativeLayout>
 
-            <View style="@style/line_left" />
+                <View style="@style/line_left" />
 
-            <RelativeLayout style="@style/set_power_rl">
+                <RelativeLayout style="@style/set_power_rl">
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="设置印章按键密码" />
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="删除组织架构" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission7"
-                    style="@style/set_power_bt" />
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission22"
+                        style="@style/set_power_bt" />
 
-            </RelativeLayout>
+                </RelativeLayout>
 
-            <View style="@style/line_left" />
+                <View style="@style/line" />
 
-            <RelativeLayout style="@style/set_power_rl">
+            </LinearLayout>
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="设置印章语音开关" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="密码用户"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission8"
-                    style="@style/set_power_bt" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            </RelativeLayout>
+                <View style="@style/line" />
 
-            <View style="@style/line_left" />
+                <RelativeLayout style="@style/set_power_rl">
 
-            <RelativeLayout style="@style/set_power_rl">
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="添加脱机用户" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="重置印章" />
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission10"
+                        style="@style/set_power_bt" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission9"
-                    style="@style/set_power_bt" />
+                </RelativeLayout>
 
-            </RelativeLayout>
+                <View style="@style/line_left" />
 
-            <View style="@style/line_left" />
+                <RelativeLayout style="@style/set_power_rl">
 
-            <RelativeLayout style="@style/set_power_rl">
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="设置脱机用户权限" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="添加脱机用户" />
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission11"
+                        style="@style/set_power_bt" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission10"
-                    style="@style/set_power_bt" />
+                </RelativeLayout>
 
-            </RelativeLayout>
+                <View style="@style/line_left" />
 
-            <View style="@style/line_left" />
+                <RelativeLayout style="@style/set_power_rl">
 
-            <RelativeLayout style="@style/set_power_rl">
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="删除脱机用户" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="设置脱机用户权限" />
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission12"
+                        style="@style/set_power_bt" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission11"
-                    style="@style/set_power_bt" />
+                </RelativeLayout>
 
-            </RelativeLayout>
+                <View style="@style/line" />
+            </LinearLayout>
 
-            <View style="@style/line_left" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="印章管理"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
 
-            <RelativeLayout style="@style/set_power_rl">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="删除脱机用户" />
+                <View style="@style/line" />
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission12"
-                    style="@style/set_power_bt" />
+                <RelativeLayout style="@style/set_power_rl">
 
-            </RelativeLayout>
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="添加印章" />
 
-            <View style="@style/line_left" />
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission1"
+                        style="@style/set_power_bt" />
 
-            <RelativeLayout style="@style/set_power_rl">
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="编辑印章信息" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission2"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="删除印章" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission3"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="更换印章" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission25"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="电子围栏"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
+
+            <View style="@style/line" />
+
+            <RelativeLayout
+                style="@style/set_power_rl"
+                android:background="@color/white">
 
                 <TextView
                     style="@style/set_power_tv"
@@ -203,9 +302,184 @@
 
             </RelativeLayout>
 
-            <View style="@style/line_left" />
+            <View style="@style/line" />
 
-            <RelativeLayout style="@style/set_power_rl">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="设备参数设置"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <View style="@style/line" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="设置印章长按时间" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission4"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="设置印章启动密码" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission6"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="设置印章按键密码" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission7"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="重置印章" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission9"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="固件升级权限" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission24"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="设置盖章延时时间" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission5"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="设置印章语音开关" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission8"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="人员管理"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <View style="@style/line" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="添加用户" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission15"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="删除用户" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission16"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="审批流设置"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
+
+            <View style="@style/line" />
+
+            <RelativeLayout
+                style="@style/set_power_rl"
+                android:background="@color/white">
 
                 <TextView
                     style="@style/set_power_tv"
@@ -217,176 +491,55 @@
 
             </RelativeLayout>
 
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="添加用户" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission15"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="删除用户" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission16"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="添加用户权限" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission17"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="设置用户权限" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission18"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="查询公司人员盖章记录" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission19"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="添加组织架构" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission20"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="编辑组织架构" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission21"
-                    style="@style/set_power_bt" />
-            </RelativeLayout>
-
-            <View style="@style/line_left" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="删除组织架构" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission22"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
             <View style="@style/line" />
 
-            <RelativeLayout style="@style/set_power_rl">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="权限设置"
+                android:textColor="@color/black_6"
+                android:textSize="12sp" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="移动用户或印章到其他部门权限" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission23"
-                    style="@style/set_power_bt" />
+                <View style="@style/line" />
 
-            </RelativeLayout>
+                <RelativeLayout style="@style/set_power_rl">
 
-            <View style="@style/line" />
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="添加用户权限" />
 
-            <RelativeLayout style="@style/set_power_rl">
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission17"
+                        style="@style/set_power_bt" />
 
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="固件升级权限" />
+                </RelativeLayout>
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission24"
-                    style="@style/set_power_bt" />
+                <View style="@style/line_left" />
 
-            </RelativeLayout>
+                <RelativeLayout
+                    style="@style/set_power_rl"
+                    android:layout_marginBottom="10dp">
 
+                    <TextView
+                        style="@style/set_power_tv"
+                        android:text="设置用户权限" />
 
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission18"
+                        style="@style/set_power_bt" />
 
+                </RelativeLayout>
 
-
-            <View style="@style/line" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="更换印章" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission25"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
-
-            <View style="@style/line" />
-
-            <RelativeLayout style="@style/set_power_rl">
-
-                <TextView
-                    style="@style/set_power_tv"
-                    android:text="查看公司组织架构" />
-
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/permission26"
-                    style="@style/set_power_bt" />
-
-            </RelativeLayout>
+                <View style="@style/line" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

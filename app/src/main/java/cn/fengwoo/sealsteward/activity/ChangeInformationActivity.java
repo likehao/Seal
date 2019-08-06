@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,6 +94,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
         String socialCode = intent.getStringExtra("socialCode");    //社会信用代码
         String legalPerson = intent.getStringExtra("legalPerson");   //法人
         companyId = intent.getStringExtra("companyId");   //法人
+        String job = intent.getStringExtra("job");   //职位
         tag = intent.getIntExtra("TAG", 0);
         //判断点击的是哪个
         switch (tag) {
@@ -119,6 +121,10 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
             case 6:
                 information_et.setText(legalPerson);
                 information_et.setSelection(legalPerson.length());
+                break;
+            case 7:
+                information_et.setText(job);
+                information_et.setSelection(job.length());
                 break;
         }
 
@@ -151,7 +157,9 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
                 changePhoneInfomation();
             } else if (tag == 3) {
                 changeEmailInfomation();   //修改邮箱
-            } else {
+            } else if (tag == 7){
+                changeJob();   //修改职位
+            }else {
                 changeCompanyName();   //修改公司
             }
         } else {
@@ -332,6 +340,45 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
 
     }
 
+    /**
+     * 更改职位
+     */
+    private void changeJob(){
+        HashMap<String , String> hashMap = new HashMap<>();
+        hashMap.put("userId",CommonUtil.getUserData(this).getId());
+        hashMap.put("job",information_et.getText().toString());
+        HttpUtil.sendDataAsync(this, HttpUrl.CHANGE_JOB, 3, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Log.e("TAG","更改职位错误错误错误错误");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){}.getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        loadingView.cancel();
+                        //更新存储职位
+                        String newJob = information_et.getText().toString().trim();
+                        LoginData data = CommonUtil.getUserData(ChangeInformationActivity.this);
+                        if (data != null) {
+                            data.setJob(newJob);
+                            CommonUtil.setUserData(ChangeInformationActivity.this, data);
+                        }
+                        finish();
+                        showMsg("修改成功");
+                    }
+                }else {
+                    loadingView.cancel();
+                    showMsg(responseInfo.getMessage());
+                }
+            }
+        });
+    }
     private void showMsg(String str) {
         Looper.prepare();
         showToast(str);

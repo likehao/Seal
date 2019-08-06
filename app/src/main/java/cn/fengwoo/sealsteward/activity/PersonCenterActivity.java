@@ -141,6 +141,8 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
     RelativeLayout address_rl;
     @BindView(R.id.address_tv)
     TextView address_tv;
+    @BindView(R.id.job_rl)
+    RelativeLayout job_rl;   //职位
 
     private List<JsonBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
@@ -176,6 +178,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
         address_rl.setOnClickListener(this);
         headImg_iv.setOnClickListener(this);
         rl_auth.setOnClickListener(this);
+        job_rl.setOnClickListener(this);
     }
 
     @Override
@@ -350,6 +353,12 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
                     // 显示已认证dialog
                     didAuth();
                 }
+                break;
+            case R.id.job_rl:
+                intent = new Intent(this,ChangeInformationActivity.class);
+                intent.putExtra("job",job_tv.getText().toString());
+                intent.putExtra("TAG",7);
+                startActivity(intent);
                 break;
         }
     }
