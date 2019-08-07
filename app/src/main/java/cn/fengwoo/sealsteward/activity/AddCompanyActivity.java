@@ -1,6 +1,5 @@
 package cn.fengwoo.sealsteward.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
@@ -8,8 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +94,8 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
      * @return
      */
     private boolean checkData(){
-        companyName = company_name_et.getText().toString();
-        trade = trade_tv.getText().toString();
+        companyName = company_name_et.getText().toString().trim();
+        trade = trade_tv.getText().toString().trim();
  /*       socialCode = social_credit_code_et.getText().toString();
         legalPerson = legal_person_et.getText().toString();*/
         if (companyName.length() == 0) {
@@ -123,6 +124,7 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
         loadingView.show();
         AddCompanyInfo addCompanyInfo = new AddCompanyInfo();
         addCompanyInfo.setCompanyName(companyName);
+        addCompanyInfo.setTrade(trade);
 /*        addCompanyInfo.setSocialCreditCode(socialCode);
         addCompanyInfo.setLegalPersonName(legalPerson);*/
         HttpUtil.sendDataAsync(AddCompanyActivity.this, HttpUrl.ADDCOMPANY, 2, null, addCompanyInfo, new Callback() {

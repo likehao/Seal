@@ -298,7 +298,8 @@
         <activity android:name=".activity.RecordQrCodeActivity" />
         <activity android:name=".activity.ScanRecordQrCodeResultActivity" />
         <activity android:name=".activity.SearchOrgUserAndSealActivity" />
-        <activity android:name=".activity.MapViewActivity"/>
+        <activity android:name=".activity.MapViewActivity" />
+        <activity android:name=".activity.ChangeCompanyActivity"/>
     </application>
 
 </manifest>

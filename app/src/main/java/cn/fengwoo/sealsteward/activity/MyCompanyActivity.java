@@ -7,12 +7,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,12 +17,8 @@ import com.longsh.optionframelibrary.OptionBottomDialog;
 import com.white.easysp.EasySP;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +28,10 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.CompanyListAdapter;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
-import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.CompanyInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserDetailData;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -73,7 +64,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<CompanyInfo> arrayList;
     private String pos;   //初始选择
     private String userId;
-    private String selectCompanyId, selectCompanyName;
+    private String selectCompanyId, selectCompanyName,trade;
 
     private String targetPermissionJson = "";
     private String belongUser;   //公司的归属者
@@ -136,7 +127,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     arrayList = new ArrayList<>();
                     for (int i = 0; i < responseInfo.getData().size(); i++) {
                         arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
-                                responseInfo.getData().get(i).getId(), responseInfo.getData().get(i).getBelongUser()));
+                                responseInfo.getData().get(i).getId(), responseInfo.getData().get(i).getBelongUser(),
+                                responseInfo.getData().get(i).getTrade()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -178,7 +170,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private void selectDialog(final String select, int selectPosition) {
         strings = new ArrayList<String>();
         strings.add("切换");
-        strings.add("删除");
+//        strings.add("删除");
         strings.add("查看详情");
         strings.add("公司转让");
         final OptionBottomDialog optionBottomDialog = new OptionBottomDialog(MyCompanyActivity.this, strings);
@@ -191,13 +183,16 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     //切换公司
                     switchCompany(select);
 
-                } else if (position == 1) {
-                    deleteDialog(selectPosition); //提示删除
-                    optionBottomDialog.dismiss();
-                } else if (position == 2){
-                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+//                } else if (position == 1) {
+//                    deleteDialog(selectPosition); //提示删除
+//                    optionBottomDialog.dismiss();
+                } else if (position == 1){
+//                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent = new Intent(MyCompanyActivity.this, ChangeCompanyActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
                     intent.putExtra("belongUser", belongUser);
+                    intent.putExtra("companyName", selectCompanyName);
+                    intent.putExtra("trade", trade);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }else {
@@ -275,9 +270,12 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+//                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent = new Intent(MyCompanyActivity.this, ChangeCompanyActivity.class);
                     intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
                     intent.putExtra("belongUser", belongUser);
+                    intent.putExtra("companyName", selectCompanyName);
+                    intent.putExtra("trade", trade);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
 
@@ -297,9 +295,12 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+//                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent = new Intent(MyCompanyActivity.this, ChangeCompanyActivity.class);
                     intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
                     intent.putExtra("belongUser", belongUser);
+                    intent.putExtra("companyName", selectCompanyName);
+                    intent.putExtra("trade", trade);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
 
@@ -332,9 +333,12 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     switchCompany(select);
 
                 } else {
-                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+//                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
+                    intent = new Intent(MyCompanyActivity.this, ChangeCompanyActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
                     intent.putExtra("belongUser", belongUser);
+                    intent.putExtra("companyName", selectCompanyName);
+                    intent.putExtra("trade", trade);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }
@@ -347,6 +351,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         //赋值选择的那一条数据获取它的id
         selectCompanyId = arrayList.get(position).getId();
         selectCompanyName = arrayList.get(position).getCompanyName();
+        trade = arrayList.get(position).getTrade();
         //判断公司的归属者
         belongUser = arrayList.get(position).getBelongUser();
         //判断点击的是被选中的还是未选中的公司

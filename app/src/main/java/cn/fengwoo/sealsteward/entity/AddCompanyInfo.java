@@ -15,6 +15,7 @@ public class AddCompanyInfo implements Serializable {
      "id": "string",
      "legalPersonName": "string",
      "socialCreditCode": "string"
+     "trade": "string"
      */
     private Boolean authStatus;
     private String authTime;
@@ -24,6 +25,8 @@ public class AddCompanyInfo implements Serializable {
     private String id;
     private String legalPersonName;
     private String socialCreditCode;
+
+    private String trade;
 
     public Boolean getAuthStatus() {
         return authStatus;
@@ -89,6 +92,14 @@ public class AddCompanyInfo implements Serializable {
         this.socialCreditCode = socialCreditCode;
     }
 
+    public String getTrade() {
+        return trade;
+    }
+
+    public void setTrade(String trade) {
+        this.trade = trade;
+    }
+
     @Override
     public String toString() {
         return "AddCompanyInfo{" +
@@ -100,6 +111,7 @@ public class AddCompanyInfo implements Serializable {
                 ", id='" + id + '\'' +
                 ", legalPersonName='" + legalPersonName + '\'' +
                 ", socialCreditCode='" + socialCreditCode + '\'' +
+                ", trade='" + trade + '\'' +
                 '}';
     }
 

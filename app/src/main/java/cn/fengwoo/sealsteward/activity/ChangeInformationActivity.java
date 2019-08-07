@@ -1,44 +1,30 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
-import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Logger;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
-import cn.fengwoo.sealsteward.utils.FromToJson;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.utils.ReqCallBack;
-import cn.fengwoo.sealsteward.utils.RequestHeaderUtil;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -58,6 +44,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     LoadingView loadingView;
     private int tag;
     String companyId;
+    private static final int CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +136,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
      * 判断修改类型
      */
     private void typeChangeInfomation() {
-        if (information_et.getText().length() != 0) {
+        if (information_et.getText().toString().trim().length() != 0) {
             loadingView.show();
             if (tag == 1) {  //修改姓名
                 changeNameInfomation();
@@ -160,7 +147,11 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
             } else if (tag == 7){
                 changeJob();   //修改职位
             }else {
-                changeCompanyName();   //修改公司
+                Intent intent = new Intent();
+                intent.putExtra("companyText",information_et.getText().toString());
+                setResult(CODE,intent);
+                finish();
+//                changeCompanyName();   //修改公司
             }
         } else {
             showToast("信息不能为空");

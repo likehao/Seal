@@ -17,6 +17,7 @@ public class CompanyInfo implements Serializable {
      "id": "string",
      "legalPersonName": "string",
      "socialCreditCode": "string"
+     "trade": "string"
      }
      ]
      */
@@ -28,14 +29,24 @@ public class CompanyInfo implements Serializable {
     private String id;
     private String legalPersonName;
     private String socialCreditCode;
+    private String trade;
+
+    public String getTrade() {
+        return trade;
+    }
+
+    public void setTrade(String trade) {
+        this.trade = trade;
+    }
 
     public CompanyInfo(){
 
     }
-    public CompanyInfo(String companyName,String id,String belongUser) {
+    public CompanyInfo(String companyName,String id,String belongUser,String trade) {
         this.companyName = companyName;
         this.id = id;
         this.belongUser = belongUser;
+        this.trade = trade;
     }
 
 
@@ -114,6 +125,7 @@ public class CompanyInfo implements Serializable {
                 ", id='" + id + '\'' +
                 ", legalPersonName='" + legalPersonName + '\'' +
                 ", socialCreditCode='" + socialCreditCode + '\'' +
+                ", trade='" + trade + '\'' +
                 '}';
     }
 

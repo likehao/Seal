@@ -241,6 +241,12 @@ public class SuggestionActivity extends BaseActivity implements View.OnClickList
             File fileByUri;
             if (mSelected != null) {
                 //将uri转为file
+             /*   for (int i = 0 ;i < mSelected.size(); i++){
+                    fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(i)));
+                    for (File list : fileByUri.listFiles()){
+
+                    }
+                }*/
                 fileByUri = new File(FileUtil.getRealFilePath(this, mSelected.get(0)));
             } else {
                 fileByUri = new File(Matisse.obtainCaptureImageResult(data));
