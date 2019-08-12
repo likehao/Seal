@@ -54,6 +54,7 @@ import cn.fengwoo.sealsteward.fragment.MainFragment;
 import cn.fengwoo.sealsteward.fragment.MessageFragment;
 import cn.fengwoo.sealsteward.fragment.MineFragment;
 import cn.fengwoo.sealsteward.fragment.RecordFragment;
+import cn.fengwoo.sealsteward.fragment.StatisticsFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
@@ -91,8 +92,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView tv_right;
     @BindView(R.id.welcome_tv)
     TextView welcome;
-    private ImageView[] imageViews = new ImageView[5];  //底部导航图集合
-    private TextView[] textViews = new TextView[7];   //底部导航文字集合
+    private ImageView[] imageViews = new ImageView[8];  //底部导航图集合
+    private TextView[] textViews = new TextView[8];   //底部导航文字集合
     private LinearLayout[] linearLayouts = new LinearLayout[7];
     private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
     AddPopuwindow popuwindow;
@@ -104,6 +105,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     RecordFragment recordFragment;
     MessageFragment messageFragment;
     ApplicationFragment applicationFragment;
+    StatisticsFragment statisticsFragment;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private List<String> dialogList;
     /*    @BindView(R.id.circle_useSeal_apply_ll)
@@ -132,7 +134,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     LinearLayout phoneSeal;  //手机盖章
     @BindView(R.id.pwd_seal_ll)
     LinearLayout pwdSeal;   //密码盖章
-
+    @BindView(R.id.statistics)
+    LinearLayout statistics;
+    @BindView(R.id.statistics_iv)
+    ImageView statistics_iv;
+    @BindView(R.id.statistics_tv)
+    TextView statistics_tv;
+    @BindView(R.id.edit_tv)
+    TextView edit_tv;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,12 +231,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         textViews[2] = (TextView) findViewById(R.id.matter_tv);
         textViews[3] = (TextView) findViewById(R.id.mine_tv);
         textViews[4] = (TextView) findViewById(R.id.application_tv);
+        textViews[7] = statistics_tv;
 
         imageViews[0] = (ImageView) findViewById(R.id.seal_iv);
         imageViews[1] = (ImageView) findViewById(R.id.record_iv);
         imageViews[2] = (ImageView) findViewById(R.id.matter_iv);
         imageViews[3] = (ImageView) findViewById(R.id.mine_iv);
         imageViews[4] = (ImageView) findViewById(R.id.application_iv);
+        imageViews[7] = statistics_iv;
 
         textViews[5] = tv_left;
         textViews[6] = tv_right;
@@ -257,6 +268,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //       circle_useSeal_apply_ll.setOnClickListener(this);
         add_ll.setOnClickListener(this);
         msg_ll.setOnClickListener(this);
+        statistics.setOnClickListener(this);
+        edit_tv.setOnClickListener(this);
     }
 
     @Override
@@ -272,6 +285,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 scan_ll.setVisibility(View.VISIBLE);
                 title_ll.setVisibility(View.VISIBLE);
                 welcome.setVisibility(View.VISIBLE);
+                edit_tv.setVisibility(View.GONE);
                 changeView(0);
                 break;
             case R.id.record_page:
@@ -287,6 +301,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.VISIBLE);
                 welcome.setVisibility(View.GONE);
+                edit_tv.setVisibility(View.GONE);
                 changeView(1);
                 break;
             case R.id.message_page:
@@ -297,6 +312,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.VISIBLE);
                 welcome.setVisibility(View.GONE);
+                edit_tv.setVisibility(View.GONE);
                 changeView(2);
                 break;
             case R.id.mine:
@@ -309,6 +325,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.GONE);
                 welcome.setVisibility(View.GONE);
+                edit_tv.setVisibility(View.GONE);
                 changeView(3);
                 break;
             case R.id.application_page:
@@ -321,7 +338,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.VISIBLE);
                 welcome.setVisibility(View.GONE);
+                edit_tv.setVisibility(View.GONE);
                 changeView(4);
+                break;
+            case R.id.statistics:
+                ll_record.setVisibility(View.GONE);
+                title_tv.setVisibility(View.VISIBLE);
+                title_tv.setText("用印统计");
+                scan_ll.setVisibility(View.GONE);
+                add_ll.setVisibility(View.GONE);
+                record_more_iv.setVisibility(View.GONE);
+                msg_ll.setVisibility(View.GONE);
+                title_ll.setVisibility(View.VISIBLE);
+                welcome.setVisibility(View.GONE);
+                edit_tv.setVisibility(View.VISIBLE);
+                edit_tv.setText("明细");
+                changeView(7);
                 break;
             case R.id.record_more_iv:
                 //盖章记录更多popuwindow
@@ -351,7 +383,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 intent = new Intent(this, MsgActivity.class);
                 startActivity(intent);
                 break;
-
             case R.id.tv_left:
                 Utils.log("left");
                 //设置文字透明度
@@ -360,7 +391,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                tv_left.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("left");
                 break;
-
             case R.id.tv_right:
                 Utils.log("right");
                 changeTitleView(6);
@@ -368,6 +398,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                tv_left.setTextColor(Color.argb(130, 255, 255, 255));
 //                tv_right.setTextColor(Color.argb(255, 255, 255, 255));
                 leftOrRightListener.whichSide("right");
+                break;
+            case R.id.edit_tv:
+                intent = new Intent(this,SealDetailedActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -417,6 +451,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     transaction.show(applicationFragment);
                 }
+                break;
+            case 7:
+                if (statisticsFragment == null){
+                    statisticsFragment = new StatisticsFragment();
+                    transaction.add(R.id.home_fragment,statisticsFragment);
+                }else {
+                    transaction.show(statisticsFragment);
+                }
+                break;
 
         }
         transaction.commit();
@@ -437,9 +480,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         imageViews[2].setImageResource(index == 2 ? R.drawable.matter_select : R.drawable.matter);
         textViews[3].setTextColor(index == 3 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.gray_text));
         imageViews[3].setImageResource(index == 3 ? R.drawable.mian_select : R.drawable.mine);
-        imageViews[4].setImageResource(index == 4 ? R.drawable.application_select : R.drawable.application);
         textViews[4].setTextColor(index == 4 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.gray_text));
-
+        imageViews[4].setImageResource(index == 4 ? R.drawable.application_select : R.drawable.application);
+        textViews[7].setTextColor(index == 7 ? ContextCompat.getColor(this,R.color.style) : ContextCompat.getColor(this,R.color.gray_text));
+        imageViews[7].setImageResource(index == 7 ? R.drawable.icon_printed_statistics_click : R.drawable.icon_printed_statistics_default);
     }
 
     /**
@@ -473,6 +517,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (applicationFragment != null) {
             transaction.hide(applicationFragment);
         }
+        if (statisticsFragment != null){
+            transaction.hide(statisticsFragment);
+        }
     }
 
     private void initFragment() {
@@ -481,6 +528,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         messageFragment = (MessageFragment) fragmentManager.findFragmentByTag("message");
         mineFragment = (MineFragment) fragmentManager.findFragmentByTag("mine");
         applicationFragment = (ApplicationFragment) fragmentManager.findFragmentByTag("application");
+        statisticsFragment = (StatisticsFragment) fragmentManager.findFragmentByTag("statistics");
     }
 
     //检查权限
@@ -548,7 +596,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 ResponseInfo<List<MessageData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<MessageData>>>() {
                 }
                         .getType());
-                assert responseInfo != null;
                 if (responseInfo.getCode() != null) {
                     if (responseInfo.getCode() == 1002 || responseInfo.getCode() == 1003 || responseInfo.getCode() == 1004) {
                         //关闭定时器

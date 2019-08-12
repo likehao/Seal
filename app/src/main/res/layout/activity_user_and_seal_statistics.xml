@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.UserAndSealStatisticsActivity"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <include layout="@layout/head"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/user_seal_ty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:tabTextColor="@color/black_3"
+                app:tabSelectedTextColor="@color/style"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                app:tabIndicatorColor="@color/style"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/user_seal_vp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

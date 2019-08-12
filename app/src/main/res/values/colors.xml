@@ -23,6 +23,7 @@
     <color name="black_6">#666666</color>
     <color name="pink">#e39b9e</color>
     <color name="scan_corner">#27AC88</color>
+    <color name="chart">#83CBFD</color>
 
     <color name="Black4">#121415</color>
     <color name="Black5">#242125</color>
@@ -36,6 +37,8 @@
     <color name="upload_photo">#FFBA00</color>
     <color name="org">#FCF9FC</color>
     <color name="gray_line">#DDDDDD</color>
+    <color name="number_tv">#FF9933</color>
+    <color name="number_gray">#CCCCCC</color>
 
 
     <color name="lvDividerLine">#d9e3e8</color>

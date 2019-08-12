@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
@@ -57,6 +58,7 @@ public class CommonUtil {
         return user;
     }
 
+    @SuppressLint("ApplySharedPref")
     public static void setUserData(Activity activity, LoginData user) {
         //获取SharedPreferences对象
         SharedPreferences sharedPreferences = activity.getSharedPreferences("userdata", MODE_PRIVATE);

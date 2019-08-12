@@ -116,7 +116,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private BiometricPromptManager mManager;
     @BindView(R.id.my_scrollView)
     NestedScrollView scrollView;
-//    IOSScrollView scrollView;
+    //    IOSScrollView scrollView;
     @BindView(R.id.head_ll)
     LinearLayout head_ll;
     @BindView(R.id.title_tv)
@@ -138,9 +138,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         head_ll.setAlpha(0);  //设置title初始为透明
         title_tv.setText("我的");
         mManager = BiometricPromptManager.from(getActivity());
-        if(mManager.isHardwareDetected()){
+        if (mManager.isHardwareDetected()) {
             rl_safe.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             rl_safe.setVisibility(View.GONE);
         }
         String headPortrait = CommonUtil.getUserData(getActivity()).getHeadPortrait();
@@ -170,10 +170,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
         /**
          *  第一个参数NestedScrollView v:是NestedScrollView的对象
-             第二个参数:scrollX是目前的（滑动后）的X轴坐标
-             第三个参数:ScrollY是目前的（滑动后）的Y轴坐标
-             第四个参数:oldScrollX是之前的（滑动前）的X轴坐标
-             第五个参数:oldScrollY是之前的（滑动前）的Y轴坐标
+         第二个参数:scrollX是目前的（滑动后）的X轴坐标
+         第三个参数:ScrollY是目前的（滑动后）的Y轴坐标
+         第四个参数:oldScrollX是之前的（滑动前）的X轴坐标
+         第五个参数:oldScrollY是之前的（滑动前）的Y轴坐标
          */
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -187,16 +187,16 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 } else if (scrollY == 0) {//滑动到顶部
 
                 }*/
-                int high = dip2px(getActivity(),46);
-                if (i1 <= 0){
+                int high = dip2px(getActivity(), 46);
+                if (i1 <= 0) {
                     head_ll.setAlpha(0);
-                }else if (i1>0 && i1< high){
+                } else if (i1 > 0 && i1 < high) {
                     //获取渐变率
                     float scale = (float) i1 / high;
                     //获取渐变数值
                     float alpha = (1.0f * scale);
                     head_ll.setAlpha(alpha);
-                }else {
+                } else {
                     head_ll.setAlpha(1f);
                 }
             }
@@ -347,7 +347,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.rl_safe:
-                if(!mManager.hasEnrolledFingerprints()){
+                if (!mManager.hasEnrolledFingerprints()) {
                     showToast("请至少设置一个指纹");
                     return;
                 }
@@ -427,6 +427,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             phone.setText(CommonUtil.getUserData(getActivity()).getMobilePhone());
         }
     }
+
     public void showToast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }

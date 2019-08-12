@@ -17,9 +17,9 @@ android {
     defaultConfig {
         applicationId "cn.fengwoo.sealsteward"
         minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 330
-        versionName "3.3.0"
+        targetSdkVersion 26     //防止9.0手机登录出问题，需要将其改为27以下，或者APP改用https请求
+        versionCode 331
+        versionName "3.3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -122,6 +122,7 @@ dependencies {
         all*.exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
@@ -138,6 +139,7 @@ dependencies {
     implementation(name: 'alipaySdk-15.6.0-20190226104053', ext: 'aar')
 
     // 知乎选图片
+
     //    implementation(name: 'matisse-debug', ext: 'aar')
 
     //pwd
@@ -251,7 +253,8 @@ dependencies {
     implementation project(':matisse')
 
     // dfu
-//    api 'no.nordicsemi.android:dfu:1.6.1'
+
+    //    api 'no.nordicsemi.android:dfu:1.6.1'
     api 'no.nordicsemi.android:dfu:1.8.1'
 
     //图片放大缩小
@@ -272,10 +275,13 @@ dependencies {
     implementation(name: 'SecurityBodySDK-external-release-5.4.79', ext: 'aar')
     implementation(name: 'NoCaptchaSDK-external-release-5.4.29', ext: 'aar')
     implementation 'net.vidageek:mirror:1.6.1'
-//    implementation project(':FastBleLib')
+
+    //    implementation project(':FastBleLib')
     implementation 'com.clj.fastble:FastBleLib:2.3.4'
 
     //撤滑返回
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
-
+    //统计图表绘制
+//    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation files('libs/mpandroidchartlibrary-2-1-5.jar')
 }

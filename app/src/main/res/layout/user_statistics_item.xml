@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/detail_ll"
+        style="@style/pressed_effect">
+
+        <cn.fengwoo.sealsteward.view.CircleImageView
+            android:id="@+id/user_statistics_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="1"
+            android:textColor="@color/white"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="15dp"
+            android:gravity="center"
+            android:src="@drawable/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/user_statistics_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="15dp"
+            android:text="社会人"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:textColor="@color/black_3" />
+
+        <TextView
+            android:id="@+id/user_statistics_count_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textSize="13sp"
+            android:textColor="@color/dark_gray"
+            android:text="1000次"/>
+
+        <ImageView
+            style="@style/right_arrow"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="5dp" />
+    </LinearLayout>
+
+    <View
+        style="@style/line_left"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="15dp" />
+</LinearLayout>

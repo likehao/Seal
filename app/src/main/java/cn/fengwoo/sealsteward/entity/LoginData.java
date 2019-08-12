@@ -77,6 +77,7 @@ public class LoginData implements Serializable {
     public LoginData(){
 
     }
+
     public List<String> getFuncIdList() {
         return funcIdList;
     }

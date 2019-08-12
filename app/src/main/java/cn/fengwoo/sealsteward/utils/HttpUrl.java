@@ -2,10 +2,10 @@ package cn.fengwoo.sealsteward.utils;
 
 public class HttpUrl {
     //    public static final String URL = "http://192.168.0.117/sealappservice/";  //测试环境
-//    public static final String URL = "http://192.168.1.117:8800/";  //调试环境
+    public static final String URL = "http://192.168.1.117:8800/";  //调试环境
 //    public static final String URL = "http://www.baiheyz.com:8080/sealappservicetest/";  //测试
 //    public static final String URL = "http://192.168.1.101:8800";  //测试
-    public static final String URL = "http://www.baiheyz.com:8080/bhsealappservice/";    //线上
+//    public static final String URL = "http://www.baiheyz.com:8080/bhsealappservice/";    //线上
 
 
     /**
@@ -419,4 +419,19 @@ public class HttpUrl {
      * 修改职位
      */
     public static final String CHANGE_JOB = "user/updatejob";
+
+    /**
+     * 统计
+     */
+    public static final String ORG_STATISTIC = "statistic/orgstructurestatistic";
+    /**
+     * 印章统计
+     */
+    public static final String SEAL_STATISTIC = "statistic/sealstatistic";
+    /**
+     * 用户统计
+     */
+    public static final String USER_STATISTIC = "statistic/userstatistic";
+
+
 }

@@ -299,7 +299,9 @@
         <activity android:name=".activity.ScanRecordQrCodeResultActivity" />
         <activity android:name=".activity.SearchOrgUserAndSealActivity" />
         <activity android:name=".activity.MapViewActivity" />
-        <activity android:name=".activity.ChangeCompanyActivity"/>
+        <activity android:name=".activity.ChangeCompanyActivity" />
+        <activity android:name=".activity.SealDetailedActivity" />
+        <activity android:name=".activity.UserAndSealStatisticsActivity"/>
     </application>
 
 </manifest>
