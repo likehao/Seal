@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/detail_ll"
+        android:id="@+id/sealStatistics_ll"
         style="@style/pressed_effect">
 
         <cn.fengwoo.sealsteward.view.CircleImageView
@@ -39,7 +39,7 @@
             android:gravity="end"
             android:textSize="13sp"
             android:textColor="@color/dark_gray"
-            android:text="1000次"/>
+            android:text="0次"/>
 
         <ImageView
             style="@style/right_arrow"

@@ -17,7 +17,8 @@ public class SealStatisticsData implements Serializable {
     private String sealPrint;
     private String stampCount;
 
-    public SealStatisticsData(String name, String sealPrint, String stampCount) {
+    public SealStatisticsData(String id ,String name, String sealPrint, String stampCount) {
+        this.id = id;
         this.name = name;
         this.sealPrint = sealPrint;
         this.stampCount = stampCount;

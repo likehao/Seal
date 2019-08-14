@@ -2,8 +2,12 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,9 +44,13 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
     TextView title_tv;
     @BindView(R.id.useSeal_detail_lv)
     ListView listView;
+    @BindView(R.id.search)
+    EditText search;
     private ArrayList<UseSealDetailData> arrayList;
     private LoadingView loadingView;
+    private CommonAdapter detailAdapter;
     private ResponseInfo<List<UseSealDetailData>> responseInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +67,25 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
         title_tv.setText("用印明细");
         back.setOnClickListener(this);
         loadingView = new LoadingView(this);
+        search.setOnClickListener(this);
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                /*判断是否是“搜索”键*/
+                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                    String searchStr = search.getText().toString().trim();
+                    if (!TextUtils.isEmpty(searchStr)){
+                        //清空数据
+                        arrayList.clear();
+                        detailAdapter.notifyDataSetChanged();
+                        getSearchData(searchStr);
+                        return true;   //返回false表示点击后，隐藏软键盘。返回true表示保留软键盘
+                    }
+
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -67,10 +94,14 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
             case R.id.set_back_ll:
                 finish();
                 break;
+            case R.id.search:
+                search.setCursorVisible(true);  //显示光标
+                break;
         }
     }
 
     private void getData(){
+        loadingView.show();
         HttpUtil.sendDataAsync(this, HttpUrl.ORG_STATISTIC, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -87,18 +118,27 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
                     loadingView.cancel();
                     for (UseSealDetailData useSealDetailData : responseInfo.getData()){
-                        arrayList.add(new UseSealDetailData(useSealDetailData.getOrgStructureName(),useSealDetailData.getStampCount()));
+                        arrayList.add(new UseSealDetailData(useSealDetailData.getId(),useSealDetailData.getOrgStructureName(),useSealDetailData.getStampCount()));
                     }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setData();
+                        }
+                    });
                 }
             }
         });
 
-        CommonAdapter detailAdapter = new CommonAdapter<UseSealDetailData>(SealDetailedActivity.this, arrayList, R.layout.detail_item) {
+    }
+
+    private void setData(){
+        detailAdapter = new CommonAdapter<UseSealDetailData>(SealDetailedActivity.this, arrayList, R.layout.detail_item) {
             @Override
             public void convert(ViewHolder viewHolder, UseSealDetailData useSealDetailData, int position) {
                 viewHolder.setText(R.id.detail_department_tv,useSealDetailData.getOrgStructureName());
                 viewHolder.setText(R.id.detail_time_tv,useSealDetailData.getStampCount()+"");
-                viewHolder.setText(R.id.number_tv,position+1+"");
+                viewHolder.setText(R.id.number_tv,position+1+"");  //初始是红，从1开始
                 if (position == 1){
                     viewHolder.setBackgroundRes(R.id.number_tv,R.drawable.circle_textview_yellow);
                 }else if (position == 2){
@@ -110,8 +150,8 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(SealDetailedActivity.this,UserAndSealStatisticsActivity.class);
-                        intent.putExtra("orgId",responseInfo.getData().get(position).getId());
-                        intent.putExtra("orgName",responseInfo.getData().get(position).getOrgStructureName());
+                        intent.putExtra("orgId",arrayList.get(position).getId());
+                        intent.putExtra("orgName",arrayList.get(position).getOrgStructureName());
                         startActivity(intent);
                     }
                 });
@@ -119,5 +159,32 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
         } ;
         detailAdapter.notifyDataSetChanged();
         listView.setAdapter(detailAdapter);
+    }
+
+    /**
+     * 获取搜索内容
+     * @param search
+     */
+    private void getSearchData(String search){
+        ArrayList<UseSealDetailData> searchList = new ArrayList<>();
+        if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+            for (UseSealDetailData useSealDetailData : responseInfo.getData()) {
+                if (useSealDetailData.getOrgStructureName().contains(search)) {
+                    if (!searchList.contains(useSealDetailData)) {
+                        searchList.add(useSealDetailData);
+                    }
+                }
+            }
+        }
+        for (UseSealDetailData data : searchList){
+            arrayList.add(new UseSealDetailData(data.getId(),data.getOrgStructureName(),data.getStampCount()));
+        }
+        listView.setAdapter(detailAdapter);
+        if (detailAdapter != null) {
+            detailAdapter.notifyDataSetChanged();
+        }
+        if (searchList.size() == 0) {
+            showToast("未查询到结果");
+        }
     }
 }

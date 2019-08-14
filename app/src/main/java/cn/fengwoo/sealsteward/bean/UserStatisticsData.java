@@ -17,8 +17,6 @@ public class UserStatisticsData implements Serializable {
     private String id;
     private String realName;
     private String stampCount;
-    private String name;
-    private String sealPrint;
 
     @Override
     public String toString() {
@@ -32,8 +30,6 @@ public class UserStatisticsData implements Serializable {
                 ", searchType=" + searchType +
                 ", year=" + year +
                 ", id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", sealPrint='" + sealPrint + '\'' +
                 ", stampCount='" + stampCount + '\'' +
                 ", headPortrait='" + headPortrait + '\'' +
                 ", realName='" + realName + '\'' +
@@ -43,7 +39,8 @@ public class UserStatisticsData implements Serializable {
     public UserStatisticsData(){
 
     }
-    public UserStatisticsData(String realName, String headPortrait, String stampCount) {
+    public UserStatisticsData(String id,String realName, String headPortrait, String stampCount) {
+        this.id = id;
         this.realName = realName;
         this.headPortrait = headPortrait;
         this.stampCount = stampCount;
@@ -79,22 +76,6 @@ public class UserStatisticsData implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSealPrint() {
-        return sealPrint;
-    }
-
-    public void setSealPrint(String sealPrint) {
-        this.sealPrint = sealPrint;
     }
 
     public String getStampCount() {

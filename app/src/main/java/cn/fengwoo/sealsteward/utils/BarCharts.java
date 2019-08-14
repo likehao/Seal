@@ -123,7 +123,7 @@ public class BarCharts {
 //        xAxis.setAxisLineColor( int color); // 设置轴线的轴的颜色。
 //        xAxis.setAxisLineWidth( float width);// 设置该轴轴行的宽度。
 //        barChart.animateY(1000); // 立即执行的动画,Y轴
-
+//
         if (isSlither) {
             //当为true时,放大图
             if (i > 6) {

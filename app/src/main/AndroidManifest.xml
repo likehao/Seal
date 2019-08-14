@@ -301,7 +301,9 @@
         <activity android:name=".activity.MapViewActivity" />
         <activity android:name=".activity.ChangeCompanyActivity" />
         <activity android:name=".activity.SealDetailedActivity" />
-        <activity android:name=".activity.UserAndSealStatisticsActivity"/>
+        <activity android:name=".activity.UserAndSealStatisticsActivity" />
+        <activity android:name=".activity.UserStatisticActivity" />
+        <activity android:name=".activity.SealStatisticActivity"/>
     </application>
 
 </manifest>

@@ -22,12 +22,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.cjt2325.cameralibrary.util.LogUtil;
 import com.orhanobut.logger.Logger;
 import com.white.easysp.EasySP;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

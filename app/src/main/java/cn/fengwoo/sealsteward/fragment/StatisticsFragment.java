@@ -30,6 +30,7 @@ import cn.fengwoo.sealsteward.entity.UseSealDetailData;
 import cn.fengwoo.sealsteward.utils.BarCharts;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -49,26 +50,33 @@ public class StatisticsFragment extends Fragment {
     private ArrayList<String> xValues = new ArrayList<>();
     private ArrayList<Integer> stampCount = new ArrayList<>();
     int sum;
+    private LoadingView loadingView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.statistics_fragment,container,false);
         ButterKnife.bind(this,view);
-        mBarChart = new BarCharts();
-
-        getStatistic();
+        initView();
         return view;
 
+    }
+
+    private void initView() {
+        mBarChart = new BarCharts();
+        loadingView = new LoadingView(getActivity());
+        getStatistic();
     }
 
     /**
      * 获取统计数据
      */
     private void getStatistic(){
+        loadingView.show();
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.ORG_STATISTIC, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
                 Log.e("TAG", e + "统计错误错误错误错误错误错误!!!!!!!!!!!!!!!");
             }
 
@@ -84,13 +92,16 @@ public class StatisticsFragment extends Fragment {
                         stampCount.add(useSealDetailData.getStampCount());
                         sum += useSealDetailData.getStampCount();
                     }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            stampCountSum_tv.setText(sum+"次");
-                            mBarChart.showBarChart(barChart, getBarData(xValues.size()), true);
-                        }
-                    });
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadingView.cancel();
+                                stampCountSum_tv.setText(sum + "次");
+                                mBarChart.showBarChart(barChart, getBarData(xValues.size()), true);
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -109,7 +120,7 @@ public class StatisticsFragment extends Fragment {
             yValues.add(new BarEntry(stampCount.get(i), i));
         }
         // y轴的数据集合
-        BarDataSet barDataSet = new BarDataSet(yValues, "测试图");
+        BarDataSet barDataSet = new BarDataSet(yValues, "统计图");
         ArrayList<Integer> colors = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             colors.add(Color.parseColor("#83CBFD"));
@@ -124,7 +135,6 @@ public class StatisticsFragment extends Fragment {
         barDataSet.setDrawValues(true);
         BarData barData = new BarData(xValues, barDataSets);
         barData.setValueTextSize(15f);  //设置直方图上面文字的大小
-
         return barData;
     }
 }

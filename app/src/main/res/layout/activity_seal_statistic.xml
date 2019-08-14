@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+    tools:context=".activity.SealStatisticActivity"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <include layout="@layout/head"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +32,7 @@
                 android:layout_marginStart="10dp"/>
 
             <EditText
-                android:id="@+id/userStatistics_search"
+                android:id="@+id/sealSearchSta_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="请输入部门名称"
@@ -42,7 +47,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/user_statistics_ll"
+            android:id="@+id/sealSta_ll"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -52,10 +57,10 @@
             android:background="@drawable/circle_white_corner">
 
             <TextView
-                android:id="@+id/statistics_time_tv"
+                android:id="@+id/sealSta_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2000年8月"
+                android:text="2019年8月"
                 android:textColor="@color/black_3"
                 android:layout_gravity="center"/>
 
@@ -77,18 +82,18 @@
         android:paddingTop="10dp">
 
         <TextView
-            android:id="@+id/UserOrgName_tv"
+            android:id="@+id/org_SealName_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="研发部"
-            android:textColor="@color/black_3"
             android:background="@drawable/text_background"
+            android:textColor="@color/black_3"
             android:textSize="15sp"
             android:textStyle="bold"/>
 
     </RelativeLayout>
     <ListView
-        android:id="@+id/userStatistic_lv"
+        android:id="@+id/seal_statistics_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
