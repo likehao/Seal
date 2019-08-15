@@ -15,8 +15,10 @@ public class UserStatisticsData implements Serializable {
 
     private String headPortrait;
     private String id;
+    private String orgStructureName;
     private String realName;
     private String stampCount;
+    private Integer totalStampCount;
 
     @Override
     public String toString() {
@@ -30,9 +32,11 @@ public class UserStatisticsData implements Serializable {
                 ", searchType=" + searchType +
                 ", year=" + year +
                 ", id='" + id + '\'' +
+                ", orgStructureName='" + orgStructureName + '\'' +
                 ", stampCount='" + stampCount + '\'' +
                 ", headPortrait='" + headPortrait + '\'' +
                 ", realName='" + realName + '\'' +
+                ", totalStampCount='" + totalStampCount + '\'' +
                 '}';
     }
 
@@ -140,6 +144,22 @@ public class UserStatisticsData implements Serializable {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getOrgStructureName() {
+        return orgStructureName;
+    }
+
+    public void setOrgStructureName(String orgStructureName) {
+        this.orgStructureName = orgStructureName;
+    }
+
+    public Integer getTotalStampCount() {
+        return totalStampCount;
+    }
+
+    public void setTotalStampCount(Integer totalStampCount) {
+        this.totalStampCount = totalStampCount;
     }
 
 }

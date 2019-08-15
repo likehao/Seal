@@ -157,6 +157,11 @@ public class HttpUtil {
         if (request != null) {
             final Call call = client.newCall(request);
             call.enqueue(callback);
+
+            if (NetCheckUtil.checkNet(activity)){
+            }else {
+                Toast.makeText(activity,"网络不可用",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

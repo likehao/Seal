@@ -7,6 +7,9 @@ public class UseSealDetailData implements Serializable {
     private String orgStructureName;
     private Integer stampCount;
 
+    public UseSealDetailData(){
+
+    }
     public UseSealDetailData(String id ,String orgStructureName, Integer stampCount) {
         this.id = id;
         this.orgStructureName = orgStructureName;

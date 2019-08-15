@@ -6,6 +6,47 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="35dp"
+        android:background="@drawable/border_style_corner"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp">
+
+        <LinearLayout
+            android:id="@+id/user_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/user_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="人员"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/seal_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/seal_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="印章"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -24,18 +65,34 @@
             android:text="盖章次数"/>
     </LinearLayout>
 
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rec_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp">
+    </android.support.v7.widget.RecyclerView>
+
+
+
+    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/bar_chart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"/>
+        android:layout_weight="4"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,4 +109,6 @@
             android:text="0次"
             android:textColor="@color/number_tv"/>
     </LinearLayout>
+
+
 </LinearLayout>
