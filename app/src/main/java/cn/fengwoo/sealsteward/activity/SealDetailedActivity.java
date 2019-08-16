@@ -24,6 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.UserStatisticsData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UseSealDetailData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
@@ -46,10 +47,10 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
     ListView listView;
     @BindView(R.id.search)
     EditText search;
-    private ArrayList<UseSealDetailData> arrayList;
+    private ArrayList<UseSealDetailData.orgStructureStatisticVoList> arrayList;
     private LoadingView loadingView;
     private CommonAdapter detailAdapter;
-    private ResponseInfo<List<UseSealDetailData>> responseInfo;
+    private ResponseInfo<UseSealDetailData> responseInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,9 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
 
     private void getData(){
         loadingView.show();
-        HttpUtil.sendDataAsync(this, HttpUrl.ORG_STATISTIC, 1, null, null, new Callback() {
+        UserStatisticsData userStatisticsData = new UserStatisticsData();
+        userStatisticsData.setSearchType(3);
+        HttpUtil.sendDataAsync(this, HttpUrl.ORG_STATISTIC, 2, null, userStatisticsData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -113,12 +116,12 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<List<UseSealDetailData>>>(){}
+                responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<UseSealDetailData>>(){}
                         .getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
                     loadingView.cancel();
-                    for (UseSealDetailData useSealDetailData : responseInfo.getData()){
-                        arrayList.add(new UseSealDetailData(useSealDetailData.getId(),useSealDetailData.getOrgStructureName(),useSealDetailData.getStampCount()));
+                    for (UseSealDetailData.orgStructureStatisticVoList list : responseInfo.getData().getOrgStructureStatisticVoList()) {
+                        arrayList.add(new UseSealDetailData.orgStructureStatisticVoList(list.getId(), list.getOrgStructureName(), list.getStampCount()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -133,9 +136,9 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void setData(){
-        detailAdapter = new CommonAdapter<UseSealDetailData>(SealDetailedActivity.this, arrayList, R.layout.detail_item) {
+        detailAdapter = new CommonAdapter<UseSealDetailData.orgStructureStatisticVoList>(SealDetailedActivity.this, arrayList, R.layout.detail_item) {
             @Override
-            public void convert(ViewHolder viewHolder, UseSealDetailData useSealDetailData, int position) {
+            public void convert(ViewHolder viewHolder, UseSealDetailData.orgStructureStatisticVoList useSealDetailData, int position) {
                 viewHolder.setText(R.id.detail_department_tv,useSealDetailData.getOrgStructureName());
                 viewHolder.setText(R.id.detail_time_tv,useSealDetailData.getStampCount()+"");
                 viewHolder.setText(R.id.number_tv,position+1+"");  //初始是红，从1开始
@@ -162,13 +165,13 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
     }
 
     /**
-     * 获取搜索内容
+     *  获取搜索内容
      * @param search
      */
     private void getSearchData(String search){
-        ArrayList<UseSealDetailData> searchList = new ArrayList<>();
+        ArrayList<UseSealDetailData.orgStructureStatisticVoList> searchList = new ArrayList<>();
         if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-            for (UseSealDetailData useSealDetailData : responseInfo.getData()) {
+            for (UseSealDetailData.orgStructureStatisticVoList useSealDetailData : responseInfo.getData().getOrgStructureStatisticVoList()) {
                 if (useSealDetailData.getOrgStructureName().contains(search)) {
                     if (!searchList.contains(useSealDetailData)) {
                         searchList.add(useSealDetailData);
@@ -176,8 +179,8 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         }
-        for (UseSealDetailData data : searchList){
-            arrayList.add(new UseSealDetailData(data.getId(),data.getOrgStructureName(),data.getStampCount()));
+        for (UseSealDetailData.orgStructureStatisticVoList data : searchList){
+            arrayList.add(new UseSealDetailData.orgStructureStatisticVoList(data.getId(),data.getOrgStructureName(),data.getStampCount()));
         }
         listView.setAdapter(detailAdapter);
         if (detailAdapter != null) {

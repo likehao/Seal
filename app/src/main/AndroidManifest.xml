@@ -303,7 +303,8 @@
         <activity android:name=".activity.SealDetailedActivity" />
         <activity android:name=".activity.UserAndSealStatisticsActivity" />
         <activity android:name=".activity.UserStatisticActivity" />
-        <activity android:name=".activity.SealStatisticActivity"/>
+        <activity android:name=".activity.SealStatisticActivity" />
+        <activity android:name=".activity.SelectTimeActivity"></activity>
     </application>
 
 </manifest>

@@ -40,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.SealStatisticActivity;
+import cn.fengwoo.sealsteward.activity.SelectTimeActivity;
 import cn.fengwoo.sealsteward.activity.UserStatisticActivity;
 import cn.fengwoo.sealsteward.bean.SealStatisticsData;
 import cn.fengwoo.sealsteward.bean.UserStatisticsData;
@@ -190,7 +191,9 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.seal_statistics_ll:
-                selectTime();
+                Intent intent = new Intent(getActivity(), SelectTimeActivity.class);
+                startActivity(intent);
+//                selectTime();
                 break;
             case R.id.sealStatistics_search:
                 sealSearch.setCursorVisible(true);

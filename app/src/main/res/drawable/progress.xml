@@ -26,8 +26,8 @@
                 <solid android:color="@color/chart" />
                 <!-- padding设置内容区域离边界的间距 -->
                 <!-- corners设置圆角，只适用于rectangle -->
-                <corners android:topLeftRadius="8dp"
-                    android:topRightRadius="8dp"/>
+                <!--<corners android:topLeftRadius="8dp"-->
+                    <!--android:topRightRadius="8dp"/>-->
             </shape>
         </clip>
     </item>

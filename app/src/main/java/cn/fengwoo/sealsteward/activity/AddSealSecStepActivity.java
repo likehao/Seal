@@ -85,7 +85,6 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     LinearLayout secStep_ll;
     @BindView(R.id.img)
     ImageView img;
-
     @BindView(R.id.btn_create_seal_pic)
     Button btn_create_seal_pic;
 
@@ -190,7 +189,11 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                     // 保存 印模 名字
                     sealPringString = responseInfo.getData().getFileName();
                     secStep_ll.setVisibility(View.GONE);
-//                    Glide.with(AddSealSecStepActivity.this).load(file).into(img);
+//                    //加载印模
+//                    img.setImageDrawable(null);
+//
+//                    String f = "/mnt/sdcard/SealDownImage/temp.png";
+//                    Glide.with(AddSealSecStepActivity.this).load(f).into(img);
                     //添加印章
                     //      addSeal();
                 } else {
@@ -383,6 +386,11 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 .forResult(REQUEST_CODE_CHOOSE);
     }
 
+    /**
+     * 生成无底色印模
+     * @param jpgFilePath
+     * @param pngFilePath
+     */
     public void convertToPng(String jpgFilePath, String pngFilePath) {
         showLoadingView();
         new Thread(new Runnable() {
@@ -403,11 +411,10 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String pngFilePathx = "file://" + HttpDownloader.path + "temp.png";
-//                File pngFile = new File(pngFilePathx);
+//                        String pngFilePathx = "file://" + HttpDownloader.path + "temp.png";
+                        String pngFilePathx = "/mnt/sdcard/SealDownImage/temp.png";
 
                         Utils.log("222222222222222222222222222222");
-
                         Glide.with(AddSealSecStepActivity.this).load(pngFilePathx).diskCacheStrategy(DiskCacheStrategy.NONE).
                                 into(img);
 
@@ -416,56 +423,9 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
                         cancelLoadingView();
                     }
                 });
-
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        String pngFilePathx = "file://" + HttpDownloader.path + "temp.png";
-////                File pngFile = new File(pngFilePathx);
-//
-//                        Utils.log("222222222222222222222222222222");
-//
-//                        Glide.with(AddSealSecStepActivity.this).load(pngFilePathx).diskCacheStrategy(DiskCacheStrategy.NONE).
-//                                into(img);
-//
-//                        File mFile = new File(pngFilePath);
-//                        uploadPic(mFile);
-//
-//                    }
-//                }, 10000);
             }
         }).start();
-//        Bitmap bitmap = BitmapFactory.decodeFile(jpgFilePath);
-//        bitmap = Utils.turnTransparent(bitmap);
-//        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(pngFilePath))) {
-//            if (bitmap.compress(Bitmap.CompressFormat.PNG, 80, bos)) {
-//                bos.flush();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        // 显示图片
-//        Utils.log("111111111111111111111111111111");
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                String pngFilePathx = "file://" + HttpDownloader.path + "temp.png";
-////                File pngFile = new File(pngFilePathx);
-//
-//                Utils.log("222222222222222222222222222222");
-//
-//                Glide.with(AddSealSecStepActivity.this).load(pngFilePathx).diskCacheStrategy(DiskCacheStrategy.NONE).
-//                into(img);
-//
-//                File mFile = new File(pngFilePath);
-//                uploadPic(mFile);
-////              Glide.with(AddSealSecStepActivity.this).load(R.mipmap.ic_launcher).into(img);
-////              Glide.with(this).load(pngFile).into(img); // 不行
-//            }
-//        }, 10000);
-
     }
-
 
     /**
      * 确认是否删除
