@@ -58,6 +58,15 @@ public class GetApplyListBean implements Serializable {
     private String stampPdf;
     private List<String> stampRecordImgList;
     private String stampRecordPdf;
+    private String companyId;
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
 
     public String getApplyCause() {
         return applyCause;
@@ -260,6 +269,7 @@ public class GetApplyListBean implements Serializable {
                 ", stampPdf='" + stampPdf + '\'' +
                 ", stampRecordImgList=" + stampRecordImgList +
                 ", stampRecordPdf='" + stampRecordPdf + '\'' +
+                ", companyId='" + companyId + '\'' +
                 '}';
     }
 

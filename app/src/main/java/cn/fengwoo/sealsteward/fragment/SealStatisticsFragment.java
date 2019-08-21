@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
 import com.mcxtzhang.commonadapter.lvgv.ViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -45,6 +48,9 @@ import cn.fengwoo.sealsteward.activity.UserStatisticActivity;
 import cn.fengwoo.sealsteward.bean.SealStatisticsData;
 import cn.fengwoo.sealsteward.bean.UserStatisticsData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.utils.DateUtils;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import okhttp3.Call;
@@ -64,13 +70,17 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
     LinearLayout seal_statistics_ll;
     @BindView(R.id.seal_time_tv)
     TextView time;
+    @BindView(R.id.seal_time_tv2)
+    TextView time2;
     @BindView(R.id.sealStatistics_search)
     EditText sealSearch;
     private ArrayList<SealStatisticsData> detailData;
     private String id, orgName;
-    private  CommonAdapter commonAdapter;
-    private int year,month;
+    private CommonAdapter commonAdapter;
+    private int year, month;
     private ResponseInfo<List<SealStatisticsData>> responseInfo;
+    private static final int SEAL_TIME_CODE = 123;
+    private String bigTime, small;
 
     @Nullable
     @Override
@@ -78,7 +88,7 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
         view = inflater.inflate(R.layout.seal_statistics_layout, container, false);
         ButterKnife.bind(this, view);
         initView();
-        getSealStatistics(year,month);
+        getSealStatistics(year, month, 0);
 
         return view;
     }
@@ -99,9 +109,9 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 /*判断是否是“搜索”键*/
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String searchStr = sealSearch.getText().toString().trim();
-                    if (!TextUtils.isEmpty(searchStr)){
+                    if (!TextUtils.isEmpty(searchStr)) {
                         //清空数据
                         detailData.clear();
                         if (commonAdapter != null) {
@@ -117,12 +127,17 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
         });
     }
 
-    private void getSealStatistics(int YY,int MM) {
+    private void getSealStatistics(int YY, int MM, int type) {
         UserStatisticsData userStatisticsData = new UserStatisticsData();
         userStatisticsData.setOrgStructureId(id);
-        userStatisticsData.setYear(YY);
-        userStatisticsData.setMonth(MM);
-        userStatisticsData.setSearchType(0);
+        if (type == 0) {
+            userStatisticsData.setYear(YY);
+            userStatisticsData.setMonth(MM);
+        } else if (type == 1) {
+            userStatisticsData.setStartTime(small);
+            userStatisticsData.setEndTime(bigTime);
+        }
+        userStatisticsData.setSearchType(type);
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.SEAL_STATISTIC, 2, null, userStatisticsData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -157,15 +172,40 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
         commonAdapter = new CommonAdapter<SealStatisticsData>(getActivity(), detailData, R.layout.seal_statistics_item) {
             @Override
             public void convert(ViewHolder viewHolder, SealStatisticsData sealStatisticsData, int position) {
-//                                viewHolder.setText(R.id.user_statistics_iv,userStatisticsData.getSealPrint());
-                if (position == 0){
-                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv,R.color.red);
-                }else if (position == 1){
-                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv,R.color.number_tv);
-                }else if (position == 2){
-                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv,R.color.style);
-                }else if (position > 2){
-                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv,R.color.dark_gray);
+                //加载图像
+                ImageView view = viewHolder.getView(R.id.seal_statistics_iv);
+                String sealPrint = sealStatisticsData.getSealPrint();
+                if (sealPrint != null && !sealPrint.isEmpty()) {
+                    Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
+                    if (bitmap == null) {
+                        HttpDownloader.downloadImage(getActivity(), 1, sealPrint, new DownloadImageCallback() {
+                            @Override
+                            public void onResult(final String fileName) {
+                                if (fileName != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String path = "file://" + HttpDownloader.path + fileName;
+                                            Picasso.with(getActivity()).load(path).into(view);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        String path = "file://" + HttpDownloader.path + sealPrint;
+                        Picasso.with(getActivity()).load(path).into(view);
+                    }
+                }
+                //设置排名颜色
+                if (position == 0) {
+                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv, R.color.red);
+                } else if (position == 1) {
+                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv, R.color.number_tv);
+                } else if (position == 2) {
+                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv, R.color.style);
+                } else if (position > 2) {
+                    viewHolder.setTextColorRes(R.id.seal_statistics_count_tv, R.color.dark_gray);
                 }
 
                 viewHolder.setText(R.id.seal_statistics_name_tv, sealStatisticsData.getName());
@@ -176,7 +216,7 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
                         Intent intent = new Intent(getActivity(), UserStatisticActivity.class);
                         intent.putExtra("sealId", detailData.get(position).getId());
                         intent.putExtra("orgName", orgName);
-                        intent.putExtra("sealName",detailData.get(position).getName());
+                        intent.putExtra("sealName", detailData.get(position).getName());
                         startActivity(intent);
                     }
                 });
@@ -192,7 +232,7 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
         switch (v.getId()) {
             case R.id.seal_statistics_ll:
                 Intent intent = new Intent(getActivity(), SelectTimeActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, SEAL_TIME_CODE);
 //                selectTime();
                 break;
             case R.id.sealStatistics_search:
@@ -228,7 +268,7 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
                     commonAdapter.notifyDataSetChanged();
                 }
                 time.setText(format);
-                getSealStatistics(Y,M);
+                getSealStatistics(Y, M, 0);
             }
         })
                 .setType(new boolean[]{true, true, false, false, false, false})  //年月日时分秒 的显示与否，不设置则默认全部显示
@@ -243,7 +283,7 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
     /**
      * 搜索结果
      */
-    private void getSearchData(String search){
+    private void getSearchData(String search) {
         List<SealStatisticsData> list = new ArrayList<>();
         if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
             for (SealStatisticsData sealStatisticsData : responseInfo.getData()) {
@@ -254,8 +294,8 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
                 }
             }
         }
-        for (SealStatisticsData data : list){
-            detailData.add(new SealStatisticsData(data.getId(),data.getName(),data.getSealPrint(),data.getStampCount()));
+        for (SealStatisticsData data : list) {
+            detailData.add(new SealStatisticsData(data.getId(), data.getName(), data.getSealPrint(), data.getStampCount()));
         }
 
         listView.setAdapter(commonAdapter);
@@ -263,7 +303,49 @@ public class SealStatisticsFragment extends Fragment implements View.OnClickList
             commonAdapter.notifyDataSetChanged();
         }
         if (list.size() == 0) {
-            Toast.makeText(getActivity(),"未查询到结果",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "未查询到结果", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int yTime = 0, mTime = 0;
+        if (requestCode == SEAL_TIME_CODE && resultCode == SEAL_TIME_CODE) {
+            if (data != null) {
+                String getTime = data.getStringExtra("time");
+                String startTime = data.getStringExtra("startTime");
+                String endTime = data.getStringExtra("endTime");
+                if (startTime != null && endTime != null) {
+                    Boolean selectB = DateUtils.compare(startTime, endTime);  //比较开始时间和结束时间
+                    if (selectB) {
+                        bigTime = startTime;
+                        small = endTime;
+                    } else {
+                        bigTime = endTime;
+                        small = startTime;
+                    }
+                }
+                int type = data.getIntExtra("type", 2);
+                //分割年月
+                if (getTime != null) {
+                    yTime = Integer.parseInt(getTime.split("-")[0]);
+                    mTime = Integer.parseInt(getTime.split("-")[1]);
+                    time.setText(yTime + "年" + mTime + "月");
+                    time2.setVisibility(View.GONE);
+                }
+                if (type == 1) {
+                    time.setText(small);
+                    time2.setVisibility(View.VISIBLE);
+                    time2.setText(bigTime);
+                }
+                //清空数据
+                detailData.clear();
+                if (commonAdapter != null) {
+                    commonAdapter.notifyDataSetChanged();
+                }
+                getSealStatistics(yTime, mTime, type);
+            }
         }
     }
 }

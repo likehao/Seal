@@ -78,7 +78,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
     @BindView(R.id.message_more_iv)
-    ImageView message_more_iv;
+    TextView message_more_iv;
     MessagePopuwindow messagePopuwindow;
     @BindView(R.id.see_record_lv)
     ListView see_record_lv;
@@ -113,6 +113,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
     ResponseInfo<List<RecordListBean>> responseInfo;
     private boolean isRead = false;
     private int type,scan;
+    private String companyId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +157,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         String headPortrait = intent.getStringExtra("headPortrait");
         String orgStructureName = intent.getStringExtra("orgStructureName");
         String cause = intent.getStringExtra("cause");
+        companyId = intent.getStringExtra("companyId");
 //        int approveStatus = intent.getIntExtra("approveStatus",0);
 
 
@@ -336,14 +338,17 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
         } else if (s.equals("申请文件")){
             Intent intent = new Intent(this, FileActivity.class);
             intent.putExtra("fileName",applyPdf);
+            intent.putExtra("companyId",companyId);
             startActivity(intent);
         }else if (s.equals("盖章文件")){
             Intent intent = new Intent(this, FileActivity.class);
             intent.putExtra("fileName",stampPdf);
+            intent.putExtra("companyId",companyId);
             startActivity(intent);
         }else if(s.equals("记录文件")){
             Intent intent = new Intent(this, FileActivity.class);
             intent.putExtra("fileName",stampRecordPdf);
+            intent.putExtra("companyId",companyId);
             startActivity(intent);
         }
     }

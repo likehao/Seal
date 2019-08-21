@@ -56,7 +56,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="当前用章总量:"
+            android:text="印章总量:"
             android:textColor="@color/black_3"
             android:textSize="16sp" />
 
@@ -65,11 +65,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/number_tv"
+            android:layout_marginStart="10dp"
             android:text="10"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black_3"
             android:text="枚"/>
     </LinearLayout>
 
@@ -82,7 +84,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="当前用印总人数:"
+            android:text="用印总人数:"
             android:textColor="@color/black_3"
             android:textSize="16sp" />
 
@@ -91,11 +93,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/number_tv"
+            android:layout_marginStart="10dp"
             android:text="10"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black_3"
             android:text="人"/>
     </LinearLayout>
 
@@ -107,8 +111,8 @@
         android:layout_marginTop="30dp">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="10dp"
+            android:layout_width="15dp"
+            android:layout_height="5dp"
             android:layout_gravity="center"
             android:background="@color/chart" />
 
@@ -116,15 +120,78 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:textColor="@color/black_3"
             android:text="盖章次数" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rec_statistics"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="30dp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"
+                android:layout_marginTop="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"
+                android:layout_marginTop="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"
+                android:layout_marginTop="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"
+                android:layout_marginTop="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"
+                android:layout_marginTop="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"
+                android:layout_marginTop="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line"
+                android:layout_marginTop="50dp"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rec_statistics"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="28dp"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

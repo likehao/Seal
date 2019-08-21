@@ -96,7 +96,6 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/search_ll"
             android:layout_width="match_parent"
@@ -171,7 +170,7 @@
             android:background="@drawable/record_more"
             android:visibility="gone" />
 
-        <ImageView
+  <!--      <ImageView
             android:id="@+id/message_more_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -179,6 +178,17 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:background="@drawable/record_more"
+            android:visibility="gone" />-->
+
+        <TextView
+            android:id="@+id/message_more_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:text="查看文件"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <ImageView
@@ -240,6 +250,15 @@
                 android:textColor="@color/white"
                 android:visibility="gone" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/cancel_tv"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:text="@string/cancel"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@color/white"/>
 
         <LinearLayout
             android:id="@+id/cancel_ll"

@@ -67,9 +67,15 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         Intent intent = getIntent();
         //获取PDF文件拼接URL
         String fileName = intent.getStringExtra("fileName");
+        String companyId = intent.getStringExtra("companyId");
         if(fileName != null && !fileName.isEmpty()){
-            url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + CommonUtil.getUserData(this).getCompanyId()
-                    + "&fileName=" + fileName;
+            if (companyId != null){
+                url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + companyId
+                        + "&fileName=" + fileName;
+            }else {
+                url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + CommonUtil.getUserData(this).getCompanyId()
+                        + "&fileName=" + fileName;
+            }
             loadPdf(url);
         }
     }

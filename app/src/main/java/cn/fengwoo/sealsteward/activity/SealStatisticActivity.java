@@ -1,7 +1,9 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
 import com.mcxtzhang.commonadapter.lvgv.ViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,7 +39,11 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.SealStatisticsData;
 import cn.fengwoo.sealsteward.bean.UserStatisticsData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.fragment.RecordFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.DateUtils;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -61,14 +68,18 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
     LinearLayout sealSta_ll;
     @BindView(R.id.sealSta_tv)
     TextView sealSta_tv;
+    @BindView(R.id.sealSta_tv2)
+    TextView sealSta_tv2;
     @BindView(R.id.sealSearchSta_et)
     EditText sealSearchSta_et;
     private String userId, orgName, realName;
-    private ArrayList<UserStatisticsData> arrayList;
+    private ArrayList<SealStatisticsData> arrayList;
     private LoadingView loadingView;
     private CommonAdapter commonAdapter;
     private int year, month;
-    private ResponseInfo<List<UserStatisticsData>> responseInfo;
+    private ResponseInfo<List<SealStatisticsData>> responseInfo;
+    private static final int USER_TIME_CODE = 123;
+    private String bigTime, small;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +88,7 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
 
         ButterKnife.bind(this);
         initView();
-        getUserStatistic(year, month);
+        getUserStatistic(year, month,0);
 
     }
 
@@ -102,9 +113,9 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 /*判断是否是“搜索”键*/
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String searchStr = sealSearchSta_et.getText().toString().trim();
-                    if (!TextUtils.isEmpty(searchStr)){
+                    if (!TextUtils.isEmpty(searchStr)) {
                         //清空数据
                         arrayList.clear();
                         if (commonAdapter != null) {
@@ -122,17 +133,23 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 获取数据统计
+     *
      * @param YY
      * @param MM
      */
-    private void getUserStatistic(int YY, int MM) {
+    private void getUserStatistic(int YY, int MM, int type) {
         loadingView.show();
         UserStatisticsData userStatisticsData = new UserStatisticsData();
         userStatisticsData.setOrgStructureId(userId);
-        userStatisticsData.setYear(YY);
-        userStatisticsData.setMonth(MM);
-        userStatisticsData.setSearchType(0);
-        HttpUtil.sendDataAsync(this, HttpUrl.USER_STATISTIC, 2, null, userStatisticsData, new Callback() {
+        if (type == 0) {
+            userStatisticsData.setYear(YY);
+            userStatisticsData.setMonth(MM);
+        } else if (type == 1) {
+            userStatisticsData.setStartTime(small);
+            userStatisticsData.setEndTime(bigTime);
+        }
+        userStatisticsData.setSearchType(type);
+        HttpUtil.sendDataAsync(this, HttpUrl.SEAL_STATISTIC, 2, null, userStatisticsData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
@@ -144,12 +161,12 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
                 loadingView.cancel();
                 String result = response.body().string();
                 Gson gson = new Gson();
-                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<UserStatisticsData>>>() {
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<SealStatisticsData>>>() {
                 }
                         .getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
-                    for (UserStatisticsData data : responseInfo.getData()) {
-                        arrayList.add(new UserStatisticsData(data.getId(), data.getRealName(), data.getHeadPortrait(), data.getStampCount()));
+                    for (SealStatisticsData data : responseInfo.getData()) {
+                        arrayList.add(new SealStatisticsData(data.getId(), data.getName(), data.getSealPrint(), data.getStampCount()));
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -158,6 +175,10 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
                         }
                     });
 
+                } else {
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
                 }
             }
         });
@@ -167,12 +188,51 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
      * 初始数据
      */
     private void initData() {
-        commonAdapter = new CommonAdapter<UserStatisticsData>(this, arrayList, R.layout.user_statistics_item) {
+        commonAdapter = new CommonAdapter<SealStatisticsData>(this, arrayList, R.layout.user_statistics_item) {
             @Override
-            public void convert(ViewHolder viewHolder, UserStatisticsData userStatisticsData, int position) {
-//                viewHolder.set(R.id.user_statistics_iv,userStatisticsData.getHeadPortrait());
-                viewHolder.setText(R.id.user_statistics_name_tv, userStatisticsData.getRealName());
-                viewHolder.setText(R.id.user_statistics_count_tv, userStatisticsData.getStampCount());
+            public void convert(ViewHolder viewHolder, SealStatisticsData sealStatisticsData, int position) {
+                ImageView view = viewHolder.getView(R.id.user_statistics_iv);
+                String sealPrint = sealStatisticsData.getSealPrint();
+                if (sealPrint != null && !sealPrint.isEmpty()) {
+                    Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
+                    if (bitmap == null) {
+                        HttpDownloader.downloadImage(SealStatisticActivity.this, 1, sealPrint, new DownloadImageCallback() {
+                            @Override
+                            public void onResult(final String fileName) {
+                                if (fileName != null) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String path = "file://" + HttpDownloader.path + fileName;
+                                            Picasso.with(SealStatisticActivity.this).load(path).into(view);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        String path = "file://" + HttpDownloader.path + sealPrint;
+                        Picasso.with(SealStatisticActivity.this).load(path).into(view);
+                    }
+                }
+                //设置前三名字体颜色
+                if (position == 0){
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.red);
+                }else if (position == 1){
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.number_tv);
+                }else if (position == 2){
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.style);
+                }else if (position > 2){
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.dark_gray);
+                }
+                viewHolder.setText(R.id.user_statistics_name_tv, sealStatisticsData.getName());
+                viewHolder.setText(R.id.user_statistics_count_tv, sealStatisticsData.getStampCount());
+                viewHolder.setOnClickListener(R.id.userStatistics_ll, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
 
         };
@@ -185,7 +245,9 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sealSta_ll:
-                selectTime();
+                Intent intent = new Intent(this, SelectTimeActivity.class);
+                startActivityForResult(intent, USER_TIME_CODE);
+//                selectTime();
                 break;
             case R.id.set_back_ll:
                 finish();
@@ -222,7 +284,7 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
                     commonAdapter.notifyDataSetChanged();
                 }
                 sealSta_tv.setText(format);
-                getUserStatistic(Y, M);
+                getUserStatistic(Y, M, 0);
             }
         })
                 .setType(new boolean[]{true, true, false, false, false, false})  //年月日时分秒 的显示与否，不设置则默认全部显示
@@ -237,19 +299,19 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
     /**
      * 搜索结果
      */
-    private void getSearchData(String search){
-        List<UserStatisticsData> list = new ArrayList<>();
+    private void getSearchData(String search) {
+        List<SealStatisticsData> list = new ArrayList<>();
         if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
-            for (UserStatisticsData userStatisticsData : responseInfo.getData()) {
-                if (userStatisticsData.getRealName().contains(search)) {
-                    if (!list.contains(userStatisticsData)) {
-                        list.add(userStatisticsData);
+            for (SealStatisticsData sealStatisticsData : responseInfo.getData()) {
+                if (sealStatisticsData.getName().contains(search)) {
+                    if (!list.contains(sealStatisticsData)) {
+                        list.add(sealStatisticsData);
                     }
                 }
             }
         }
-        for (UserStatisticsData data : list){
-            arrayList.add(new UserStatisticsData(data.getId(),data.getRealName(),data.getHeadPortrait(),data.getStampCount()));
+        for (SealStatisticsData data : list) {
+            arrayList.add(new SealStatisticsData(data.getId(), data.getName(), data.getSealPrint(), data.getStampCount()));
         }
 
         listView.setAdapter(commonAdapter);
@@ -258,6 +320,48 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
         }
         if (list.size() == 0) {
             showToast("未查询到结果");
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int yTime = 0, mTime = 0;
+        if (requestCode == USER_TIME_CODE && resultCode == USER_TIME_CODE) {
+            if (data != null) {
+                String getTime = data.getStringExtra("time");
+                String startTime = data.getStringExtra("startTime");
+                String endTime = data.getStringExtra("endTime");
+                if (startTime != null && endTime != null) {
+                    Boolean selectB = DateUtils.compare(startTime, endTime);  //比较开始时间和结束时间
+                    if (selectB) {
+                        bigTime = startTime;
+                        small = endTime;
+                    } else {
+                        bigTime = endTime;
+                        small = startTime;
+                    }
+                }
+                int type = data.getIntExtra("type", 2);
+                //分割年月
+                if (getTime != null) {
+                    yTime = Integer.parseInt(getTime.split("-")[0]);
+                    mTime = Integer.parseInt(getTime.split("-")[1]);
+                    sealSta_tv.setText(yTime + "年" + mTime + "月");
+                    sealSta_tv2.setVisibility(View.GONE);
+                }
+                if (type == 1) {
+                    sealSta_tv.setText(small);
+                    sealSta_tv2.setVisibility(View.VISIBLE);
+                    sealSta_tv2.setText(bigTime);
+                }
+                //清空数据
+                arrayList.clear();
+                if (commonAdapter != null) {
+                    commonAdapter.notifyDataSetChanged();
+                }
+                getUserStatistic(yTime, mTime, type);
+            }
         }
     }
 }

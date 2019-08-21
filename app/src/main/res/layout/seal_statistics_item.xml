@@ -21,12 +21,14 @@
 
         <TextView
             android:id="@+id/seal_statistics_name_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="15dp"
             android:text="财务章"
-            android:gravity="center"
+            android:gravity="start"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textSize="13sp"
             android:textColor="@color/black_3" />
 

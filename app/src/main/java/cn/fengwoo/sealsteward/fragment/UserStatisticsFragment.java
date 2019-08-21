@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
 import com.mcxtzhang.commonadapter.lvgv.ViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,9 +43,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.SealStatisticActivity;
+import cn.fengwoo.sealsteward.activity.SelectTimeActivity;
 import cn.fengwoo.sealsteward.bean.UserStatisticsData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.UseSealDetailData;
+import cn.fengwoo.sealsteward.utils.DateUtils;
+import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
+import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import okhttp3.Call;
@@ -58,6 +64,8 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
     LinearLayout user_statistics_ll;
     @BindView(R.id.statistics_time_tv)
     TextView time;
+    @BindView(R.id.statistics_time_tv2)
+    TextView time2;
     @BindView(R.id.userStatistic_lv)
     ListView userStatistic_lv;
     @BindView(R.id.UserOrgName_tv)
@@ -69,6 +77,8 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
     private CommonAdapter commonAdapter;
     private int year,month;
     private ResponseInfo<List<UserStatisticsData>> responseInfo;
+    private static final int USER_TIME_CODE = 123;
+    private String bigTime,small;
 
     @Nullable
     @Override
@@ -77,7 +87,7 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
         view = inflater.inflate(R.layout.user_statistics_layout, container, false);
         ButterKnife.bind(this, view);
         initView();
-        getUseStatistics(year,month);
+        getUseStatistics(year,month,0);
         return view;
     }
 
@@ -127,30 +137,31 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
         commonAdapter = new CommonAdapter<UserStatisticsData>(getActivity(), detailData, R.layout.user_statistics_item) {
             @Override
             public void convert(ViewHolder viewHolder, UserStatisticsData userStatisticsData, int position) {
-//                ImageView view = viewHolder.getView(R.id.user_statistics_iv);
-//                String headPortrait = userStatisticsData.getHeadPortrait();
-//                if (headPortrait != null && !headPortrait.isEmpty()) {
-//                    Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
-//                    if (bitmap == null) {
-//                        HttpDownloader.downloadImage(getActivity(), 1, headPortrait, new DownloadImageCallback() {
-//                            @Override
-//                            public void onResult(final String fileName) {
-//                                if (fileName != null) {
-//                                    getActivity().runOnUiThread(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            String path = "file://" + HttpDownloader.path + fileName;
-//                                            Picasso.with(getActivity()).load(path).into(view);
-//                                        }
-//                                    });
-//                                }
-//                            }
-//                        });
-//                    } else {
-//                        String path = "file://" + HttpDownloader.path + headPortrait;
-//                        Picasso.with(getActivity()).load(path).into(view);
-//                    }
-//                }
+                ImageView view = viewHolder.getView(R.id.user_statistics_iv);
+                String headPortrait = userStatisticsData.getHeadPortrait();
+                if (headPortrait != null && !headPortrait.isEmpty()) {
+                    Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(headPortrait);
+                    if (bitmap == null) {
+                        HttpDownloader.downloadImage(getActivity(), 1, headPortrait, new DownloadImageCallback() {
+                            @Override
+                            public void onResult(final String fileName) {
+                                if (fileName != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String path = "file://" + HttpDownloader.path + fileName;
+                                            Picasso.with(getActivity()).load(path).into(view);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        String path = "file://" + HttpDownloader.path + headPortrait;
+                        Picasso.with(getActivity()).load(path).into(view);
+                    }
+                }
+
                 //设置前三名字体颜色
                 if (position == 0){
                     viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.red);
@@ -168,7 +179,7 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), SealStatisticActivity.class);
-                        intent.putExtra("userId",detailData.get(position).getId());
+                        intent.putExtra("userId",detailData.get(position).getUserId());
                         intent.putExtra("orgName",orgName);
                         intent.putExtra("realName",detailData.get(position).getRealName());
                         startActivity(intent);
@@ -184,12 +195,18 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
     /**
      * 获取人员统计数据
      */
-    private void getUseStatistics(int yy,int mm) {
+    private void getUseStatistics(int yy,int mm,int type) {
         UserStatisticsData userStatisticsData = new UserStatisticsData();
         userStatisticsData.setOrgStructureId(id);
-        userStatisticsData.setYear(yy);
-        userStatisticsData.setMonth(mm);
-        userStatisticsData.setSearchType(0);
+        if (type == 0){
+            userStatisticsData.setYear(yy);
+            userStatisticsData.setMonth(mm);
+
+        }else if (type == 1){
+            userStatisticsData.setStartTime(small);
+            userStatisticsData.setEndTime(bigTime);
+        }
+        userStatisticsData.setSearchType(type);
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.USER_STATISTIC, 2, null, userStatisticsData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -229,7 +246,9 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.user_statistics_ll:
-                selectTime();
+                Intent intent = new Intent(getActivity(), SelectTimeActivity.class);
+                startActivityForResult(intent,USER_TIME_CODE);
+//                selectTime();
                 break;
             case R.id.userStatistics_search:
                 userSearch.setCursorVisible(true);  //显示光标
@@ -264,7 +283,7 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
                     commonAdapter.notifyDataSetChanged();
                 }
                 time.setText(format);
-                getUseStatistics(Y,M);
+                getUseStatistics(Y,M,0);
             }
         })
                 .setType(new boolean[]{true, true, false, false, false, false})  //年月日时分秒 的显示与否，不设置则默认全部显示
@@ -300,6 +319,48 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
         }
         if (list.size() == 0) {
             Toast.makeText(getActivity(),"未查询到结果",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int yTime = 0,mTime = 0;
+        if (requestCode == USER_TIME_CODE && resultCode == USER_TIME_CODE){
+            if (data != null){
+                String getTime = data.getStringExtra("time");
+                String startTime = data.getStringExtra("startTime");
+                String endTime = data.getStringExtra("endTime");
+                if (startTime != null && endTime != null){
+                    Boolean selectB = DateUtils.compare(startTime, endTime);  //比较开始时间和结束时间
+                    if (selectB){
+                        bigTime = startTime;
+                        small = endTime;
+                    }else {
+                        bigTime = endTime;
+                        small = startTime;
+                    }
+                }
+                int type = data.getIntExtra("type",2);
+                //分割年月
+                if (getTime != null) {
+                    yTime = Integer.parseInt(getTime.split("-")[0]);
+                    mTime = Integer.parseInt(getTime.split("-")[1]);
+                    time.setText(yTime + "年" + mTime + "月");
+                    time2.setVisibility(View.GONE);
+                }
+                if (type == 1){
+                    time.setText(small);
+                    time2.setVisibility(View.VISIBLE);
+                    time2.setText(bigTime);
+                }
+                //清空数据
+                detailData.clear();
+                if (commonAdapter != null) {
+                    commonAdapter.notifyDataSetChanged();
+                }
+                getUseStatistics(yTime,mTime,type);
+            }
         }
     }
 }

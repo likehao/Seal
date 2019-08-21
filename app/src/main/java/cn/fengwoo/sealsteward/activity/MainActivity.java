@@ -95,7 +95,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView[] imageViews = new ImageView[8];  //底部导航图集合
     private TextView[] textViews = new TextView[8];   //底部导航文字集合
     private LinearLayout[] linearLayouts = new LinearLayout[7];
-    private ImageView record_more_iv, message_more_iv;  //右上角点点点更多
+    private ImageView record_more_iv;  //右上角点点点更多
+    private TextView message_more_iv;
     AddPopuwindow popuwindow;
     MessagePopuwindow messagePopuwindow;
     //主页面集合
@@ -246,7 +247,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         linearLayouts[6] = pwdSeal;
 
         record_more_iv = (ImageView) findViewById(R.id.record_more_iv);
-        message_more_iv = (ImageView) findViewById(R.id.message_more_iv);
+        message_more_iv = (TextView) findViewById(R.id.message_more_iv);
         fragmentList = new ArrayList<Fragment>();
         initFragment();
 //        title_tv.setText(CommonUtil.getUserData(this).getCompanyName());

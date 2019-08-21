@@ -4,9 +4,140 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
     tools:context=".activity.SelectTimeActivity">
 
-    <include layout="@layout/head"/>
+    <include layout="@layout/head" />
 
+    <LinearLayout
+        android:id="@+id/selectTime_ll"
+        android:layout_width="94dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/select_time_border_gray"
+        android:gravity="center">
 
+        <TextView
+            android:id="@+id/selectTime_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="按月选择"
+            android:textColor="@color/black_3" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/icon_switch" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selectMonth_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/show_time_tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:textColor="@color/style"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/style"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <cn.carbs.android.gregorianlunarcalendar.library.view.GregorianLunarCalendarView
+            android:id="@+id/calendar_view1"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:glcv_GregorianThemeColor="@color/colorGregorian"
+            app:glcv_NormalTextColor="#000000"
+            app:glcv_ScrollAnimation="true"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/selectDay_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/startTime_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/style"
+                    android:hint="开始时间"/>
+
+                <View
+                    android:id="@+id/startTime_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/style"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="至"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/endTime_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black_3"
+                    android:hint="结束时间"/>
+
+                <View
+                    android:id="@+id/endTime_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/black_6"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <cn.carbs.android.gregorianlunarcalendar.library.view.GregorianLunarCalendarView
+            android:id="@+id/calendar_view2"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:glcv_GregorianThemeColor="@color/colorGregorian"
+            app:glcv_NormalTextColor="#000000"
+            app:glcv_ScrollAnimation="true"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
 </LinearLayout>

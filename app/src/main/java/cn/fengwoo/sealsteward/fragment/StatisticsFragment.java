@@ -1,7 +1,6 @@
 package cn.fengwoo.sealsteward.fragment;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,9 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +18,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.BarAdapter;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.bean.UserStatisticsData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UseSealDetailData;
@@ -74,6 +75,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.statistics_fragment, container, false);
+        EventBus.getDefault().register(this);   //注册Eventbus
         ButterKnife.bind(this, view);
         initView();
         getStatistic();
@@ -164,14 +166,39 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
                         @Override
                         public void run() {
                             initAdapter();
-                            sealNum.setText(responseInfo.getData().getSealTotalCount()+"枚");
-                            peopleNum.setText(responseInfo.getData().getUserTotalCount()+"人");
+                            sealNum.setText(responseInfo.getData().getSealTotalCount()+"");
+                            peopleNum.setText(responseInfo.getData().getUserTotalCount()+"");
                         }
                     });
                 }
             }
         });
 
+    }
+
+    /**
+     * 处理注册事件
+     *
+     * @param messageEvent
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        String s = messageEvent.msgType;
+        switch (s) {
+            case "切换公司":
+                mDatas.clear();
+                barAdapter.notifyDataSetChanged();
+                getStatistic();
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
 }

@@ -169,6 +169,7 @@ public class ScanRecordQrCodeResultActivity extends BaseActivity implements View
         intent.putExtra("status", responseInfo.getData().getApproveStatus());
         intent.putExtra("photoList", (Serializable) responseInfo.getData().getStampRecordImgList());
         intent.putExtra("cause", (Serializable) responseInfo.getData().getApplyCause());
+        intent.putExtra("companyId", (Serializable) responseInfo.getData().getCompanyId());
         Utils.log("status:" + responseInfo.getData().getApproveStatus());
         intent.putExtra("scan",1);
         startActivity(intent);

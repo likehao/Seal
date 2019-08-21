@@ -52,13 +52,30 @@
             android:gravity="center"
             android:background="@drawable/circle_white_corner">
 
-            <TextView
-                android:id="@+id/seal_time_tv"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2019年8月"
-                android:textColor="@color/black_3"
-                android:layout_gravity="center"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/seal_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:text="2019年8月"
+                    android:textColor="@color/black_3"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/seal_time_tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:text="2019年8月"
+                    android:textColor="@color/black_3"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -74,6 +91,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:layout_marginTop="10dp"
         android:paddingTop="10dp">
 
@@ -85,6 +103,8 @@
             android:background="@drawable/text_background"
             android:textColor="@color/black_3"
             android:textSize="15sp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textStyle="bold"/>
 
     </RelativeLayout>

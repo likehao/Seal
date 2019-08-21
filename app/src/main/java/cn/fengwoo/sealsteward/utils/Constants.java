@@ -61,6 +61,7 @@ public class Constants {
 
     public static final String permission25 = "256d4bbe65b011e9802700163e004197";//"更换印章"
     public static final String permission26 = "299f9afe65b011e9802700163e004197";//"查看公司组织架构"
+    public static final String permission27 = "";//"用印统计"
 
 
     public static final UUID SERVICE_UUID = UUID.fromString("000018F0-0000-1000-8000-00805F9B34FB");

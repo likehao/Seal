@@ -281,4 +281,8 @@ dependencies {
 
     //撤滑返回
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
+    implementation project(':library')
+
+    implementation 'cn.carbs.android:IndicatorView:1.0.2'
+    implementation 'cn.carbswang.android:NumberPickerView:1.1.0'
 }
