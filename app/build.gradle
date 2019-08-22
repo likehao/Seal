@@ -285,4 +285,6 @@ dependencies {
 
     implementation 'cn.carbs.android:IndicatorView:1.0.2'
     implementation 'cn.carbswang.android:NumberPickerView:1.1.0'
+
+    implementation 'com.lzy.net:okgo:3.0.4'
 }

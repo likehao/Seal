@@ -3,6 +3,7 @@ package cn.fengwoo.sealsteward.utils;
 import java.util.UUID;
 
 public class Constants {
+    public static final String key = "190429896143";
 
     // EasySP 保存的数据
     // dataProtocolVersion   String // 是二期还是三期   2 为二，3为三

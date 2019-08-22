@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.mcxtzhang.commonadapter.lvgv.CommonAdapter;
 import com.mcxtzhang.commonadapter.lvgv.ViewHolder;
 import com.polidea.rxandroidble2.RxBleClient;
@@ -449,6 +451,34 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        OkGo.<String>get(HttpUrl.URL + HttpUrl.DEVICE_ACCESS)
+                .params("appKey", Constants.key)
+                .params("mac", scanResultsList.get(position).getBleDevice().getMacAddress())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(com.lzy.okgo.model.Response<String> response) {
+//                                Utils.log("success:" + response.body().toString());
+                        if (response.body().toString().contains("成功")) {
+                            itemClick(position);
+                        } else {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().toString());
+                                showToast(jsonObject.getString("message"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(com.lzy.okgo.model.Response<String> response) {
+                        showToast("设备接入失败，请检查是否接入了网络");
+                    }
+                });
+        }
+
+
+    private void itemClick(int position){
         // 断开蓝牙
         ((MyApp) getApplication()).removeAllDisposable();
         ((MyApp) getApplication()).setConnectionObservable(null);
@@ -492,7 +522,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         }
         connectBle(position);
     }
-
 
     private void connectBle(int position) {
         // 连接ble设备

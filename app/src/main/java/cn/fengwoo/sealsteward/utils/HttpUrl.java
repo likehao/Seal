@@ -434,4 +434,8 @@ public class HttpUrl {
     public static final String USER_STATISTIC = "statistic/userstatistic";
 
 
+    public static final String GET_ACC = "sdk/getsdkaccount";
+    public static final String DEVICE_ACCESS = "sdk/sdkdeviceaccess";
+
+
 }
