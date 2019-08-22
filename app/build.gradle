@@ -18,8 +18,8 @@ android {
         applicationId "cn.fengwoo.sealsteward"
         minSdkVersion 23
         targetSdkVersion 26     //防止9.0手机登录出问题，需要将其改为27以下，或者APP改用https请求
-        versionCode 331
-        versionName "3.3.1"
+        versionCode 340
+        versionName "3.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。

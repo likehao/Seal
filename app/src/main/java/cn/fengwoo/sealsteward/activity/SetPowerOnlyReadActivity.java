@@ -92,6 +92,8 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
     SwitchButton permission25;
     @BindView(R.id.permission26)
     SwitchButton permission26;
+    @BindView(R.id.permission27)
+    SwitchButton permission27;
     private LoadingView loadingView;
     private SetPermissionData setPermissionData;
     private String userId;
@@ -143,6 +145,7 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
         permission24.setOnCheckedChangeListener(this);
         permission25.setOnCheckedChangeListener(this);
         permission26.setOnCheckedChangeListener(this);
+        permission27.setOnCheckedChangeListener(this);
         loadingView = new LoadingView(this);
         if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
             edit_tv.setVisibility(View.GONE);
@@ -187,6 +190,7 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
         permission24.setEnabled(false);
         permission25.setEnabled(false);
         permission26.setEnabled(false);
+        permission27.setEnabled(false);
     }
 
     private void setSwitchButtons() {
@@ -293,6 +297,10 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
         if (targetPermissionJson.contains(Constants.permission26)) {
             permission26.setChecked(true);
             funcIdList.add(Constants.permission26);
+        }
+        if (targetPermissionJson.contains(Constants.permission27)) {
+            permission27.setChecked(true);
+            funcIdList.add(Constants.permission27);
         }
     }
 
@@ -473,8 +481,6 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
                     funcIdList.remove(Constants.permission22);
                 }
                 break;
-
-
             case R.id.permission23:
                 if (isChecked) {
                     funcIdList.add(Constants.permission23);
@@ -489,9 +495,6 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
                     funcIdList.remove(Constants.permission24);
                 }
                 break;
-
-
-
             case R.id.permission25:
                 if (isChecked) {
                     funcIdList.add(Constants.permission25);
@@ -504,6 +507,13 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
                     funcIdList.add(Constants.permission26);
                 } else {
                     funcIdList.remove(Constants.permission26);
+                }
+                break;
+            case R.id.permission27:
+                if (isChecked) {
+                    funcIdList.add(Constants.permission27);
+                } else {
+                    funcIdList.remove(Constants.permission27);
                 }
                 break;
         }

@@ -141,7 +141,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
     private String url;
 
-    private String applyId;
+    private String applyId,companyId;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -322,8 +322,9 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
 
         ll_tab.setVisibility(View.GONE);
 
-        //如果是扫描记录二维码进入则不现实上传照片和提交
+        //如果是扫描记录二维码进入则不显示上传照片和提交
         int scan = intent.getIntExtra("scan",0);
+
         if (scan == 1){
             upload_photo_ll.setVisibility(View.GONE);
             edit_tv.setVisibility(View.GONE);
@@ -355,24 +356,47 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
                 //先从本地读取，没有则下载
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(list.get(i));
                 if (bitmap == null) {
-                    HttpDownloader.downloadImage(this, category, list.get(i), new DownloadImageCallback() {
-                        @Override
-                        public void onResult(final String fileName) {
-                            if (fileName != null) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String str = "file://" + HttpDownloader.path + fileName;
-                                        imgList.add(str);
-                                        Uri uri = Uri.parse(str);
-                                        uriList.add(uri);
-                                        recycleviewAdapter.setData(uriList, UploadFileActivity.this, list, isRead);
-                                        recycleviewAdapter.notifyDataSetChanged();
-                                    }
-                                });
+                    companyId = getIntent().getStringExtra("companyId");  //获取扫描记录的公司ID
+                    if (companyId != null){
+                        //扫描不是同一个公司查看别人的记录照片
+                        HttpDownloader.downloadImage(this, category, list.get(i),companyId, new DownloadImageCallback() {
+                            @Override
+                            public void onResult(final String fileName) {
+                                if (fileName != null) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String str = "file://" + HttpDownloader.path + fileName;
+                                            imgList.add(str);
+                                            Uri uri = Uri.parse(str);
+                                            uriList.add(uri);
+                                            recycleviewAdapter.setData(uriList, UploadFileActivity.this, list, isRead);
+                                            recycleviewAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }else {
+                        HttpDownloader.downloadImage(this, category, list.get(i), new DownloadImageCallback() {
+                            @Override
+                            public void onResult(final String fileName) {
+                                if (fileName != null) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String str = "file://" + HttpDownloader.path + fileName;
+                                            imgList.add(str);
+                                            Uri uri = Uri.parse(str);
+                                            uriList.add(uri);
+                                            recycleviewAdapter.setData(uriList, UploadFileActivity.this, list, isRead);
+                                            recycleviewAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
                 } else {
                     String headPortraitPath = "file://" + HttpDownloader.path + list.get(i);
                     imgList.add(headPortraitPath);

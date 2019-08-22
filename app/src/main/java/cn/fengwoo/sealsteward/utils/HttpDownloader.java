@@ -67,6 +67,43 @@ public class HttpDownloader {
         });
     }
 
+    /**
+     * 扫描记录二维码进入查看照片需要
+     * @param activity
+     * @param category
+     * @param fileName
+     * @param companyId
+     * @param callback
+     */
+    public static void downloadImage(Activity activity, Integer category, final String fileName,String companyId,final DownloadImageCallback callback){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("category", category + "");
+        hashMap.put("fileName", fileName);
+        hashMap.put("companyId",companyId);
+        HttpUtil.sendDataAsync(activity, HttpUrl.DOWNLOADIMAGE, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onResult(null);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                byte[] imgData = response.body().bytes();
+                if(imgData.length > 0){
+                    //Bitmap bitmap = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                    //保存到本地
+                    Boolean result = saveBitmapToSDCard(imgData, fileName);
+                    if(result){
+                        callback.onResult(fileName);
+
+                        return;
+                    }
+                }
+                callback.onResult(null);
+            }
+        });
+    }
+
     public static void downloadDfuZip(Activity activity, final String fileName,final DownloadImageCallback callback){
         HashMap<String, String> hashMap = new HashMap<>();
 //        hashMap.put("category", category + "");

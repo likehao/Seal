@@ -55,7 +55,9 @@
 
                 <View style="@style/line_left" />
 
-                <RelativeLayout style="@style/pressed_effect">
+                <RelativeLayout
+                    android:id="@+id/org_name_rl"
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -71,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="30dp"
                         android:background="@null"
                         android:ellipsize="end"
                         android:singleLine="true"
@@ -79,11 +81,13 @@
                         android:textColor="@color/gray_text"
                         android:textSize="15sp" />
 
+                    <View style="@style/right_arrow" />
                 </RelativeLayout>
 
                 <View style="@style/line_left" />
 
-                <RelativeLayout style="@style/pressed_effect">
+                <RelativeLayout
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -145,7 +149,9 @@
 
                 <View style="@style/line_left" />
 
-                <RelativeLayout style="@style/pressed_effect">
+                <RelativeLayout
+                    android:id="@+id/org_job_rl"
+                    style="@style/pressed_effect">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -161,10 +167,12 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="30dp"
                         android:background="@null"
                         android:textColor="@color/gray_text"
                         android:textSize="15sp" />
+
+                    <View style="@style/right_arrow" />
                 </RelativeLayout>
 
                 <View style="@style/line_left" />

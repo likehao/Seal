@@ -314,6 +314,7 @@ public class SeeRecordActivity extends BaseActivity implements View.OnClickListe
                 intent.putStringArrayListExtra("photoList",listImg);
                 intent.putExtra("type",type);
                 intent.putExtra("scan",scan);
+                intent.putExtra("companyId",companyId);
                 startActivityForResult(intent,REQUESTCODE);
                 break;
         }

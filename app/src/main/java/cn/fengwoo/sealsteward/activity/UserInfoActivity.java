@@ -66,6 +66,10 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private String targetPermissionJson = "";
     ResponseInfo<UserDetailData> responseInfo;
     LoadingView loadingView;
+    @BindView(R.id.org_name_rl)
+    RelativeLayout orgName;
+    @BindView(R.id.org_job_rl)
+    RelativeLayout orgJob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         title_tv.setText("用户详情");
         set_back_ll.setOnClickListener(this);
         user_info__headImg_rl.setOnClickListener(this);
+        orgName.setOnClickListener(this);
+        orgJob.setOnClickListener(this);
     }
 
     @Override
@@ -98,6 +104,22 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 String userImg = "file://" + HttpDownloader.path + userPrint;
                 intent.putExtra("photo",userImg);
                 startActivity(intent);
+                break;
+            case R.id.org_name_rl:
+                intent = new Intent(this, ChangeInformationActivity.class);
+                intent.putExtra("realName", realNameTv.getText().toString());
+                intent.putExtra("userId",uID);
+                intent.putExtra("TAG", 8);
+                startActivityForResult(intent,12);
+//                startActivity(intent);
+                break;
+            case R.id.org_job_rl:
+                intent = new Intent(this,ChangeInformationActivity.class);
+                intent.putExtra("job",jobTv.getText().toString());
+                intent.putExtra("userId",uID);
+                intent.putExtra("TAG",7);
+                startActivityForResult(intent,12);
+//                startActivity(intent);
                 break;
         }
     }

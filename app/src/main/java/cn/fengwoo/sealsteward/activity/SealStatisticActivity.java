@@ -230,7 +230,9 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
                 viewHolder.setOnClickListener(R.id.userStatistics_ll, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+//                         Intent intent = new Intent(SealStatisticActivity.this,MainActivity.class);
+//                         intent.putExtra("statisticCode",1);
+//                         startActivity(intent);
                     }
                 });
             }

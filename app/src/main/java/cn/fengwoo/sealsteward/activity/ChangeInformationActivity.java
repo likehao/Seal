@@ -43,7 +43,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
     EditText information_et;
     LoadingView loadingView;
     private int tag;
-    String companyId;
+    String companyId,userId;
     private static final int CODE = 1;
 
     @Override
@@ -82,6 +82,7 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
         String legalPerson = intent.getStringExtra("legalPerson");   //法人
         companyId = intent.getStringExtra("companyId");   //法人
         String job = intent.getStringExtra("job");   //职位
+        userId = intent.getStringExtra("userId");    //组织架构用户ID
         tag = intent.getIntExtra("TAG", 0);
         //判断点击的是哪个
         switch (tag) {
@@ -112,6 +113,10 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
             case 7:
                 information_et.setText(job);
                 information_et.setSelection(job.length());
+                break;
+            case 8:
+                information_et.setText(realName);
+                information_et.setSelection(realName.length());
                 break;
         }
 
@@ -146,6 +151,8 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
                 changeEmailInfomation();   //修改邮箱
             } else if (tag == 7){
                 changeJob();   //修改职位
+            }else if (tag == 8){
+                changeUserName();  //修改组织架构用户名
             }else {
                 Intent intent = new Intent();
                 intent.putExtra("companyText",information_et.getText().toString());
@@ -158,6 +165,51 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
         }
     }
 
+    /**
+     * 修改组织架构用户名
+     */
+    private void changeUserName(){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("realName", information_et.getText().toString());
+        hashMap.put("userId",userId);
+        HttpUtil.sendDataAsync(this, HttpUrl.UPDATEUSERNAME, 3, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                showMsg(e + "");
+                Log.e("TAG", "更改名字失败........");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        loadingView.cancel();
+                        String newName = information_et.getText().toString().trim();
+                        //更新存储姓名
+                        LoginData data = CommonUtil.getUserData(ChangeInformationActivity.this);
+                        if (data != null) {
+                            data.setRealName(newName);
+                            CommonUtil.setUserData(ChangeInformationActivity.this, data);
+                        }
+                        setResult(12);
+                        finish();
+                        showMsg("修改成功");
+                    } else {
+                        loadingView.cancel();
+                        showMsg(responseInfo.getMessage());
+                    }
+                } else {
+                    loadingView.cancel();
+                    showMsg(responseInfo.getMessage());
+                }
+            }
+        });
+    }
     /**
      * 更改姓名
      */
@@ -336,7 +388,11 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
      */
     private void changeJob(){
         HashMap<String , String> hashMap = new HashMap<>();
-        hashMap.put("userId",CommonUtil.getUserData(this).getId());
+        if (userId != null){
+            hashMap.put("userId", userId);
+        }else {
+            hashMap.put("userId", CommonUtil.getUserData(this).getId());
+        }
         hashMap.put("job",information_et.getText().toString());
         HttpUtil.sendDataAsync(this, HttpUrl.CHANGE_JOB, 3, hashMap, null, new Callback() {
             @Override
@@ -359,6 +415,10 @@ public class ChangeInformationActivity extends BaseActivity implements View.OnCl
                         if (data != null) {
                             data.setJob(newJob);
                             CommonUtil.setUserData(ChangeInformationActivity.this, data);
+                        }
+                        if (userId != null){
+                            //组织架构用户修改
+                            setResult(12);
                         }
                         finish();
                         showMsg("修改成功");

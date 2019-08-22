@@ -57,6 +57,7 @@ import cn.fengwoo.sealsteward.fragment.RecordFragment;
 import cn.fengwoo.sealsteward.fragment.StatisticsFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -143,6 +144,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView statistics_tv;
     @BindView(R.id.edit_tv)
     TextView edit_tv;
+    @BindView(R.id.bottom_ll)
+    LinearLayout bottom_ll;
+    @BindView(R.id.set_back_ll)
+    LinearLayout back;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -271,6 +276,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         msg_ll.setOnClickListener(this);
         statistics.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
+        back.setOnClickListener(this);
     }
 
     @Override
@@ -352,8 +358,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 msg_ll.setVisibility(View.GONE);
                 title_ll.setVisibility(View.VISIBLE);
                 welcome.setVisibility(View.GONE);
-                edit_tv.setVisibility(View.VISIBLE);
-                edit_tv.setText("明细");
+                //判断有无统计权限来显示明细按钮
+                if (!Utils.hasThePermission(this, Constants.permission27)) {
+                    edit_tv.setVisibility(View.GONE);
+                }else {
+                    edit_tv.setVisibility(View.VISIBLE);
+                    edit_tv.setText("明细");
+                }
                 changeView(7);
                 break;
             case R.id.record_more_iv:
@@ -403,6 +414,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.edit_tv:
                 intent = new Intent(this,SealDetailedActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.set_back_ll:
+                finish();
                 break;
         }
     }
@@ -754,7 +768,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         // getMessageNum();
-
     }
 
     private void stopTimer() {
@@ -767,7 +780,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             timerTask = null;
         }
     }
-
 
     private void appUpdateDialog() {
         final CommonDialog commonDialog = new CommonDialog(this, "提示", "发现有新的版本", "更新");
@@ -851,6 +863,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+//        InitArg();
+    }
+
+    /**
+     * 获取统计传递过来的值
+     */
+    private void InitArg(){
+        Intent intent = getIntent();
+        int statisticCode = intent.getIntExtra("statisticCode",0);
+        if (statisticCode == 1){
         }
     }
 }

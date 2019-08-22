@@ -433,9 +433,15 @@ public class HttpUrl {
      */
     public static final String USER_STATISTIC = "statistic/userstatistic";
 
-
     public static final String GET_ACC = "sdk/getsdkaccount";
     public static final String DEVICE_ACCESS = "sdk/sdkdeviceaccess";
 
-
+    /**
+     * 修改组织架构用户名
+     */
+    public static final String UPDATEUSERNAME = "user/updateusername";
+    /**
+     *  扫描记录查看照片
+     */
+    public static final String DOWNLOADIMAGE = "file/downloadimage";
 }

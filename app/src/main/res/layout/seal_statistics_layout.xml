@@ -86,7 +86,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -95,19 +95,25 @@
         android:layout_marginTop="10dp"
         android:paddingTop="10dp">
 
+        <View
+            android:layout_width="2dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/black_3"/>
         <TextView
             android:id="@+id/sealOrgName_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="研发部"
-            android:background="@drawable/text_background"
             android:textColor="@color/black_3"
             android:textSize="15sp"
             android:singleLine="true"
             android:ellipsize="end"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
             android:textStyle="bold"/>
 
-    </RelativeLayout>
+    </LinearLayout>
     <ListView
         android:id="@+id/sealStatistic_lv"
         android:layout_width="match_parent"
