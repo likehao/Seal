@@ -51,7 +51,7 @@ import okhttp3.Response;
 /**
  * 用户统计
  */
-public class UserStatisticActivity extends BaseActivity implements View.OnClickListener{
+public class UserStatisticActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.set_back_ll)
     LinearLayout back;
@@ -69,12 +69,14 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
     TextView userSta_tv2;
     @BindView(R.id.userSearchSta_et)
     EditText userSearchSta_et;
-    private String sealId, orgName,sealName;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
+    private String sealId, orgName, sealName;
     private ArrayList<UserStatisticsData> arrayList;
     private LoadingView loadingView;
-    private int year,month;
+    private int year, month;
     private CommonAdapter commonAdapter;
-    private  ResponseInfo<List<UserStatisticsData>> responseInfo;
+    private ResponseInfo<List<UserStatisticsData>> responseInfo;
     private static final int USER_TIME_CODE = 123;
     private String bigTime, small;
 
@@ -85,7 +87,7 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
         ButterKnife.bind(this);
         initView();
 
-        getSealStatistic(year,month,0);
+        getSealStatistic(year, month, 0);
     }
 
     private void initView() {
@@ -97,7 +99,7 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
         orgName = intent.getStringExtra("orgName");
         sealId = intent.getStringExtra("sealId");
         sealName = intent.getStringExtra("sealName");
-        org_RealName_tv.setText(orgName+"-"+sealName);  //显示部门及印章名称
+        org_RealName_tv.setText(orgName + "-" + sealName);  //显示部门及印章名称
         userSta_ll.setOnClickListener(this);
         back.setOnClickListener(this);
         //获取当前年月
@@ -109,9 +111,9 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 /*判断是否是“搜索”键*/
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String searchStr = userSearchSta_et.getText().toString().trim();
-                    if (!TextUtils.isEmpty(searchStr)){
+                    if (!TextUtils.isEmpty(searchStr)) {
                         //清空数据
                         arrayList.clear();
                         if (commonAdapter != null) {
@@ -130,7 +132,7 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
     /**
      * 获取印章统计数据
      */
-    private void getSealStatistic(int YY,int MM,int type) {
+    private void getSealStatistic(int YY, int MM, int type) {
         loadingView.show();
         UserStatisticsData userStatisticsData = new UserStatisticsData();
         userStatisticsData.setSealId(sealId);
@@ -156,19 +158,20 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
                 Gson gson = new Gson();
                 responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<UserStatisticsData>>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
-                    for (UserStatisticsData data : responseInfo.getData()) {
-                        arrayList.add(new UserStatisticsData(data.getId(), data.getRealName(),
-                                data.getHeadPortrait(), data.getStampCount()));
-
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                            for (UserStatisticsData data : responseInfo.getData()) {
+                                arrayList.add(new UserStatisticsData(data.getId(), data.getRealName(),
+                                        data.getHeadPortrait(), data.getStampCount()));
+                            }
                             initData();
+                        } else {
+                            no_record_ll.setVisibility(View.VISIBLE);
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     }
@@ -176,7 +179,7 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
     /**
      * 初始化数据
      */
-    private void initData(){
+    private void initData() {
         commonAdapter = new CommonAdapter<UserStatisticsData>(this, arrayList, R.layout.seal_statistics_item) {
             @Override
             public void convert(ViewHolder viewHolder, UserStatisticsData userStatisticsData, int position) {
@@ -215,13 +218,16 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
                     viewHolder.setTextColorRes(R.id.seal_statistics_count_tv, R.color.dark_gray);
                 }
                 viewHolder.setText(R.id.seal_statistics_name_tv, userStatisticsData.getRealName());
-                viewHolder.setText(R.id.seal_statistics_count_tv, userStatisticsData.getStampCount());
+                viewHolder.setText(R.id.seal_statistics_count_tv, userStatisticsData.getStampCount() + "次");
                 viewHolder.setOnClickListener(R.id.sealStatistics_ll, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(UserStatisticActivity.this,MainActivity.class);
-//                        intent.putExtra("statisticCode",1);
-//                        startActivity(intent);
+                        Intent intent = new Intent(UserStatisticActivity.this, StatisticRecordActivity.class);
+                        intent.putExtra("sealId", sealId);
+                        intent.putExtra("userId", arrayList.get(position).getId());
+                        intent.putExtra("startTime", small);
+                        intent.putExtra("endTime", bigTime);
+                        startActivity(intent);
                     }
                 });
             }
@@ -229,11 +235,12 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
         };
         commonAdapter.notifyDataSetChanged();
         listView.setAdapter(commonAdapter);
+        no_record_ll.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.userSta_ll:
                 Intent intent = new Intent(this, SelectTimeActivity.class);
                 startActivityForResult(intent, USER_TIME_CODE);
@@ -271,7 +278,7 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
                     commonAdapter.notifyDataSetChanged();
                 }
                 userSta_tv.setText(format);
-                getSealStatistic(Y,M,0);
+                getSealStatistic(Y, M, 0);
             }
         })
                 .setType(new boolean[]{true, true, false, false, false, false})  //年月日时分秒 的显示与否，不设置则默认全部显示
@@ -286,7 +293,7 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
     /**
      * 搜索结果
      */
-    private void getSearchData(String search){
+    private void getSearchData(String search) {
         List<UserStatisticsData> list = new ArrayList<>();
         if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
             for (UserStatisticsData userStatisticsData : responseInfo.getData()) {
@@ -297,8 +304,8 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
                 }
             }
         }
-        for (UserStatisticsData data : list){
-            arrayList.add(new UserStatisticsData(data.getId(),data.getRealName(),data.getHeadPortrait(),data.getStampCount()));
+        for (UserStatisticsData data : list) {
+            arrayList.add(new UserStatisticsData(data.getId(), data.getRealName(), data.getHeadPortrait(), data.getStampCount()));
         }
 
         listView.setAdapter(commonAdapter);
@@ -328,6 +335,9 @@ public class UserStatisticActivity extends BaseActivity implements View.OnClickL
                         bigTime = endTime;
                         small = startTime;
                     }
+                } else {
+                    small = null;
+                    bigTime = null;
                 }
                 int type = data.getIntExtra("type", 2);
                 //分割年月

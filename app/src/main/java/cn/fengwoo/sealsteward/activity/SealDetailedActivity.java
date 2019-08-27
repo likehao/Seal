@@ -38,7 +38,7 @@ import okhttp3.Response;
 /**
  * 用印明细
  */
-public class SealDetailedActivity extends BaseActivity implements View.OnClickListener{
+public class SealDetailedActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.set_back_ll)
     LinearLayout back;
     @BindView(R.id.title_tv)
@@ -73,9 +73,9 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 /*判断是否是“搜索”键*/
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String searchStr = search.getText().toString().trim();
-                    if (!TextUtils.isEmpty(searchStr)){
+                    if (!TextUtils.isEmpty(searchStr)) {
                         //清空数据
                         arrayList.clear();
                         detailAdapter.notifyDataSetChanged();
@@ -91,7 +91,7 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.set_back_ll:
                 finish();
                 break;
@@ -101,7 +101,7 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    private void getData(){
+    private void getData() {
         loadingView.show();
         UserStatisticsData userStatisticsData = new UserStatisticsData();
         userStatisticsData.setSearchType(3);
@@ -116,59 +116,64 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<UseSealDetailData>>(){}
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<UseSealDetailData>>() {
+                }
                         .getType());
-                if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
-                    loadingView.cancel();
-                    for (UseSealDetailData.orgStructureStatisticVoList list : responseInfo.getData().getOrgStructureStatisticVoList()) {
-                        arrayList.add(new UseSealDetailData.orgStructureStatisticVoList(list.getId(), list.getOrgStructureName(), list.getStampCount()));
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                            loadingView.cancel();
+                            for (UseSealDetailData.orgStructureStatisticVoList list : responseInfo.getData().getOrgStructureStatisticVoList()) {
+                                arrayList.add(new UseSealDetailData.orgStructureStatisticVoList(list.getId(), list.getOrgStructureName(), list.getStampCount()));
+                            }
                             setData();
                         }
-                    });
-                }
+                    }
+                });
             }
         });
 
     }
 
-    private void setData(){
+    private void setData() {
         detailAdapter = new CommonAdapter<UseSealDetailData.orgStructureStatisticVoList>(SealDetailedActivity.this, arrayList, R.layout.detail_item) {
             @Override
             public void convert(ViewHolder viewHolder, UseSealDetailData.orgStructureStatisticVoList useSealDetailData, int position) {
-                viewHolder.setText(R.id.detail_department_tv,useSealDetailData.getOrgStructureName());
-                viewHolder.setText(R.id.detail_time_tv,useSealDetailData.getStampCount()+"");
-                viewHolder.setText(R.id.number_tv,position+1+"");  //初始是红，从1开始
-                if (position == 1){
-                    viewHolder.setBackgroundRes(R.id.number_tv,R.drawable.circle_textview_yellow);
-                }else if (position == 2){
-                    viewHolder.setBackgroundRes(R.id.number_tv,R.drawable.circle_textview_blue);
-                }else if (position > 2){
-                    viewHolder.setBackgroundRes(R.id.number_tv,R.drawable.circle_textview_gray);
+                viewHolder.setText(R.id.detail_department_tv, useSealDetailData.getOrgStructureName());
+                viewHolder.setText(R.id.detail_time_tv, useSealDetailData.getStampCount() + "次");
+                viewHolder.setText(R.id.number_tv, position + 1 + "");  //初始是红，从1开始
+                if (position == 1) {
+                    viewHolder.setBackgroundRes(R.id.number_tv, R.drawable.circle_textview_yellow);
+                    viewHolder.setTextColorRes(R.id.detail_time_tv, R.color.number_tv);
+                } else if (position == 2) {
+                    viewHolder.setBackgroundRes(R.id.number_tv, R.drawable.circle_textview_blue);
+                    viewHolder.setTextColorRes(R.id.detail_time_tv, R.color.style);
+                } else if (position > 2) {
+                    viewHolder.setBackgroundRes(R.id.number_tv, R.drawable.circle_textview_gray);
+                    viewHolder.setTextColorRes(R.id.detail_time_tv, R.color.dark_gray);
                 }
                 viewHolder.setOnClickListener(R.id.detail_ll, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(SealDetailedActivity.this,UserAndSealStatisticsActivity.class);
-                        intent.putExtra("orgId",arrayList.get(position).getId());
-                        intent.putExtra("orgName",arrayList.get(position).getOrgStructureName());
+                        Intent intent = new Intent(SealDetailedActivity.this, UserAndSealStatisticsActivity.class);
+                        intent.putExtra("orgId", arrayList.get(position).getId());
+                        intent.putExtra("orgName", arrayList.get(position).getOrgStructureName());
                         startActivity(intent);
                     }
                 });
             }
-        } ;
+        };
         detailAdapter.notifyDataSetChanged();
         listView.setAdapter(detailAdapter);
     }
 
     /**
-     *  获取搜索内容
+     * 获取搜索内容
+     *
      * @param search
      */
-    private void getSearchData(String search){
+    private void getSearchData(String search) {
         ArrayList<UseSealDetailData.orgStructureStatisticVoList> searchList = new ArrayList<>();
         if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
             for (UseSealDetailData.orgStructureStatisticVoList useSealDetailData : responseInfo.getData().getOrgStructureStatisticVoList()) {
@@ -179,8 +184,8 @@ public class SealDetailedActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         }
-        for (UseSealDetailData.orgStructureStatisticVoList data : searchList){
-            arrayList.add(new UseSealDetailData.orgStructureStatisticVoList(data.getId(),data.getOrgStructureName(),data.getStampCount()));
+        for (UseSealDetailData.orgStructureStatisticVoList data : searchList) {
+            arrayList.add(new UseSealDetailData.orgStructureStatisticVoList(data.getId(), data.getOrgStructureName(), data.getStampCount()));
         }
         listView.setAdapter(detailAdapter);
         if (detailAdapter != null) {

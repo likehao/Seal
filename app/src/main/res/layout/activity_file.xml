@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.FileActivity"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".activity.FileActivity">
 
-    <include layout="@layout/head"/>
+    <include layout="@layout/head" />
 
     <WebView
         android:id="@+id/webView"
@@ -16,5 +16,4 @@
         android:layout_height="match_parent">
 
     </WebView>
-
 </LinearLayout>

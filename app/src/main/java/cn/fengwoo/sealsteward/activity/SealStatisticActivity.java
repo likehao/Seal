@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -39,7 +38,6 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.SealStatisticsData;
 import cn.fengwoo.sealsteward.bean.UserStatisticsData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.fragment.RecordFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
@@ -72,6 +70,8 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
     TextView sealSta_tv2;
     @BindView(R.id.sealSearchSta_et)
     EditText sealSearchSta_et;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record_ll;
     private String userId, orgName, realName;
     private ArrayList<SealStatisticsData> arrayList;
     private LoadingView loadingView;
@@ -88,7 +88,7 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
 
         ButterKnife.bind(this);
         initView();
-        getUserStatistic(year, month,0);
+        getUserStatistic(year, month, 0);
 
     }
 
@@ -140,7 +140,7 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
     private void getUserStatistic(int YY, int MM, int type) {
         loadingView.show();
         UserStatisticsData userStatisticsData = new UserStatisticsData();
-        userStatisticsData.setOrgStructureId(userId);
+        userStatisticsData.setUserId(userId);
         if (type == 0) {
             userStatisticsData.setYear(YY);
             userStatisticsData.setMonth(MM);
@@ -164,22 +164,20 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
                 responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<SealStatisticsData>>>() {
                 }
                         .getType());
-                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
-                    for (SealStatisticsData data : responseInfo.getData()) {
-                        arrayList.add(new SealStatisticsData(data.getId(), data.getName(), data.getSealPrint(), data.getStampCount()));
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                            for (SealStatisticsData data : responseInfo.getData()) {
+                                arrayList.add(new SealStatisticsData(data.getId(), data.getName(), data.getSealPrint(), data.getStampCount()));
+                            }
                             initData();
-                        }
-                    });
 
-                } else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
-                }
+                        } else {
+                            no_record_ll.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
             }
         });
     }
@@ -216,23 +214,26 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
                     }
                 }
                 //设置前三名字体颜色
-                if (position == 0){
-                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.red);
-                }else if (position == 1){
-                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.number_tv);
-                }else if (position == 2){
-                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.style);
-                }else if (position > 2){
-                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv,R.color.dark_gray);
+                if (position == 0) {
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv, R.color.red);
+                } else if (position == 1) {
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv, R.color.number_tv);
+                } else if (position == 2) {
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv, R.color.style);
+                } else if (position > 2) {
+                    viewHolder.setTextColorRes(R.id.user_statistics_count_tv, R.color.dark_gray);
                 }
                 viewHolder.setText(R.id.user_statistics_name_tv, sealStatisticsData.getName());
-                viewHolder.setText(R.id.user_statistics_count_tv, sealStatisticsData.getStampCount());
+                viewHolder.setText(R.id.user_statistics_count_tv, sealStatisticsData.getStampCount() + "次");
                 viewHolder.setOnClickListener(R.id.userStatistics_ll, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                         Intent intent = new Intent(SealStatisticActivity.this,MainActivity.class);
-//                         intent.putExtra("statisticCode",1);
-//                         startActivity(intent);
+                        Intent intent = new Intent(SealStatisticActivity.this, StatisticRecordActivity.class);
+                        intent.putExtra("sealId", arrayList.get(position).getId());
+                        intent.putExtra("userId", userId);
+                        intent.putExtra("startTime", small);
+                        intent.putExtra("endTime", bigTime);
+                        startActivity(intent);
                     }
                 });
             }
@@ -240,6 +241,7 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
         };
         commonAdapter.notifyDataSetChanged();
         listView.setAdapter(commonAdapter);
+        no_record_ll.setVisibility(View.GONE);
 
     }
 
@@ -343,6 +345,10 @@ public class SealStatisticActivity extends BaseActivity implements View.OnClickL
                         bigTime = endTime;
                         small = startTime;
                     }
+                } else {
+                    //清空时间，防止选择时间之后点击进入记录之后还会有值
+                    small = null;
+                    bigTime = null;
                 }
                 int type = data.getIntExtra("type", 2);
                 //分割年月

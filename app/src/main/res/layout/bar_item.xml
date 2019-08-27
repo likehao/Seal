@@ -1,48 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="50dp"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/stampCount_tv"
+    <LinearLayout
+        android:id="@+id/bar_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10"
-        android:textColor="@color/number_tv"
-        android:layout_gravity="center"/>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal">
+        android:layout_above="@+id/name"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/stampCount_tv"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textSize="12sp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:text="研发部研发部"
-            android:gravity="center_vertical"
-            android:textColor="#999"/>
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:textColor="@color/number_tv"
+            android:layout_gravity="center"/>
 
-        <ProgressBar
-            android:id="@+id/progress"
+        <ImageView
+            android:id="@+id/barView"
             android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:indeterminateOnly="false"
-            android:layout_above="@+id/name"
-            android:progress="70"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
-            android:layout_centerHorizontal="true"
-            android:progressDrawable="@drawable/progress"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/bar_statistics"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
 
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textSize="12sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text="研发部研发部"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:textColor="#999"/>
 
-</LinearLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_gravity="center_horizontal">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/name"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:textSize="12sp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:maxLines="2"-->
+            <!--android:ellipsize="end"-->
+            <!--android:text="研发部研发部"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:textColor="#999"/>-->
+
+        <!--&lt;!&ndash;<View&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/barView"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="30dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_centerHorizontal="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_above="@+id/name"/>&ndash;&gt;-->
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progress"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:indeterminateOnly="false"-->
+            <!--android:layout_above="@+id/name"-->
+            <!--android:progress="70"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="30dp"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:visibility="gone"-->
+            <!--android:progressDrawable="@drawable/progress"/>-->
+
+    <!--</RelativeLayout>-->
+
+</RelativeLayout>

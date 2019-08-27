@@ -287,4 +287,7 @@ dependencies {
     implementation 'cn.carbswang.android:NumberPickerView:1.1.0'
 
     implementation 'com.lzy.net:okgo:3.0.4'
+
+    //悬浮窗
+    implementation 'com.imuxuan:floatingview:1.2'
 }

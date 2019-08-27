@@ -128,8 +128,9 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.look_file_bt:
                 intent = new Intent(UseSealApplyActivity.this, FileActivity.class);
+                intent.putExtra("applyId",applyId);
                 intent.putExtra("fileName",fileName);
-                startActivity(intent);
+                startActivityForResult(intent,88);
                 break;
             case R.id.go_approval_tv:
                 intent = new Intent(UseSealApplyActivity.this, ApprovalConfirmActivity.class);
@@ -144,6 +145,10 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 99){
+            setResult(88);
+            finish();
+        }
+        if (resultCode == 88){
             setResult(88);
             finish();
         }

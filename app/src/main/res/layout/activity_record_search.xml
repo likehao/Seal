@@ -17,7 +17,7 @@
         android:id="@+id/ll_record"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="110dp">
+        android:layout_marginTop="100dp">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/record_refreshLayout"

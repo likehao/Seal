@@ -179,7 +179,7 @@ public class UserStatisticsFragment extends Fragment implements View.OnClickList
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), SealStatisticActivity.class);
-                        intent.putExtra("userId",detailData.get(position).getUserId());
+                        intent.putExtra("userId",detailData.get(position).getId());
                         intent.putExtra("orgName",orgName);
                         intent.putExtra("realName",detailData.get(position).getRealName());
                         startActivity(intent);

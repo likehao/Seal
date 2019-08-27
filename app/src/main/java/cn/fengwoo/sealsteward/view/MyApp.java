@@ -40,13 +40,12 @@ import no.nordicsemi.android.dfu.DfuServiceInitiator;
 /**
  * SmartRefreshLayout使用指定Header 和 Footer
  */
-public class MyApp extends MultiDexApplication {
+public class MyApp extends MultiDexApplication{
     private static final String TAG = "MyApp";
     private Observable<RxBleConnection> connectionObservable;
     public Disposable connectDisposable;
     public List<Disposable> disposableList;
     public RxBleDevice rxBleDevice;
-
 
     public RxBleDevice getRxBleDevice() {
         return rxBleDevice;

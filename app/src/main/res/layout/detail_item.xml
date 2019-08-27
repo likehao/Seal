@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:gravity="end"
             android:textSize="13sp"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/red"
             android:text="1000次"/>
 
         <ImageView

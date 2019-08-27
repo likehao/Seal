@@ -144,10 +144,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView statistics_tv;
     @BindView(R.id.edit_tv)
     TextView edit_tv;
-    @BindView(R.id.bottom_ll)
-    LinearLayout bottom_ll;
-    @BindView(R.id.set_back_ll)
-    LinearLayout back;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,7 +272,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         msg_ll.setOnClickListener(this);
         statistics.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
-        back.setOnClickListener(this);
     }
 
     @Override
@@ -414,9 +409,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.edit_tv:
                 intent = new Intent(this,SealDetailedActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.set_back_ll:
-                finish();
                 break;
         }
     }
@@ -863,23 +855,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-//        InitArg();
-    }
-
-    /**
-     * 获取统计传递过来的值
-     */
-    private void InitArg(){
-        Intent intent = getIntent();
-        int statisticCode = intent.getIntExtra("statisticCode",0);
-        if (statisticCode == 1){
         }
     }
 }

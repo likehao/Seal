@@ -5,18 +5,25 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.imuxuan.floatingview.FloatingMagnetView;
+import com.imuxuan.floatingview.FloatingView;
+import com.imuxuan.floatingview.MagnetViewListener;
 import com.mob.MobSDK;
+
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
@@ -31,11 +38,12 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 /**
  * 附件
  */
-public class FileActivity extends BaseActivity implements View.OnClickListener{
+public class FileActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.set_back_ll)
     LinearLayout set_back_ll;
@@ -45,7 +53,7 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
     ImageView pdf_share_iv;
     @BindView(R.id.webView)
     WebView webView;
-    String url;
+    String url,applyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,29 +71,58 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         set_back_ll.setOnClickListener(this);
         pdf_share_iv.setVisibility(View.VISIBLE);
         pdf_share_iv.setOnClickListener(this);
-
         Intent intent = getIntent();
         //获取PDF文件拼接URL
         String fileName = intent.getStringExtra("fileName");
         String companyId = intent.getStringExtra("companyId");
-        if(fileName != null && !fileName.isEmpty()){
-            if (companyId != null){
+        applyId = intent.getStringExtra("applyId");
+        if (fileName != null && !fileName.isEmpty()) {
+            if (companyId != null) {
                 url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + companyId
                         + "&fileName=" + fileName;
-            }else {
+            } else {
                 url = HttpUrl.URL + HttpUrl.DOWNLOADPDF + "?companyId=" + CommonUtil.getUserData(this).getCompanyId()
                         + "&fileName=" + fileName;
             }
             loadPdf(url);
         }
+
+        if (applyId != null) {
+            FloatingView.get().add();
+            setSwipeBackEnable(false);  //设置是否允许撤滑返回
+        }
+
+//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.setMargins(20,180,0,400);
+
+        //设置悬浮窗
+        FloatingView.get()
+//                .layoutParams(layoutParams)
+                .icon(R.drawable.suspension_button)
+                .listener(magnetViewListener);
     }
 
+    //悬浮窗点击事件
+    private MagnetViewListener magnetViewListener = new MagnetViewListener() {
+        @Override
+        public void onRemove(FloatingMagnetView magnetView) {
+
+        }
+
+        @Override
+        public void onClick(FloatingMagnetView magnetView) {
+            Intent intent = new Intent(FileActivity.this,ApprovalConfirmActivity.class);
+            intent.putExtra("applyId",applyId);
+            startActivityForResult(intent,99);
+        }
+    };
     /**
      * 加载PDF
+     *
      * @param pdfUrl
      */
     @SuppressLint("SetJavaScriptEnabled")
-    private void loadPdf(String pdfUrl){
+    private void loadPdf(String pdfUrl) {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -95,7 +132,7 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
             }
         });
         WebSettings settings = webView.getSettings();
-  //      settings.setSavePassword(false);
+        //      settings.setSavePassword(false);
         settings.setJavaScriptEnabled(true);
         settings.setAllowFileAccessFromFileURLs(true);
         settings.setAllowUniversalAccessFromFileURLs(true);
@@ -117,9 +154,10 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
         webView.loadUrl("file:///android_asset/pdfjs/web/viewer.html?file=" + pdfUrl);
 
     }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.set_back_ll:
                 finish();
                 break;
@@ -132,7 +170,7 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
     /**
      * 分享
      */
-    private void showShare(){
+    private void showShare() {
         OnekeyShare oks = new OnekeyShare();
         /*oks.addHiddenPlatform(QQ.NAME);
         oks.setImageData();
@@ -207,9 +245,32 @@ public class FileActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (webView != null){
+        if (webView != null) {
             webView.destroy();
             webView.setVisibility(View.GONE);
+        }
+        //销毁悬浮窗
+        FloatingView.get().remove();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FloatingView.get().attach(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FloatingView.get().detach(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 99){
+            setResult(88);
+            finish();
         }
     }
 }
