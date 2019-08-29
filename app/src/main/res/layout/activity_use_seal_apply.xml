@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".activity.UseSealApplyActivity">
 
@@ -15,47 +15,15 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:paddingBottom="20dp"
-                android:orientation="vertical">
-                <!--
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="40dp"
-                                    android:background="@color/white">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginStart="15dp"
-                                        android:text="@string/apply_type"
-                                        android:textColor="@color/black" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_toLeftOf="@+id/iv1"
-                                        android:text="@string/Please_select_type" />
-
-                                    <ImageView
-                                        android:id="@+id/iv1"
-                                        android:layout_width="25dp"
-                                        android:layout_height="25dp"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginEnd="5dp"
-                                        android:background="@drawable/right_arrow" />
-                                </RelativeLayout>
-                -->
+                android:orientation="vertical"
+                android:paddingBottom="20dp">
 
                 <RelativeLayout style="@style/pressed_effect">
 
@@ -65,7 +33,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
                         android:text="@string/seal_name"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black_3"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/detail_sealName_tv"
@@ -74,11 +43,15 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
-                        android:text="@string/please_select_seal" />
+                        android:text="@string/please_select_seal"
+                        android:textColor="@color/black_6"
+                        android:textSize="12sp" />
 
                 </RelativeLayout>
 
-                <View style="@style/line_left" />
+                <View
+                    style="@style/line_left"
+                    android:layout_marginEnd="15dp" />
 
                 <RelativeLayout style="@style/pressed_effect">
 
@@ -88,7 +61,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
                         android:text="@string/apply_time"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black_3"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/detail_count_tv"
@@ -97,14 +71,17 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
-                        android:hint="@string/please_input_time"
                         android:gravity="end"
+                        android:hint="@string/please_input_time"
+                        android:textColor="@color/black_6"
                         android:textSize="12sp" />
 
 
                 </RelativeLayout>
 
-                <View style="@style/line_left" />
+                <View
+                    style="@style/line_left"
+                    android:layout_marginEnd="15dp" />
 
                 <RelativeLayout style="@style/pressed_effect">
 
@@ -114,7 +91,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
                         android:text="@string/Failure_time"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black_3"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/detail_failTime_tv"
@@ -123,80 +101,15 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
-                        android:text="@string/please_fail_time" />
+                        android:text="@string/please_fail_time"
+                        android:textColor="@color/black_6"
+                        android:textSize="12sp" />
 
                 </RelativeLayout>
 
-                <!--             <View
-                                 android:layout_width="match_parent"
-                                 android:layout_height="0.5dp"
-                                 android:layout_marginStart="15dp"
-                                 android:background="@color/line" />
-
-                             <RelativeLayout
-                                 android:layout_width="match_parent"
-                                 android:layout_height="40dp"
-                                 android:background="@color/white">
-
-                                 <TextView
-                                     android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content"
-                                     android:layout_centerVertical="true"
-                                     android:layout_marginStart="15dp"
-                                     android:text="@string/use_seal_file_name"
-                                     android:textColor="@color/black" />
-
-                                 <TextView
-                                     android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content"
-                                     android:layout_centerVertical="true"
-                                     android:layout_toLeftOf="@+id/iv6"
-                                     android:text="@string/please_input_name" />
-
-                                 <ImageView
-                                     android:id="@+id/iv6"
-                                     android:layout_width="25dp"
-                                     android:layout_height="25dp"
-                                     android:layout_alignParentEnd="true"
-                                     android:layout_centerVertical="true"
-                                     android:layout_marginEnd="5dp"
-                                     android:background="@drawable/right_arrow" />
-
-                             </RelativeLayout>-->
-
-                <View style="@style/line_left" />
-
-                <!--         <RelativeLayout
-                             style="@style/pressed_effect">
-
-                             <TextView
-                                 android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:layout_centerVertical="true"
-                                 android:layout_marginStart="15dp"
-                                 android:text="@string/file_number"
-                                 android:textColor="@color/black" />
-
-                             <TextView
-                                 android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:layout_centerVertical="true"
-                                 android:layout_toStartOf="@+id/iv4"
-                                 android:text="@string/please_input_file_number" />
-
-                             <ImageView
-                                 android:id="@+id/iv4"
-                                 android:layout_width="25dp"
-                                 android:layout_height="25dp"
-                                 android:layout_alignParentEnd="true"
-                                 android:layout_centerVertical="true"
-                                 android:layout_marginEnd="5dp"
-                                 android:background="@drawable/right_arrow" />
-
-                         </RelativeLayout>
-
-                         <View
-                             style="@style/line_left"/>-->
+                <View
+                    style="@style/line_left"
+                    android:layout_marginEnd="15dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -208,7 +121,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
                         android:text="@string/Application_reason"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black_3"
+                        android:textSize="13sp" />
 
                 </RelativeLayout>
 
@@ -226,9 +140,9 @@
                         android:background="@null"
                         android:gravity="top|left"
                         android:hint="@string/please_input_reason"
-                        android:textColor="@color/black"
                         android:paddingStart="5dp"
                         android:paddingTop="5dp"
+                        android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -242,7 +156,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
                         android:text="@string/sign"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black_3"
+                        android:textSize="13sp" />
 
                 </RelativeLayout>
 
@@ -257,65 +172,25 @@
                     <ImageView
                         android:id="@+id/use_apply_sign_iv"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
                 </LinearLayout>
 
-                <!--         <RelativeLayout
-                             style="@style/pressed_effect">
-
-                             <TextView
-                                 android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:layout_centerVertical="true"
-                                 android:layout_marginStart="15dp"
-                                 android:text="@string/Copy_to"
-                                 android:textColor="@color/black" />
-
-                             <TextView
-                                 android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:layout_centerVertical="true"
-                                 android:layout_toLeftOf="@+id/iv7"
-                                 android:text="@string/please_copy_people" />
-
-                             <ImageView
-                                 android:id="@+id/iv7"
-                                 android:layout_width="25dp"
-                                 android:layout_height="25dp"
-                                 android:layout_alignParentEnd="true"
-                                 android:layout_centerVertical="true"
-                                 android:layout_marginEnd="5dp"
-                                 android:background="@drawable/right_arrow" />
-
-                         </RelativeLayout>
-
-                         <View style="@style/line" />-->
-
                 <Button
-                    android:id="@+id/look_file_bt"
-                    android:layout_width="280dp"
+                    android:id="@+id/go_approval_bt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="50dp"
                     android:layout_marginTop="50dp"
-                    android:background="@drawable/login_circle_bg"
-                    android:text="@string/look_file"
-                    android:textColor="@color/white" />
+                    android:background="@drawable/click_bt_press"
+                    android:paddingBottom="11dp"
+                    android:text="@string/go_approval"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </ScrollView>
 
-        <TextView
-            android:id="@+id/go_approval_tv"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/style"
-            android:gravity="center"
-            android:text="@string/go_approval"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

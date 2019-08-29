@@ -53,7 +53,7 @@
 
     <!-- 拨打电话 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <!--悬浮窗所需权限-->
+    <!-- 悬浮窗所需权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -307,7 +307,8 @@
         <activity android:name=".activity.UserStatisticActivity" />
         <activity android:name=".activity.SealStatisticActivity" />
         <activity android:name=".activity.SelectTimeActivity" />
-        <activity android:name=".activity.StatisticRecordActivity"/>
+        <activity android:name=".activity.StatisticRecordActivity" />
+        <activity android:name=".activity.MyCardTicketActivity"/>
     </application>
 
 </manifest>

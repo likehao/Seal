@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -92,12 +93,12 @@ public class FileActivity extends BaseActivity implements View.OnClickListener {
             setSwipeBackEnable(false);  //设置是否允许撤滑返回
         }
 
-//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        layoutParams.setMargins(20,180,0,400);
-
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0,900,0,0);
+//        layoutParams.gravity = 200;
         //设置悬浮窗
         FloatingView.get()
-//                .layoutParams(layoutParams)
+                .layoutParams(layoutParams)
                 .icon(R.drawable.suspension_button)
                 .listener(magnetViewListener);
     }

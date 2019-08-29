@@ -39,6 +39,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.CompanyQRCodeActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
 import cn.fengwoo.sealsteward.activity.LoginActivity;
+import cn.fengwoo.sealsteward.activity.MyCardTicketActivity;
 import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
 import cn.fengwoo.sealsteward.activity.MyQRCodeActivity;
 import cn.fengwoo.sealsteward.activity.MySignActivity;
@@ -121,6 +122,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     LinearLayout head_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
+    @BindView(R.id.switch_company_ll)
+    LinearLayout switvhCompany;
+    @BindView(R.id.my_card_rl)
+    RelativeLayout my_card;
 
     @Nullable
     @Override
@@ -228,6 +233,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         rl_safe.setOnClickListener(this);
         my_power_rl.setOnClickListener(this);
         company_QRCode_rl.setOnClickListener(this);
+        switvhCompany.setOnClickListener(this);
+        my_card.setOnClickListener(this);
     }
 
     private void getSmtData() {
@@ -363,6 +370,14 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
                 intent.putExtra("permission", EasySP.init(getActivity()).getString("permission"));
                 startActivityForResult(intent, 12);
+                break;
+            case R.id.switch_company_ll:
+                intent = new Intent(getActivity(),MyCompanyActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_card_rl:
+                intent = new Intent(getActivity(), MyCardTicketActivity.class);
+                startActivity(intent);
                 break;
         }
     }

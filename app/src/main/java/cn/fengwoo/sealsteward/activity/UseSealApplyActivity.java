@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 
@@ -31,10 +30,8 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     LinearLayout set_back_ll;
     @BindView(R.id.title_tv)
     TextView title_tv;
-    @BindView(R.id.look_file_bt)
-    Button look_file_bt;
-    @BindView(R.id.go_approval_tv)
-    TextView go_approval_tv;
+    @BindView(R.id.go_approval_bt)
+    Button go_approval_bt;
     @BindView(R.id.detail_sealName_tv)
     TextView detailSealNameTv;
     @BindView(R.id.detail_count_tv)
@@ -45,6 +42,8 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     EditText detailCauseEt;
     @BindView(R.id.use_apply_sign_iv)
     ImageView use_apply_sign_iv;
+    @BindView(R.id.edit_tv)
+    TextView look_file;
     private Intent intent;
     String applyId;
     String fileName;
@@ -66,12 +65,14 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("申请详情");
         set_back_ll.setOnClickListener(this);
-        look_file_bt.setOnClickListener(this);
+        look_file.setVisibility(View.VISIBLE);
+        look_file.setText("查看附件");
+        look_file.setOnClickListener(this);
         intent = getIntent();
         int waitInt = intent.getIntExtra("waitAgree", 0);
         if (waitInt == 1) {
-            go_approval_tv.setVisibility(View.VISIBLE);
-            go_approval_tv.setOnClickListener(this);
+            go_approval_bt.setVisibility(View.VISIBLE);
+            go_approval_bt.setOnClickListener(this);
         }
         detailCauseEt.setEnabled(false);
         detailCauseEt.setCursorVisible(false);  //隐藏光标
@@ -126,13 +127,13 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
             case R.id.set_back_ll:
                 finish();
                 break;
-            case R.id.look_file_bt:
+            case R.id.edit_tv:
                 intent = new Intent(UseSealApplyActivity.this, FileActivity.class);
                 intent.putExtra("applyId",applyId);
                 intent.putExtra("fileName",fileName);
                 startActivityForResult(intent,88);
                 break;
-            case R.id.go_approval_tv:
+            case R.id.go_approval_bt:
                 intent = new Intent(UseSealApplyActivity.this, ApprovalConfirmActivity.class);
                 intent.putExtra("applyId",applyId);
                 startActivityForResult(intent,99);

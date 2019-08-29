@@ -49,4 +49,5 @@
     <color name="warning_dialog_content_color">#888866</color>
     <color name="colorGregorian">#ff3388ff</color>
     <color name="colorLunar">#ffee5544</color>
+    <color name="orange">#FF8F0E</color>
 </resources>
