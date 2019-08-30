@@ -299,10 +299,12 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == 123) {
-            departmentId = data.getExtras().getString("id");
-            departmentName = data.getExtras().getString("name");
-            Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
-            tv_department.setText(departmentName);
+            if (data != null){
+                departmentId = data.getStringExtra("id");
+                departmentName = data.getStringExtra("name");
+                Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
+                tv_department.setText(departmentName);
+            }
         }
 /*
         switch (requestCode) {

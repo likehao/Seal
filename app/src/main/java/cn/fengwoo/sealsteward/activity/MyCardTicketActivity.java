@@ -69,7 +69,7 @@ public class MyCardTicketActivity extends BaseActivity implements View.OnClickLi
         HttpUtil.sendDataAsync(this, HttpUrl.TICKET, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("TAG", e + "卡券错误错误错误错误错误错误");
+                Log.e("TAG", e + "获取卡券错误错误错误错误错误错误");
             }
 
             @Override
