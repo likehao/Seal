@@ -19,7 +19,6 @@ import com.mcxtzhang.commonadapter.lvgv.ViewHolder;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

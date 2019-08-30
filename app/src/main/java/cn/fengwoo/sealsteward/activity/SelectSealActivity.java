@@ -187,6 +187,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
         Utils.log("confirm");
         intent = getIntent();
         String serviceRecharge = intent.getStringExtra("serviceRecharge");
+        String cardId = intent.getStringExtra("cardId");  //卡券id
         if (serviceRecharge != null && serviceRecharge.equals("pay")) {
             intent.putExtra("id", m_id);
             if (m_id != null) {
@@ -201,6 +202,7 @@ public class SelectSealActivity extends BaseActivity implements View.OnClickList
             intent = new Intent();
             intent.putExtra("id", m_id);
             intent.putExtra("name", m_name);
+            intent.putExtra("cardId", cardId);
             setResult(123, intent);
             finish();
         }

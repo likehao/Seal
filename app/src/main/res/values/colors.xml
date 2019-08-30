@@ -50,4 +50,5 @@
     <color name="colorGregorian">#ff3388ff</color>
     <color name="colorLunar">#ffee5544</color>
     <color name="orange">#FF8F0E</color>
+    <color name="card_gray">#D7D4D7</color>
 </resources>
