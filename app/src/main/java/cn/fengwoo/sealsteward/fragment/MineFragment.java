@@ -338,12 +338,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.dfu:
-
                 intent = new Intent(getActivity(), DfuActivity.class);
                 startActivity(intent);
-
                 break;
-
             case R.id.my_QRCode_rl:
                 intent = new Intent(getActivity(), MyQRCodeActivity.class);
                 startActivity(intent);
@@ -352,7 +349,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), CompanyQRCodeActivity.class);
                 startActivity(intent);
                 break;
-
             case R.id.rl_safe:
                 if (!mManager.hasEnrolledFingerprints()) {
                     showToast("请至少设置一个指纹");
@@ -361,7 +357,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), SafeActivity.class);
                 startActivity(intent);
                 break;
-
             case R.id.my_power_rl:
                 Utils.log("click permission");
                 Intent intent = new Intent();

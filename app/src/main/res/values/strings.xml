@@ -41,6 +41,7 @@
     <string name="set">设置</string>
     <string name="version">当前版本</string>
     <string name="Instructions">使用说明</string>
+    <string name="unsubscribe">注销账户</string>
     <string name="Opinion">意见反馈</string>
     <string name="about">关于</string>
     <string name="Scavenging_caching">清除缓存</string>
@@ -178,6 +179,7 @@
     <string name="complete_approval">已审批</string>
     <string name="reject">已驳回</string>
     <string name="recommend_seal">推荐印章管家</string>
+    <string name="server_address">服务器地址</string>
     <string name="nearby_device">附近设备</string>
     <string name="my_QRCode">我的二维码</string>
     <string name="my_Card_ticket">我的卡券</string>

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.white.easysp.EasySP;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
+import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -37,14 +39,16 @@ import okhttp3.Response;
 public class HttpUtil {
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");//mdiatype 这个需要和服务端保持一致
     private static final String TAG = HttpUtil.class.getSimpleName();
-    private static final String BASE_URL = HttpUrl.URL;//请求接口根地址
+//    private static final String BASE_URL = HttpUrl.URL;//请求接口根地址
     public static final int TYPE_GET = 0;//get请求
     public static final int TYPE_POST_JSON = 1;//post请求参数为json
     public static final int TYPE_PATCH_FORM = 2;//patch请求
     private static OkHttpClient okHttpClient;//okHttpClient 实例
     private Handler okHttpHandler;
     private LoginData loginData = new LoginData();
-
+    private static String addStr;
+    private static String URL2;
+    public static String BASE_URL;    //拼接地址
 
     /**
      * 初始化RequestManager
@@ -77,6 +81,10 @@ public class HttpUtil {
      * @param <T>
      */
     public static <T> void sendDataAsync(Activity activity, String url, Integer type, Map<String, String> params, T data, Callback callback) {
+        addStr = EasySP.init(MyApp.getAppContext()).getString("addStr").trim();
+        URL2 = "/bhsealappservice/";
+        BASE_URL = String.format("%s%s",addStr , URL2);    //拼接地址
+//        BASE_URL = "http://192.168.1.117:8800/";  //调试环境
         //初始化OkHttpClient
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)//设置超时时间

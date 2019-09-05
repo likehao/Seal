@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -33,7 +34,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.longsh.optionframelibrary.OptionBottomDialog;
@@ -59,7 +59,6 @@ import cn.fengwoo.sealsteward.database.AccountDao;
 import cn.fengwoo.sealsteward.entity.HistoryInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
@@ -70,6 +69,7 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
+import cn.fengwoo.sealsteward.view.RealmNameDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
@@ -99,6 +99,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     TextView forgetPwd;
     @BindView(R.id.register_forgetPwd_ll)
     LinearLayout register_forgetPwd;
+    @BindView(R.id.set_realmName_ll)
+    LinearLayout setRealmName;    //设置域名
     private List<String> stringList;
     private CheckBox check_down_up;  //弹出账号列表上下箭头
     private AccountDao accountDao;
@@ -114,6 +116,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private LoadingView loadingView;
     private LoginData user;
     private BiometricPromptManager mManager;
+    private String addStr;
+    private RealmNameDialog realmNameDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +154,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initView() {
+        realmNameDialog = new RealmNameDialog(this);
         check_down_up = (CheckBox) findViewById(R.id.check_down_up);
         password_rl = (RelativeLayout) findViewById(R.id.password_rl);
         login_bt.setOnClickListener(this);
@@ -160,6 +165,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         tv_finger_print_login.setOnClickListener(this);
         register.setOnClickListener(this);
         forgetPwd.setOnClickListener(this);
+        setRealmName.setOnClickListener(this);
         String state = EasySP.init(this).getString("finger_print");
         if (state.equals("1")) {
         } else {
@@ -316,14 +322,73 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 identify();
                 break;
             case R.id.register_tv:
-                intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                getResgister();
                 break;
             case R.id.forget_pwd_tv:
-                intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-                startActivity(intent);
+                getForgetPwd();
+                break;
+            case R.id.set_realmName_ll:
+                showRealmNameDialog();
                 break;
         }
+    }
+
+    /**
+     * 检测是否服务器地址dialog
+     */
+    private void showDia(String str){
+        final CommonDialog commonDialog = new CommonDialog(this, "是否设置服务器地址？", "不设置则默认使用深圳白鹤区块链科技有限公司的服务器地址,稍后您可以点击右上角按钮设置", str);
+        commonDialog.cancel.setText("设置");
+        commonDialog.showDialog();
+        commonDialog.cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialog.dialog.dismiss();
+                showRealmNameDialog();
+            }
+        });
+        commonDialog.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialog.dialog.dismiss();
+                EasySP.init(LoginActivity.this).putString("addStr", "http://www.baiheyz.com:8080");
+                if (str.equals("登录")){
+                    //发送get请求
+                    loadingView.show();
+                    loadingView.showView("登录中");
+                    loginGet(phone, password,"0");
+                }else if (str.equals("立即注册")){
+                    intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                }else if (str.equals("忘记密码")){
+                    intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    /**
+     * 显示输入服务器地址dialog
+     */
+    @SuppressLint({"ApplySharedPref", "SetTextI18n"})
+    private void showRealmNameDialog(){
+        realmNameDialog.showDialog();
+        if (addStr != null && addStr.length() != 0){
+            realmNameDialog.address.setText(addStr);  //显示取消添加服务器dialog时最后保存下来的地址
+        }else {
+            realmNameDialog.address.setText("http://");
+        }
+        realmNameDialog.address.setSelection(realmNameDialog.address.getText().toString().trim().length()); //将光标移至文字末尾
+
+        //取消dialog的监听事件
+        realmNameDialog.dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                addStr = realmNameDialog.address.getText().toString().trim();
+            }
+        });
+
     }
 
     /**
@@ -335,10 +400,46 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (checkLogin(phone, password)) {
             return;
         } else {
+            if (realmNameDialog.address.length() == 7){
+                //服务器地址为http://，显示dialog
+                showDia("登录");
+            }else {
+                EasySP.init(LoginActivity.this).putString("addStr", addStr);  //添加的服务器地址
+                //发送get请求
+                loadingView.show();
+                loadingView.showView("登录中");
+                loginGet(phone, password,"0");
+            }
+        }
+    }
+
+    /**
+     * 注册
+     */
+    private void getResgister(){
+        if (realmNameDialog.address.length() == 7){
+            //服务器地址为http://，显示dialog
+            showDia("立即注册");
+        }else {
+            EasySP.init(LoginActivity.this).putString("addStr", addStr);  //添加的服务器地址
             //发送get请求
-            loadingView.show();
-            loadingView.showView("登录中");
-            loginGet(phone, password,"0");
+            intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 忘记密码
+     */
+    private void getForgetPwd(){
+        if (realmNameDialog.address.length() == 7){
+            //服务器地址为http://，显示dialog
+            showDia("忘记密码");
+        }else {
+            EasySP.init(LoginActivity.this).putString("addStr", addStr);  //添加的服务器地址
+            //发送get请求
+            intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -421,7 +522,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     // save data
                     EasySP.init(LoginActivity.this).putString("l_tel", phone);
                     EasySP.init(LoginActivity.this).putString("l_pwd", password);
-
                     loadingView.cancel();
                     //添加一个登陆标记
                     loginResponseInfo.getData().login(LoginActivity.this);

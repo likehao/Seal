@@ -46,10 +46,10 @@ public class MyApp extends MultiDexApplication{
     public Disposable connectDisposable;
     public List<Disposable> disposableList;
     public RxBleDevice rxBleDevice;
-
     public RxBleDevice getRxBleDevice() {
         return rxBleDevice;
     }
+    public static Context context;
 
     public void setRxBleDevice(RxBleDevice rxBleDevice) {
         this.rxBleDevice = rxBleDevice;
@@ -107,6 +107,7 @@ public class MyApp extends MultiDexApplication{
         NetStateChangeReceiver.registerReceiver(this);
         Logger.addLogAdapter(new AndroidLogAdapter());
         ToastUtils.init(this);
+        context = getApplicationContext();
         disposableList = new ArrayList<>();
 //        createNoMedia();
 
@@ -210,5 +211,9 @@ public class MyApp extends MultiDexApplication{
         for (Activity activity : activityLinkedList) {
             activity.finish();
         }
+    }
+
+    public static Context getAppContext(){
+        return context;
     }
 }

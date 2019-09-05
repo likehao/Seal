@@ -7,26 +7,40 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.longsh.optionframelibrary.OptionBottomDialog;
 import com.mob.MobSDK;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CleanMessageUtil;
 import cn.fengwoo.sealsteward.utils.DeviceUuidFactory;
+import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.CommonDialog;
+import cn.fengwoo.sealsteward.view.MyApp;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 设置
@@ -48,6 +62,9 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
     TextView cache_tv;
     @BindView(R.id.call_phone_rl)
     RelativeLayout call_phone_rl;
+    @BindView(R.id.unsubscribe_rl)
+    RelativeLayout unsubscribe;  //注销账户
+    private CommonDialog commonDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +85,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
         recommend_seal_rl.setOnClickListener(this);
         clear_cache_rl.setOnClickListener(this);
         call_phone_rl.setOnClickListener(this);
+        unsubscribe.setOnClickListener(this);
         try {
             cache_tv.setText(CleanMessageUtil.getTotalCacheSize(this));  //获取缓存
         } catch (Exception e) {
@@ -94,9 +112,72 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
             case R.id.call_phone_rl:
                 callPhone("4008508187");
                 break;
+            case R.id.unsubscribe_rl:
+                unsubscribeDialog();
+                break;
         }
     }
 
+    /**
+     * 注销dialog
+     */
+    private void unsubscribeDialog(){
+        ArrayList list = new ArrayList<String>();
+        list.add("确定注销账户？");
+        OptionBottomDialog optionBottomDialog = new OptionBottomDialog(this,list);
+        optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0){
+                    optionBottomDialog.dismiss();
+                    commonDialog = new CommonDialog(SetActivity.this,"警告","确定注销账户？注销后无法再登录,请谨慎操作！","确定");
+                    commonDialog.showDialog();
+                    commonDialog.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getUnsubscribe();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * 确定注销账户请求
+     */
+    private void getUnsubscribe(){
+        HttpUtil.sendDataAsync(this, HttpUrl.UNSUBSCRIBE, 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"注销账户错误错误错误错误错误");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
+                }.getType());
+                if (responseInfo.getCode() == 0){
+                    if (responseInfo.getData()){
+                        Intent intent = new Intent(SetActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        commonDialog.dialog.dismiss();
+                        System.exit(0);
+                        finish();
+                        //断开蓝牙
+                        ((MyApp) SetActivity.this.getApplication()).removeAllDisposable();
+                        ((MyApp) SetActivity.this.getApplication()).setConnectionObservable(null);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 分享
+     */
     private void shareSeal() {
         String url = "https://sj.qq.com/myapp/detail.htm?apkName=cn.fengwoo.sealsteward";
         OnekeyShare oks = new OnekeyShare();

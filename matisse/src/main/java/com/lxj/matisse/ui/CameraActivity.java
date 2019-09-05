@@ -213,6 +213,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
         jCameraView.onPause();
     }
 }
