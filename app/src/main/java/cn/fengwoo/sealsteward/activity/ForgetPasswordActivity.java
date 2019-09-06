@@ -11,12 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,16 +24,16 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
  * 忘记密码
  */
-public class ForgetPasswordActivity extends Base2Activity implements View.OnClickListener{
+public class ForgetPasswordActivity extends Base2Activity implements View.OnClickListener {
 
     @BindView(R.id.forgetPassword_next_bt)
     Button forgetPassword_next_bt;
@@ -45,6 +45,7 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
     EditText verificationCode_et;   //验证码
     @BindView(R.id.forget_pwd_getCode_bt)
     Button forget_pwd_getCode_bt;   //获取验证码按钮
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,7 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.forget_password_iv:
                 finish();
                 break;
@@ -91,15 +92,10 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //创建okHttpClient对象
-                OkHttpClient okHttpClient = new OkHttpClient();
-                //创建请求
-                Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 2)
-                        .get()
-                        .build();
-                //设置回调
-                okHttpClient.newCall(request).enqueue(new Callback() {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("mobilePhone", register_phone_et.getText().toString().trim());
+                hashMap.put("type", 2 + "");
+                HttpUtil.sendDataAsync(ForgetPasswordActivity.this, HttpUrl.SENDVERIFICATIONCODE, 1, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Looper.prepare();
@@ -110,19 +106,19 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
+                        Utils.log(result);
                         Gson gson = new Gson();
-                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
+                        ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
-                        //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
-                        if (responseInfo.getCode() == 0){
-                            if (responseInfo.getData()){
+                        if (responseInfo.getCode() == 0) {
+                            if (responseInfo.getData()) {
                                 timer.start();
-                                Log.e("TAG","获取验证码成功!!!!!!!!!!!!!!!!");
+                                Log.e("TAG", "获取验证码成功!!!!!!!!!!!!!!!!");
                                 Looper.prepare();
                                 showToast("验证码已发送");
                                 Looper.loop();
                             }
-                        }else {
+                        } else {
                             Looper.prepare();
                             showToast(responseInfo.getMessage());
                             Looper.loop();
@@ -136,21 +132,20 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
     /**
      * 验证验证码
      */
-    private void checkForgetPwdCode(){
+    private void checkForgetPwdCode() {
         //提交短信验证码,判断字符串是否为空
-        if (TextUtils.isEmpty(register_phone_et.getText().toString().trim())){
+        if (TextUtils.isEmpty(register_phone_et.getText().toString().trim())) {
             showToast("请输入手机号");
             return;
-        }else if (TextUtils.isEmpty(verificationCode_et.getText().toString().trim())){
+        } else if (TextUtils.isEmpty(verificationCode_et.getText().toString().trim())) {
             showToast("请输入验证码");
             return;
         }
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(HttpUrl.URL + HttpUrl.CHECKVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 2 + "&code=" + verificationCode_et.getText().toString().trim())
-                .get()
-                .build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("mobilePhone", register_phone_et.getText().toString().trim());
+        hashMap.put("type", 2 + "");
+        hashMap.put("code", verificationCode_et.getText().toString().trim());
+        HttpUtil.sendDataAsync(ForgetPasswordActivity.this, HttpUrl.CHECKVERIFICATIONCODE, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
@@ -162,18 +157,18 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<Boolean> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<Boolean>>(){
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0){
+                if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData()) {
                         //验证成功之后跳转到设置密码页面
                         Intent intent = new Intent(ForgetPasswordActivity.this, SetPasswordActivity.class);
-                        intent.putExtra("foreget_next","foreget");
+                        intent.putExtra("foreget_next", "foreget");
                         intent.putExtra("phone", register_phone_et.getText().toString()); //传递输入的电话号码
                         startActivity(intent);
                         finish();
                     }
-                }else {
+                } else {
                     Looper.prepare();
                     showToast(responseInfo.getMessage());
                     Looper.loop();
@@ -181,6 +176,7 @@ public class ForgetPasswordActivity extends Base2Activity implements View.OnClic
             }
         });
     }
+
     /**
      * 验证码倒计时
      */

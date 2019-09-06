@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,11 +26,10 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.FromToJson;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -105,15 +105,10 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //创建okHttpClient对象
-                OkHttpClient okHttpClient = new OkHttpClient();
-                //创建请求
-                Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 1)
-                        .get()
-                        .build();
-                //设置回调
-                okHttpClient.newCall(request).enqueue(new Callback() {
+                HashMap<String , String> hashMap = new HashMap<>();
+                hashMap.put("mobilePhone",register_phone_et.getText().toString().trim());
+                hashMap.put("type",1+"");
+                HttpUtil.sendDataAsync(RegisterActivity.this, HttpUrl.SENDVERIFICATIONCODE, 1, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Looper.prepare();
@@ -128,7 +123,6 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
                         Gson gson = new Gson();
                         ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
-                        //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
                                 timer.start();
@@ -160,12 +154,11 @@ public class RegisterActivity extends Base2Activity implements View.OnClickListe
             showToast("请输入验证码");
             return;
         }
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(HttpUrl.URL + HttpUrl.CHECKVERIFICATIONCODE + "?mobilePhone=" + register_phone_et.getText().toString().trim() + "&type=" + 1 + "&code=" + verificationCode_et.getText().toString().trim())
-                .get()
-                .build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        HashMap<String , String> hashMap = new HashMap<>();
+        hashMap.put("mobilePhone",register_phone_et.getText().toString().trim());
+        hashMap.put("type",1+"");
+        hashMap.put("code",verificationCode_et.getText().toString().trim());
+        HttpUtil.sendDataAsync(RegisterActivity.this, HttpUrl.CHECKVERIFICATIONCODE, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();

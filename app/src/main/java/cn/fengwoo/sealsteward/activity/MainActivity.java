@@ -256,8 +256,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        tv_right.setTextColor(Color.argb(130, 255, 255, 255));
         welcome.setVisibility(View.VISIBLE);
         title_tv.setVisibility(View.GONE);
+
+        String companyId = CommonUtil.getUserData(this).getCompanyId();
+        if (companyId == null){
+            showPoint();
+        }
     }
 
+    /**
+     * 没有公司显示提示dialog
+     */
+    private void showPoint(){
+        showToast("暂无公司，请添加");
+    }
     private void setListener() {
         home_page.setOnClickListener(this);
         mine.setOnClickListener(this);

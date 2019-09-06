@@ -58,6 +58,10 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     TextView sealNum;
     @BindView(R.id.useSeal_people_tv)
     TextView peopleNum;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record;
+    @BindView(R.id.statistics_ll)
+    LinearLayout statistics_ll;
     List<String> list = new ArrayList<>();
     private ArrayList<String> xValues = new ArrayList<>();
     private ArrayList<Integer> stampCount = new ArrayList<>();
@@ -161,13 +165,22 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
                         for (UseSealDetailData.orgStructureStatisticVoList list : responseInfo.getData().getOrgStructureStatisticVoList()) {
                             mDatas.add(new UseSealDetailData.orgStructureStatisticVoList(list.getId(), list.getOrgStructureName(), list.getStampCount()));
                         }
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             initAdapter();
                             sealNum.setText(responseInfo.getData().getSealTotalCount()+"");
                             peopleNum.setText(responseInfo.getData().getUserTotalCount()+"");
+                            no_record.setVisibility(View.GONE);
+                            statistics_ll.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            statistics_ll.setVisibility(View.GONE);
+                            no_record.setVisibility(View.VISIBLE);
                         }
                     });
                 }

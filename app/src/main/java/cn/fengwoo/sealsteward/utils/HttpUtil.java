@@ -81,10 +81,10 @@ public class HttpUtil {
      * @param <T>
      */
     public static <T> void sendDataAsync(Activity activity, String url, Integer type, Map<String, String> params, T data, Callback callback) {
-        addStr = EasySP.init(MyApp.getAppContext()).getString("addStr").trim();
+        addStr = EasySP.init(MyApp.getAppContext()).getString("addStr").trim();  //接收正式服务器地址
+//        addStr = "http://192.168.1.117";   //调试环境
         URL2 = "/bhsealappservice/";
         BASE_URL = String.format("%s%s",addStr , URL2);    //拼接地址
-//        BASE_URL = "http://192.168.1.117:8800/";  //调试环境
         //初始化OkHttpClient
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)//设置超时时间

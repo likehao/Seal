@@ -35,32 +35,24 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.adapter.NodeTreeAdapter;
 import cn.fengwoo.sealsteward.entity.AddUserInfo;
-import cn.fengwoo.sealsteward.entity.OrganizationalStructureData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
-import cn.fengwoo.sealsteward.utils.Dept;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
-import cn.fengwoo.sealsteward.utils.NodeHelper;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -498,15 +490,22 @@ public class AddUserByScanActivity extends BaseActivity implements View.OnClickL
                 startActivityForResult(intent, 0);
                 break;
             case R.id.sendSecurityCode:
-                //创建okHttpClient对象
-                OkHttpClient okHttpClient = new OkHttpClient();
-                //创建请求
-                Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + phone_number_et.getText().toString().trim().replace(" ", "") + "&type=" + 5)
-                        .get()
-                        .build();
-                //设置回调
-                okHttpClient.newCall(request).enqueue(new Callback() {
+                sendMsg();
+                break;
+        }
+    }
+
+    /**
+     * 获取验证码
+     */
+    private void sendMsg() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String , String> hashMap = new HashMap<>();
+                hashMap.put("mobilePhone",phone_number_et.getText().toString().trim().replace(" ", ""));
+                hashMap.put("type",5+"");
+                HttpUtil.sendDataAsync(AddUserByScanActivity.this, HttpUrl.SENDVERIFICATIONCODE, 1, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Looper.prepare();
@@ -517,10 +516,10 @@ public class AddUserByScanActivity extends BaseActivity implements View.OnClickL
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
+                        Utils.log(result);
                         Gson gson = new Gson();
                         ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
-                        //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
                                 timer.start();
@@ -536,9 +535,8 @@ public class AddUserByScanActivity extends BaseActivity implements View.OnClickL
                         }
                     }
                 });
-
-                break;
-        }
+            }
+        });
     }
 
     /**

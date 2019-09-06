@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,17 +12,13 @@ import android.os.CountDownTimer;
 import android.os.Looper;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.taobao.windvane.util.PhoneInfo;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +26,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.weiwangcn.betterspinner.library.BetterSpinner;
 import com.white.easysp.EasySP;
 
 import org.json.JSONException;
@@ -39,6 +33,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,8 +53,6 @@ import cn.qqtheme.framework.widget.WheelView;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -88,7 +81,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     private Intent intent;
     @BindView(R.id.edit_tv)
     TextView edit_tv;
-//    @BindView(R.id.spinner_job)
+    //    @BindView(R.id.spinner_job)
 //    Spinner spinner_job;
     @BindView(R.id.et_job)
     EditText et_job;
@@ -180,11 +173,12 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
     /**
      * 选择职位
      */
-    private void selectJob(){
+    private void selectJob() {
         List<String> list = new ArrayList<>();
         list.add("经理");
         list.add("普通员工");
-        SinglePicker<String> picker;picker = new SinglePicker<String>(this, list);
+        SinglePicker<String> picker;
+        picker = new SinglePicker<String>(this, list);
         picker.setCanceledOnTouchOutside(true);
         picker.setDividerRatio(WheelView.DividerConfig.FILL);
         picker.setTextColor(0xFF000000);
@@ -202,25 +196,26 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         });
         picker.show();
     }
+
     private void addUser() {
 
-        if(TextUtils.isEmpty(et_job.getText().toString())){
-            Toast.makeText(this,"请输入职位",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(et_job.getText().toString())) {
+            Toast.makeText(this, "请输入职位", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(code_et.getText().toString())){
-            Toast.makeText(this,"请输入验证码",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(code_et.getText().toString())) {
+            Toast.makeText(this, "请输入验证码", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(departmentName)){
-            Toast.makeText(this,"请选择部门",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(departmentName)) {
+            Toast.makeText(this, "请选择部门", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(phone_number_et.getText().toString())){
-            Toast.makeText(this,"请输入手机号码",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(phone_number_et.getText().toString())) {
+            Toast.makeText(this, "请输入手机号码", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -299,7 +294,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == 123) {
-            if (data != null){
+            if (data != null) {
                 departmentId = data.getStringExtra("id");
                 departmentName = data.getStringExtra("name");
                 Utils.log("888***id:" + departmentId + "  ***name:" + departmentName);
@@ -408,15 +403,21 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                 readPermissions();
                 break;
             case R.id.sendSecurityCode:
-                //创建okHttpClient对象
-                OkHttpClient okHttpClient = new OkHttpClient();
-                //创建请求
-                Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + phone_number_et.getText().toString().trim().replace(" ", "") + "&type=" + 5)
-                        .get()
-                        .build();
-                //设置回调
-                okHttpClient.newCall(request).enqueue(new Callback() {
+                sendCode();
+                break;
+        }
+    }
+    /**
+     * 获取验证码
+     */
+    private void sendCode() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                HashMap<String , String> hashMap = new HashMap<>();
+                hashMap.put("mobilePhone",phone_number_et.getText().toString().trim().replace(" ", ""));
+                hashMap.put("type",5+"");
+                HttpUtil.sendDataAsync(AddUserActivity.this, HttpUrl.SENDVERIFICATIONCODE, 1, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Looper.prepare();
@@ -427,17 +428,17 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
+                        Utils.log(result);
                         Gson gson = new Gson();
                         ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
-                        //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
                                 timer.start();
+                                Log.e("TAG", "获取验证码成功!!!!!!!!!!!!!!!!");
                                 Looper.prepare();
                                 showToast("验证码已发送");
                                 Looper.loop();
-                                Log.e("TAG", "获取验证码成功!!!!!!!!!!!!!!!!");
                             }
                         } else {
                             Looper.prepare();
@@ -446,10 +447,10 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
                         }
                     }
                 });
-
-                break;
-        }
+            }
+        });
     }
+
     /**
      * 验证码倒计时
      */
@@ -467,6 +468,7 @@ public class AddUserActivity extends BaseActivity implements View.OnClickListene
             sendSecurityCode.setText("重新发送");
         }
     };
+
     /**
      * 申请权限
      */

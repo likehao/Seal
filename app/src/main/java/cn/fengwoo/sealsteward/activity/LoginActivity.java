@@ -70,6 +70,8 @@ import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.RealmNameDialog;
+import cn.qqtheme.framework.picker.SinglePicker;
+import cn.qqtheme.framework.widget.WheelView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.functions.Consumer;
 import okhttp3.Call;
@@ -116,7 +118,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private LoadingView loadingView;
     private LoginData user;
     private BiometricPromptManager mManager;
-    private String addStr;
+    private String addStr,addressUrl,ip,port_num;
     private RealmNameDialog realmNameDialog;
 
     @Override
@@ -166,6 +168,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         register.setOnClickListener(this);
         forgetPwd.setOnClickListener(this);
         setRealmName.setOnClickListener(this);
+        realmNameDialog.agreement_rl.setOnClickListener(this);
+        realmNameDialog.sure.setOnClickListener(this);
         String state = EasySP.init(this).getString("finger_print");
         if (state.equals("1")) {
         } else {
@@ -330,7 +334,40 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.set_realmName_ll:
                 showRealmNameDialog();
                 break;
+            case R.id.realName_agreement_rl:    //传输协议
+                showPickView();
+                break;
+            case R.id.realmName_sure_tv:     //服务器地址确定按钮
+                getServiceAddress();
+                break;
         }
+    }
+
+
+    /**
+     * 显示传输协议选择器
+     */
+    private void showPickView(){
+        List<String> list = new ArrayList<>();
+        list.add("http");
+        list.add("https");
+        SinglePicker<String> picker = new SinglePicker<String>(this, list);
+        picker.setCanceledOnTouchOutside(true);
+        picker.setDividerRatio(WheelView.DividerConfig.FILL);
+        picker.setTextColor(0xFF000000);
+//        picker.setSubmitTextColor(0xFFFB2C3C);
+//        picker.setCancelTextColor(0xFFFB2C3C);
+        picker.setTextSize(15);
+        picker.setLineSpaceMultiplier(2);   //设置每项的高度，范围为2-4
+        picker.setContentPadding(0, 10);
+        picker.setCycleDisable(true);
+        picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
+            @Override
+            public void onItemPicked(int index, String item) {
+                realmNameDialog.agreement.setText(item);
+            }
+        });
+        picker.show();
     }
 
     /**
@@ -374,23 +411,42 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @SuppressLint({"ApplySharedPref", "SetTextI18n"})
     private void showRealmNameDialog(){
         realmNameDialog.showDialog();
-        if (addStr != null && addStr.length() != 0){
-            realmNameDialog.address.setText(addStr);  //显示取消添加服务器dialog时最后保存下来的地址
-        }else {
-            realmNameDialog.address.setText("http://");
+        String str = EasySP.init(this).getString("addStr");
+        if (ip != null && ip.length() != 0){
+            realmNameDialog.service_ip.setText(ip);
         }
-        realmNameDialog.address.setSelection(realmNameDialog.address.getText().toString().trim().length()); //将光标移至文字末尾
+        if (port_num != null && port_num.length() != 0){
+            realmNameDialog.port_number.setText(port_num);
+        }
+        realmNameDialog.service_ip.setSelection(realmNameDialog.service_ip.getText().toString().trim().length());  //将光标移至文字末尾
+        realmNameDialog.port_number.setSelection(realmNameDialog.port_number.getText().toString().trim().length());
 
-        //取消dialog的监听事件
-        realmNameDialog.dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                addStr = realmNameDialog.address.getText().toString().trim();
-            }
-        });
-
+//        //取消dialog的监听事件
+//        realmNameDialog.dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                addStr = realmNameDialog.address.getText().toString().trim();
+//            }
+//        });
     }
 
+    /**
+     * 确定之后获得完整的服务器地址
+     */
+    private void getServiceAddress(){
+        String agreement = realmNameDialog.agreement.getText().toString();
+        ip = realmNameDialog.service_ip.getText().toString().trim();
+        port_num = realmNameDialog.port_number.getText().toString().trim();
+        //拼接服务器地址,判断是否有端口
+        if (port_num.length() != 0){
+            addressUrl = String.format("%s%s%s%s", agreement, "://", ip,":"+ port_num);
+        }else {
+            addressUrl = String.format("%s%s%s", agreement, "://", ip);
+        }
+        Log.e("TAG",addressUrl+"服务器地址服务器地址！！！！！！！！！！！！");
+        realmNameDialog.dialog.dismiss();
+
+    }
     /**
      * 登录
      */
@@ -400,11 +456,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (checkLogin(phone, password)) {
             return;
         } else {
-            if (realmNameDialog.address.length() == 7){
+            if (realmNameDialog.service_ip.getText().toString().trim().length() == 0){
                 //服务器地址为http://，显示dialog
                 showDia("登录");
             }else {
-                EasySP.init(LoginActivity.this).putString("addStr", addStr);  //添加的服务器地址
+                EasySP.init(LoginActivity.this).putString("addStr", addressUrl);  //添加的服务器地址
                 //发送get请求
                 loadingView.show();
                 loadingView.showView("登录中");
@@ -417,11 +473,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 注册
      */
     private void getResgister(){
-        if (realmNameDialog.address.length() == 7){
+        if (realmNameDialog.service_ip.getText().toString().trim().length() == 0){
             //服务器地址为http://，显示dialog
             showDia("立即注册");
         }else {
-            EasySP.init(LoginActivity.this).putString("addStr", addStr);  //添加的服务器地址
+            EasySP.init(LoginActivity.this).putString("addStr", addressUrl);  //添加的服务器地址
             //发送get请求
             intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
@@ -432,11 +488,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 忘记密码
      */
     private void getForgetPwd(){
-        if (realmNameDialog.address.length() == 7){
+        if (realmNameDialog.service_ip.getText().toString().trim().length() == 0){
             //服务器地址为http://，显示dialog
             showDia("忘记密码");
         }else {
-            EasySP.init(LoginActivity.this).putString("addStr", addStr);  //添加的服务器地址
+            EasySP.init(LoginActivity.this).putString("addStr", addressUrl);  //添加的服务器地址
             //发送get请求
             intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
             startActivity(intent);
@@ -522,6 +578,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     // save data
                     EasySP.init(LoginActivity.this).putString("l_tel", phone);
                     EasySP.init(LoginActivity.this).putString("l_pwd", password);
+
+//                    EasySP.init(LoginActivity.this).putString("addStr", realmNameDialog.service_ip.getText().toString().trim());
                     loadingView.cancel();
                     //添加一个登陆标记
                     loginResponseInfo.getData().login(LoginActivity.this);
@@ -531,16 +589,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     // 本地存入权限
                     String targetPermissionJson = "";
-                    if (user.getAdmin()) {
-                        targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
-                    } else {
-                        targetPermissionJson = new Gson().toJson(user.getFuncIdList());
+//                    if (user.getAdmin()) {
+//                        targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
+//                    } else {
+//                        targetPermissionJson = new Gson().toJson(user.getFuncIdList());
+//                    }
+                    if (user.getAdmin() != null) {
+                        if (user.getAdmin()) {
+                            targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
+                        } else {
+                            targetPermissionJson = new Gson().toJson(user.getFuncIdList());
+                        }
+                        EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
+                        EasySP.init(LoginActivity.this).putBoolean("isAdmin", loginResponseInfo.getData().getAdmin());
                     }
 //                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
 //                    Utils.log(targetPermissionJson);
 
-                    EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
-                    EasySP.init(LoginActivity.this).putBoolean("isAdmin", loginResponseInfo.getData().getAdmin());
                     //存储用户的姓名，电话，头像
                     HistoryInfo historyInfo = new HistoryInfo(phone, user.getRealName(), user.getHeadPortrait(), new Date().getTime());
 

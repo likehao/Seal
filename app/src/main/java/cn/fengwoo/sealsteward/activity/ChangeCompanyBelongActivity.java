@@ -12,10 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
 import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
@@ -28,8 +31,6 @@ import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -149,12 +150,11 @@ public class ChangeCompanyBelongActivity extends BaseActivity implements View.On
             showToast("请输入验证码");
             return;
         }
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(HttpUrl.URL + HttpUrl.CHECKVERIFICATIONCODE + "?mobilePhone=" + phone.getText().toString().trim() + "&type=" + 4 + "&code=" + code.getText().toString().trim())
-                .get()
-                .build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        HashMap<String , String> hashMap = new HashMap<>();
+        hashMap.put("mobilePhone",phone.getText().toString().trim());
+        hashMap.put("type",4+"");
+        hashMap.put("code",code.getText().toString().trim());
+        HttpUtil.sendDataAsync(ChangeCompanyBelongActivity.this, HttpUrl.CHECKVERIFICATIONCODE, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
@@ -180,7 +180,6 @@ public class ChangeCompanyBelongActivity extends BaseActivity implements View.On
             }
         });
     }
-
     /**
      * 获取验证码
      */
@@ -188,15 +187,10 @@ public class ChangeCompanyBelongActivity extends BaseActivity implements View.On
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //创建okHttpClient对象
-                OkHttpClient okHttpClient = new OkHttpClient();
-                //创建请求
-                Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + phone.getText().toString().trim() + "&type=" + 4)
-                        .get()
-                        .build();
-                //设置回调
-                okHttpClient.newCall(request).enqueue(new Callback() {
+                HashMap<String , String> hashMap = new HashMap<>();
+                hashMap.put("mobilePhone",phone.getText().toString().trim());
+                hashMap.put("type",4+"");
+                HttpUtil.sendDataAsync(ChangeCompanyBelongActivity.this, HttpUrl.SENDVERIFICATIONCODE, 1, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Looper.prepare();

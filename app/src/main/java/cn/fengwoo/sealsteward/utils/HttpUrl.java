@@ -21,6 +21,7 @@ public class HttpUrl{
      * 注册
      */
     public static final String REGISTER = "user/register";
+    public static final String REGISTER2 = "user/register2";
     /**
      * 数据同步
      */

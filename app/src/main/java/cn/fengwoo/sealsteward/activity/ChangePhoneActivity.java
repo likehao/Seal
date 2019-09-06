@@ -29,8 +29,6 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -110,15 +108,10 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //创建okHttpClient对象
-                OkHttpClient okHttpClient = new OkHttpClient();
-                //创建请求
-                Request request = new Request.Builder()
-                        .url(HttpUrl.URL + HttpUrl.SENDVERIFICATIONCODE + "?mobilePhone=" + new_phone.getText().toString().trim() + "&type=" + 3)
-                        .get()
-                        .build();
-                //设置回调
-                okHttpClient.newCall(request).enqueue(new Callback() {
+                HashMap<String , String> hashMap = new HashMap<>();
+                hashMap.put("mobilePhone",new_phone.getText().toString().trim());
+                hashMap.put("type",3+"");
+                HttpUtil.sendDataAsync(ChangePhoneActivity.this, HttpUrl.SENDVERIFICATIONCODE, 1, hashMap, null, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Looper.prepare();
@@ -133,7 +126,6 @@ public class ChangePhoneActivity extends BaseActivity implements View.OnClickLis
                         Gson gson = new Gson();
                         ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
                         }.getType());
-                        //           ResponseInfo<Boolean> responseInfo = fromToJson.fromToJson(result);
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
                                 timer.start();

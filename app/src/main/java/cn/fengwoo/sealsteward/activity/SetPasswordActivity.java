@@ -11,12 +11,15 @@ import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
+import cn.fengwoo.sealsteward.utils.HttpUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -114,12 +117,10 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
         //获取手机号
         Intent intent = getIntent();
         String phone = intent.getStringExtra("phone");
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(HttpUrl.URL + HttpUrl.REGISTER + "?mobilePhone=" + phone + "&password=" + password)
-                .get()
-                .build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        HashMap<String , String> hashMap = new HashMap<>();
+        hashMap.put("mobilePhone",phone);
+        hashMap.put("password",password);
+        HttpUtil.sendDataAsync(SetPasswordActivity.this, HttpUrl.REGISTER2, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
@@ -138,8 +139,6 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                         Intent intent = new Intent();
 //                        intent.setClass(SetPasswordActivity.this, LoginActivity.class);
                         intent.putExtra("password", password);
-//                        startActivity(intent);
-                        intent.putExtra("password",password);
 //                        startActivity(intent);
                         finish();
                         Log.e("TAG", "注册成功!!!!!!!!!!!!!!!!!!!");
@@ -164,7 +163,41 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
         //获取手机号
         Intent intent = getIntent();
         String phone = intent.getStringExtra("phone");
-        OkHttpClient okHttpClient = new OkHttpClient();
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("mobilePhone",phone);
+        hashMap.put("newPassword",password);
+        HttpUtil.sendDataAsync(SetPasswordActivity.this, HttpUrl.FORGETPASSWORD, 3, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<Boolean> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<Boolean>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0) {
+                    if (responseInfo.getData()) {
+                        finish();
+                        Log.e("TAG", "设置密码成功!!!!!!!!!!!!!!!!!!!");
+                        Looper.prepare();
+                        showToast("设置密码成功");
+                        Looper.loop();
+
+                    }
+                } else {
+                    Log.e("TAG", "设置密码失败!!!!!!!!!!!!!");
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
+                }
+            }
+        });
+      /*  OkHttpClient okHttpClient = new OkHttpClient();
         //设置请求体
         RequestBody requestBody = new FormBody.Builder()
                 .add("mobilePhone", phone)
@@ -204,6 +237,6 @@ public class SetPasswordActivity extends Base2Activity implements View.OnClickLi
                     Looper.loop();
                 }
             }
-        });
+        });*/
     }
 }
