@@ -19,8 +19,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.AddCompanyInfo;
+import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.view.LoadingView;
@@ -147,11 +149,6 @@ public class AddCompanyActivity extends BaseActivity implements View.OnClickList
                         finish();
                         Looper.prepare();
                         showToast("添加成功");
-                        Looper.loop();
-                    }else {
-                        loadingView.cancel();
-                        Looper.prepare();
-                        showToast(responseInfo.getMessage());
                         Looper.loop();
                     }
                 }else {

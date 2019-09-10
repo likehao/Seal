@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.fengwoo.sealsteward.R;
 
@@ -34,6 +35,7 @@ public class CommonDialog {
                 }
             }
         });
+
     }
     public void showDialog(){
         dialog.show();

@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -118,8 +119,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private LoadingView loadingView;
     private LoginData user;
     private BiometricPromptManager mManager;
-    private String addStr,addressUrl,ip,port_num;
+    private String addStr, addressUrl, ip, port_num;
     private RealmNameDialog realmNameDialog;
+    private String saveAddStr, saveIp, savePOrt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +179,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //            showToast("没有打开指纹登录");
             tv_finger_print_login.setVisibility(View.GONE);
         }
+        saveAddStr = getIntent().getStringExtra("addStr");   //退出保存的服务器地址
+        saveIp = getIntent().getStringExtra("ip");
+        savePOrt = getIntent().getStringExtra("port_num");
+
     }
 
     private void initData() {
@@ -331,7 +337,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.forget_pwd_tv:
                 getForgetPwd();
                 break;
-            case R.id.set_realmName_ll:
+            case R.id.set_realmName_ll:     //设置服务器地址
                 showRealmNameDialog();
                 break;
             case R.id.realName_agreement_rl:    //传输协议
@@ -347,7 +353,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     /**
      * 显示传输协议选择器
      */
-    private void showPickView(){
+    private void showPickView() {
         List<String> list = new ArrayList<>();
         list.add("http");
         list.add("https");
@@ -373,7 +379,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     /**
      * 检测是否服务器地址dialog
      */
-    private void showDia(String str){
+    private void showDia(String str) {
         final CommonDialog commonDialog = new CommonDialog(this, "是否设置服务器地址？", "不设置则默认使用深圳白鹤区块链科技有限公司的服务器地址,稍后您可以点击右上角按钮设置", str);
         commonDialog.cancel.setText("设置");
         commonDialog.showDialog();
@@ -388,16 +394,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onClick(View v) {
                 commonDialog.dialog.dismiss();
-                EasySP.init(LoginActivity.this).putString("addStr", "http://www.baiheyz.com:8080");
-                if (str.equals("登录")){
+                addressUrl = "http://www.baiheyz.com:8080";
+                EasySP.init(LoginActivity.this).putString("addStr", addressUrl);
+                if (str.equals("登录")) {
                     //发送get请求
                     loadingView.show();
                     loadingView.showView("登录中");
-                    loginGet(phone, password,"0");
-                }else if (str.equals("立即注册")){
+                    loginGet(phone, password, "0");
+                } else if (str.equals("立即注册")) {
                     intent = new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(intent);
-                }else if (str.equals("忘记密码")){
+                } else if (str.equals("忘记密码")) {
                     intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
                     startActivity(intent);
                 }
@@ -409,13 +416,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 显示输入服务器地址dialog
      */
     @SuppressLint({"ApplySharedPref", "SetTextI18n"})
-    private void showRealmNameDialog(){
+    private void showRealmNameDialog() {
         realmNameDialog.showDialog();
-        String str = EasySP.init(this).getString("addStr");
-        if (ip != null && ip.length() != 0){
+        if (saveIp != null) {
+            realmNameDialog.service_ip.setText(saveIp);
+            //如果不是我们自己的服务器就显示
+//            if (!saveAddStr.equals("http://www.baiheyz.com:8080")) {
+//                String ipStr = saveAddStr.split("//")[1];
+//                realmNameDialog.service_ip.setText(ipStr);
+//            }
+        }
+        if (savePOrt != null){
+            realmNameDialog.port_number.setText(savePOrt);
+        }
+        if (ip != null && ip.length() != 0) {
             realmNameDialog.service_ip.setText(ip);
         }
-        if (port_num != null && port_num.length() != 0){
+        if (port_num != null && port_num.length() != 0) {
             realmNameDialog.port_number.setText(port_num);
         }
         realmNameDialog.service_ip.setSelection(realmNameDialog.service_ip.getText().toString().trim().length());  //将光标移至文字末尾
@@ -433,20 +450,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     /**
      * 确定之后获得完整的服务器地址
      */
-    private void getServiceAddress(){
+    private void getServiceAddress() {
         String agreement = realmNameDialog.agreement.getText().toString();
         ip = realmNameDialog.service_ip.getText().toString().trim();
+        if (ip.length() == 0) {
+//            saveAddStr = null;
+            saveIp = null;
+        }
         port_num = realmNameDialog.port_number.getText().toString().trim();
         //拼接服务器地址,判断是否有端口
-        if (port_num.length() != 0){
-            addressUrl = String.format("%s%s%s%s", agreement, "://", ip,":"+ port_num);
-        }else {
+        if (port_num.length() != 0) {
+            addressUrl = String.format("%s%s%s%s", agreement, "://", ip, ":" + port_num);
+        } else {
             addressUrl = String.format("%s%s%s", agreement, "://", ip);
         }
-        Log.e("TAG",addressUrl+"服务器地址服务器地址！！！！！！！！！！！！");
+        Log.e("TAG", "服务器地址addressUrl:" + addressUrl);
         realmNameDialog.dialog.dismiss();
 
     }
+
     /**
      * 登录
      */
@@ -456,15 +478,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (checkLogin(phone, password)) {
             return;
         } else {
-            if (realmNameDialog.service_ip.getText().toString().trim().length() == 0){
+            if (realmNameDialog.service_ip.getText().toString().trim().length() == 0) {
                 //服务器地址为http://，显示dialog
                 showDia("登录");
-            }else {
+            } else {
                 EasySP.init(LoginActivity.this).putString("addStr", addressUrl);  //添加的服务器地址
                 //发送get请求
                 loadingView.show();
                 loadingView.showView("登录中");
-                loginGet(phone, password,"0");
+                loginGet(phone, password, "0");
             }
         }
     }
@@ -472,11 +494,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     /**
      * 注册
      */
-    private void getResgister(){
-        if (realmNameDialog.service_ip.getText().toString().trim().length() == 0){
+    private void getResgister() {
+        if (realmNameDialog.service_ip.getText().toString().trim().length() == 0) {
             //服务器地址为http://，显示dialog
             showDia("立即注册");
-        }else {
+        } else {
             EasySP.init(LoginActivity.this).putString("addStr", addressUrl);  //添加的服务器地址
             //发送get请求
             intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -487,11 +509,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     /**
      * 忘记密码
      */
-    private void getForgetPwd(){
-        if (realmNameDialog.service_ip.getText().toString().trim().length() == 0){
+    private void getForgetPwd() {
+        if (realmNameDialog.service_ip.getText().toString().trim().length() == 0) {
             //服务器地址为http://，显示dialog
             showDia("忘记密码");
-        }else {
+        } else {
             EasySP.init(LoginActivity.this).putString("addStr", addressUrl);  //添加的服务器地址
             //发送get请求
             intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
@@ -550,7 +572,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     /**
      * 发送登录请求
      */
-    private void loginGet(final String phone, final String password,String isFP) {
+    private void loginGet(final String phone, final String password, String isFP) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("mobilePhone", phone);
         hashMap.put("password", password);
@@ -564,6 +586,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 Log.e("TAG", "登录失败。。。。。。。");
             }
 
+            @SuppressLint("ApplySharedPref")
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
@@ -579,7 +602,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     EasySP.init(LoginActivity.this).putString("l_tel", phone);
                     EasySP.init(LoginActivity.this).putString("l_pwd", password);
 
-//                    EasySP.init(LoginActivity.this).putString("addStr", realmNameDialog.service_ip.getText().toString().trim());
+                    //存储服务器地址
+                    EasySP.init(LoginActivity.this).putString("ip", ip);
+                    EasySP.init(LoginActivity.this).putString("port_num", port_num);
+                    Log.e("TAG", "登录存储服务器地址:" + addressUrl);
                     loadingView.cancel();
                     //添加一个登陆标记
                     loginResponseInfo.getData().login(LoginActivity.this);
@@ -589,11 +615,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     // 本地存入权限
                     String targetPermissionJson = "";
-//                    if (user.getAdmin()) {
-//                        targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
-//                    } else {
-//                        targetPermissionJson = new Gson().toJson(user.getFuncIdList());
-//                    }
+
                     if (user.getAdmin() != null) {
                         if (user.getAdmin()) {
                             targetPermissionJson = new Gson().toJson(user.getSystemFuncList());

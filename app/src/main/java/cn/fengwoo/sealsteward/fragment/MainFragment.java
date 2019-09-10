@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -63,18 +64,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Observable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.activity.AddCompanyActivity;
 import cn.fengwoo.sealsteward.activity.ApplyCauseActivity;
 import cn.fengwoo.sealsteward.activity.ApplyUseSealActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.CameraAutoActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
+import cn.fengwoo.sealsteward.activity.MainActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.PplAddActivity;
+import cn.fengwoo.sealsteward.activity.ScanActivity;
 import cn.fengwoo.sealsteward.activity.SeeRecordActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
@@ -85,7 +88,6 @@ import cn.fengwoo.sealsteward.bean.UploadHistoryRecord;
 import cn.fengwoo.sealsteward.entity.BannerData;
 import cn.fengwoo.sealsteward.entity.DfuEntity;
 import cn.fengwoo.sealsteward.entity.LoadImageData;
-import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.StampUploadRecordData;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -103,9 +105,9 @@ import cn.fengwoo.sealsteward.utils.RxTimerUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.CustomDialog;
-import cn.fengwoo.sealsteward.view.IOSScrollView;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
+import cn.fengwoo.sealsteward.view.NoCompanyView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -204,6 +206,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private Long lastTime;
     private Vibrator vibrator;
 
+
 //    private boolean hasDfu = false;
 
     private Handler handler = new Handler(new Handler.Callback() {
@@ -261,10 +264,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         sealDevice_rl.setOnClickListener(this);
         needSeal_rl.setOnClickListener(this);
         useSealApply_rl.setOnClickListener(this);
-        approval_record_rl.setOnClickListener(this);
         wait_me_apply_rl.setOnClickListener(this);
-        tv_check_record.setOnClickListener(this);
         add_ppl.setOnClickListener(this);
+        approval_record_rl.setOnClickListener(this);
+        tv_check_record.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -313,7 +318,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             imageViews.add("file://" + HttpDownloader.path + imgName);
                         } else {
                             //没有则下载
-                            HttpDownloader.downloadImage(getActivity(), 8, imgName, new DownloadImageCallback() {
+                            HttpDownloader.downloadImage(getActivity(), 8, imgName,"", new DownloadImageCallback() {
                                 @Override
                                 public void onResult(String fileName) {
                                     if (fileName != null) {
@@ -374,53 +379,70 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
                 break;
             case R.id.needSeal_rl:
-                if (!Utils.isLocationEnabled(getActivity())) {
-                    showToast("请确保开启了定位服务");
-                    return;
-                }
+                if (Utils.isHaveCompanyId(getActivity())) {
+                    if (!Utils.isLocationEnabled(getActivity())) {
+                        showToast("请确保开启了定位服务");
+                        return;
+                    }
 
-                // 断开蓝牙
-                ((MyApp) getApplication()).setConnectionObservable(null);
-                ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                    // 断开蓝牙
+                    ((MyApp) getApplication()).setConnectionObservable(null);
+                    ((MyApp) getActivity().getApplication()).removeAllDisposable();
 
-                if (!Utils.isConnect(getActivity())) {
-                    intent = new Intent(getActivity(), NearbyDeviceActivity.class);
-                    intent.putExtra("isAddNewSeal", false);
-                    permissions();
+                    if (!Utils.isConnect(getActivity())) {
+                        intent = new Intent(getActivity(), NearbyDeviceActivity.class);
+                        intent.putExtra("isAddNewSeal", false);
+                        permissions();
 //                    startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
 
-                    return;
-                }
+                        return;
+                    }
 //                if(hasDfu){
 //                    goToDfuPage();
 //                    return;
 //                }
-                lockSeal();
-                intent = new Intent(getActivity(), ApplyCauseActivity.class);
-                startActivityForResult(intent, Constants.TO_WANT_SEAL);
+                    lockSeal();
+                    intent = new Intent(getActivity(), ApplyCauseActivity.class);
+                    startActivityForResult(intent, Constants.TO_WANT_SEAL);
+                } else {
+                    showToast("您暂无公司，请添加公司或者加入其他公司后重试");
+                }
                 break;
             case R.id.useSealApply_rl:
-                EasySP.init(getActivity()).putString("currentSealName", "");
-                intent = new Intent(getActivity(), ApplyUseSealActivity.class);
-                startActivity(intent);
+                if (Utils.isHaveCompanyId(getActivity())) {
+                    EasySP.init(getActivity()).putString("currentSealName", "");
+                    intent = new Intent(getActivity(), ApplyUseSealActivity.class);
+                    startActivity(intent);
+                } else {
+                    showToast("您暂无公司，请添加公司或者加入其他公司后重试");
+                }
                 break;
             case R.id.approval_record_rl:
                 intent = new Intent(getActivity(), ApprovalRecordActivity.class);
                 startActivity(intent);
                 break;
             case R.id.wait_me_apply_rl:
-                Intent intent = new Intent(getActivity(), WaitMeAgreeActivity.class);
-                intent.putExtra("msgId", waitId);
-                startActivity(intent);
+                if (Utils.isHaveCompanyId(getActivity())) {
+                    Intent intent = new Intent(getActivity(), WaitMeAgreeActivity.class);
+                    intent.putExtra("msgId", waitId);
+                    startActivity(intent);
+                } else {
+                    showToast("您暂无公司，请添加公司或者加入其他公司后重试");
+                }
                 break;
             case R.id.tv_check_record:
                 getApplyDetail();
                 break;
             case R.id.add_ppl:
-                intent = new Intent(getActivity(), PplAddActivity.class);
+                if (Utils.isHaveCompanyId(getActivity())) {
+                    intent = new Intent(getActivity(), PplAddActivity.class);
 //                intent.putExtra("msgId", waitId);
-                startActivity(intent);
+                    startActivity(intent);
+                } else {
+                    showToast("您暂无公司，请添加公司或者加入其他公司后重试");
+                }
                 break;
+
         }
     }
 
@@ -589,7 +611,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             intent.putExtra("应用模块连上就finish", "应用模块连上就finish");
             permissions();
         }
-        if (s.equals("切换公司")){
+        if (s.equals("切换公司")) {
             company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
         }
     }
@@ -827,7 +849,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                         @Override
                         public void run() {
                             intent.setClass(getActivity(), CameraAutoActivity.class);
-                            intent.putExtra("cancel","cancel");
+                            intent.putExtra("cancel", "cancel");
                             startActivityForResult(intent, 678);
                         }
                     }, 1000);

@@ -143,7 +143,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
 
     @BindView(R.id.iv_red_dot)
     ImageView iv_red_dot;
-
+    @BindView(R.id.org_ll)
+    LinearLayout org_ll; //资源管理模块
     private SinglePicker<String> picker;
 
     @Nullable
@@ -176,6 +177,9 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     }
 
     private void setListener() {
+        if (!Utils.isHaveCompanyId(getActivity())){
+            org_ll.setVisibility(View.GONE);
+        }
         organizational_structure_rl.setOnClickListener(this);
         start_psd_rl.setOnClickListener(this);
         key_psd_rl.setOnClickListener(this);
@@ -857,6 +861,15 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!Utils.isHaveCompanyId(getActivity())){
+            org_ll.setVisibility(View.GONE);
+        }else {
+            org_ll.setVisibility(View.VISIBLE);
+        }
+    }
 
     // 可见时要刷新ui
     // 可见的情况有两种，一：onCreateView,二：如下的回调

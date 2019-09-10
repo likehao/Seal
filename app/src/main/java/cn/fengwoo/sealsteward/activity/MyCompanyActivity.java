@@ -59,12 +59,14 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
     private Intent intent;
     @BindView(R.id.company_list_lv)
     ListView company_list_lv;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record;
     private LoadingView loadingView;
     private CompanyListAdapter companyListAdapter;
     private ArrayList<CompanyInfo> arrayList;
     private String pos;   //初始选择
     private String userId;
-    private String selectCompanyId, selectCompanyName,trade;
+    private String selectCompanyId, selectCompanyName, trade;
 
     private String targetPermissionJson = "";
     private String belongUser;   //公司的归属者
@@ -117,13 +119,13 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
                 String result = response.body().string();
                 Gson gson = new Gson();
                 ResponseInfo<List<CompanyInfo>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<CompanyInfo>>>() {
                 }.getType());
 
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
-                    loadingView.cancel();
                     arrayList = new ArrayList<>();
                     for (int i = 0; i < responseInfo.getData().size(); i++) {
                         arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
@@ -134,18 +136,23 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             companyListAdapter = new CompanyListAdapter(arrayList, MyCompanyActivity.this);
+                            if (arrayList.size() == 1) {
+                                //更新存储公司名称,ID
+                                LoginData data = CommonUtil.getUserData(MyCompanyActivity.this);
+                                if (data != null) {
+                                    data.setCompanyName(arrayList.get(0).getCompanyName());
+                                    data.setCompanyId(arrayList.get(0).getId());
+                                    CommonUtil.setUserData(MyCompanyActivity.this, data);
+                                }
+
+                            }
                             company_list_lv.setAdapter(companyListAdapter);
                             companyListAdapter.notifyDataSetChanged(); //刷新数据
+                            no_record.setVisibility(View.GONE);
                         }
                     });
 
-                } else {
-                    loadingView.cancel();
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
                 }
-
             }
         });
 
@@ -186,7 +193,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
 //                } else if (position == 1) {
 //                    deleteDialog(selectPosition); //提示删除
 //                    optionBottomDialog.dismiss();
-                } else if (position == 1){
+                } else if (position == 1) {
 //                    intent = new Intent(MyCompanyActivity.this, CompanyDetailActivity.class);
                     intent = new Intent(MyCompanyActivity.this, ChangeCompanyActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
@@ -195,8 +202,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     intent.putExtra("trade", trade);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
-                }else {
-                    intent = new Intent(MyCompanyActivity.this,ChangeCompanyBelongActivity.class);
+                } else {
+                    intent = new Intent(MyCompanyActivity.this, ChangeCompanyBelongActivity.class);
                     intent.putExtra("companyId", selectCompanyId);
                     startActivity(intent);
                     optionBottomDialog.dismiss();
@@ -242,7 +249,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
 
                                 // 更新本地权限信息
                                 getUserInfoData(CommonUtil.getUserData(MyCompanyActivity.this).getId());
-                                EventBus.getDefault().post(new MessageEvent("切换公司","切换公司"));
+                                EventBus.getDefault().post(new MessageEvent("切换公司", "切换公司"));
 
                             }
                         });
@@ -283,6 +290,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
             }
         });
     }
+
     /**
      * 查看公司详情,公司转让
      */
@@ -304,10 +312,10 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                     startActivity(intent);
                     optionBottomDialog.dismiss();
 
-                }else {
+                } else {
                     intent = new Intent(MyCompanyActivity.this, ChangeCompanyBelongActivity.class);
                     intent.putExtra("companyId", selectCompanyId);  //选中的公司ID
-                    intent.putExtra("转让公司下线","转让公司下线");
+                    intent.putExtra("转让公司下线", "转让公司下线");
                     startActivity(intent);
                     optionBottomDialog.dismiss();
                 }
@@ -365,7 +373,7 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
         } else {
             if (arrayList.get(position).getBelongUser().equals(userId)) {
                 selectDialog2();   //点击的是选中的公司，并且是自己的公司
-            }else {
+            } else {
                 selectDialog();   //点击的是选中的公司
             }
         }
@@ -470,8 +478,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN){
-            if (isFastDoubleClick()){
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
                 return false;
             }
         }

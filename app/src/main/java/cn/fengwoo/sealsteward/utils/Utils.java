@@ -1,5 +1,6 @@
 package cn.fengwoo.sealsteward.utils;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -336,6 +337,19 @@ public class Utils {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
         }
+    }
+
+    /**
+     * 判断是否有公司ID
+     * @param activity
+     * @return
+     */
+    public static boolean isHaveCompanyId(Activity activity){
+        String companyId = CommonUtil.getUserData(activity).getCompanyId();
+        if (companyId == null || companyId.equals("")) {
+            return false;
+        }
+        return true;
     }
 
 }

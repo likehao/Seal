@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.Utils;
 import io.reactivex.Observable;
@@ -216,4 +217,5 @@ public class MyApp extends MultiDexApplication{
     public static Context getAppContext(){
         return context;
     }
+
 }

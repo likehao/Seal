@@ -46,7 +46,6 @@
                     android:id="@+id/agreement_tv"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:background="@drawable/rectangle_stroke"
                     android:text="http"
                     android:textColor="@color/black_6"
                     android:textSize="14sp" />
@@ -81,6 +80,7 @@
                 android:background="@drawable/rectangle_stroke"
                 android:textColor="@color/black_6"
                 android:singleLine="true"
+                android:hint="www.xxx.xxx"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -105,6 +105,7 @@
                 android:textColor="@color/black_6"
                 android:singleLine="true"
                 android:inputType="number"
+                android:hint="设置端口号"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>

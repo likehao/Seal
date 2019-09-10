@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,12 +22,12 @@
                 android:layout_height="wrap_content"
                 android:background="@color/style"
                 android:ellipsize="end"
-                android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:paddingStart="10dp"
                 android:singleLine="true"
-                android:text="@string/company_name"
+                android:text="@string/main_home_page"
                 android:textColor="@color/white"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -507,4 +507,6 @@
         </LinearLayout>
 
     </cn.fengwoo.sealsteward.view.IOSScrollView>
-</LinearLayout>
+
+
+</FrameLayout>

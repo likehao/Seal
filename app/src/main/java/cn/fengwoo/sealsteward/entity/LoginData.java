@@ -65,7 +65,6 @@ public class LoginData implements Serializable {
     private String userEmail;
     private String orgStructureId;
 
-
     public String getOrgStructureId() {
         return orgStructureId;
     }

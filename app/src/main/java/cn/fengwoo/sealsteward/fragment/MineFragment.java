@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
@@ -35,6 +36,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.carbs.android.gregorianlunarcalendar.library.util.Util;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.CompanyQRCodeActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
@@ -63,6 +65,8 @@ import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * 主页我的
@@ -346,8 +350,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.company_QRCode_rl:
-                intent = new Intent(getActivity(), CompanyQRCodeActivity.class);
-                startActivity(intent);
+                if (Utils.isHaveCompanyId(getActivity())) {
+                    intent = new Intent(getActivity(), CompanyQRCodeActivity.class);
+                    startActivity(intent);
+                }else {
+                    showToast("您暂无公司，请添加公司或者加入其他公司后重试");
+                }
                 break;
             case R.id.rl_safe:
                 if (!mManager.hasEnrolledFingerprints()) {
@@ -358,13 +366,17 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.my_power_rl:
-                Utils.log("click permission");
-                Intent intent = new Intent();
-                intent.putExtra("userId", CommonUtil.getUserData(getActivity()).getId());
-                intent.setClass(getActivity(), SetPowerOnlyReadActivity.class);
-                intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
-                intent.putExtra("permission", EasySP.init(getActivity()).getString("permission"));
-                startActivityForResult(intent, 12);
+                if (Utils.isHaveCompanyId(getActivity())){
+                    Utils.log("click permission");
+                    Intent intent = new Intent();
+                    intent.putExtra("userId", CommonUtil.getUserData(getActivity()).getId());
+                    intent.setClass(getActivity(), SetPowerOnlyReadActivity.class);
+                    intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
+                    intent.putExtra("permission", EasySP.init(getActivity()).getString("permission"));
+                    startActivityForResult(intent, 12);
+                }else {
+                    showToast("您暂无公司，请添加公司或者加入其他公司后重试");
+                }
                 break;
             case R.id.switch_company_ll:
                 intent = new Intent(getActivity(),MyCompanyActivity.class);
@@ -407,6 +419,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
                                 intent = new Intent(getActivity(), LoginActivity.class);
+                                String ip = EasySP.init(getActivity()).getString("ip");
+                                String port_num = EasySP.init(getActivity()).getString("port_num");
+                                intent.putExtra("ip",ip);
+                                intent.putExtra("port_num",port_num);
                                 startActivity(intent);
                                 commonDialog.dialog.dismiss();
                                 System.exit(0);

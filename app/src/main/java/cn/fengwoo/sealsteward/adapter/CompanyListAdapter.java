@@ -58,7 +58,6 @@ public class CompanyListAdapter extends BaseAdapter {
         SharedPreferences sharedPreferences = context.getSharedPreferences("userdata", MODE_PRIVATE);
         //获取Editor对象
         companyId = sharedPreferences.getString("companyId", "");
-
         String id = list.get(position).getId();
         if (id.equals(companyId)) {
             viewHolder.select_company_iv.setVisibility(View.VISIBLE);

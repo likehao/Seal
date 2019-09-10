@@ -124,11 +124,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView msgSum_tv;  //消息总数
     private Timer timer;
     int sum, addSum;
-
     private boolean firstTag = false; // 弹出过一次，变成true
-
     private LeftOrRightListener leftOrRightListener;
-
     int msgFourSix = 0;
     @BindView(R.id.title_ll)
     LinearLayout title_ll;
@@ -144,6 +141,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     TextView statistics_tv;
     @BindView(R.id.edit_tv)
     TextView edit_tv;
+
+    @BindView(R.id.none_company_ll)
+    LinearLayout none_company;
+    @BindView(R.id.scan_addCompany_tv)
+    TextView scanAddCompany;
+    @BindView(R.id.add_Company_tv)
+    TextView addCompany;
+    @BindView(R.id.cancel_iv)
+    ImageView cancel_iv;
+    @BindView(R.id.none_bg_ll)
+    LinearLayout none_bg_ll;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,19 +265,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        tv_right.setTextColor(Color.argb(130, 255, 255, 255));
         welcome.setVisibility(View.VISIBLE);
         title_tv.setVisibility(View.GONE);
-
-        String companyId = CommonUtil.getUserData(this).getCompanyId();
-        if (companyId == null){
-            showPoint();
-        }
     }
 
-    /**
-     * 没有公司显示提示dialog
-     */
-    private void showPoint(){
-        showToast("暂无公司，请添加");
-    }
     private void setListener() {
         home_page.setOnClickListener(this);
         mine.setOnClickListener(this);
@@ -283,6 +281,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         msg_ll.setOnClickListener(this);
         statistics.setOnClickListener(this);
         edit_tv.setOnClickListener(this);
+        scanAddCompany.setOnClickListener(this);
+        addCompany.setOnClickListener(this);
+        cancel_iv.setOnClickListener(this);
+
+        String companyId = CommonUtil.getUserData(this).getCompanyId();
+        if (companyId == null || companyId.equals("")) {
+//            bt.performClick();
+            none_bg_ll.getBackground().mutate().setAlpha(80);
+            none_company.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -365,11 +373,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 title_ll.setVisibility(View.VISIBLE);
                 welcome.setVisibility(View.GONE);
                 //判断有无统计权限来显示明细按钮
-                if (!Utils.hasThePermission(this, Constants.permission27)) {
-                    edit_tv.setVisibility(View.GONE);
-                }else {
-                    edit_tv.setVisibility(View.VISIBLE);
-                    edit_tv.setText("明细");
+                if (Utils.isHaveCompanyId(this)) {
+//                    if (companyId != null && !companyId.equals("")) {
+                        if (!Utils.hasThePermission(this, Constants.permission27)) {
+                            edit_tv.setVisibility(View.GONE);
+                        } else {
+                            edit_tv.setVisibility(View.VISIBLE);
+                            edit_tv.setText("明细");
+                        }
+//                    }
                 }
                 changeView(7);
                 break;
@@ -418,8 +430,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 leftOrRightListener.whichSide("right");
                 break;
             case R.id.edit_tv:
-                intent = new Intent(this,SealDetailedActivity.class);
+                intent = new Intent(this, SealDetailedActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.scan_addCompany_tv:
+                intent = new Intent(this, ScanActivity.class);
+                startActivity(intent);
+                none_company.setVisibility(View.GONE);
+                none_bg_ll.getBackground().mutate().setAlpha(0);
+                break;
+            case R.id.add_Company_tv:
+                intent = new Intent(this,AddCompanyActivity.class);
+                startActivity(intent);
+                none_company.setVisibility(View.GONE);
+                none_bg_ll.getBackground().mutate().setAlpha(0);
+                break;
+            case R.id.cancel_iv:
+                none_company.setVisibility(View.GONE);
+                none_bg_ll.getBackground().mutate().setAlpha(0);
                 break;
         }
     }
@@ -471,10 +499,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case 7:
-                if (statisticsFragment == null){
+                if (statisticsFragment == null) {
                     statisticsFragment = new StatisticsFragment();
-                    transaction.add(R.id.home_fragment,statisticsFragment);
-                }else {
+                    transaction.add(R.id.home_fragment, statisticsFragment);
+                } else {
                     transaction.show(statisticsFragment);
                 }
                 break;
@@ -500,17 +528,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         imageViews[3].setImageResource(index == 3 ? R.drawable.mian_select : R.drawable.mine);
         textViews[4].setTextColor(index == 4 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.gray_text));
         imageViews[4].setImageResource(index == 4 ? R.drawable.application_select : R.drawable.application);
-        textViews[7].setTextColor(index == 7 ? ContextCompat.getColor(this,R.color.style) : ContextCompat.getColor(this,R.color.gray_text));
+        textViews[7].setTextColor(index == 7 ? ContextCompat.getColor(this, R.color.style) : ContextCompat.getColor(this, R.color.gray_text));
         imageViews[7].setImageResource(index == 7 ? R.drawable.icon_printed_statistics_click : R.drawable.icon_printed_statistics_default);
     }
 
     /**
      * 记录页面头部手机盖章和密码盖章按钮的选中状态
+     *
      * @param code
      */
-    public void changeTitleView(int code){
-        textViews[5].setTextColor(code == 5 ? ContextCompat.getColor(this,R.color.style) : ContextCompat.getColor(this,R.color.white));
-        linearLayouts[5].setBackground(code == 5 ? ContextCompat.getDrawable(this,R.drawable.select_phone_seal1) : ContextCompat.getDrawable(this,R.drawable.select_phone_seal));
+    public void changeTitleView(int code) {
+        textViews[5].setTextColor(code == 5 ? ContextCompat.getColor(this, R.color.style) : ContextCompat.getColor(this, R.color.white));
+        linearLayouts[5].setBackground(code == 5 ? ContextCompat.getDrawable(this, R.drawable.select_phone_seal1) : ContextCompat.getDrawable(this, R.drawable.select_phone_seal));
         textViews[6].setTextColor(code == 6 ? getResources().getColor(R.color.style) : getResources().getColor(R.color.white));
         linearLayouts[6].setBackground(code == 6 ? getResources().getDrawable(R.drawable.select_pwd_seal1) : getResources().getDrawable(R.drawable.select_pwd_seal));
 
@@ -535,7 +564,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (applicationFragment != null) {
             transaction.hide(applicationFragment);
         }
-        if (statisticsFragment != null){
+        if (statisticsFragment != null) {
             transaction.hide(statisticsFragment);
         }
     }
@@ -823,6 +852,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 防止点击过快出现两个页面
+     *
      * @param ev
      * @return
      */
@@ -844,7 +874,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(MessageEvent messageEvent) {
         String s = messageEvent.msgType;
-        if (s.equals("title_ui")){   //记录筛选改变头UI
+        if (s.equals("title_ui")) {   //记录筛选改变头UI
             changeTitleView(5);
         }
     }
