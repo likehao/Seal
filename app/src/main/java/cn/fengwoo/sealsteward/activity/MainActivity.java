@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -47,6 +48,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageData;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
+import cn.fengwoo.sealsteward.entity.CompanyInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.fragment.ApplicationFragment;
@@ -152,6 +154,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     ImageView cancel_iv;
     @BindView(R.id.none_bg_ll)
     LinearLayout none_bg_ll;
+    private ArrayList<CompanyInfo> arrayList;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -285,10 +288,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         addCompany.setOnClickListener(this);
         cancel_iv.setOnClickListener(this);
 
-        String companyId = CommonUtil.getUserData(this).getCompanyId();
-        if (companyId == null || companyId.equals("")) {
-//            bt.performClick();
-            none_bg_ll.setBackgroundColor(ContextCompat.getColor(this,R.color.black));
+        //判断是否有公司来显示弹框
+        if (!Utils.isHaveCompanyId(this)) {
+            //            bt.performClick();
+            none_bg_ll.setBackgroundColor(ContextCompat.getColor(this, R.color.black));
             none_bg_ll.getBackground().mutate().setAlpha(80);
             none_company.setVisibility(View.VISIBLE);
             none_bg_ll.setClickable(true);
@@ -377,12 +380,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //判断有无统计权限来显示明细按钮
                 if (Utils.isHaveCompanyId(this)) {
 //                    if (companyId != null && !companyId.equals("")) {
-                        if (!Utils.hasThePermission(this, Constants.permission27)) {
-                            edit_tv.setVisibility(View.GONE);
-                        } else {
-                            edit_tv.setVisibility(View.VISIBLE);
-                            edit_tv.setText("明细");
-                        }
+                    if (!Utils.hasThePermission(this, Constants.permission27)) {
+                        edit_tv.setVisibility(View.GONE);
+                    } else {
+                        edit_tv.setVisibility(View.VISIBLE);
+                        edit_tv.setText("明细");
+                    }
 //                    }
                 }
                 changeView(7);
@@ -443,7 +446,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 none_bg_ll.setClickable(false);
                 break;
             case R.id.add_Company_tv:   //添加公司
-                intent = new Intent(this,MyCompanyActivity.class);
+                intent = new Intent(this, MyCompanyActivity.class);
                 startActivity(intent);
                 none_company.setVisibility(View.GONE);
                 none_bg_ll.getBackground().mutate().setAlpha(0);
@@ -650,8 +653,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         .getType());
                 if (responseInfo.getCode() != null) {
                     if (responseInfo.getCode() == 1002 || responseInfo.getCode() == 1003 || responseInfo.getCode() == 1004) {
-                        //关闭定时器
                         int i = responseInfo.getCode();
+                        Log.e("TAG", "获取消息码：" + i);
+                        //关闭定时器
                         stopTimer();
                         //清除用户信息
                         LoginData.logout(MainActivity.this);
@@ -663,9 +667,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         String ip = EasySP.init(MainActivity.this).getString("ip");  //服务器ip
                         String port_num = EasySP.init(MainActivity.this).getString("port_num");   //服务器端口号
                         String agreement = EasySP.init(MainActivity.this).getString("agreement");  //传输协议
-                        intent.putExtra("ip",ip);
-                        intent.putExtra("port_num",port_num);
-                        intent.putExtra("agreement",agreement);
+                        intent.putExtra("ip", ip);
+                        intent.putExtra("port_num", port_num);
+                        intent.putExtra("agreement", agreement);
                         intent.putExtra("loginstatus", "timeout");
                         intent.putExtra("info", responseInfo.getMessage());
                         startActivity(intent);
@@ -681,7 +685,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             for (MessageData messageData : responseInfo.getData()) {
 
                                 int msgNum = messageData.getUnreadCount();
-
 
                                 //显示消息数
                                 int type = messageData.getType();
@@ -722,6 +725,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                             appUpdateDialog();
                                         }
                                         firstTag = true;
+                                    }
+                                }
+                                //判断是否加入公司已经被同意
+                                if (type == 6) {
+                                    if (msgNum != 0 && !Utils.isHaveCompanyId(MainActivity.this)) {
+                                        //请求一下公司列表
+                                        getCompanyList();
                                     }
                                 }
                             }
@@ -777,6 +787,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     }
                 });
 
+            }
+        });
+
+    }
+
+    /**
+     * 获取用户名下公司列表
+     */
+    private void getCompanyList() {
+        loadingView.show();
+        HttpUtil.sendDataAsync(MainActivity.this, HttpUrl.USERCOMPANY, 1, null, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<List<CompanyInfo>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<CompanyInfo>>>() {
+                }.getType());
+                arrayList = new ArrayList<>();
+                for (int i = 0; i < responseInfo.getData().size(); i++) {
+                    arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
+                            responseInfo.getData().get(i).getId(), responseInfo.getData().get(i).getBelongUser(),
+                            responseInfo.getData().get(i).getTrade()));
+                }
+                if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    //更新存储公司名称,ID
+                    LoginData data = CommonUtil.getUserData(MainActivity.this);
+                    if (data != null) {
+                        data.setCompanyName(arrayList.get(0).getCompanyName());
+                        data.setCompanyId(arrayList.get(0).getId());
+                        CommonUtil.setUserData(MainActivity.this, data);
+                    }
+                }
             }
         });
 

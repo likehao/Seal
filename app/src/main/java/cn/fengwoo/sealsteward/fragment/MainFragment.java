@@ -311,7 +311,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                             imageViews.add("file://" + HttpDownloader.path + imgName);
                         } else {
                             //没有则下载
-                            HttpDownloader.downloadImage(getActivity(), 8, imgName,"", new DownloadImageCallback() {
+                            HttpDownloader.downloadImage(getActivity(), 8, imgName, "", new DownloadImageCallback() {
                                 @Override
                                 public void onResult(String fileName) {
                                     if (fileName != null) {
@@ -427,15 +427,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 getApplyDetail();
                 break;
             case R.id.add_ppl:
-                if (Utils.isHaveCompanyId(getActivity())) {
-                    intent = new Intent(getActivity(), PplAddActivity.class);
+                intent = new Intent(getActivity(), PplAddActivity.class);
 //                intent.putExtra("msgId", waitId);
-                    startActivity(intent);
-                } else {
-                    showToast("您暂无公司，请添加公司或者加入其他公司后重试");
-                }
+                startActivity(intent);
                 break;
-
         }
     }
 
@@ -982,7 +977,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             }
         });
     }
-
 
     public void showToast(String str) {
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();

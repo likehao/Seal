@@ -10,17 +10,14 @@
 
     <include layout="@layout/head" />
 
-
-
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white">
-        <View
-            style="@style/line"
-            />
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <View style="@style/line" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,9 +32,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="15dp"
                     android:text="@string/organizational2"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -49,14 +46,13 @@
                     android:layout_marginEnd="30dp"
                     android:text="@string/please_select" />
 
-                <View
-                    style="@style/right_arrow" />
+                <View style="@style/right_arrow" />
             </RelativeLayout>
         </LinearLayout>
 
         <View
-            android:layout_marginTop="10dp"
-            style="@style/line_left" />
+            style="@style/line_left"
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,8 +80,8 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginStart="90dp"
                     android:background="@null"
-                    android:hint="@string/please_input_position"
                     android:gravity="end"
+                    android:hint="@string/please_input_position"
                     android:singleLine="true"
                     android:text=""
                     android:textSize="12sp" />
@@ -95,8 +91,8 @@
         </LinearLayout>
 
         <View
-            android:layout_marginTop="10dp"
-            style="@style/line" />
+            style="@style/line"
+            android:layout_marginTop="10dp" />
     </LinearLayout>
 
 

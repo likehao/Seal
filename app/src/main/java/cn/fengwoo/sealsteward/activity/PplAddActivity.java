@@ -176,7 +176,9 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-
+    /**
+     * 获取人员加入列表数据
+     */
     private void getNetDate() {
         loadingView.show();
         Utils.log("getDate");
@@ -278,6 +280,9 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
+    /**
+     * 待我处理
+     */
     private void setListAdapter1() {
         commonAdapter1 = new CommonAdapter<PplAddEntity>(this, items1, R.layout.ppl_add_item_left) {
             @Override
@@ -315,6 +320,9 @@ public class PplAddActivity extends BaseActivity implements View.OnClickListener
         list1.setAdapter(commonAdapter1);
     }
 
+    /**
+     * 我的申请
+     */
     private void setListAdapter2() {
         commonAdapter2 = new CommonAdapter<PplAddEntity>(this, items2, R.layout.ppl_add_item_right) {
             @Override

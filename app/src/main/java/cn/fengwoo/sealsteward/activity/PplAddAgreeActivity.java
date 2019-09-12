@@ -15,9 +15,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -28,7 +25,6 @@ import cn.fengwoo.sealsteward.entity.PplAddEntity;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
-import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -37,7 +33,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- *
+ * 人员加入分配职位部门
  */
 public class PplAddAgreeActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.title_tv)
@@ -119,11 +115,11 @@ public class PplAddAgreeActivity extends BaseActivity implements View.OnClickLis
 
     private void confirm() {
 
-        if(TextUtils.isEmpty(etJob.getText().toString())){
+        if (TextUtils.isEmpty(etJob.getText().toString())) {
             showToast("请输入职位");
             return;
         }
-        if(tvDepartment.getText().toString().equals("请选择")){
+        if (tvDepartment.getText().toString().equals("请选择")) {
             showToast("请选择部门");
             return;
         }
@@ -154,8 +150,12 @@ public class PplAddAgreeActivity extends BaseActivity implements View.OnClickLis
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                     if (responseInfo.getData()) {
                         setResult(123, intent);
-                        finish();                    }
-                }else{
+                        finish();
+                        Looper.prepare();
+                        showToast("已同意");
+                        Looper.loop();
+                    }
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
