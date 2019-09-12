@@ -2,7 +2,6 @@ package cn.fengwoo.sealsteward.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
@@ -36,7 +35,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.carbs.android.gregorianlunarcalendar.library.util.Util;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.activity.CompanyQRCodeActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
@@ -65,8 +63,6 @@ import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * 主页我的
@@ -421,8 +417,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                                 intent = new Intent(getActivity(), LoginActivity.class);
                                 String ip = EasySP.init(getActivity()).getString("ip");
                                 String port_num = EasySP.init(getActivity()).getString("port_num");
+                                String agreement = EasySP.init(getActivity()).getString("agreement");  //传输协议
                                 intent.putExtra("ip",ip);
                                 intent.putExtra("port_num",port_num);
+                                intent.putExtra("agreement",agreement);
                                 startActivity(intent);
                                 commonDialog.dialog.dismiss();
                                 System.exit(0);

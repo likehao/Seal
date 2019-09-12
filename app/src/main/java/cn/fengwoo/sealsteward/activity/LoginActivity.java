@@ -4,9 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -119,9 +117,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private LoadingView loadingView;
     private LoginData user;
     private BiometricPromptManager mManager;
-    private String addStr, addressUrl, ip, port_num;
+    private String addStr, addressUrl, ip, agreement, port_num;
     private RealmNameDialog realmNameDialog;
-    private String saveAddStr, saveIp, savePOrt;
+    private String saveAddStr, saveIp, savePOrt, saveAgreement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +180,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         saveAddStr = getIntent().getStringExtra("addStr");   //退出保存的服务器地址
         saveIp = getIntent().getStringExtra("ip");
         savePOrt = getIntent().getStringExtra("port_num");
+        saveAgreement = getIntent().getStringExtra("agreement");
 
     }
 
@@ -426,7 +425,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                realmNameDialog.service_ip.setText(ipStr);
 //            }
         }
-        if (savePOrt != null){
+        if (savePOrt != null) {
             realmNameDialog.port_number.setText(savePOrt);
         }
         if (ip != null && ip.length() != 0) {
@@ -451,13 +450,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 确定之后获得完整的服务器地址
      */
     private void getServiceAddress() {
-        String agreement = realmNameDialog.agreement.getText().toString();
+        agreement = realmNameDialog.agreement.getText().toString().trim();
+        saveAgreement = agreement;
+
         ip = realmNameDialog.service_ip.getText().toString().trim();
+        saveIp = ip;
         if (ip.length() == 0) {
-//            saveAddStr = null;
             saveIp = null;
         }
+
         port_num = realmNameDialog.port_number.getText().toString().trim();
+        savePOrt = port_num;
+        if (port_num.length() == 0) {
+            savePOrt = null;
+        }
+
         //拼接服务器地址,判断是否有端口
         if (port_num.length() != 0) {
             addressUrl = String.format("%s%s%s%s", agreement, "://", ip, ":" + port_num);
@@ -478,10 +485,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (checkLogin(phone, password)) {
             return;
         } else {
-            if (realmNameDialog.service_ip.getText().toString().trim().length() == 0) {
+            if (saveIp == null) {
                 //服务器地址为http://，显示dialog
                 showDia("登录");
             } else {
+                if (savePOrt != null) {
+                    addressUrl = String.format("%s%s%s%s", saveAgreement, "://", saveIp, ":" + savePOrt);
+                } else {
+                    addressUrl = String.format("%s%s%s", saveAgreement, "://", saveIp);
+                }
                 EasySP.init(LoginActivity.this).putString("addStr", addressUrl);  //添加的服务器地址
                 //发送get请求
                 loadingView.show();
@@ -603,8 +615,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     EasySP.init(LoginActivity.this).putString("l_pwd", password);
 
                     //存储服务器地址
-                    EasySP.init(LoginActivity.this).putString("ip", ip);
-                    EasySP.init(LoginActivity.this).putString("port_num", port_num);
+                    EasySP.init(LoginActivity.this).putString("agreement", saveAgreement);
+                    EasySP.init(LoginActivity.this).putString("ip", saveIp);
+                    EasySP.init(LoginActivity.this).putString("port_num", savePOrt);
                     Log.e("TAG", "登录存储服务器地址:" + addressUrl);
                     loadingView.cancel();
                     //添加一个登陆标记
@@ -810,9 +823,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             selectPopuwindow.dismiss();
         }
         check_down_up.setChecked(false);
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
         return super.dispatchTouchEvent(ev);
     }
-
 
     @TargetApi(28)
     private void identify() {
@@ -865,4 +882,5 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             });
         }
     }
+
 }

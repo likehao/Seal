@@ -288,8 +288,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         String companyId = CommonUtil.getUserData(this).getCompanyId();
         if (companyId == null || companyId.equals("")) {
 //            bt.performClick();
+            none_bg_ll.setBackgroundColor(ContextCompat.getColor(this,R.color.black));
             none_bg_ll.getBackground().mutate().setAlpha(80);
             none_company.setVisibility(View.VISIBLE);
+            none_bg_ll.setClickable(true);
         }
     }
 
@@ -433,21 +435,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 intent = new Intent(this, SealDetailedActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.scan_addCompany_tv:
+            case R.id.scan_addCompany_tv:      //扫描添加公司
                 intent = new Intent(this, ScanActivity.class);
                 startActivity(intent);
                 none_company.setVisibility(View.GONE);
                 none_bg_ll.getBackground().mutate().setAlpha(0);
+                none_bg_ll.setClickable(false);
                 break;
-            case R.id.add_Company_tv:
-                intent = new Intent(this,AddCompanyActivity.class);
+            case R.id.add_Company_tv:   //添加公司
+                intent = new Intent(this,MyCompanyActivity.class);
                 startActivity(intent);
                 none_company.setVisibility(View.GONE);
                 none_bg_ll.getBackground().mutate().setAlpha(0);
+                none_bg_ll.setClickable(false);
                 break;
             case R.id.cancel_iv:
                 none_company.setVisibility(View.GONE);
                 none_bg_ll.getBackground().mutate().setAlpha(0);
+                none_bg_ll.setClickable(false);
                 break;
         }
     }
@@ -655,6 +660,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         ((MyApp) getApplication()).setConnectionObservable(null);
                         //下线直接跳转登录界面
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        String ip = EasySP.init(MainActivity.this).getString("ip");  //服务器ip
+                        String port_num = EasySP.init(MainActivity.this).getString("port_num");   //服务器端口号
+                        String agreement = EasySP.init(MainActivity.this).getString("agreement");  //传输协议
+                        intent.putExtra("ip",ip);
+                        intent.putExtra("port_num",port_num);
+                        intent.putExtra("agreement",agreement);
                         intent.putExtra("loginstatus", "timeout");
                         intent.putExtra("info", responseInfo.getMessage());
                         startActivity(intent);

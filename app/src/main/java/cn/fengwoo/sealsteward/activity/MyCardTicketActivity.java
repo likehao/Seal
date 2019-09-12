@@ -44,6 +44,8 @@ public class MyCardTicketActivity extends BaseActivity implements View.OnClickLi
     ListView listView;
     private CommonAdapter commonAdapter;
     private ArrayList<CardTicketBean> list;
+    @BindView(R.id.no_record_ll)
+    LinearLayout no_record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class MyCardTicketActivity extends BaseActivity implements View.OnClickLi
                                 list.add(new CardTicketBean(data.getAmountOfMoney(), data.getContent(),
                                         data.getReceiveStatus(),data.getId()));
                             }
+                            no_record.setVisibility(View.GONE);
                             setData();
                         }
 
