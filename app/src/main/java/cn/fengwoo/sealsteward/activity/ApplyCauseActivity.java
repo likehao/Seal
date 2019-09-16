@@ -302,7 +302,6 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
 
     }
 
-
     private void saveAndJump() {
         EasySP.init(this).putString("currentApplyId", responseInfo.getData().get(i).getId());
 
@@ -319,7 +318,6 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         setResult(Constants.TO_WANT_SEAL, intent);
         finish();
     }
-
 
     @Override
     public void onStart() {

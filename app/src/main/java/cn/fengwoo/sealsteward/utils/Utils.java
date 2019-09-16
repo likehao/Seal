@@ -1,6 +1,7 @@
 package cn.fengwoo.sealsteward.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -352,4 +354,25 @@ public class Utils {
         return true;
     }
 
+    /**
+     * 判断APP处于后台还是前台
+     * @param context
+     * @return
+     */
+    public static boolean isBackground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+                if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    Log.i("TAG", "处于后台" + appProcess.processName);
+                    return true;
+                } else {
+                    Log.i("TAG", "处于前台" + appProcess.processName);
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
 }

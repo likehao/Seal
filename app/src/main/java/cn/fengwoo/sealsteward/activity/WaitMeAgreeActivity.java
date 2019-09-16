@@ -158,7 +158,8 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
                                 String applyTime = DateUtils.getDateString(Long.parseLong(app.getApplyTime()));  //申请时间
                                 waitMeAgreeDataList.add(new WaitMeAgreeData(app.getApplyCause(), app.getApplyUserName()
                                         , app.getOrgStructureName(), applyTime, app.getSealName(), app.getApplyCount(),
-                                        app.getExpireTime(), app.getId(), app.getApplyPdf(),app.getAutoGraph()));
+                                        app.getExpireTime(), app.getId(), app.getApplyPdf(),app.getAutoGraph()
+                                        ,app.getFileType(),app.getFileNumber()));
                             }
                             //请求数据
                             refreshLayout.finishRefresh(); //刷新完成
@@ -196,6 +197,8 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         intent.putExtra("applyId", waitMeAgreeDataList.get(position).getApplyId());
         intent.putExtra("pdf", waitMeAgreeDataList.get(position).getPdf());
         intent.putExtra("autoGraph", waitMeAgreeDataList.get(position).getAutoGraph());
+        intent.putExtra("fileType",waitMeAgreeDataList.get(position).getFileType());
+        intent.putExtra("fileNum",waitMeAgreeDataList.get(position).getFileNumber());
         startActivityForResult(intent, 88);
     }
 

@@ -424,7 +424,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
                 break;
             case R.id.tv_check_record:
-                getApplyDetail();
+                if (Utils.isHaveCompanyId(getActivity())) {
+                    getApplyDetail();
+                }
                 break;
             case R.id.add_ppl:
                 intent = new Intent(getActivity(), PplAddActivity.class);
@@ -434,8 +436,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         }
     }
 
+    /**
+     * 查看记录
+     */
     private void getApplyDetail() {
-
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("applyId", EasySP.init(getActivity()).getString("currentApplyId"));
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.APPLYDETAIL, 1, hashMap, null, new Callback() {

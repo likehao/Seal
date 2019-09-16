@@ -835,6 +835,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         String userId = intent.getStringExtra("userId");
         String failTime = intent.getStringExtra("failTime");
         String sealId = intent.getStringExtra("sealId");
+        String fileType = intent.getStringExtra("fileType");
+        String fileNum = intent.getStringExtra("fileNum");
         AddUseSealApplyBeanx addUseSealApplyBean = new AddUseSealApplyBeanx();
         addUseSealApplyBean.setApplyCause(cause);
         addUseSealApplyBean.setApplyCount(Integer.valueOf(applyCount));
@@ -842,6 +844,8 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
         addUseSealApplyBean.setExpireTime(failTime);
         addUseSealApplyBean.setSealId(sealId);
         addUseSealApplyBean.setImgList(allFileName);
+        addUseSealApplyBean.setFileType(fileType);
+        addUseSealApplyBean.setFileNumber(Integer.valueOf(fileNum));
         if (!TextUtils.isEmpty(applyId)) {
             addUseSealApplyBean.setApplyId(applyId);
         }

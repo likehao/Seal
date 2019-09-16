@@ -55,7 +55,7 @@ public class CompanyListAdapter extends BaseAdapter {
         viewHolder.company_name_tv.setText(list.get(position).getCompanyName());
         //选中状态
         //获取SharedPreferences对象
-        SharedPreferences sharedPreferences = context.getSharedPreferences("userdata", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("newuserdata", MODE_PRIVATE);
         //获取Editor对象
         companyId = sharedPreferences.getString("companyId", "");
         String id = list.get(position).getId();

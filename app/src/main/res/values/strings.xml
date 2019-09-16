@@ -116,6 +116,7 @@
     <string name="apply_person">申请人</string>
     <string name="Next_step">下一步</string>
     <string name="file_number">文件份数</string>
+    <string name="file_type">文件类型</string>
     <string name="Application_reason">申请事由</string>
     <string name="please_input_reason">请输入申请事由（例如:XXX招标合同）</string>
     <string name="seal_information">印章信息</string>
@@ -153,6 +154,7 @@
     <string name="please_fail_time">请选择失效时间</string>
     <string name="please_input_name">请输入名称</string>
     <string name="please_input_file_number">请输入文件份数</string>
+    <string name="please_select_file_type">请选择文件类型</string>
     <string name="Copy_to">抄送到</string>
     <string name="please_copy_people">请选择抄送人</string>
     <string name="please_input_seal_name">请输入印章名称</string>

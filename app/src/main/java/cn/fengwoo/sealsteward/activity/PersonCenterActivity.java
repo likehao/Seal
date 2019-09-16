@@ -502,9 +502,7 @@ public class PersonCenterActivity extends BaseActivity implements View.OnClickLi
 
 
                                     } else {
-                                        Looper.prepare();
                                         showToast(responseInfo.getMessage());
-                                        Looper.loop();
                                     }
                                 }
 

@@ -44,6 +44,10 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
     ImageView use_apply_sign_iv;
     @BindView(R.id.edit_tv)
     TextView look_file;
+    @BindView(R.id.detail_fileType_tv)
+    TextView fileType;
+    @BindView(R.id.detail_fileNum_tv)
+    TextView fileNum;
     private Intent intent;
     String applyId;
     String fileName;
@@ -86,6 +90,8 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         String failTime = intent.getStringExtra("failTime");
         String cause = intent.getStringExtra("cause");
         String autoGraph = intent.getStringExtra("autoGraph");
+        String fType = intent.getStringExtra("fileType");  //文件类型
+        Integer fNum = intent.getIntExtra("fileNum",0);  //文件份数
         //读取签名
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
         if(bitmap == null){
@@ -119,6 +125,14 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         detailCountTv.setText(count+"");
         detailFailTimeTv.setText(failTime);
         detailCauseEt.setText(cause);
+        if (fType == null) {
+            fileType.setText("无");
+        }else {
+            fileType.setText(fType);
+        }
+        if (fNum != 0){
+            fileNum.setText(fNum+"");
+        }
     }
 
     @Override

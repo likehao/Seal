@@ -29,6 +29,25 @@ public class AddUseSealApplyBean implements Serializable {
     //上传盖章详情图片
     private String applyId;
 
+    private String fileType;
+    private Integer fileNumber;
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public Integer getFileNumber() {
+        return fileNumber;
+    }
+
+    public void setFileNumber(Integer fileNumber) {
+        this.fileNumber = fileNumber;
+    }
+
     public String getApplyId() {
         return applyId;
     }
@@ -95,6 +114,8 @@ public class AddUseSealApplyBean implements Serializable {
                 ", sealId='" + sealId + '\'' +
                 ", imgList=" + imgList +
                 ", applyId=" + applyId +
+                ", fileType=" + fileType +
+                ", fileNumber=" + fileNumber +
                 '}';
     }
 

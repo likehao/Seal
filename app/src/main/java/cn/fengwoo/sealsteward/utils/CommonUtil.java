@@ -19,7 +19,7 @@ public class CommonUtil {
 
     public static LoginData getUserData(Activity activity) {
         //获取SharedPreferences对象
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("userdata", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("newuserdata", MODE_PRIVATE);
         //获取Editor对象
         String userId = sharedPreferences.getString("id", "");
         String realName = sharedPreferences.getString("realName", "");
@@ -61,7 +61,7 @@ public class CommonUtil {
     @SuppressLint("ApplySharedPref")
     public static void setUserData(Activity activity, LoginData user) {
         //获取SharedPreferences对象
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("userdata", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("newuserdata", MODE_PRIVATE);
         //获取Editor对象
         SharedPreferences.Editor editor = sharedPreferences.edit();
 

@@ -33,7 +33,6 @@ import com.polidea.rxandroidble2.scan.ScanResult;
 import com.polidea.rxandroidble2.scan.ScanSettings;
 import com.white.easysp.EasySP;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,12 +44,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.SealAdapter;
-import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.database.SealItemBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.SealData;
-import cn.fengwoo.sealsteward.entity.SealInfoData;
-import cn.fengwoo.sealsteward.fragment.MineFragment;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -458,11 +454,12 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onSuccess(com.lzy.okgo.model.Response<String> response) {
 //                                Utils.log("success:" + response.body().toString());
-                        if (response.body().toString().contains("成功")) {
+                        String result = response.body().toString();
+                        if (result.contains("成功")) {
                             itemClick(position);
                         } else {
                             try {
-                                JSONObject jsonObject = new JSONObject(response.body().toString());
+                                JSONObject jsonObject = new JSONObject(result);
                                 showToast(jsonObject.getString("message"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -523,6 +520,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         connectBle(position);
     }
 
+    /**
+     * 连接设备
+     * @param position
+     */
     private void connectBle(int position) {
         // 连接ble设备
 

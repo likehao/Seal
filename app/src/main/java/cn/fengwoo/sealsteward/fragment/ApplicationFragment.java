@@ -483,11 +483,15 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.service_charge_rl:   //服务费充值
-                intent = new Intent(getActivity(), SelectSealActivity.class);
-                //   intent.putExtra("electronic", 1);
-                intent.putExtra("serviceRecharge", "pay");
-                intent.putExtra("服务费充值搜索印章", "服务费充值搜索印章");
-                startActivity(intent);
+                if (Utils.isHaveCompanyId(getActivity())) {
+                    intent = new Intent(getActivity(), SelectSealActivity.class);
+                    //   intent.putExtra("electronic", 1);
+                    intent.putExtra("serviceRecharge", "pay");
+                    intent.putExtra("服务费充值搜索印章", "服务费充值搜索印章");
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(getActivity(), "您暂无公司，请添加公司或者加入其他公司后重试", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.recharge_record_rl:
                 intent = new Intent(getActivity(), RechargeRecordActivity.class);

@@ -7,10 +7,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.white.easysp.EasySP;
 
 import java.io.File;
@@ -20,8 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import cn.fengwoo.sealsteward.entity.LoginData;
-import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.view.MyApp;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,13 +35,8 @@ import okhttp3.Response;
 public class HttpUtil {
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");//mdiatype 这个需要和服务端保持一致
     private static final String TAG = HttpUtil.class.getSimpleName();
-//    private static final String BASE_URL = HttpUrl.URL;//请求接口根地址
-    public static final int TYPE_GET = 0;//get请求
-    public static final int TYPE_POST_JSON = 1;//post请求参数为json
-    public static final int TYPE_PATCH_FORM = 2;//patch请求
     private static OkHttpClient okHttpClient;//okHttpClient 实例
     private Handler okHttpHandler;
-    private LoginData loginData = new LoginData();
     private static String addStr;
     private static String URL2;
     public static String BASE_URL;    //拼接地址
@@ -66,12 +57,12 @@ public class HttpUtil {
 
     /**
      * 发送请求
-     *
-     *  type 1 get
-     *  type 2 post
-     *  type 3 patch
-     *  type 4 delete
-     *  type 5 put
+     * <p>
+     * type 1 get
+     * type 2 post
+     * type 3 patch
+     * type 4 delete
+     * type 5 put
      *
      * @param url      地址
      * @param type     1,get 2,post 3,patch ,4delete,5put
@@ -84,7 +75,8 @@ public class HttpUtil {
         addStr = EasySP.init(MyApp.getAppContext()).getString("addStr").trim();  //接收正式服务器地址
 //        addStr = "http://192.168.1.117";   //调试环境
         URL2 = "/bhsealappservice/";
-        BASE_URL = String.format("%s%s",addStr , URL2);    //拼接地址
+//        BASE_URL = addStr;    //本地地址
+        BASE_URL = String.format("%s%s", addStr, URL2);    //拼接地址
         //初始化OkHttpClient
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)//设置超时时间
@@ -108,7 +100,7 @@ public class HttpUtil {
                     tempParams.append(String.format("%s=%s", key, URLEncoder.encode(params.get(key), "utf-8")));
                     pos++;
                 }
-                if (type == 3 ) {  //拼接patch数据
+                if (type == 3) {  //拼接patch数据
                     FormBody.Builder builder = new FormBody.Builder();
                     for (String key : params.keySet()) {
                         builder.add(key, params.get(key));
@@ -137,7 +129,7 @@ public class HttpUtil {
                     if (formBody != null) {
                         request = addHeaders(activity).url(requestUrl).patch(formBody).build();
                     }
-                }else if(type ==5){
+                } else if (type == 5) {
                     Gson gson = new Gson();
                     String json = gson.toJson(data);
                     body = RequestBody.create(MEDIA_TYPE_JSON, json);
@@ -156,139 +148,11 @@ public class HttpUtil {
             final Call call = client.newCall(request);
             call.enqueue(callback);
 
-            if (NetCheckUtil.checkNet(activity)){
-            }else {
-                Toast.makeText(activity,"网络不可用",Toast.LENGTH_SHORT).show();
-            }
+//            if (NetCheckUtil.checkNet(activity)){
+//            }else {
+//                Toast.makeText(activity,"网络不可用",Toast.LENGTH_SHORT).show();
+//            }
         }
-    }
-
-    /**
-     * okHttp异步请求统一入口
-     *
-     * @param actionUrl   接口地址
-     * @param requestType 请求类型
-     * @param paramsMap   请求参数
-     * @param callBack    请求返回数据回调
-     * @param <T>         数据泛型
-     **/
-    public <T> Call requestAsyn(Activity activity, String actionUrl, int requestType, HashMap<String, String> paramsMap, ReqCallBack<T> callBack) {
-        Call call = null;
-        switch (requestType) {
-            case TYPE_GET:
-                call = requestGet(activity, actionUrl, paramsMap, callBack);
-                break;
-            case TYPE_POST_JSON:
-                call = requestPost(activity, actionUrl, paramsMap, callBack);
-                break;
-            case TYPE_PATCH_FORM:
-                call = requestPatch(activity, actionUrl, paramsMap, callBack);
-                break;
-        }
-        return call;
-    }
-
-    /**
-     * okHttp get异步请求
-     *
-     * @param actionUrl 接口地址
-     * @param paramsMap 请求参数
-     * @param callBack  请求返回数据回调
-     * @param <T>       数据泛型
-     * @return
-     */
-    private <T> Call requestGet(Activity activity, String actionUrl, HashMap<String, String> paramsMap, final ReqCallBack<T> callBack) {
-        StringBuilder tempParams = new StringBuilder();
-        try {
-            int pos = 0;
-            for (String key : paramsMap.keySet()) {
-                if (pos > 0) {
-                    tempParams.append("&");
-                }
-                tempParams.append(String.format("%s=%s", key, URLEncoder.encode(paramsMap.get(key), "utf-8")));
-                pos++;
-            }
-            String requestUrl = String.format("%s/%s?%s", BASE_URL, actionUrl, tempParams.toString());
-            final Request request = addHeaders(activity).url(requestUrl).build();
-            final Call call = okHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    failedCallBack("访问失败", callBack);
-                    Log.e(TAG, e.toString());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String string = response.body().string();
-                       /* FromToJson fromToJson = new FromToJson();
-                        ResponseInfo<T> responseInfo  = fromToJson.fromToJson(string);*/
-                        Gson gson = new Gson();
-                        ResponseInfo<T> responseInfo = gson.fromJson(string, new TypeToken<ResponseInfo<T>>() {
-                        }.getType());
-                        Log.e(TAG, "response ----->" + string);
-                        successCallBack((T) responseInfo.getData(), callBack);
-                    } else {
-                        failedCallBack("服务器错误", callBack);
-                    }
-                }
-            });
-            return call;
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        }
-        return null;
-    }
-
-    /**
-     * okHttp post异步请求
-     *
-     * @param actionUrl 接口地址
-     * @param paramsMap 请求参数
-     * @param callBack  请求返回数据回调
-     * @param <T>       数据泛型
-     * @return
-     */
-    private <T> Call requestPost(Activity activity, String actionUrl, HashMap<String, String> paramsMap, final ReqCallBack<T> callBack) {
-        try {
-            StringBuilder tempParams = new StringBuilder();
-            int pos = 0;
-            for (String key : paramsMap.keySet()) {
-                if (pos > 0) {
-                    tempParams.append("&");
-                }
-                tempParams.append(String.format("%s=%s", key, URLEncoder.encode(paramsMap.get(key), "utf-8")));
-                pos++;
-            }
-            String params = tempParams.toString();
-            RequestBody body = RequestBody.create(MEDIA_TYPE_JSON, params);
-            String requestUrl = String.format("%s/%s", BASE_URL, actionUrl);
-            final Request request = addHeaders(activity).url(requestUrl).post(body).build();
-            final Call call = okHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    failedCallBack("访问失败", callBack);
-                    Log.e(TAG, e.toString());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String string = response.body().string();
-                        Log.e(TAG, "response ----->" + string);
-                        successCallBack((T) string, callBack);
-                    } else {
-                        failedCallBack("服务器错误", callBack);
-                    }
-                }
-            });
-            return call;
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        }
-        return null;
     }
 
     /**
@@ -349,50 +213,6 @@ public class HttpUtil {
     }
 
     /**
-     * okHttp patch异步请求
-     *
-     * @param actionUrl 接口地址
-     * @param paramsMap 请求参数
-     * @param callBack  请求返回数据回调
-     * @param <T>       数据泛型
-     * @return
-     */
-    private <T> Call requestPatch(Activity activity, String actionUrl, HashMap<String, String> paramsMap, final ReqCallBack<T> callBack) {
-        try {
-            FormBody.Builder builder = new FormBody.Builder();
-            for (String key : paramsMap.keySet()) {
-                builder.add(key, paramsMap.get(key));
-            }
-            RequestBody formBody = builder.build();
-            String requestUrl = String.format("%s/%s", BASE_URL, actionUrl);
-            final Request request = addHeaders(activity).url(requestUrl).patch(formBody).build();
-            final Call call = okHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    failedCallBack("访问失败", callBack);
-                    Log.e(TAG, e.toString());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String string = response.body().string();
-                        Log.e(TAG, "response ----->" + string);
-                        successCallBack((T) string, callBack);
-                    } else {
-                        failedCallBack("服务器错误", callBack);
-                    }
-                }
-            });
-            return call;
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        }
-        return null;
-    }
-
-    /**
      * 添加请求头
      *
      * @return
@@ -407,17 +227,6 @@ public class HttpUtil {
                 .addHeader("X-System-Version", Build.VERSION.RELEASE)   // 系统版本
                 .addHeader("X-App-Version", version)  //app版本
                 .addHeader("X-Phone-Type", Build.MODEL);  //手机型号
-        return builder;
-    }
-
-    public static Request.Builder addRequestHeaders() {
-        Request.Builder builder = new Request.Builder()
-                .addHeader("X-Token", RequestHeaderUtil.TOKEN)     //token
-                .addHeader("X-User-Id", RequestHeaderUtil.USER_ID)   //用户Id
-                .addHeader("X-Company-Id", RequestHeaderUtil.COMPANY_ID)   //公司Id
-                .addHeader("X-System-Version", RequestHeaderUtil.SYSTEM_VERSION)   // 系统版本
-                .addHeader("X-App-Version", RequestHeaderUtil.APP_VERSION)  //app版本
-                .addHeader("X-Phone-Type", RequestHeaderUtil.PHONE_TYPE);  //手机型号
         return builder;
     }
 

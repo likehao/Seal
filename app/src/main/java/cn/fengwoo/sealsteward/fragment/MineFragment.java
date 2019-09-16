@@ -238,7 +238,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getSmtData() {
-
         mine_smt.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -265,10 +264,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
                         // 本地存入权限
                         String targetPermissionJson = "";
-                        if (user.getAdmin()) {
-                            targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
-                        } else {
-                            targetPermissionJson = new Gson().toJson(user.getFuncIdList());
+                        if (user.getAdmin() != null) {
+                            if (user.getAdmin()) {
+                                targetPermissionJson = new Gson().toJson(user.getSystemFuncList());
+                            } else {
+                                targetPermissionJson = new Gson().toJson(user.getFuncIdList());
+                            }
                         }
 //                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
 //                    Utils.log(targetPermissionJson);
@@ -349,7 +350,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 if (Utils.isHaveCompanyId(getActivity())) {
                     intent = new Intent(getActivity(), CompanyQRCodeActivity.class);
                     startActivity(intent);
-                }else {
+                } else {
                     showToast("您暂无公司，请添加公司或者加入其他公司后重试");
                 }
                 break;
@@ -362,7 +363,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.my_power_rl:
-                if (Utils.isHaveCompanyId(getActivity())){
+                if (Utils.isHaveCompanyId(getActivity())) {
                     Utils.log("click permission");
                     Intent intent = new Intent();
                     intent.putExtra("userId", CommonUtil.getUserData(getActivity()).getId());
@@ -370,12 +371,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
                     intent.putExtra("permission", EasySP.init(getActivity()).getString("permission"));
                     startActivityForResult(intent, 12);
-                }else {
+                } else {
                     showToast("您暂无公司，请添加公司或者加入其他公司后重试");
                 }
                 break;
             case R.id.switch_company_ll:
-                intent = new Intent(getActivity(),MyCompanyActivity.class);
+                intent = new Intent(getActivity(), MyCompanyActivity.class);
                 startActivity(intent);
                 break;
             case R.id.my_card_rl:
@@ -404,6 +405,24 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Log.e("TAG", e + "退出错误错误错误!!!!!!!!!!!!!!!");
+                        intent = new Intent(getActivity(), LoginActivity.class);
+                        String ip = EasySP.init(getActivity()).getString("ip");
+                        String port_num = EasySP.init(getActivity()).getString("port_num");
+                        String agreement = EasySP.init(getActivity()).getString("agreement");  //传输协议
+                        intent.putExtra("ip", ip);
+                        intent.putExtra("port_num", port_num);
+                        intent.putExtra("agreement", agreement);
+                        startActivity(intent);
+                        commonDialog.dialog.dismiss();
+                        System.exit(0);
+                        if (null != getActivity()) {
+                            Objects.requireNonNull(getActivity()).finish();
+                        }
+
+                        //断开蓝牙
+                        ((MyApp) getActivity().getApplication()).removeAllDisposable();
+                        ((MyApp) getActivity().getApplication()).setConnectionObservable(null);
+                        Log.e("TAG", "退出成功.........");
                     }
 
                     @Override
@@ -418,9 +437,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                                 String ip = EasySP.init(getActivity()).getString("ip");
                                 String port_num = EasySP.init(getActivity()).getString("port_num");
                                 String agreement = EasySP.init(getActivity()).getString("agreement");  //传输协议
-                                intent.putExtra("ip",ip);
-                                intent.putExtra("port_num",port_num);
-                                intent.putExtra("agreement",agreement);
+                                intent.putExtra("ip", ip);
+                                intent.putExtra("port_num", port_num);
+                                intent.putExtra("agreement", agreement);
                                 startActivity(intent);
                                 commonDialog.dialog.dismiss();
                                 System.exit(0);

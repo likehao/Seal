@@ -215,7 +215,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
-                getMessageNum();
+                Log.e("TAG应用是否处于后台",Utils.isBackground(MainActivity.this)+"");
+                //如果应用处于后台就不定时调用
+                if (!Utils.isBackground(MainActivity.this)){
+                    getMessageNum();
+                }
             }
             super.handleMessage(msg);
         }
@@ -814,12 +818,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 ResponseInfo<List<CompanyInfo>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<CompanyInfo>>>() {
                 }.getType());
                 arrayList = new ArrayList<>();
-                for (int i = 0; i < responseInfo.getData().size(); i++) {
-                    arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
-                            responseInfo.getData().get(i).getId(), responseInfo.getData().get(i).getBelongUser(),
-                            responseInfo.getData().get(i).getTrade()));
-                }
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
+                    for (int i = 0; i < responseInfo.getData().size(); i++) {
+                        arrayList.add(new CompanyInfo(responseInfo.getData().get(i).getCompanyName(),
+                                responseInfo.getData().get(i).getId(), responseInfo.getData().get(i).getBelongUser(),
+                                responseInfo.getData().get(i).getTrade()));
+                    }
                     //更新存储公司名称,ID
                     LoginData data = CommonUtil.getUserData(MainActivity.this);
                     if (data != null) {
@@ -960,4 +964,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             EventBus.getDefault().unregister(this);
         }
     }
+
 }

@@ -43,7 +43,6 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
-                        android:text="@string/please_select_seal"
                         android:textColor="@color/black_6"
                         android:textSize="12sp" />
 
@@ -72,7 +71,6 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
                         android:gravity="end"
-                        android:hint="@string/please_input_time"
                         android:textColor="@color/black_6"
                         android:textSize="12sp" />
 
@@ -101,7 +99,60 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
-                        android:text="@string/please_fail_time"
+                        android:textColor="@color/black_6"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <View
+                    style="@style/line_left"
+                    android:layout_marginEnd="15dp" />
+
+                <RelativeLayout style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/file_type"
+                        android:textColor="@color/black_3"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/detail_fileType_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:textColor="@color/black_6"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <View
+                    style="@style/line_left"
+                    android:layout_marginEnd="15dp" />
+
+                <RelativeLayout style="@style/pressed_effect">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/file_number"
+                        android:textColor="@color/black_3"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/detail_fileNum_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/black_6"
                         android:textSize="12sp" />
 

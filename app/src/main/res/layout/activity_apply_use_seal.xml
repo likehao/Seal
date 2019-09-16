@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ApplyUseSealActivity"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".activity.ApplyUseSealActivity">
 
     <include layout="@layout/head" />
 
@@ -38,12 +38,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/iv1"
                     android:gravity="end"
-                    android:layout_toStartOf="@+id/iv5"
-                    android:hint="@string/please_select_seal" />
+                    android:hint="@string/please_select_seal"
+                    android:textSize="12sp" />
 
                 <ImageView
-                    android:id="@+id/iv5"
+                    android:id="@+id/iv1"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
@@ -59,9 +60,9 @@
 
             <RelativeLayout
                 android:id="@+id/apply_time_rl"
+                style="@style/pressed_effect"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                style="@style/pressed_effect">
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,10 +79,10 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/iv2"
                     android:background="@null"
-                    android:textSize="12sp"
-                    android:inputType="number"
                     android:gravity="end"
-                    android:hint="@string/please_input_time" />
+                    android:hint="@string/please_input_time"
+                    android:inputType="number"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/iv2"
@@ -118,7 +119,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/iv3"
-                    android:hint="@string/please_fail_time" />
+                    android:hint="@string/please_fail_time"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/iv3"
@@ -131,42 +133,6 @@
 
             </RelativeLayout>
 
-            <!--             <View
-                             android:layout_width="match_parent"
-                             android:layout_height="0.5dp"
-                             android:layout_marginStart="15dp"
-                             android:background="@color/line" />
-
-                         <RelativeLayout
-                             android:layout_width="match_parent"
-                             android:layout_height="40dp"
-                             android:background="@color/white">
-
-                             <TextView
-                                 android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:layout_centerVertical="true"
-                                 android:layout_marginStart="15dp"
-                                 android:text="@string/use_seal_file_name"
-                                 android:textColor="@color/black" />
-
-                             <TextView
-                                 android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:layout_centerVertical="true"
-                                 android:layout_toLeftOf="@+id/iv6"
-                                 android:text="@string/please_input_name" />
-
-                             <ImageView
-                                 android:id="@+id/iv6"
-                                 android:layout_width="25dp"
-                                 android:layout_height="25dp"
-                                 android:layout_alignParentEnd="true"
-                                 android:layout_centerVertical="true"
-                                 android:layout_marginEnd="5dp"
-                                 android:background="@drawable/right_arrow" />
-
-                         </RelativeLayout>-->
 
             <View
                 android:layout_width="match_parent"
@@ -175,8 +141,45 @@
                 android:background="@color/line" />
 
             <RelativeLayout
-                android:visibility="gone"
+                android:id="@+id/file_type_rl"
                 style="@style/pressed_effect">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="@string/file_type"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/file_type_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/iv5"
+                    android:hint="@string/please_select_file_type"
+                    android:gravity="end"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/iv5"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/right_arrow" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="15dp"
+                android:background="@color/line" />
+
+            <RelativeLayout style="@style/pressed_effect">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -186,12 +189,17 @@
                     android:text="@string/file_number"
                     android:textColor="@color/black" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/file_number_et"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/iv4"
-                    android:text="@string/please_input_file_number" />
+                    android:background="@null"
+                    android:gravity="end"
+                    android:hint="@string/please_input_file_number"
+                    android:inputType="number"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/iv4"
@@ -205,7 +213,6 @@
             </RelativeLayout>
 
             <View
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="15dp"
@@ -228,8 +235,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:background="@color/background">
 
                 <EditText
@@ -239,8 +246,8 @@
                     android:background="@null"
                     android:gravity="top|left"
                     android:hint="@string/please_input_reason"
-                    android:paddingTop="5dp"
                     android:paddingStart="5dp"
+                    android:paddingTop="5dp"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -262,8 +269,8 @@
                 android:id="@+id/apply_sign_rl"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:background="@color/background">
 
                 <ImageView
@@ -279,38 +286,9 @@
                     android:text="@string/please_sign" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:visibility="gone"
-                style="@style/pressed_effect">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="15dp"
-                    android:text="@string/Copy_to"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/iv7"
-                    android:text="@string/please_copy_people" />
-
-                <ImageView
-                    android:id="@+id/iv7"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/right_arrow" />
-
-            </RelativeLayout>
-
-            <View style="@style/line"
-                android:layout_marginTop="10dp"/>
+            <View
+                style="@style/line"
+                android:layout_marginTop="10dp" />
 
             <Button
                 android:id="@+id/nextBt"

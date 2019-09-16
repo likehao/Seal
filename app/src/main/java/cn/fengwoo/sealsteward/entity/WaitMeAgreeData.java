@@ -15,6 +15,25 @@ public class WaitMeAgreeData implements Serializable {
     private String pdf;
     private String autoGraph;
 
+    private String fileType;
+    private Integer fileNumber;
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public Integer getFileNumber() {
+        return fileNumber;
+    }
+
+    public void setFileNumber(Integer fileNumber) {
+        this.fileNumber = fileNumber;
+    }
+
     public String getAutoGraph() {
         return autoGraph;
     }
@@ -23,7 +42,8 @@ public class WaitMeAgreeData implements Serializable {
         this.autoGraph = autoGraph;
     }
 
-    public WaitMeAgreeData(String cause, String applyPerson, String department, String applyTime, String sealName, Integer applyCount, String failTime, String applyId, String pdf, String autoGraph) {
+    public WaitMeAgreeData(String cause, String applyPerson, String department, String applyTime, String sealName,
+                           Integer applyCount, String failTime, String applyId, String pdf, String autoGraph,String fileType,Integer fileNumber) {
         this.cause = cause;
         this.applyPerson = applyPerson;
         this.department = department;
@@ -34,6 +54,8 @@ public class WaitMeAgreeData implements Serializable {
         this.applyId = applyId;
         this.pdf = pdf;
         this.autoGraph = autoGraph;
+        this.fileType = fileType;
+        this.fileNumber = fileNumber;
     }
 
     public String getCause() {

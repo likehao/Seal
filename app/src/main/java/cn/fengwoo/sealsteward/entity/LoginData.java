@@ -260,17 +260,17 @@ public class LoginData implements Serializable {
 
     //登录
     public void login(Context context){
-        context.getSharedPreferences("userdata",Context.MODE_PRIVATE).edit()
+        context.getSharedPreferences("newuserdata",Context.MODE_PRIVATE).edit()
                 .putString("login",new Gson().toJson(this)).apply();
     }
 
     public static boolean isLogin(Context context){
-        return context.getSharedPreferences("userdata",Context.MODE_PRIVATE).contains("login");
+        return context.getSharedPreferences("newuserdata",Context.MODE_PRIVATE).contains("login");
     }
 
     //退出
     public static void logout(Context context){
-        context.getSharedPreferences("userdata",Context.MODE_PRIVATE).edit()
+        context.getSharedPreferences("newuserdata",Context.MODE_PRIVATE).edit()
                 .remove("login").apply();
     }
 

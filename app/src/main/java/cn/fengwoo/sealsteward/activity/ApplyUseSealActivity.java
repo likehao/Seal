@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -31,14 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.AddUseSealApplyBean;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.SealData;
 import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -51,7 +49,8 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.CustomDialog;
-import cn.fengwoo.sealsteward.view.MyApp;
+import cn.qqtheme.framework.picker.SinglePicker;
+import cn.qqtheme.framework.widget.WheelView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -86,13 +85,19 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     ImageView apply_sign_iv;
     @BindView(R.id.please_sign_tv)
     TextView please_sign_tv;
+    @BindView(R.id.file_number_et)
+    EditText file_num;
+    @BindView(R.id.file_type_rl)  //文件类型
+            RelativeLayout file_type_rl;
+    @BindView(R.id.file_type_tv)
+    TextView file_type;
     String type, sign;
     ResponseInfo<SealInfoData> responseInfo;
 
     private final static int SELECTSEALREQUESTCODE = 123;  //选择印章结果码
     private final static int UPLOADREQUESTCODE = 10;
     private String sealName, sealId;
-    private String name, failTime, cause;
+    private String name, failTime, cause,fileNum,fileType;
     private String applyCount;
     private Intent intent;
     private String applyId;
@@ -116,6 +121,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         seal_name_rl.setOnClickListener(this);
         failTime_rl.setOnClickListener(this);
         apply_sign_rl.setOnClickListener(this);
+        file_type_rl.setOnClickListener(this);
 
     }
 
@@ -173,6 +179,9 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
             case R.id.failTime_rl:
                 selectTime();
                 break;
+            case R.id.file_type_rl:
+                selectType();
+                break;
 
         }
     }
@@ -195,6 +204,8 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         AddUseSealApplyBean useSealApplyBean = new AddUseSealApplyBean();
         useSealApplyBean.setApplyCause(cause);
         useSealApplyBean.setApplyCount(mCount);
+        useSealApplyBean.setFileType(fileType);
+        useSealApplyBean.setFileNumber(Integer.valueOf(fileNum));
         String userId = CommonUtil.getUserData(this).getId();
         useSealApplyBean.setApplyUser(userId);
 //        if (imgList != null) {
@@ -245,6 +256,8 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("sealId", sealId);
                         intent.putExtra("category", 4);
                         intent.putExtra("ApplyUseSealActivity", "ApplyUseSealActivity");
+                        intent.putExtra("fileType",fileType);
+                        intent.putExtra("fileNum",fileNum);
 
                         if (!TextUtils.isEmpty(applyId)) {
                             intent.putExtra("applyId", applyId);
@@ -280,7 +293,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
 
 
     /**
-     *
+     * 显示过期充值
      */
     private void showExpiredTip() {
         cancelLoadingView();
@@ -323,12 +336,45 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
+    /**
+     * 选择文件类型
+     *
+     * @return
+     */
+    private void selectType() {
+        List<String> list = new ArrayList<>();
+        list.add("合同");
+        list.add("招标");
+        list.add("内部");
+        list.add("其他");
+        SinglePicker<String> picker = new SinglePicker<String>(this, list);
+        picker.setCanceledOnTouchOutside(true);
+        picker.setDividerRatio(WheelView.DividerConfig.FILL);
+        picker.setTextColor(0xFF000000);
+//        picker.setSubmitTextColor(0xFFFB2C3C);
+//        picker.setCancelTextColor(0xFFFB2C3C);
+        picker.setTextSize(15);
+        picker.setSelectedIndex(0);
+        picker.setLineSpaceMultiplier(3);   //设置每项的高度，范围为2-4
+        picker.setContentPadding(0, 10);
+        picker.setCycleDisable(true);
+        picker.setOnItemPickListener(new SinglePicker.OnItemPickListener<String>() {
+            @Override
+            public void onItemPicked(int index, String item) {
+                file_type.setText(item);
+            }
+
+        });
+        picker.show();
+    }
 
     private Boolean checkData() {
         name = sealName_TV.getText().toString().trim();
         applyCount = apply_time_et.getText().toString().trim();
         failTime = fail_time_tv.getText().toString().trim();
         cause = apply_cause_et.getText().toString().trim();
+        fileNum = file_num.getText().toString().trim();
+        fileType = file_type.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             showToast("请选择印章名称");
             return false;
@@ -347,6 +393,14 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         }
         if (apply_sign_iv.getDrawable() == null) {
             showToast("请签名");
+            return false;
+        }
+        if (fileNum.startsWith("0") || TextUtils.isEmpty(fileNum)){
+            showToast("文件份数不能为0");
+            return false;
+        }
+        if (TextUtils.isEmpty(fileType)){
+            showToast("请选择文件类型");
             return false;
         }
         return true;
@@ -442,6 +496,11 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * 获取印章信息
+     *
+     * @param sealId
+     */
     private void getSealInfo(String sealId) {
         HashMap<String, String> hashMap = new HashMap<>();
         Intent intent = getIntent();  //获取选中的公司ID

@@ -60,6 +60,24 @@ public class GetApplyListBean implements Serializable {
     private String stampRecordPdf;
     private String companyId;
 
+    private String fileType;
+    private Integer fileNumber;
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public Integer getFileNumber() {
+        return fileNumber;
+    }
+
+    public void setFileNumber(Integer fileNumber) {
+        this.fileNumber = fileNumber;
+    }
+
     public String getCompanyId() {
         return companyId;
     }
@@ -270,6 +288,8 @@ public class GetApplyListBean implements Serializable {
                 ", stampRecordImgList=" + stampRecordImgList +
                 ", stampRecordPdf='" + stampRecordPdf + '\'' +
                 ", companyId='" + companyId + '\'' +
+                ", fileType='" + fileType + '\'' +
+                ", fileNumber='" + fileNumber + '\'' +
                 '}';
     }
 

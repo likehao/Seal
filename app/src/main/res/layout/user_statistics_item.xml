@@ -17,7 +17,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="15dp"
             android:gravity="center"
-            android:src="@drawable/ic_launcher"/>
+            android:src="@drawable/default_head_portrait"/>
 
         <TextView
             android:id="@+id/user_statistics_name_tv"

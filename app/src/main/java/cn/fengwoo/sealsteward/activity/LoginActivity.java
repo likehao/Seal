@@ -485,11 +485,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (checkLogin(phone, password)) {
             return;
         } else {
-            if (saveIp == null) {
+            if (saveIp == null || saveIp.equals("")) {
                 //服务器地址为http://，显示dialog
                 showDia("登录");
             } else {
-                if (savePOrt != null) {
+                if (savePOrt != null && !savePOrt.equals("")) {
                     addressUrl = String.format("%s%s%s%s", saveAgreement, "://", saveIp, ":" + savePOrt);
                 } else {
                     addressUrl = String.format("%s%s%s", saveAgreement, "://", saveIp);
@@ -635,9 +635,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         } else {
                             targetPermissionJson = new Gson().toJson(user.getFuncIdList());
                         }
-                        EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
-                        EasySP.init(LoginActivity.this).putBoolean("isAdmin", loginResponseInfo.getData().getAdmin());
                     }
+                    EasySP.init(LoginActivity.this).putString("permission", targetPermissionJson);
+                    EasySP.init(LoginActivity.this).putBoolean("isAdmin", loginResponseInfo.getData().getAdmin());
+
 //                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
 //                    Utils.log(targetPermissionJson);
 
