@@ -25,10 +25,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/corners_bg"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp">
+                    android:background="@drawable/corners_bg"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -235,7 +235,6 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-
                         <RelativeLayout
                             android:id="@+id/seal_dfu"
                             android:layout_width="wrap_content"
@@ -270,11 +269,34 @@
 
                                 <TextView
                                     style="@style/application_text"
-                                    android:text="固件升级" />
+                                    android:text="@string/firmware_update" />
 
                             </LinearLayout>
                         </RelativeLayout>
 
+                        <!--!!!!!!!!!!!!!!!!!!!!!!!指纹!!!!!!!!!!!!!!!!!!!!!!-->
+                        <RelativeLayout
+                            android:id="@+id/record_finger_rl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    style="@style/imageView"
+                                    android:background="@drawable/application_fingerprint_user" />
+
+                                <TextView
+                                    style="@style/application_text"
+                                    android:text="@string/record_fingerprints" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
 
                     </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
 
@@ -284,10 +306,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/corners_bg"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/corners_bg"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -468,10 +490,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/corners_bg"
-                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
+                    android:background="@drawable/corners_bg"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -610,7 +632,7 @@
 
                                 <TextView
                                     style="@style/application_text"
-                                    android:text="更换印章" />
+                                    android:text="@string/change_seal" />
 
                             </LinearLayout>
                         </RelativeLayout>
@@ -624,17 +646,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/corners_bg"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/corners_bg"
                     android:orientation="vertical">
 
                     <LinearLayout

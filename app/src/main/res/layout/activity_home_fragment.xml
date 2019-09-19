@@ -44,7 +44,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/white_bg_long"
+                    android:background="@drawable/corners_bg"
                     android:elevation="3dp">
 
                     <com.youth.banner.Banner

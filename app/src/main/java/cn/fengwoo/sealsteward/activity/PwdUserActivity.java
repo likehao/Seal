@@ -110,7 +110,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-
     @OnClick({R.id.add_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -145,7 +144,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                 Gson gson = new Gson();
                 ResponseInfo<List<PwdUserListItem>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<PwdUserListItem>>>() {
                 }.getType());
-
 
                 if (responseInfo.getCode() == 0) {
                     if (responseInfo.getData() != null) {
@@ -285,8 +283,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         }
                         deleteItem = pwdUserListItem;
                         // 发送命令到ble设备，delete数据
-
-
                         byte[] pwdCodeBytes = DataTrans.intToBytesLittle(pwdUserListItem.getUserNumber());
                         ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                                 .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.DELETEPRESSPWD, pwdCodeBytes).getBytes()))

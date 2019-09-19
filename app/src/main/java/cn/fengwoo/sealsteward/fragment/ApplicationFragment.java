@@ -43,13 +43,12 @@ import cn.fengwoo.sealsteward.activity.AddUserActivity;
 import cn.fengwoo.sealsteward.activity.ApprovalRecordActivity;
 import cn.fengwoo.sealsteward.activity.ChangeSealActivity;
 import cn.fengwoo.sealsteward.activity.DfuActivity;
-import cn.fengwoo.sealsteward.activity.EditOrganizationActivity;
 import cn.fengwoo.sealsteward.activity.MyApplyActivity;
 import cn.fengwoo.sealsteward.activity.NearbyDeviceActivity;
 import cn.fengwoo.sealsteward.activity.OrganizationalStructureActivity;
 import cn.fengwoo.sealsteward.activity.PwdUserActivity;
 import cn.fengwoo.sealsteward.activity.RechargeRecordActivity;
-import cn.fengwoo.sealsteward.activity.ScanSearchAddSealActivity;
+import cn.fengwoo.sealsteward.activity.FingerprintUserActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealActivity;
 import cn.fengwoo.sealsteward.activity.SelectSealToFlowActivity;
 import cn.fengwoo.sealsteward.activity.StartPasswordActivity;
@@ -145,6 +144,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     ImageView iv_red_dot;
     @BindView(R.id.org_ll)
     LinearLayout org_ll; //资源管理模块
+    @BindView(R.id.record_finger_rl)
+    RelativeLayout record_finger;   //指纹
     private SinglePicker<String> picker;
 
     @Nullable
@@ -177,7 +178,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     }
 
     private void setListener() {
-        if (!Utils.isHaveCompanyId(getActivity())){
+        if (!Utils.isHaveCompanyId(getActivity())) {
             org_ll.setVisibility(View.GONE);
         }
         organizational_structure_rl.setOnClickListener(this);
@@ -199,10 +200,33 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         rl_pwd_user.setOnClickListener(this);
         change_seal.setOnClickListener(this);
         seal_dfu.setOnClickListener(this);
+        record_finger.setOnClickListener(this);
 
     }
 
     private void hideSomeIcon() {
+
+        // seal 管理,判断连接的是二期还是三期来显示功能控件
+        if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+            press_time_rl.setVisibility(View.GONE);
+            wait_time_rl.setVisibility(View.GONE);
+            rl_voice.setVisibility(View.GONE);
+//            rl_pwd_user.setVisibility(View.GONE);
+            seal_dfu.setVisibility(View.GONE);
+
+            start_psd_rl.setVisibility(View.VISIBLE);
+            key_psd_rl.setVisibility(View.VISIBLE);
+        } else {
+            start_psd_rl.setVisibility(View.GONE);
+            key_psd_rl.setVisibility(View.GONE);
+
+            press_time_rl.setVisibility(View.VISIBLE);
+            wait_time_rl.setVisibility(View.VISIBLE);
+            rl_voice.setVisibility(View.VISIBLE);
+//            rl_pwd_user.setVisibility(View.VISIBLE);
+            seal_dfu.setVisibility(View.VISIBLE);
+        }
+
         if (!Utils.hasThePermission(getActivity(), Constants.permission6)) {
             start_psd_rl.setVisibility(View.GONE);
         } else {
@@ -218,7 +242,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         } else {
             reset_device_rl.setVisibility(View.VISIBLE);
         }
-        if (!Utils.hasThePermission(getActivity(), Constants.permission4)) {
+        if (!Utils.hasThePermission(getActivity(), Constants.permission4)) { //设置长按时间
             press_time_rl.setVisibility(View.GONE);
         } else {
             press_time_rl.setVisibility(View.VISIBLE);
@@ -279,48 +303,28 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         if (Utils.isAllInvisible(qmuidemo_floatlayout1)) {
             // 所有子view不可见，显示tip
             ll_tip1.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             ll_tip1.setVisibility(View.GONE);
         }
         if (Utils.isAllInvisible(qmuidemo_floatlayout2)) {
             // 所有子view不可见，显示tip
             ll_tip2.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             ll_tip2.setVisibility(View.GONE);
         }
         if (Utils.isAllInvisible(qmuidemo_floatlayout3)) {
             // 所有子view不可见，显示tip
             ll_tip3.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             ll_tip3.setVisibility(View.GONE);
         }
         if (Utils.isAllInvisible(qmuidemo_floatlayout4)) {
             // 所有子view不可见，显示tip
             ll_tip4.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             ll_tip4.setVisibility(View.GONE);
         }
 
-        // seal 管理
-        if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
-            press_time_rl.setVisibility(View.GONE);
-            wait_time_rl.setVisibility(View.GONE);
-            rl_voice.setVisibility(View.GONE);
-            rl_pwd_user.setVisibility(View.GONE);
-            seal_dfu.setVisibility(View.GONE);
-
-            start_psd_rl.setVisibility(View.VISIBLE);
-            key_psd_rl.setVisibility(View.VISIBLE);
-        } else {
-            start_psd_rl.setVisibility(View.GONE);
-            key_psd_rl.setVisibility(View.GONE);
-
-            press_time_rl.setVisibility(View.VISIBLE);
-            wait_time_rl.setVisibility(View.VISIBLE);
-            rl_voice.setVisibility(View.VISIBLE);
-            rl_pwd_user.setVisibility(View.VISIBLE);
-            seal_dfu.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -399,14 +403,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 if (!Utils.isConnect(getActivity())) {
                     return;
                 }
-
-
                 if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
                     Utils.showToast(getActivity(), "二期印章无此功能");
                     return;
                 }
-
-
 //                setPopSeekBar();
                 readPressTime();
                 break;
@@ -489,7 +489,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     intent.putExtra("serviceRecharge", "pay");
                     intent.putExtra("服务费充值搜索印章", "服务费充值搜索印章");
                     startActivity(intent);
-                }else {
+                } else {
                     Toast.makeText(getActivity(), "您暂无公司，请添加公司或者加入其他公司后重试", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -545,6 +545,22 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                 intent = new Intent(getActivity(), DfuActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.record_finger_rl:
+                if (!Utils.isConnect(getActivity())) {
+                    EventBus.getDefault().post(new MessageEvent("connect_seal", "connect_seal"));
+                    return;
+                }
+                if (!Utils.isConnect(getActivity())) {
+                    return;
+                }
+                if (EasySP.init(getActivity()).getString("dataProtocolVersion").equals("2")) {
+                    Utils.showToast(getActivity(), "二期印章无此功能");
+                    return;
+                }
+                intent = new Intent(getActivity(), FingerprintUserActivity.class);
+                startActivity(intent);
+                break;
+
         }
     }
 
@@ -841,7 +857,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("userId", CommonUtil.getUserData(getActivity()).getId());
             hashMap.put("sealId", EasySP.init(getActivity()).getString("currentSealId"));
-            hashMap.put("userType", "1");
+//            hashMap.put("userType", "1");
             HttpUtil.sendDataAsync(getActivity(), HttpUrl.RESET_SEAL, 4, hashMap, null, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -868,9 +884,9 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        if (!Utils.isHaveCompanyId(getActivity())){
+        if (!Utils.isHaveCompanyId(getActivity())) {
             org_ll.setVisibility(View.GONE);
-        }else {
+        } else {
             org_ll.setVisibility(View.VISIBLE);
         }
     }

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.youth.banner.loader.ImageLoader;
 
 /**
@@ -13,7 +15,6 @@ import com.youth.banner.loader.ImageLoader;
 public class GlideImageLoader extends ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
-        //图片加载器不限制，使用Object接收和返回，强转成传输的类型
         if(path.getClass().equals(String.class)){
             Picasso.with(context).load(path.toString()).into(imageView);
         }

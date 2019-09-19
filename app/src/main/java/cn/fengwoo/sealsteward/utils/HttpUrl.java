@@ -458,4 +458,12 @@ public class HttpUrl{
      * 注销账户
      */
     public static final String UNSUBSCRIBE = "user/closeaccount";
+    /**
+     * 服务配置
+     */
+    public static final String SERVICECONFIG = "config/serverconfig";
+    /**
+     * 即将过期印章列表
+     */
+    public static final String NEAROVERTIMESEALLIST = "seal/nearlyexpiredseallist";
 }

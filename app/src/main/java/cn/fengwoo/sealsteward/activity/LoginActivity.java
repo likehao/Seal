@@ -54,6 +54,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.adapter.OptionsAdapter;
+import cn.fengwoo.sealsteward.bean.ServiceConfigData;
 import cn.fengwoo.sealsteward.database.AccountDao;
 import cn.fengwoo.sealsteward.entity.HistoryInfo;
 import cn.fengwoo.sealsteward.entity.LoginData;
@@ -117,7 +118,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private LoadingView loadingView;
     private LoginData user;
     private BiometricPromptManager mManager;
-    private String addStr, addressUrl, ip, agreement, port_num;
+    private String addStr, addressUrl, ip, agreement, port_num,serviceConfig;
     private RealmNameDialog realmNameDialog;
     private String saveAddStr, saveIp, savePOrt, saveAgreement;
 
@@ -343,7 +344,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 showPickView();
                 break;
             case R.id.realmName_sure_tv:     //服务器地址确定按钮
-                getServiceAddress();
+                getServiceConfig();
+//                getServiceAddress();
                 break;
         }
     }
@@ -450,16 +452,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 确定之后获得完整的服务器地址
      */
     private void getServiceAddress() {
-        agreement = realmNameDialog.agreement.getText().toString().trim();
+        agreement = realmNameDialog.agreement.getText().toString().trim();  //http/htpps
         saveAgreement = agreement;
 
-        ip = realmNameDialog.service_ip.getText().toString().trim();
+//        ip = realmNameDialog.service_ip.getText().toString().trim();     // ip
         saveIp = ip;
         if (ip.length() == 0) {
             saveIp = null;
         }
 
-        port_num = realmNameDialog.port_number.getText().toString().trim();
+//        port_num = realmNameDialog.port_number.getText().toString().trim();  //端口号
         savePOrt = port_num;
         if (port_num.length() == 0) {
             savePOrt = null;
@@ -472,8 +474,47 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             addressUrl = String.format("%s%s%s", agreement, "://", ip);
         }
         Log.e("TAG", "服务器地址addressUrl:" + addressUrl);
+
         realmNameDialog.dialog.dismiss();
 
+//        getServiceConfig();
+    }
+
+    /**
+     * 服务配置请求
+     */
+    private void getServiceConfig(){
+        ip = realmNameDialog.service_ip.getText().toString().trim();     // ip
+        port_num = realmNameDialog.port_number.getText().toString().trim();  //端口号
+        //拼接服务器地址,判断是否有端口
+        if (port_num.length() != 0) {
+            serviceConfig = String.format("%s%s", ip, ":" + port_num);
+        } else {
+            serviceConfig = ip;
+        }
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("serverAddress", serviceConfig);
+        HttpUtil.sendDataAsync(this, HttpUrl.SERVICECONFIG, 1, hashMap, null, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG",e+"服务配置错误错误错误!!!!!!!!!!!!!");
+                realmNameDialog.dialog.dismiss();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<ServiceConfigData> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<ServiceConfigData>>(){}
+                .getType());
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
+                    String appKey = responseInfo.getData().getAppKey();
+                    EasySP.init(LoginActivity.this).putString("appkey",appKey);
+                    getServiceAddress();
+                }
+
+            }
+        });
     }
 
     /**

@@ -280,17 +280,17 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         HttpUtil.sendDataAsync(getActivity(), HttpUrl.BANNER, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
                 List<Integer> imgList = new ArrayList<Integer>();
                 imgList.add(R.drawable.default_banner);
                 loadBanner(imgList);
-                Looper.prepare();
-                Toast.makeText(getActivity(), "" + e, Toast.LENGTH_SHORT).show();
-                Looper.loop();
+                Log.e("ATG", "获取广告图失败!!!!!!!!!!!!!!");
             }
 
             @SuppressLint("SdCardPath")
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
                 String result = response.body().string();
                 Gson gson = new Gson();
                 LogUtil.d("333" + result);
@@ -299,7 +299,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                         .getType());
                 if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                     Log.e("ATG", "获取广告图成功!!!!!!!!!!!!!!");
-                    loadingView.cancel();
                     imageViews.clear();
                     int count = responseInfo.getData().size();   //banner图片总数
                     //设置图片集合
@@ -327,12 +326,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     List<Integer> imgList = new ArrayList<Integer>();
                     imgList.add(R.drawable.default_banner);
                     loadBanner(imgList);
-                    loadingView.cancel();
                     Log.e("ATG", "获取广告图失败!!!!!!!!!!!!!!");
-                    Looper.prepare();
-                    Toast.makeText(getActivity(), responseInfo.getMessage(), Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-
                 }
 
             }

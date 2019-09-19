@@ -289,6 +289,8 @@
     <string name="over_time">结束时间</string>
     <string name="select">查询</string>
     <string name="voice_switch">语音开关</string>
+    <string name="firmware_update">固件升级</string>
+    <string name="record_fingerprints">录制指纹</string>
     <string name="ends_verification_code">发送验证码</string>
     <string name="seal_add">—— 盖章统计 ——</string>
     <string name="connected_seal">—— 已连印章 ——</string>
@@ -344,5 +346,6 @@
     <string name="search_content">搜索事由/流水号</string>
     <string name="search_content2">搜索流水号</string>
     <string name="look_record">查看记录</string>
+    <string name="change_seal">更换印章</string>
 
 </resources>

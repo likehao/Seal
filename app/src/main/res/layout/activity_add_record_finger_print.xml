@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".activity.AddRecordFingerPrintActivity"
     android:background="@color/background"
-    android:orientation="vertical"
-    tools:context=".activity.AboutActivity">
+    android:orientation="vertical">
 
-    <include layout="@layout/head" />
+    <include layout="@layout/head"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_marginTop="10dp">
 
             <RelativeLayout
-                android:id="@+id/rl_select_ppl"
+                android:id="@+id/finger_user_rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -36,7 +36,7 @@
                     android:textSize="13sp" />
 
                 <TextView
-                    android:id="@+id/tv_user"
+                    android:id="@+id/finger_user_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -77,7 +77,7 @@
                     android:textSize="13sp" />
 
                 <EditText
-                    android:id="@+id/et_use_times"
+                    android:id="@+id/finger_use_time_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="250dp"
@@ -97,13 +97,13 @@
             android:layout_marginTop="10dp" />
 
         <LinearLayout
+            android:id="@+id/finger_failTime_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:paddingBottom="10dp">
 
             <RelativeLayout
-                android:id="@+id/expired_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -117,7 +117,7 @@
                     android:textSize="13sp" />
 
                 <TextView
-                    android:id="@+id/tv_expired_time"
+                    android:id="@+id/finger_failTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -133,14 +133,14 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_submit"
+        android:id="@+id/finger_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
         android:background="@drawable/click_bt_press"
         android:paddingBottom="11dp"
-        android:text="提交"
+        android:text="录入指纹"
         android:textColor="@color/white" />
 
 </LinearLayout>

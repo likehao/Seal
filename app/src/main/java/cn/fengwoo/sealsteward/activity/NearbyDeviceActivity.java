@@ -447,8 +447,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String appkey = EasySP.init(this).getString("appkey");
         OkGo.<String>get(HttpUrl.URL + HttpUrl.DEVICE_ACCESS)
-                .params("appKey", Constants.key)
+                .params("appKey", appkey.length() == 0 ? Constants.key : appkey)
                 .params("mac", scanResultsList.get(position).getBleDevice().getMacAddress())
                 .execute(new StringCallback() {
                     @Override
@@ -555,6 +556,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                             Utils.log("connected");
                             // sava dataProtocolVersion
                             // 根据 ble 名字来判断 dataProtocolVersion
+
                             if (scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")) {
                                 EasySP.init(this).putString("dataProtocolVersion", "3");
                             } else {

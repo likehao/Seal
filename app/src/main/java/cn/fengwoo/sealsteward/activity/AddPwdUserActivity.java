@@ -79,10 +79,6 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
     String format; //选择的时间
     private byte[] startAllByte;
     private byte[] updateCountByte;
-    private String user_name = "";
-    private String stamp_count = "";
-    private String expired_time = "";
-    private String user_number = "";
 
     ResponseInfo<AddPwdUserUploadReturn> responseInfo;
     PwdUserListItem pwdUserListItem;
@@ -376,7 +372,6 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
 
         }
 
-
         Utils.log("sendDataAsync");
 
         HttpUtil.sendDataAsync(AddPwdUserActivity.this, HttpUrl.UPDATE_PWD_USER, 2, null, addPwdUserUploadReturn, new Callback() {
@@ -394,10 +389,6 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                 String result = response.body().string();
                 Utils.log("更新离线用户信息return:" + result);
                 loadingView.cancel();
-//                Looper.prepare();
-//
-//                Looper.loop();
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -406,30 +397,6 @@ public class AddPwdUserActivity extends BaseActivity implements View.OnClickList
                         finish();
                     }
                 });
-
-
-//                Gson gson = new Gson();
-//                ResponseInfo<AddPwdUserUploadReturn> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddPwdUserUploadReturn>>() {
-//                }.getType());
-//                if (responseInfo.getCode() == 0) {
-//                    if (responseInfo.getData() != null) {
-//                        loadingView.cancel();
-//
-//                        Looper.prepare();
-//                        showToast("更新成功");
-//                        Looper.loop();
-//                    } else {
-//                        loadingView.cancel();
-//                        Looper.prepare();
-//                        showToast(responseInfo.getMessage());
-//                        Looper.loop();
-//                    }
-//                } else {
-//                    loadingView.cancel();
-//                    Looper.prepare();
-//                    showToast(responseInfo.getMessage());
-//                    Looper.loop();
-//                }
 
             }
         });
