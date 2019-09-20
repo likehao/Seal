@@ -24,7 +24,7 @@ import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.PwdUserListItem;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
-import cn.fengwoo.sealsteward.utils.Constants;
+import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -48,7 +48,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.finger_lv)
     ListView listView;
     private CommonAdapter commonAdapter;
-    private ArrayList<String> list;
+    private ArrayList<PwdUserListItem> list;
 
 
     @Override
@@ -63,9 +63,6 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
 
     private void initView() {
         list = new ArrayList<>();
-        list.add("aa");
-        list.add("aa");
-        list.add("aa");
         title_tv.setText("指纹用户");
         set_back_ll.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
@@ -112,22 +109,43 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                 Gson gson = new Gson();
                 ResponseInfo<List<PwdUserListItem>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<PwdUserListItem>>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
-
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            no_record.setVisibility(View.GONE);
+                            setFingerData();
+                        }
+                    });
                 }
             }
         });
 
-        commonAdapter = new CommonAdapter<String>(this, list, R.layout.finger_item) {
-            @Override
-            public void convert(ViewHolder viewHolder, String s, int position) {
-                viewHolder.setText(R.id.finger_time_tv, 5 + "");
-                viewHolder.setText(R.id.finger_failTime_tv, 5 + "");
-                viewHolder.setText(R.id.finger_people_tv, 5 + "");
-            }
-        };
-        listView.setAdapter(commonAdapter);
     }
 
-
+    /**
+     * 设置
+     */
+    private void setFingerData() {
+        commonAdapter = new CommonAdapter<PwdUserListItem>(FingerprintUserActivity.this, list, R.layout.finger_item) {
+            @Override
+            public void convert(ViewHolder viewHolder, PwdUserListItem pwdUserListItem, int position) {
+                viewHolder.setText(R.id.finger_time_tv, pwdUserListItem.getStampCount()+"");
+                viewHolder.setText(R.id.finger_failTime_tv, DateUtils.getDateString(pwdUserListItem.getExpireTime()));
+                viewHolder.setText(R.id.finger_people_tv,  pwdUserListItem.getUserName());
+                //编辑
+                viewHolder.setOnClickListener(R.id.finger_edit_tv, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setClass(FingerprintUserActivity.this, AddRecordFingerPrintActivity.class);
+                        intent.putExtra("pwdUserListItem", pwdUserListItem);
+                        startActivityForResult(intent, 123);
+                    }
+                });
+            }
+        };
+        commonAdapter.notifyDataSetChanged();
+        listView.setAdapter(commonAdapter);
+    }
 }

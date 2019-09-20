@@ -1119,6 +1119,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                         .subscribe(
                                 bytes -> {
                                     // Given characteristic has been changes, here is the value.
+                                    String result = Utils.bytesToHexString(bytes); //接收的结果
                                     Utils.log("notificationObservable:" + Utils.bytesToHexString(bytes));
 
                                     if (Utils.bytesToHexString(bytes).startsWith("FF 05 A0 00")) {

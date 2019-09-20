@@ -37,7 +37,9 @@
             android:text="返回"
             android:textColor="@color/white"
             android:textSize="15sp"
+            android:visibility="gone"
             android:paddingBottom="11dp"/>
+
     </LinearLayout>
 
 </LinearLayout>

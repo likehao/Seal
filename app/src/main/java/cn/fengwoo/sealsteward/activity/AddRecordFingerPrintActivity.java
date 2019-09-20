@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.white.easysp.EasySP;
 
 import java.io.IOException;
@@ -27,10 +29,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.AddPwdUserUpload;
+import cn.fengwoo.sealsteward.entity.AddPwdUserUploadReturn;
+import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
+import cn.fengwoo.sealsteward.utils.DataProtocol;
 import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.MyApp;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -49,17 +60,18 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
     @BindView(R.id.finger_user_tv)
     TextView finger_user;
     @BindView(R.id.finger_use_time_et)
-    EditText useTime;
+    EditText useTime;   //使用次数
     @BindView(R.id.finger_bt)
     Button finger_bt;
     @BindView(R.id.finger_failTime_ll)
-    LinearLayout finger_failTime_ll;
+    LinearLayout finger_failTime_ll;   //失效时间
     @BindView(R.id.finger_failTime)
     TextView failTime;
     private Intent intent;
     private String format; //选择的时间
     private String userId, userName;
     private Boolean timeB = true;
+    private byte[] startFingerByte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,11 +162,41 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
         HttpUtil.sendDataAsync(AddRecordFingerPrintActivity.this, HttpUrl.ADD_PWD_USER, 2, null, addPwdUserUpload, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                ResponseInfo<AddPwdUserUploadReturn> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddPwdUserUploadReturn>>() {
+                }.getType());
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
+                    String count = useTime.getText().toString().trim();  //使用次数
+                    try {
+                        startFingerByte = CommonUtil.recordFingerprint(Integer.parseInt(count), DateUtils.dateToStamp(format)); //                                                                                                                                                                                                                                                                                                                                                                                                               次数和失效时间
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    byte[] bytes = new DataProtocol(CommonUtil.RECORDING, startFingerByte).getBytes();
+                    String str = Utils.bytesToHexString(bytes); //发送的指令
+
+                    ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
+                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.RECORDING, startFingerByte).getBytes()))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    characteristicValue -> {
+                                        Utils.log("指纹fingerprint");
+                                        // Characteristic value confirmed.
+                                    },
+                                    throwable -> {
+                                        Utils.log("指纹error");
+                                        // Handle an error here.
+                                    }
+                            ));
+                }
                 intent = new Intent(AddRecordFingerPrintActivity.this, RecordFingerprintActivity.class);
                 startActivity(intent);
             }

@@ -361,4 +361,24 @@ public class CommonUtil {
         return deletePrePwd;
     }
 
+    /**
+     * 录入指纹
+     */
+    public static byte[] recordFingerprint(int count,String failTime){
+        byte[] time = DataTrans.shortToByteArray((short) count,false);  //可盖章次数
+
+        Date date = new Date(Long.valueOf(failTime));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR)% 2000;
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DATE);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        int sec = calendar.get(Calendar.SECOND);
+
+        byte[] startFingerByte = new byte[]{time[0], time[1], (byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
+
+        return startFingerByte;
+    }
 }
