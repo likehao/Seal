@@ -29,6 +29,14 @@
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:id="@+id/gift_iv"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:background="@drawable/gift"/>
         </RelativeLayout>
 
         <LinearLayout

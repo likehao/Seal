@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/seal_time_rl"
+        style="@style/pressed_effect">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/seal_ci"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/default_seal_print" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="55dp"
+            android:layout_marginEnd="50dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/wait_recharge_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="章"
+                android:textSize="14sp"
+                android:textColor="@color/black_3" />
+
+            <TextView
+                android:id="@+id/seal_failTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/dark_gray"
+                android:text="过期时间"/>
+        </LinearLayout>
+
+        <ImageView
+            style="@style/right_arrow"
+            android:layout_marginEnd="15dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

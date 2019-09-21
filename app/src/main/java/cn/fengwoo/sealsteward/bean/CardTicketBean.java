@@ -29,12 +29,14 @@ public class CardTicketBean implements Serializable{
     private String id;
     private Boolean receiveStatus;
     private Integer useMonths;
+    private Integer rechargeType;
 
-    public CardTicketBean(Integer amountOfMoney, String content, Boolean receiveStatus,String id) {
+    public CardTicketBean(Integer amountOfMoney, String content, Boolean receiveStatus,String id,Integer rechargeType) {
         this.amountOfMoney = amountOfMoney;
         this.content = content;
         this.receiveStatus = receiveStatus;
         this.id = id;
+        this.rechargeType = rechargeType;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class CardTicketBean implements Serializable{
                 ", id='" + id + '\'' +
                 ", receiveStatus=" + receiveStatus +
                 ", useMonths=" + useMonths +
+                ", rechargeType=" + rechargeType +
                 '}';
     }
 
@@ -95,5 +98,13 @@ public class CardTicketBean implements Serializable{
 
     public void setUseMonths(Integer useMonths) {
         this.useMonths = useMonths;
+    }
+
+    public Integer getRechargeType() {
+        return rechargeType;
+    }
+
+    public void setRechargeType(Integer rechargeType) {
+        this.rechargeType = rechargeType;
     }
 }

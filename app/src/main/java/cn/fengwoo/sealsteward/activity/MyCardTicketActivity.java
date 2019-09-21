@@ -87,7 +87,7 @@ public class MyCardTicketActivity extends BaseActivity implements View.OnClickLi
                         if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                             for (CardTicketBean data : responseInfo.getData()) {
                                 list.add(new CardTicketBean(data.getAmountOfMoney(), data.getContent(),
-                                        data.getReceiveStatus(),data.getId()));
+                                        data.getReceiveStatus(),data.getId(),data.getRechargeType()));
                             }
                             no_record.setVisibility(View.GONE);
                             setData();
@@ -107,8 +107,15 @@ public class MyCardTicketActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void convert(ViewHolder viewHolder, CardTicketBean cardTicketBean, int position) {
                 LinearLayout item = viewHolder.getView(R.id.card_ticket_ll);
-                viewHolder.setText(R.id.card_money_tv, "￥" + cardTicketBean.getAmountOfMoney());
+
                 viewHolder.setText(R.id.card_package_tv, cardTicketBean.getContent());
+                if (cardTicketBean.getRechargeType() == 0){   //判断是否是赠送
+                    viewHolder.setVisible(R.id.gift_iv,true);
+                    viewHolder.setVisible(R.id.card_money_tv,false);
+                }else {
+                    viewHolder.setText(R.id.card_money_tv, "￥" + cardTicketBean.getAmountOfMoney());
+                    viewHolder.setVisible(R.id.gift_iv,false);
+                }
                 if (cardTicketBean.getReceiveStatus()) {
                     viewHolder.setText(R.id.card_use_tv, "已使用");
                     viewHolder.setTextColorRes(R.id.card_use_tv, R.color.card_gray);

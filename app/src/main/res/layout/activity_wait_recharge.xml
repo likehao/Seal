@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.WaitRechargeActivity"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <include layout="@layout/head"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="即将过期"
+        android:textSize="15sp"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/dark_gray"/>
+    <ListView
+        android:id="@+id/nearTime_lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/listview_divider"
+        android:dividerHeight="1px"
+        android:layout_weight="1"
+        android:layout_marginTop="17dp">
+
+    </ListView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="已过期"
+        android:textSize="15sp"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/dark_gray"/>
+    <ListView
+        android:id="@+id/failTime_lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/listview_divider"
+        android:layout_weight="1"
+        android:layout_marginTop="17dp">
+
+    </ListView>
+</LinearLayout>

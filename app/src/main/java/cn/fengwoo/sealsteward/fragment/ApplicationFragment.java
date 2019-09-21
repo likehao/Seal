@@ -55,6 +55,7 @@ import cn.fengwoo.sealsteward.activity.StartPasswordActivity;
 import cn.fengwoo.sealsteward.activity.VoiceActivity;
 import cn.fengwoo.sealsteward.activity.WaitHandleActivity;
 import cn.fengwoo.sealsteward.activity.WaitMeAgreeActivity;
+import cn.fengwoo.sealsteward.activity.WaitRechargeActivity;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.Constants;
@@ -140,6 +141,8 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.qmuidemo_floatlayout4)
     QMUIFloatLayout qmuidemo_floatlayout4;
 
+    @BindView(R.id.wait_recharge_rl)
+    RelativeLayout wait_recharge;
     @BindView(R.id.iv_red_dot)
     ImageView iv_red_dot;
     @BindView(R.id.org_ll)
@@ -201,6 +204,7 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
         change_seal.setOnClickListener(this);
         seal_dfu.setOnClickListener(this);
         record_finger.setOnClickListener(this);
+        wait_recharge.setOnClickListener(this);
 
     }
 
@@ -558,6 +562,10 @@ public class ApplicationFragment extends Fragment implements View.OnClickListene
                     return;
                 }
                 intent = new Intent(getActivity(), FingerprintUserActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.wait_recharge_rl:
+                intent = new Intent(getActivity(), WaitRechargeActivity.class);
                 startActivity(intent);
                 break;
 

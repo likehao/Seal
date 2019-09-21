@@ -311,7 +311,8 @@
         <activity android:name=".activity.MyCardTicketActivity" />
         <activity android:name=".activity.FingerprintUserActivity" />
         <activity android:name=".activity.AddRecordFingerPrintActivity" />
-        <activity android:name=".activity.RecordFingerprintActivity"></activity>
+        <activity android:name=".activity.RecordFingerprintActivity" />
+        <activity android:name=".activity.WaitRechargeActivity"></activity>
     </application>
 
 </manifest>

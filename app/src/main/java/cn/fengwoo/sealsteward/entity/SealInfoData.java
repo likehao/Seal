@@ -37,6 +37,24 @@ public class SealInfoData {
     private List<SealApproveFlowListBean> sealApproveFlowList;
 
     private String macName;  //额外添加的一个
+
+    private Boolean hasExpired;
+
+    public SealInfoData(String name, Boolean hasExpired,long serviceTime,String sealPrint) {
+        this.name = name;
+        this.hasExpired = hasExpired;
+        this.serviceTime = serviceTime;
+        this.sealPrint = sealPrint;
+    }
+
+    public Boolean getHasExpired() {
+        return hasExpired;
+    }
+
+    public void setHasExpired(Boolean hasExpired) {
+        this.hasExpired = hasExpired;
+    }
+
     public String getMacName() {
         return macName;
     }
