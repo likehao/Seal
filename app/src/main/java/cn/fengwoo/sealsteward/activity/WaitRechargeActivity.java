@@ -1,7 +1,9 @@
 package cn.fengwoo.sealsteward.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,10 +30,12 @@ import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
+import cn.fengwoo.sealsteward.view.LoadingView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
 
 /**
  * 待充值
@@ -49,7 +53,16 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
     private CommonAdapter commonAdapter;
     private ArrayList<SealInfoData> arrayList1;
     private ArrayList<SealInfoData> arrayList2;
-
+    @BindView(R.id.no_record_all)
+    LinearLayout no_record_all;
+    @BindView(R.id.no_record_1)
+    LinearLayout no_record_1;
+    @BindView(R.id.no_record_2)
+    LinearLayout no_record_2;
+    @BindView(R.id.no_wait_recharge_ll)
+    LinearLayout no_wait_recharge;
+    private LoadingView loadingView;
+    private static final int PAYFINISH = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +74,7 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
+        loadingView = new LoadingView(this);
         arrayList1 = new ArrayList<>();
         arrayList2 = new ArrayList<>();
         back.setVisibility(View.VISIBLE);
@@ -69,14 +83,16 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void getData() {
+        loadingView.show();
         HttpUtil.sendDataAsync(this, HttpUrl.NEAROVERTIMESEALLIST, 1, null, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                loadingView.cancel();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
                 String result = response.body().string();
                 Gson gson = new Gson();
                 ResponseInfo<List<SealInfoData>> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<List<SealInfoData>>>() {
@@ -86,17 +102,31 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
                     for (SealInfoData sealInfoData : responseInfo.getData()) {
                         if (sealInfoData.getHasExpired()) {   //过期
                             arrayList2.add(new SealInfoData(sealInfoData.getName(), sealInfoData.getHasExpired()
-                                    ,sealInfoData.getServiceTime(),sealInfoData.getSealPrint()));
+                                    ,sealInfoData.getServiceTime(),sealInfoData.getSealPrint(),sealInfoData.getId()));
                         } else {
                             arrayList1.add(new SealInfoData(sealInfoData.getName(), sealInfoData.getHasExpired()
-                                    ,sealInfoData.getServiceTime(),sealInfoData.getSealPrint()));
+                                    ,sealInfoData.getServiceTime(),sealInfoData.getSealPrint(),sealInfoData.getId()));
                         }
                     }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            no_record_all.setVisibility(View.GONE);
+                            if (arrayList1.size() != 0){
+                                no_record_1.setVisibility(View.GONE);
+                            }
+                            if (arrayList2.size() != 0){
+                                no_record_2.setVisibility(View.GONE);
+                            }
                             nearFailTime();
                             failTime();
+                        }
+                    });
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            no_wait_recharge.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -138,6 +168,14 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
                     Picasso.with(WaitRechargeActivity.this).load(sealPrintPath).into(imageView);
                     imageView.setBackgroundResource(R.color.white);
                 }
+                viewHolder.setOnClickListener(R.id.seal_time_rl, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(WaitRechargeActivity.this,PayActivity.class);
+                        intent.putExtra("sealId",arrayList1.get(position).getId());
+                        startActivityForResult(intent,PAYFINISH);
+                    }
+                });
             }
         };
         commonAdapter.notifyDataSetChanged();
@@ -178,6 +216,15 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
                     Picasso.with(WaitRechargeActivity.this).load(sealPrintPath).into(imageView);
                     imageView.setBackgroundResource(R.color.white);
                 }
+
+                viewHolder.setOnClickListener(R.id.seal_time_rl, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(WaitRechargeActivity.this,PayActivity.class);
+                        intent.putExtra("sealId",arrayList2.get(position).getId());
+                        startActivityForResult(intent,PAYFINISH);
+                    }
+                });
             }
         };
         commonAdapter.notifyDataSetChanged();
@@ -190,6 +237,16 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
             case R.id.set_back_ll:
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PAYFINISH){
+            if (resultCode == 1) {
+                finish();
+            }
         }
     }
 }

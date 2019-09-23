@@ -50,12 +50,13 @@ public class RechargePackagesAdapter extends BaseAdapter {
             viewHolder.payMoney = convertView.findViewById(R.id.pay_money_tv);
             viewHolder.select_package = convertView.findViewById(R.id.select_money_iv);
             viewHolder.select_packages_rl = convertView.findViewById(R.id.select_packages_rl);
+            viewHolder.packageName = convertView.findViewById(R.id.service_package_tv);  //套餐包名
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.payMoney.setText("￥"+String.valueOf(list.get(position).getAmountOfMoney()));
-
+        viewHolder.packageName.setText(list.get(position).getContent());
         //选中状态
         if (mSelect == position){
 //            viewHolder.select_package.setVisibility(View.VISIBLE);
@@ -71,6 +72,7 @@ public class RechargePackagesAdapter extends BaseAdapter {
         private TextView payMoney;
         private ImageView select_package;
         private RelativeLayout select_packages_rl;
+        private TextView packageName;
     }
     /**
      * 监听选中

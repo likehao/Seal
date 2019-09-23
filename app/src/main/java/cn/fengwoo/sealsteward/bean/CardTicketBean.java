@@ -23,7 +23,7 @@ public class CardTicketBean implements Serializable{
      }
      */
 
-    private Integer amountOfMoney;
+    private Double amountOfMoney;
     private String content;
     private String createTime;
     private String id;
@@ -31,7 +31,7 @@ public class CardTicketBean implements Serializable{
     private Integer useMonths;
     private Integer rechargeType;
 
-    public CardTicketBean(Integer amountOfMoney, String content, Boolean receiveStatus,String id,Integer rechargeType) {
+    public CardTicketBean(Double amountOfMoney, String content, Boolean receiveStatus,String id,Integer rechargeType) {
         this.amountOfMoney = amountOfMoney;
         this.content = content;
         this.receiveStatus = receiveStatus;
@@ -52,11 +52,11 @@ public class CardTicketBean implements Serializable{
                 '}';
     }
 
-    public Integer getAmountOfMoney() {
+    public Double getAmountOfMoney() {
         return amountOfMoney;
     }
 
-    public void setAmountOfMoney(Integer amountOfMoney) {
+    public void setAmountOfMoney(Double amountOfMoney) {
         this.amountOfMoney = amountOfMoney;
     }
 

@@ -40,6 +40,26 @@ public class WaitApplyData implements Serializable {
     private String autoGraph;
     private String sealId;
 
+    private Integer fileNumber;
+    private String fileType;
+
+    public Integer getFileNumber() {
+        return fileNumber;
+    }
+
+    public void setFileNumber(Integer fileNumber) {
+        this.fileNumber = fileNumber;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+
     public String getSealId() {
         return sealId;
     }
@@ -57,7 +77,8 @@ public class WaitApplyData implements Serializable {
 
 
     public WaitApplyData(String cause, String sealName, String failTime, Integer applyCount, String applyTime, String id, Integer approveStatus, String applyUserName, String orgStructureName
-  ,String applyUser , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf,List<String> stampRecordImgList,String autoGraph,String sealId) {
+  ,String applyUser , String headPortrait, Integer sealCount , Integer restCount , Integer uploadPhotoNum, String applyPdf,String stampPdf,String stampRecordPdf,List<String> stampRecordImgList,
+                         String autoGraph,String sealId,Integer fileNumber,String fileType) {
         this.cause = cause;
         this.sealName = sealName;
         this.failTime = failTime;
@@ -78,6 +99,8 @@ public class WaitApplyData implements Serializable {
         this.stampRecordImgList = stampRecordImgList;
         this.autoGraph = autoGraph;
         this.sealId = sealId;
+        this.fileNumber = fileNumber;
+        this.fileType = fileType;
     }
 
     public String getCause() {

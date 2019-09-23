@@ -67,7 +67,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
     private int payWay = 1;
     private Intent intent;
     Double amountOfMoney;
-    String packageId;
+    String packageId,payPackageName;
     private static final int PAYFINISH = 1;
 
     @Override
@@ -123,7 +123,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
                     //初始化值
                     amountOfMoney = arrayList.get(0).getAmountOfMoney();
                     packageId = arrayList.get(0).getId();
-
+                    payPackageName = arrayList.get(0).getContent();  //套餐名
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -152,6 +152,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
         rechargeAdapter.changeSelected(position);
         amountOfMoney = arrayList.get(position).getAmountOfMoney();
         packageId = arrayList.get(position).getId();
+        payPackageName = arrayList.get(position).getContent();
         sureMoney_tv.setText(amountOfMoney+"");
     }
 
@@ -192,6 +193,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
         intent.putExtra("servicePackageId",packageId);
         intent.putExtra("type",type);
         intent.putExtra("sealId",sealId);
+        intent.putExtra("payPackageName",payPackageName);
 //        startActivity(intent);
         startActivityForResult(intent,PAYFINISH);
     }

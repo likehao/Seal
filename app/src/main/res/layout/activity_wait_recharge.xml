@@ -4,46 +4,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.WaitRechargeActivity"
+    android:background="@color/background"
     android:orientation="vertical"
-    android:background="@color/background">
+    tools:context=".activity.WaitRechargeActivity">
 
-    <include layout="@layout/head"/>
+    <include layout="@layout/head" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="即将过期"
-        android:textSize="15sp"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="15dp"
-        android:textColor="@color/dark_gray"/>
-    <ListView
-        android:id="@+id/nearTime_lv"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@drawable/listview_divider"
-        android:dividerHeight="1px"
-        android:layout_weight="1"
-        android:layout_marginTop="17dp">
+        android:layout_height="match_parent">
 
-    </ListView>
+        <LinearLayout
+            android:id="@+id/no_wait_recharge_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="已过期"
-        android:textSize="15sp"
-        android:layout_marginTop="17dp"
-        android:layout_marginStart="15dp"
-        android:textColor="@color/dark_gray"/>
-    <ListView
-        android:id="@+id/failTime_lv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@drawable/listview_divider"
-        android:layout_weight="1"
-        android:layout_marginTop="17dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-    </ListView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="17dp"
+                    android:text="即将过期"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="15sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        android:id="@+id/no_record_1"
+                        layout="@layout/no_record" />
+
+                    <ListView
+                        android:id="@+id/nearTime_lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:divider="@drawable/listview_divider"
+                        android:background="@color/white"
+                        android:dividerHeight="0.5dp"
+                        android:scrollbars="none">
+
+                    </ListView>
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="17dp"
+                    android:text="已过期"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="15sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        android:id="@+id/no_record_2"
+                        layout="@layout/no_record" />
+
+                    <ListView
+                        android:id="@+id/failTime_lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:scrollbars="none"
+                        android:dividerHeight="0.5dp"
+                        android:background="@color/white"
+                        android:divider="@drawable/listview_divider">
+
+                    </ListView>
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <include
+            android:id="@+id/no_record_all"
+            layout="@layout/no_record" />
+    </FrameLayout>
+
 </LinearLayout>

@@ -456,16 +456,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         saveAgreement = agreement;
 
 //        ip = realmNameDialog.service_ip.getText().toString().trim();     // ip
-        saveIp = ip;
-        if (ip.length() == 0) {
-            saveIp = null;
-        }
+//        saveIp = ip;
+//        if (ip.length() == 0) {
+//            saveIp = null;
+//        }
 
 //        port_num = realmNameDialog.port_number.getText().toString().trim();  //端口号
-        savePOrt = port_num;
-        if (port_num.length() == 0) {
-            savePOrt = null;
-        }
+//        savePOrt = port_num;
+//        if (port_num.length() == 0) {
+//            savePOrt = null;
+//        }
 
         //拼接服务器地址,判断是否有端口
         if (port_num.length() != 0) {
@@ -485,7 +485,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      */
     private void getServiceConfig(){
         ip = realmNameDialog.service_ip.getText().toString().trim();     // ip
+        saveIp = ip;
+        if (ip.length() == 0) {
+            saveIp = null;
+        }
         port_num = realmNameDialog.port_number.getText().toString().trim();  //端口号
+        savePOrt = port_num;
+        if (port_num.length() == 0) {
+            savePOrt = null;
+        }
+
         //拼接服务器地址,判断是否有端口
         if (port_num.length() != 0) {
             serviceConfig = String.format("%s%s", ip, ":" + port_num);

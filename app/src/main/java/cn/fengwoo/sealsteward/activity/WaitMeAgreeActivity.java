@@ -198,7 +198,7 @@ public class WaitMeAgreeActivity extends BaseActivity implements AdapterView.OnI
         intent.putExtra("pdf", waitMeAgreeDataList.get(position).getPdf());
         intent.putExtra("autoGraph", waitMeAgreeDataList.get(position).getAutoGraph());
         intent.putExtra("fileType",waitMeAgreeDataList.get(position).getFileType());
-        intent.putExtra("fileNum",waitMeAgreeDataList.get(position).getFileNumber());
+        intent.putExtra("fileNumber",waitMeAgreeDataList.get(position).getFileNumber());
         startActivityForResult(intent, 88);
     }
 

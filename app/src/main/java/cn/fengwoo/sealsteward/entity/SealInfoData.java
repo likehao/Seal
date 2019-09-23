@@ -40,11 +40,12 @@ public class SealInfoData {
 
     private Boolean hasExpired;
 
-    public SealInfoData(String name, Boolean hasExpired,long serviceTime,String sealPrint) {
+    public SealInfoData(String name, Boolean hasExpired,long serviceTime,String sealPrint,String id) {
         this.name = name;
         this.hasExpired = hasExpired;
         this.serviceTime = serviceTime;
         this.sealPrint = sealPrint;
+        this.id = id;
     }
 
     public Boolean getHasExpired() {

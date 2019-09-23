@@ -4,9 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
+import cn.fengwoo.sealsteward.utils.CommonUtil;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import okhttp3.Call;
@@ -57,10 +60,11 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
     Button sure_pay_bt;
     @BindView(R.id.money_tv)
     TextView money_tv;
-    private String servicePackageId, sealId;
+    private String servicePackageId, sealId,payPackageName;
     private Integer type;
     private static final int SDK_PAY_FLAG = 1;
     private static final int PAYFINISH = 10;
+    private Double money;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +82,12 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
         set_back_ll.setOnClickListener(this);
         sure_pay_bt.setOnClickListener(this);
         Intent intent = getIntent();
-        Double money = intent.getDoubleExtra("amountOfMoney", 0);
+        money = intent.getDoubleExtra("amountOfMoney", 0);
         servicePackageId = intent.getStringExtra("servicePackageId");
         type = intent.getIntExtra("type", 0);  //type: 1为微信,2为支付宝
         sealId = intent.getStringExtra("sealId");
         money_tv.setText(String.valueOf(money));  //显示金额
+        payPackageName = intent.getStringExtra("payPackageName");  //套餐名
 
     }
 
@@ -93,8 +98,40 @@ public class SurePayActivity extends BaseActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.sure_pay_bt:
-                addOrder();
+//                addOrder();   暂停使用微信支付宝支付，改用H5
+                orderH5();
                 break;
+        }
+    }
+
+    /**
+     * 网页支付
+     */
+    private void orderH5(){
+        String companyId = CommonUtil.getUserData(this).getCompanyId();
+        String userId = CommonUtil.getUserData(this).getId();
+
+        String url = "http://www.baiheyz.com/paymentorder/wxpay.html?" +
+                "companyId=" + companyId +
+                "&userId="+ userId +
+                "&sealId=" + sealId +
+                "&servicePackageId=" + servicePackageId +
+                "&productName=" + payPackageName +
+                "&quantity=" + 1 +
+                "&totalPrice=" + money;
+
+        Log.e("TAG支付支付支付支付",url);
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivityForResult(intent,PAYFINISH);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PAYFINISH){
+            setResult(PAYFINISH);
+            finish();
         }
     }
 

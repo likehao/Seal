@@ -257,7 +257,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
                         intent.putExtra("category", 4);
                         intent.putExtra("ApplyUseSealActivity", "ApplyUseSealActivity");
                         intent.putExtra("fileType",fileType);
-                        intent.putExtra("fileNum",fileNum);
+                        intent.putExtra("fileNumber",fileNum);
 
                         if (!TextUtils.isEmpty(applyId)) {
                             intent.putExtra("applyId", applyId);

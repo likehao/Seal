@@ -133,7 +133,8 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                                 , expireTime, app.getApplyCount(), applyTime, app.getId(), app.getApproveStatus(),
                                 app.getApplyUserName(), app.getOrgStructureName(),app.getApplyUser()
                                 , app.getHeadPortrait(), app.getStampCount(), app.getAvailableCount(), app.getPhotoCount()
-                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList(),app.getAutoGraph(),app.getSealId()));
+                                ,app.getApplyPdf(),app.getStampPdf(),app.getStampRecordPdf(),app.getStampRecordImgList(),
+                                app.getAutoGraph(),app.getSealId(),app.getFileNumber(),app.getFileType()));
                     }
                     //请求数据
                     if (null != getActivity()) {
@@ -191,6 +192,8 @@ public class ApplyRecordOneFragment extends Fragment implements AdapterView.OnIt
                     intent.putExtra("cause", waitApplyDataList.get(position).getCause());
                     intent.putExtra("pdf", waitApplyDataList.get(position).getApplyPdf());
                     intent.putExtra("autoGraph",waitApplyDataList.get(position).getAutoGraph());
+                    intent.putExtra("fileNumber",waitApplyDataList.get(position).getFileNumber());
+                    intent.putExtra("fileType",waitApplyDataList.get(position).getFileType());
                     startActivity(intent);
                 } else {
                     Looper.prepare();

@@ -91,7 +91,7 @@ public class UseSealApplyActivity extends BaseActivity implements View.OnClickLi
         String cause = intent.getStringExtra("cause");
         String autoGraph = intent.getStringExtra("autoGraph");
         String fType = intent.getStringExtra("fileType");  //文件类型
-        Integer fNum = intent.getIntExtra("fileNum",0);  //文件份数
+        Integer fNum = intent.getIntExtra("fileNumber",0);  //文件份数
         //读取签名
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
         if(bitmap == null){
