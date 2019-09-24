@@ -38,7 +38,7 @@ import okhttp3.Response;
 
 
 /**
- * 待充值
+ * 待充值过期印章
  */
 public class WaitRechargeActivity extends BaseActivity implements View.OnClickListener {
 
@@ -79,7 +79,7 @@ public class WaitRechargeActivity extends BaseActivity implements View.OnClickLi
         arrayList2 = new ArrayList<>();
         back.setVisibility(View.VISIBLE);
         back.setOnClickListener(this);
-        title.setText("待充值印章");
+        title.setText("过期印章");
     }
 
     private void getData() {

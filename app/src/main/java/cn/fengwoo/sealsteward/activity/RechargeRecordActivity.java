@@ -73,7 +73,7 @@ public class RechargeRecordActivity extends BaseActivity {
 
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
-        title_tv.setText("充值记录");
+        title_tv.setText("我的订单");
         set_back_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
