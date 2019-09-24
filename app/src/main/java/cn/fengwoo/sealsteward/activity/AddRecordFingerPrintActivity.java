@@ -20,6 +20,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.white.easysp.EasySP;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,8 +32,10 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.fengwoo.sealsteward.R;
+import cn.fengwoo.sealsteward.bean.MessageEvent;
 import cn.fengwoo.sealsteward.entity.AddPwdUserUpload;
 import cn.fengwoo.sealsteward.entity.AddPwdUserUploadReturn;
+import cn.fengwoo.sealsteward.entity.PwdUserListItem;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
@@ -72,7 +78,9 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
     private String userId, userName;
     private Boolean timeB = true;
     private byte[] startFingerByte;
-
+    private PwdUserListItem pwdUserListItem;
+    private String fingerFailTime;
+    private ResponseInfo<AddPwdUserUploadReturn> responseInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +88,7 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
 
         ButterKnife.bind(this);
         initView();
+        getData();
     }
 
     private void initView() {
@@ -90,6 +99,18 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
         finger_user_rl.setOnClickListener(this);
         finger_failTime_ll.setOnClickListener(this);
         finger_bt.setOnClickListener(this);
+    }
+
+    private void getData() {
+        //点击编辑传递过来的值
+        pwdUserListItem = (PwdUserListItem) getIntent().getSerializableExtra("pwdUserListItem");
+        if (pwdUserListItem != null) {
+            finger_user.setText(pwdUserListItem.getUserName());   //使用人
+            useTime.setText(pwdUserListItem.getStampCount() + "");  //使用次数
+            failTime.setText(DateUtils.getDateString(pwdUserListItem.getExpireTime()));  //失效时间
+            title.setText("编辑指纹用户");
+            finger_bt.setText("提交");
+        }
     }
 
     @Override
@@ -107,8 +128,14 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
                 break;
             case R.id.finger_bt:
                 if (check()) {
-                    submit();
+                    if (pwdUserListItem == null) {
+                        submit();  //添加指纹
+                    } else {
+                        //编辑指纹
+                        editFingerCount();
+                    }
                 }
+
                 break;
         }
     }
@@ -171,9 +198,9 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Gson gson = new Gson();
-                ResponseInfo<AddPwdUserUploadReturn> responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddPwdUserUploadReturn>>() {
+                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddPwdUserUploadReturn>>() {
                 }.getType());
-                if (responseInfo.getCode() == 0 && responseInfo.getData() != null){
+                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
                     String count = useTime.getText().toString().trim();  //使用次数
                     try {
                         startFingerByte = CommonUtil.recordFingerprint(Integer.parseInt(count), DateUtils.dateToStamp(format)); //                                                                                                                                                                                                                                                                                                                                                                                                               次数和失效时间
@@ -181,10 +208,10 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
                         e.printStackTrace();
                     }
                     byte[] bytes = new DataProtocol(CommonUtil.RECORDING, startFingerByte).getBytes();
-                    String str = Utils.bytesToHexString(bytes); //发送的指令
+//                    String str = Utils.bytesToHexString(bytes); //发送的指令
 
                     ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
-                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.RECORDING, startFingerByte).getBytes()))
+                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, bytes))
                             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     characteristicValue -> {
@@ -202,6 +229,35 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
             }
         });
     }
+
+    /**
+     * 编辑指纹权限
+     */
+    private void editFingerCount() {
+        //指纹代码1byte ,使用次数2bytes, 失效时间6bytes
+        int fingerCode = pwdUserListItem.getFingerprintCode();
+        String count = useTime.getText().toString().trim();
+        try {
+            fingerFailTime = DateUtils.dateToStamp(failTime.getText().toString().trim());  //转时间戳
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        byte[] editFingerBytes = CommonUtil.changeFingerprint(fingerCode, Integer.parseInt(count),fingerFailTime);
+        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
+                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SETFINGERPRINT, editFingerBytes).getBytes()))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            Utils.log(characteristicValue.length + " : " + Utils.bytesToHexString(characteristicValue));
+
+                        },
+                        throwable -> {
+                            // Handle an error here.
+                        }
+                ));
+    }
+
     /**
      * 时间选择器
      */
@@ -231,6 +287,55 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
         timePicker.show();
     }
 
+    /**
+     * 编辑更新指纹权限
+     */
+    private void updateFingerprint(int fingerCode){
+        Object addPwdUserUploadReturn;
+        // responseInfo不为空，获取responseInfo数据
+        if (responseInfo != null) {
+            addPwdUserUploadReturn = responseInfo.getData();
+            responseInfo.getData().setFingerprintCode(fingerCode);
+        } else {
+            // 把通过选择改的值赋值
+            try {
+                pwdUserListItem.setExpireTime(Long.parseLong(DateUtils.dateToStamp(failTime.getText().toString())));
+                pwdUserListItem.setStampCount(Integer.parseInt(useTime.getText().toString()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            addPwdUserUploadReturn = pwdUserListItem;
+        }
+
+        Utils.log("sendDataAsync");
+
+        HttpUtil.sendDataAsync(AddRecordFingerPrintActivity.this, HttpUrl.UPDATE_PWD_USER, 2, null, addPwdUserUploadReturn, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Utils.log("更新指纹用户信息return:" + e.toString());
+                loadingView.cancel();
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Utils.log("更新指纹用户信息return:" + result);
+                loadingView.cancel();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("添加成功");
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+
+            }
+        });
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -238,6 +343,25 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
             userId = data.getStringExtra("id");
             userName = data.getStringExtra("name");
             finger_user.setText(userName);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) throws ParseException {
+        if (event.msgType.equals("edit_update_fingerprint")) {
+            updateFingerprint(pwdUserListItem.getFingerprintCode());      //编辑更新指纹权限
         }
     }
 }

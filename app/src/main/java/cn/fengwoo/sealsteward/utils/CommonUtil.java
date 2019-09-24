@@ -125,10 +125,8 @@ public class CommonUtil {
      */
     public static final byte SETSEALDELAY = (byte) 0xB4;
 
-
     public static final byte WRITE_VOICE = (byte) 0xB5;
     public static final byte READ_VOICE = (byte) 0xB6;
-
 
 
     /**
@@ -147,7 +145,7 @@ public class CommonUtil {
      * 查询长按时间
      */
     public static final byte SELECTPRESSTIME = (byte) 0xA7;
-     /**
+    /**
      * illegal
      */
     public static final byte ILLEGAL = (byte) 0xA8;
@@ -166,11 +164,11 @@ public class CommonUtil {
     /**
      * 删除指纹
      */
-    public static final byte DELETE = (byte) 0xAB;
+    public static final byte DELETEFINGER = (byte) 0xAB;
     /**
      * 设置指纹权限
      */
-    public static final byte SET = (byte) 0xAC;
+    public static final byte SETFINGERPRINT = (byte) 0xAC;
     /**
      * 查询指纹
      */
@@ -238,7 +236,7 @@ public class CommonUtil {
         Date date = new Date(Long.valueOf(timeStamp));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR)% 2000;
+        int year = calendar.get(Calendar.YEAR) % 2000;
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DATE);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -252,13 +250,13 @@ public class CommonUtil {
     /**
      * 添加按键密码和权限
      */
-    public static byte[] addPwd(String pwd,int sealTimes, String timeStamp) {
+    public static byte[] addPwd(String pwd, int sealTimes, String timeStamp) {
         byte[] time = DataTrans.shortToByteArray((short) sealTimes, false);
 
         Date date = new Date(Long.valueOf(timeStamp));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR)% 2000;
+        int year = calendar.get(Calendar.YEAR) % 2000;
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DATE);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -266,13 +264,13 @@ public class CommonUtil {
         int sec = calendar.get(Calendar.SECOND);
 
         byte[] pwdBytes = new byte[6];
-        for(int i=0;i<pwd.length();i++){
+        for (int i = 0; i < pwd.length(); i++) {
             String subStr = pwd.substring(i, i + 1);
             int a = Integer.valueOf(subStr);
-            pwdBytes[i] = (byte)a;
+            pwdBytes[i] = (byte) a;
         }
 
-        byte[] startByte = new byte[]{pwdBytes[0],pwdBytes[1],pwdBytes[2],pwdBytes[3],pwdBytes[4],pwdBytes[5],time[0], time[1], (byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
+        byte[] startByte = new byte[]{pwdBytes[0], pwdBytes[1], pwdBytes[2], pwdBytes[3], pwdBytes[4], pwdBytes[5], time[0], time[1], (byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
         return startByte;
     }
 
@@ -280,13 +278,13 @@ public class CommonUtil {
     /**
      * 修改次数
      */
-    public static byte[] changeTimes(String pwdcode,int sealTimes, String timeStamp) {
+    public static byte[] changeTimes(String pwdcode, int sealTimes, String timeStamp) {
         byte[] time = DataTrans.shortToByteArray((short) sealTimes, false);
 
         Date date = new Date(Long.valueOf(timeStamp));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR)% 2000;
+        int year = calendar.get(Calendar.YEAR) % 2000;
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DATE);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -295,7 +293,7 @@ public class CommonUtil {
 
         byte[] pwdCodeBytes = DataTrans.intToBytesLittle(Integer.parseInt(pwdcode));
 
-        byte[] startByte = new byte[]{pwdCodeBytes[0],pwdCodeBytes[1],pwdCodeBytes[2],pwdCodeBytes[3],time[0], time[1], (byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
+        byte[] startByte = new byte[]{pwdCodeBytes[0], pwdCodeBytes[1], pwdCodeBytes[2], pwdCodeBytes[3], time[0], time[1], (byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
         return startByte;
     }
 
@@ -364,13 +362,13 @@ public class CommonUtil {
     /**
      * 录入指纹
      */
-    public static byte[] recordFingerprint(int count,String failTime){
-        byte[] time = DataTrans.shortToByteArray((short) count,false);  //可盖章次数
+    public static byte[] recordFingerprint(int count, String failTime) {
+        byte[] time = DataTrans.shortToByteArray((short) count, false);  //可盖章次数
 
         Date date = new Date(Long.valueOf(failTime));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR)% 2000;
+        int year = calendar.get(Calendar.YEAR) % 2000;
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DATE);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -380,5 +378,23 @@ public class CommonUtil {
         byte[] startFingerByte = new byte[]{time[0], time[1], (byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
 
         return startFingerByte;
+    }
+
+    /**
+     * 修改指纹权限
+     */
+    public static byte[] changeFingerprint(int fingerCode, int count, String fingerTime) {
+        byte[] fingerCount = DataTrans.shortToByteArray((short) count, false);
+        Date date = new Date(Long.valueOf(fingerTime));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR) % 2000;
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DATE);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        int sec = calendar.get(Calendar.SECOND);
+        byte[] bytes = new byte[]{(byte) fingerCode,fingerCount[0],fingerCount[1],(byte) year, (byte) month, (byte) day, (byte) hour, (byte) min, (byte) sec};
+        return bytes;
     }
 }

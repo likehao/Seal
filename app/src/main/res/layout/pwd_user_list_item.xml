@@ -6,23 +6,23 @@
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal">
 
-    <com.mcxtzhang.swipemenulib.SwipeMenuLayout
-        android:id="@+id/sm"
-        android:layout_width="match_parent"
-        android:layout_height="137dp"
-        android:background="@drawable/corners_bg"
-        android:paddingBottom="1dp"
-        app:ios="false"
-        app:leftSwipe="true"
-        app:swipeEnable="true">
+    <!--<com.mcxtzhang.swipemenulib.SwipeMenuLayout-->
+        <!--android:id="@+id/sm"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/corners_bg"-->
+        <!--android:paddingBottom="1dp"-->
+        <!--app:ios="false"-->
+        <!--app:leftSwipe="true"-->
+        <!--app:swipeEnable="true">-->
 
         <LinearLayout
-            android:id="@+id/content"
+            android:id="@+id/layout_one"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?android:attr/selectableItemBackground"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners_bg"
             android:orientation="vertical">
-
+<!--
             <LinearLayout
                 android:id="@+id/layout_one"
                 android:layout_width="match_parent"
@@ -50,10 +50,9 @@
                     android:text="李雷"
                     android:textColor="@color/black_6"
                     android:textSize="13sp" />
-            </LinearLayout>
+            </LinearLayout>-->
 
             <LinearLayout
-                android:id="@+id/layout_two"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="8dp"
@@ -91,8 +90,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_three"
-
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="8dp"
@@ -119,7 +116,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_four"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginLeft="8dp"
@@ -144,49 +140,89 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
-        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/Gray" />
 
-        <!-- 以下都是侧滑菜单的内容依序排列 -->
-        <Button
-            android:id="@+id/btn_edit"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/holo_orange_light"
-            android:clickable="false"
-            android:focusable="false"
-            android:text="编辑"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/btn_delete"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:background="@color/red"
-            android:clickable="false"
-            android:focusable="false"
-            android:text="删除"
-            android:textColor="@android:color/white" />
-
-
-        <!--    <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@color/red_ff4a57"
-                android:clickable="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="8dp">
 
                 <TextView
-                    android:id="@+id/tv_delete"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:drawablePadding="5dp"
-                    android:drawableTop="@drawable/point_icon_delete"
-                    android:gravity="center"
-                    android:text="删除"
-                    android:textColor="@android:color/white"/>
-            </RelativeLayout>-->
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="使用人："
+                    android:textColor="@color/black_3"
+                    android:textSize="13sp" />
 
-    </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
+                <TextView
+                    android:id="@+id/tv_user"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="白小鹤"
+                    android:textColor="@color/black_6"
+                    android:textSize="13sp" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/btn_edit"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@null"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="15sp"
+                        android:text="@string/edit" />
+
+                    <Button
+                        android:id="@+id/btn_delete"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:background="@null"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="15sp"
+                        android:text="@string/delete" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--&lt;!&ndash; 以下都是侧滑菜单的内容依序排列 &ndash;&gt;-->
+        <!--<Button-->
+            <!--android:id="@+id/btn_edit"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@android:color/holo_orange_light"-->
+            <!--android:clickable="false"-->
+            <!--android:focusable="false"-->
+            <!--android:text="编辑"-->
+            <!--android:textColor="@android:color/white" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_delete"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/red"-->
+            <!--android:clickable="false"-->
+            <!--android:focusable="false"-->
+            <!--android:text="删除"-->
+            <!--android:textColor="@android:color/white" />-->
+
+    <!--</com.mcxtzhang.swipemenulib.SwipeMenuLayout>-->
 
 </LinearLayout>

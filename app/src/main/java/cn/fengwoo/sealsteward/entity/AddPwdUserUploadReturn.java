@@ -30,6 +30,15 @@ public class AddPwdUserUploadReturn implements Serializable {
     private int userType;
     private int stampCount;
     private long expireTime;
+    private Integer fingerprintCode;
+
+    public Integer getFingerprintCode() {
+        return fingerprintCode;
+    }
+
+    public void setFingerprintCode(Integer fingerprintCode) {
+        this.fingerprintCode = fingerprintCode;
+    }
 
     public String getId() {
         return id;

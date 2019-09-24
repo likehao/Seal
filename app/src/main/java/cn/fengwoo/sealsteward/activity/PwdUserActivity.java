@@ -220,42 +220,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         startActivity(intent);
                     }
                 });
-                viewHolder.getView(R.id.layout_two).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utils.log("onItemClick" + "layout_two");
-                        intent.setClass(PwdUserActivity.this, SelectPwdRecordQueryActivity.class);
-                        intent.putExtra("sealId", pwdUserListItem.getSealId());
-                        intent.putExtra("userId", pwdUserListItem.getUserId());
-                        intent.putExtra("userNumber", pwdUserListItem.getUserNumber() + "");
-                        intent.putExtra("userType", pwdUserListItem.getUserType() + "");
-                        startActivity(intent);
-                    }
-                });
-                viewHolder.getView(R.id.layout_three).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utils.log("onItemClick" + "layout_three");
-                        intent.setClass(PwdUserActivity.this, SelectPwdRecordQueryActivity.class);
-                        intent.putExtra("sealId", pwdUserListItem.getSealId());
-                        intent.putExtra("userId", pwdUserListItem.getUserId());
-                        intent.putExtra("userNumber", pwdUserListItem.getUserNumber() + "");
-                        intent.putExtra("userType", pwdUserListItem.getUserType() + "");
-                        startActivity(intent);
-                    }
-                });
-                viewHolder.getView(R.id.layout_four).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utils.log("onItemClick" + "layout_four");
-                        intent.setClass(PwdUserActivity.this, SelectPwdRecordQueryActivity.class);
-                        intent.putExtra("sealId", pwdUserListItem.getSealId());
-                        intent.putExtra("userId", pwdUserListItem.getUserId());
-                        intent.putExtra("userNumber", pwdUserListItem.getUserNumber() + "");
-                        intent.putExtra("userType", pwdUserListItem.getUserType() + "");
-                        startActivity(intent);
-                    }
-                });
 
                 viewHolder.getView(R.id.iv_eye).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -347,13 +311,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
             }
         };
         list.setAdapter(commonAdapter);
-
-//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Utils.log("onItemClick");
-//            }
-//        });
     }
 
     @Override
@@ -402,7 +359,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
         });
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -418,7 +374,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) throws ParseException {
         if (event.msgType.equals("ble_delete_pwd_user")) {
-            delete(deleteItem);
+            delete(deleteItem);      //删除密码用户
         }
     }
 }

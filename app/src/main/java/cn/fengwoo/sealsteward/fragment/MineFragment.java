@@ -44,6 +44,7 @@ import cn.fengwoo.sealsteward.activity.MyCompanyActivity;
 import cn.fengwoo.sealsteward.activity.MyQRCodeActivity;
 import cn.fengwoo.sealsteward.activity.MySignActivity;
 import cn.fengwoo.sealsteward.activity.PersonCenterActivity;
+import cn.fengwoo.sealsteward.activity.RechargeRecordActivity;
 import cn.fengwoo.sealsteward.activity.SafeActivity;
 import cn.fengwoo.sealsteward.activity.SetActivity;
 import cn.fengwoo.sealsteward.activity.SetPowerOnlyReadActivity;
@@ -126,6 +127,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     LinearLayout switvhCompany;
     @BindView(R.id.my_card_rl)
     RelativeLayout my_card;
+    @BindView(R.id.my_order_rl)
+    RelativeLayout my_order; //我的订单
 
     @Nullable
     @Override
@@ -235,6 +238,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         company_QRCode_rl.setOnClickListener(this);
         switvhCompany.setOnClickListener(this);
         my_card.setOnClickListener(this);
+        my_order.setOnClickListener(this);
     }
 
     private void getSmtData() {
@@ -271,9 +275,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                                 targetPermissionJson = new Gson().toJson(user.getFuncIdList());
                             }
                         }
+
 //                    List<SystemFuncListInfo> systemFuncListInfo = gson.fromJson(targetPermissionJson, new TypeToken<List<SystemFuncListInfo>>() {}.getType());
 //                    Utils.log(targetPermissionJson);
-
                         EasySP.init(getActivity()).putString("permission", targetPermissionJson);
                         EasySP.init(getActivity()).putBoolean("isAdmin", user.getAdmin());
 
@@ -381,6 +385,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.my_card_rl:
                 intent = new Intent(getActivity(), MyCardTicketActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_order_rl:
+                intent = new Intent(getActivity(), RechargeRecordActivity.class);
                 startActivity(intent);
                 break;
         }

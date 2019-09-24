@@ -485,6 +485,7 @@
                 android:id="@+id/org_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -538,7 +539,6 @@
                         android:padding="20dp"
                         app:qmui_childHorizontalSpacing="35dp"
                         app:qmui_childVerticalSpacing="20dp"
-
                         app:qmui_maxNumber="12">
 
                         <RelativeLayout
@@ -588,13 +588,11 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-
                         <RelativeLayout
                             android:id="@+id/add_seal_rl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:visibility="gone">
+                            android:layout_weight="1">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -612,7 +610,6 @@
 
                             </LinearLayout>
                         </RelativeLayout>
-
 
                         <RelativeLayout
                             android:id="@+id/change_seal"
@@ -637,16 +634,42 @@
                             </LinearLayout>
                         </RelativeLayout>
 
+                        <RelativeLayout
+                            android:id="@+id/wait_recharge_rl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    style="@style/imageView"
+                                    android:background="@drawable/expired_stamp" />
+
+                                <TextView
+                                    style="@style/application_text"
+                                    android:text="过期印章" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
                     </cn.fengwoo.sealsteward.view.QMUIFloatLayout>
 
 
                 </LinearLayout>
             </LinearLayout>
             <!--第三个卡片结束！！！！！！！！！！！！！！！！-->
+
+
+<!--！！！！！！！！！！暂时隐藏掉第四个模块，微信支付宝充值及充值记录！！！！！！！！！！！-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -745,30 +768,6 @@
                                 <TextView
                                     style="@style/application_text"
                                     android:text="@string/order" />
-
-                            </LinearLayout>
-                        </RelativeLayout>
-
-
-                        <RelativeLayout
-                            android:id="@+id/wait_recharge_rl"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    style="@style/imageView"
-                                    android:background="@drawable/icon_recharge" />
-
-                                <TextView
-                                    style="@style/application_text"
-                                    android:text="待充值章" />
 
                             </LinearLayout>
                         </RelativeLayout>
