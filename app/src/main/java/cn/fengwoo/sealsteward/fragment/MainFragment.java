@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -42,6 +43,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hjq.toast.ToastUtils;
 import com.polidea.rxandroidble2.RxBleConnection;
 import com.squareup.picasso.Picasso;
+import com.sw.style.ViewStyleSetter;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tianma.netdetector.lib.NetStateChangeObserver;
@@ -246,12 +248,18 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         return view;
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private void initView() {
         loadingView = new LoadingView(getActivity());
         //  title_tv.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
         company_name.setVisibility(View.VISIBLE);
         if (getActivity() != null) {
             company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
+        }
+
+        ViewStyleSetter viewStyleSetter = new ViewStyleSetter(banner);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            viewStyleSetter.setRound(30);//圆角弧度
         }
     }
 

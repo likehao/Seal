@@ -38,25 +38,18 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/home_bg" />
 
-                <LinearLayout
+                <com.youth.banner.Banner
+                    android:id="@+id/banner"
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/corners_bg"
-                    android:elevation="3dp">
-
-                    <com.youth.banner.Banner
-                        android:id="@+id/banner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:image_scale_type="fit_xy"
-                        app:indicator_drawable_selected="@drawable/message_circle"
-                        app:indicator_height="7dp"
-                        app:indicator_margin="3dp"
-                        app:indicator_width="7dp" />
-                </LinearLayout>
+                    app:image_scale_type="fit_xy"
+                    app:indicator_drawable_selected="@drawable/message_circle"
+                    app:indicator_height="7dp"
+                    app:indicator_margin="3dp"
+                    app:indicator_width="7dp" />
 
             </RelativeLayout>
 

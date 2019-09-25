@@ -125,7 +125,6 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-
     private void getDate() {
         Utils.log("getDate");
         HashMap<String, String> hashMap = new HashMap<>();

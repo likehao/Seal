@@ -290,4 +290,9 @@ dependencies {
 
     //悬浮窗
     implementation 'com.imuxuan:floatingview:1.2'
+
+    //设置控件圆角
+    implementation 'com.github.ShadowWalkerGIT:RoundView:v1.0.0'
+
+
 }
