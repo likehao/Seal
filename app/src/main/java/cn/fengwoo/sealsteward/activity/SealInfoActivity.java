@@ -186,7 +186,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void getSealInfo(boolean isEditable) {
-
         showLoadingView();
         HashMap<String, String> hashMap = new HashMap<>();
         Intent intent = getIntent();  //获取选中的公司ID

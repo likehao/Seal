@@ -203,7 +203,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private Long lastTime;
     private Vibrator vibrator;
 
-
 //    private boolean hasDfu = false;
 
     private Handler handler = new Handler(new Handler.Callback() {
@@ -257,6 +256,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             company_name.setText(CommonUtil.getUserData(getActivity()).getCompanyName());
         }
 
+        //设置banner控件为圆角
         ViewStyleSetter viewStyleSetter = new ViewStyleSetter(banner);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             viewStyleSetter.setRound(30);//圆角弧度
