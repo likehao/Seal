@@ -150,7 +150,7 @@
                 android:id="@+id/sureMoney_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.01"
+                android:text="240"
                 android:textColor="@color/black_3"
                 android:textSize="24sp" />
 

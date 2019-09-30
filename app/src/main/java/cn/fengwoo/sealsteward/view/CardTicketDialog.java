@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import cn.fengwoo.sealsteward.R;
 
+/**
+ * 卡券dialog
+ */
 public class CardTicketDialog {
     private View view;
     private AlertDialog dialog;

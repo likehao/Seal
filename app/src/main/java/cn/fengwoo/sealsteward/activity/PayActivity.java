@@ -127,6 +127,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener, A
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            sureMoney_tv.setText(amountOfMoney+"");
                             rechargeAdapter = new RechargePackagesAdapter(arrayList, PayActivity.this);
                             pay_recharge_lv.setAdapter(rechargeAdapter);
                             rechargeAdapter.notifyDataSetChanged(); //刷新数据
