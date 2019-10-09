@@ -226,6 +226,7 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
                 }
                 intent = new Intent(AddRecordFingerPrintActivity.this, RecordFingerprintActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

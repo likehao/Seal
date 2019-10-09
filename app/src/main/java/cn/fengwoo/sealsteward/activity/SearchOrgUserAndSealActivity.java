@@ -361,6 +361,7 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
 
                 } else if (position == 2) {
                     if (!Utils.hasThePermission(SearchOrgUserAndSealActivity.this, Constants.permission23)) {
+                        showToast("您暂无权限");
                         return;
                     }
                     Intent intent = new Intent(SearchOrgUserAndSealActivity.this, SelectPeopleMultiActivity.class);
@@ -447,6 +448,7 @@ public class SearchOrgUserAndSealActivity extends BaseActivity implements View.O
                     optionBottomDialog.dismiss();
                 } else if (position == 2) {
                     if (!Utils.hasThePermission(SearchOrgUserAndSealActivity.this, Constants.permission23)) {
+                        showToast("您暂无权限");
                         return;
                     }
                     Intent intent = new Intent(SearchOrgUserAndSealActivity.this, SelectSealMultiActivity.class);

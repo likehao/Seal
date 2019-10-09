@@ -1236,7 +1236,21 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         EventBus.getDefault().post(new MessageEvent("ble_delete_pwd_user", "success"));
                                     } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A5 00 ")) {
                                         EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
-                                    } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AB 00")){
+                                    }
+                                    else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 01")){
+                                        EventBus.getDefault().post(new MessageEvent("first_fingerprint", "success"));
+                                    }
+                                    else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 02")){
+                                        EventBus.getDefault().post(new MessageEvent("second_fingerprint", "success"));
+                                    }
+                                    else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 03")){
+                                        EventBus.getDefault().post(new MessageEvent("third_fingerprint", "success"));
+                                    }
+                                    else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 04")){
+                                        Log.e("TAG","指纹录制成功!!!!!!!!!!!!!!!!!!!");
+                                        EventBus.getDefault().post(new MessageEvent("add_fingerprint", "success"));
+                                    }
+                                    else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AB 00")){
                                         //删除指纹成功
                                         EventBus.getDefault().post(new MessageEvent("delete_fingerprint","success"));
                                     }else if(Utils.bytesToHexString(bytes).startsWith("FF 01 AC 00")){

@@ -520,6 +520,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     String appKey = responseInfo.getData().getAppKey();
                     EasySP.init(LoginActivity.this).putString("appkey",appKey);
                     getServiceAddress();
+                }else {
+                    realmNameDialog.dialog.dismiss();
                 }
 
             }

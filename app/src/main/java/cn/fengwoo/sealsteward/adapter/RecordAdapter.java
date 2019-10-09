@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.fengwoo.sealsteward.R;
-import cn.fengwoo.sealsteward.activity.MapViewActivity;
 import cn.fengwoo.sealsteward.activity.RecordQrCodeActivity;
-import cn.fengwoo.sealsteward.bean.GetApplyListBean;
 import cn.fengwoo.sealsteward.bean.MessageEvent;
-import cn.fengwoo.sealsteward.bean.StampRecordList;
 import cn.fengwoo.sealsteward.entity.RecordData;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.utils.HttpUrl;

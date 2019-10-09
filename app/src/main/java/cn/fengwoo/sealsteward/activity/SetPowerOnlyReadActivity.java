@@ -94,6 +94,8 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
     SwitchButton permission26;
     @BindView(R.id.permission27)
     SwitchButton permission27;
+    @BindView(R.id.permission28)
+    SwitchButton permission28;
     private LoadingView loadingView;
     private SetPermissionData setPermissionData;
     private String userId;
@@ -146,6 +148,7 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
         permission25.setOnCheckedChangeListener(this);
         permission26.setOnCheckedChangeListener(this);
         permission27.setOnCheckedChangeListener(this);
+        permission28.setOnCheckedChangeListener(this);
         loadingView = new LoadingView(this);
         if (last_activity.startsWith(UserInfoActivity.class.getSimpleName())) {
             edit_tv.setVisibility(View.GONE);
@@ -191,6 +194,7 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
         permission25.setEnabled(false);
         permission26.setEnabled(false);
         permission27.setEnabled(false);
+        permission28.setEnabled(false);
     }
 
     private void setSwitchButtons() {
@@ -301,6 +305,10 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
         if (targetPermissionJson.contains(Constants.permission27)) {
             permission27.setChecked(true);
             funcIdList.add(Constants.permission27);
+        }
+        if (targetPermissionJson.contains(Constants.permission28)) {
+            permission28.setChecked(true);
+            funcIdList.add(Constants.permission28);
         }
     }
 
@@ -514,6 +522,13 @@ public class SetPowerOnlyReadActivity extends BaseActivity implements View.OnCli
                     funcIdList.add(Constants.permission27);
                 } else {
                     funcIdList.remove(Constants.permission27);
+                }
+                break;
+            case R.id.permission28:
+                if (isChecked) {
+                    funcIdList.add(Constants.permission28);
+                } else {
+                    funcIdList.remove(Constants.permission28);
                 }
                 break;
         }

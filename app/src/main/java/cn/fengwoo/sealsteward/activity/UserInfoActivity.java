@@ -28,6 +28,7 @@ import cn.fengwoo.sealsteward.entity.ResponseInfo;
 import cn.fengwoo.sealsteward.entity.UserDetailData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.CommonUtil;
+import cn.fengwoo.sealsteward.utils.Constants;
 import cn.fengwoo.sealsteward.utils.DownloadImageCallback;
 import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
@@ -99,26 +100,34 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.user_info__headImg_rl:
-                Intent intent = new Intent(this,BigImgActivity.class);
+                Intent intent = new Intent(this, BigImgActivity.class);
                 String userPrint = responseInfo.getData().getHeadPortrait();
                 String userImg = "file://" + HttpDownloader.path + userPrint;
-                intent.putExtra("photo",userImg);
+                intent.putExtra("photo", userImg);
                 startActivity(intent);
                 break;
             case R.id.org_name_rl:
-                intent = new Intent(this, ChangeInformationActivity.class);
-                intent.putExtra("realName", realNameTv.getText().toString());
-                intent.putExtra("userId",uID);
-                intent.putExtra("TAG", 8);
-                startActivityForResult(intent,12);
+                if (!Utils.hasThePermission(this, Constants.permission28)) {
+                    showToast("您暂无此权限");
+                } else {
+                    intent = new Intent(this, ChangeInformationActivity.class);
+                    intent.putExtra("realName", realNameTv.getText().toString());
+                    intent.putExtra("userId", uID);
+                    intent.putExtra("TAG", 8);
+                    startActivityForResult(intent, 12);
+                }
 //                startActivity(intent);
                 break;
             case R.id.org_job_rl:
-                intent = new Intent(this,ChangeInformationActivity.class);
-                intent.putExtra("job",jobTv.getText().toString());
-                intent.putExtra("userId",uID);
-                intent.putExtra("TAG",7);
-                startActivityForResult(intent,12);
+                if (!Utils.hasThePermission(this, Constants.permission28)) {
+                    showToast("您暂无此权限");
+                } else {
+                    intent = new Intent(this, ChangeInformationActivity.class);
+                    intent.putExtra("job", jobTv.getText().toString());
+                    intent.putExtra("userId", uID);
+                    intent.putExtra("TAG", 7);
+                    startActivityForResult(intent, 12);
+                }
 //                startActivity(intent);
                 break;
         }
@@ -221,7 +230,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 String mUserId = CommonUtil.getUserData(this).getId();
                 if (mUserId.equals(uID)) {
                     isReadOnly = true;
-                }else{
+                } else {
                     isReadOnly = false;
                 }
 
@@ -229,12 +238,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 intent.putExtra("userId", uID);
                 if (isReadOnly) {
                     intent.setClass(this, SetPowerOnlyReadActivity.class);
-                }else{
+                } else {
                     intent.setClass(this, SetPowerActivity.class);
                 }
-                intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
-                intent.putExtra("permission", targetPermissionJson);
-                startActivityForResult(intent,12);
+                if (!Utils.hasThePermission(this, Constants.permission18)) {
+                    showToast("您暂无权限");
+                } else {
+                    intent.putExtra("last_activity", UserInfoActivity.class.getSimpleName());
+                    intent.putExtra("permission", targetPermissionJson);
+                    startActivityForResult(intent, 12);
+                }
                 break;
         }
     }

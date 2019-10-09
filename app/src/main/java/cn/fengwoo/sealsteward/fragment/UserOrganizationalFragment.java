@@ -232,6 +232,7 @@ public class UserOrganizationalFragment extends Fragment {
 //                    deleteDialog(); //提示删除
 
                     if (!Utils.hasThePermission(getActivity(), Constants.permission23)) {
+                        Toast.makeText(getActivity(),"您暂无权限",Toast.LENGTH_SHORT).show();
                         return;
                     }
 

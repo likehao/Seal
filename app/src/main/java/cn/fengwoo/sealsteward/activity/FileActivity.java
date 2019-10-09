@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -93,8 +94,11 @@ public class FileActivity extends BaseActivity implements View.OnClickListener {
             setSwipeBackEnable(false);  //设置是否允许撤滑返回
         }
 
+        //获取屏幕宽度
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int width = displayMetrics.widthPixels;
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0,900,0,0);
+        layoutParams.setMargins(width-170,900,0,0);
 //        layoutParams.gravity = 200;
         //设置悬浮窗
         FloatingView.get()

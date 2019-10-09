@@ -100,6 +100,8 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
     SwitchButton permission26;
     @BindView(R.id.permission27)
     SwitchButton permission27;
+    @BindView(R.id.permission28)
+    SwitchButton permission28;
     private LoadingView loadingView;
     private SetPermissionData setPermissionData;
     private String userId;
@@ -152,6 +154,7 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
         permission25.setOnCheckedChangeListener(this);
         permission26.setOnCheckedChangeListener(this);
         permission27.setOnCheckedChangeListener(this);
+        permission28.setOnCheckedChangeListener(this);
         loadingView = new LoadingView(this);
 
     }
@@ -282,6 +285,10 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
         if (targetPermissionJson.contains(Constants.permission27)) {
             permission27.setChecked(true);
             funcIdList.add(Constants.permission27);
+        }
+        if (targetPermissionJson.contains(Constants.permission28)) {
+            permission28.setChecked(true);
+            funcIdList.add(Constants.permission28);
         }
     }
 
@@ -497,6 +504,13 @@ public class SetPowerActivity extends BaseActivity implements View.OnClickListen
                     funcIdList.add(Constants.permission27);
                 } else {
                     funcIdList.remove(Constants.permission27);
+                }
+                break;
+            case R.id.permission28:
+                if (isChecked) {
+                    funcIdList.add(Constants.permission28);
+                } else {
+                    funcIdList.remove(Constants.permission28);
                 }
                 break;
         }

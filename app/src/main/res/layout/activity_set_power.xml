@@ -482,6 +482,20 @@
 
                     <TextView
                         style="@style/set_power_tv"
+                        android:text="编辑用户" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/permission28"
+                        style="@style/set_power_bt" />
+
+                </RelativeLayout>
+
+                <View style="@style/line_left" />
+
+                <RelativeLayout style="@style/set_power_rl">
+
+                    <TextView
+                        style="@style/set_power_tv"
                         android:text="删除用户" />
 
                     <com.suke.widget.SwitchButton

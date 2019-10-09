@@ -473,10 +473,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                         showToast("设备接入失败，请检查是否接入了网络");
                     }
                 });
-        }
+    }
 
 
-    private void itemClick(int position){
+    private void itemClick(int position) {
         // 断开蓝牙
         ((MyApp) getApplication()).removeAllDisposable();
         ((MyApp) getApplication()).setConnectionObservable(null);
@@ -523,26 +523,28 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
 
     /**
      * 连接设备
+     *
      * @param position
      */
     private void connectBle(int position) {
         // 连接ble设备
 
         String macAddress = scanResultsList.get(position).getBleDevice().getMacAddress();
+        if (macAddress != null) {
+            RxBleDevice device = rxBleClient.getBleDevice(macAddress);
 
-        RxBleDevice device = rxBleClient.getBleDevice(macAddress);
 //        RxBleDevice device = rxBleClient.getBleDevice("00:15:84:00:01:67");
 
-        ((MyApp) getApplication()).setRxBleDevice(device);
+            ((MyApp) getApplication()).setRxBleDevice(device);
 
-        if (scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")) {
-            // 用三期seal时不自动连接
-            connectionObservable = prepareConnectionObservableWithoutAutoConnect(device);
-        } else {
-            // 用二期seal时不自动连接
-            connectionObservable = prepareConnectionObservable(device);
+            if (scanResultsList.get(position).getBleDevice().getName().contains("BHQKL")) {
+                // 用三期seal时不自动连接
+                connectionObservable = prepareConnectionObservableWithoutAutoConnect(device);
+            } else {
+                // 用二期seal时不自动连接
+                connectionObservable = prepareConnectionObservable(device);
+            }
         }
-
         ((MyApp) getApplication()).setConnectionObservable(connectionObservable);
 
         connectDisposable = connectionObservable // <-- autoConnect flag
@@ -595,10 +597,10 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                     Intent intent = new Intent();
                                     intent.putExtra("bleName", getNameFromList(macAddress));
                                     intent.putExtra("sealPrint", getSealPrint(macAddress));
-                                    intent.putExtra("applicationConnect","applicationConnect");
+                                    intent.putExtra("applicationConnect", "applicationConnect");
                                     setResult(Constants.TO_NEARBY_DEVICE, intent);
                                     finish();
-                                }else {
+                                } else {
 
                                     Intent intent = new Intent();
                                     intent.putExtra("bleName", getNameFromList(macAddress));

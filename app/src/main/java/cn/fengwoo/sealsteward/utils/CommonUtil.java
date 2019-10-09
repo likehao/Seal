@@ -210,27 +210,11 @@ public class CommonUtil {
     }
 
     /**
-     * 启动数据
-     */
-    public static byte[] getStartData() {
-        int startInt = Integer.parseInt("80");
-        byte[] time = DataTrans.intToByteArray(3, true);
-        byte[] startYear = DataTrans.shortToByteArray((short) 2019, true);
-        byte[] startByte = new byte[]{(byte) startInt,
-                1, 2, 3, 4, 5, 6,
-                0, 0, 0, 26, 27, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38,
-                time[0], time[1], time[2], time[3],
-                startYear[0], startYear[1], 9, 9, 19, 19, 19};
-        return startByte;
-    }
-
-    /**
      * 启动
      */
     public static byte[] startData(int sealTimes, String timeStamp) {
         byte[] time = DataTrans.shortToByteArray((short) sealTimes, false);  //可盖章次数
 
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy MM dd HH mm ss");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Date date = new Date(Long.valueOf(timeStamp));
@@ -297,68 +281,6 @@ public class CommonUtil {
         return startByte;
     }
 
-
-    /**
-     * 指纹权限
-     *
-     * @return
-     */
-    public static byte[] setFingerprint() {
-        long setLong = DataTrans.parseLong("EB");
-        int setInt = DataTrans.integer("25");
-        byte[] setBytes = DataTrans.intToByteArray(3, true);
-        byte[] failYear = DataTrans.shortToByteArray((short) 2019, true);
-        byte[] setFingerprint = new byte[]{(byte) setLong, (byte) setInt,
-                setBytes[0], setBytes[1], setBytes[2], setBytes[3],
-                failYear[0], failYear[1], 9, 9, 19, 19, 19};
-        return setFingerprint;
-    }
-
-    /**
-     * 添加按键密码和权限
-     *
-     * @return
-     */
-    public static byte[] addPressPwd() {
-        byte[] time = DataTrans.shortToByteArray((short) 10, false);
-        int year = 2019 % 2000;
-        byte failYear = (byte) year;
-        byte[] addPressPwd = new byte[]{1, 1, 1, 1, 1, 1, time[0], time[1], failYear, 9, 9, 19, 19, 19};
-        return addPressPwd;
-    }
-
-    /**
-     * 修改按键密码权限
-     *
-     * @return
-     */
-    public static byte[] changePwdPower(byte[] bytes) {
-        //     byte[] changePwdCode = DataTrans.intToByteArray(1,false);
-        byte[] time = DataTrans.shortToByteArray((short) 10, false);
-        int year = 2019 % 2000;
-        byte failYear = (byte) year;
-        byte[] changePrePow = new byte[]{bytes[0], bytes[1], bytes[2], bytes[3], time[0], time[1], failYear, 9, 9, 19, 19, 19};
-        return changePrePow;
-    }
-
-    /**
-     * 修改按键密码
-     */
-    public static byte[] changePwd(byte[] bytes) {
-        byte[] keyPwd = new byte[]{bytes[0], bytes[1], bytes[2], bytes[3], 1, 1, 1, 1, 1, 1, 6, 5, 4, 3, 2, 1};
-        return keyPwd;
-    }
-
-    /**
-     * 删除按键密码
-     */
-    public static byte[] deletePressPwd(byte[] bytes) {
-       /* byte[] deletePwdCode = DataTrans.intToByteArray(1,false);
-        byte[] deletePrePwd = new byte[]{deletePwdCode[0], deletePwdCode[1], deletePwdCode[2], deletePwdCode[3]};*/
-        byte[] deletePrePwd = new byte[]{bytes[0], bytes[1], bytes[2], bytes[3]};
-        return deletePrePwd;
-    }
-
     /**
      * 录入指纹
      */
@@ -385,6 +307,7 @@ public class CommonUtil {
      */
     public static byte[] changeFingerprint(int fingerCode, int count, String fingerTime) {
         byte[] fingerCount = DataTrans.shortToByteArray((short) count, false);
+
         Date date = new Date(Long.valueOf(fingerTime));
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

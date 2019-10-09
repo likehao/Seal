@@ -63,6 +63,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     private CommonAdapter commonAdapter;
     private ArrayList<PwdUserListItem> list;
     private PwdUserListItem deleteItem;
+    private boolean isOnlyRead = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +91,10 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.add_ll:
-//                if (!Utils.hasThePermission(this, Constants.permission10)) {
-//                    showToast("缺少以下权限：添加脱机用户");
-//                    return;
-//                }
+                if (!Utils.hasThePermission(this, Constants.permission10)) {
+                    showToast("缺少以下权限：添加脱机用户");
+                    return;
+                }
                 Intent intent = new Intent();
                 intent.setClass(this, AddRecordFingerPrintActivity.class);
                 startActivityForResult(intent, 123);
@@ -150,9 +151,9 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                 viewHolder.setOnClickListener(R.id.finger_edit_tv, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission11)) {
-//                            return;
-//                        }
+                        if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission11)) {
+                            return;
+                        }
                         Intent intent = new Intent();
                         intent.setClass(FingerprintUserActivity.this, AddRecordFingerPrintActivity.class);
                         intent.putExtra("pwdUserListItem", pwdUserListItem);
@@ -163,6 +164,9 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                 viewHolder.setOnClickListener(R.id.finger_delete_tv, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission12)) {
+                            return;
+                        }
                         deleteItem = pwdUserListItem;
                         byte[] fingerCode = new byte[pwdUserListItem.getFingerprintCode()];
                         ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
@@ -178,19 +182,24 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                                 ));
                     }
                 });
-//                // edit
-//                if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission11)) {
+//                if (isOnlyRead) {
 //                    viewHolder.getView(R.id.finger_edit_tv).setVisibility(View.GONE);
-//                } else {
-//                    viewHolder.getView(R.id.finger_edit_tv).setVisibility(View.VISIBLE);
-//                }
-//
-//                // delete
-//                if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission12)) {
 //                    viewHolder.getView(R.id.finger_delete_tv).setVisibility(View.GONE);
-//                } else {
-//                    viewHolder.getView(R.id.finger_delete_tv).setVisibility(View.VISIBLE);
 //                }
+
+                // edit
+                if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission11)) {
+                    viewHolder.getView(R.id.finger_edit_tv).setVisibility(View.GONE);
+                } else {
+                    viewHolder.getView(R.id.finger_edit_tv).setVisibility(View.VISIBLE);
+                }
+
+                // delete
+                if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission12)) {
+                    viewHolder.getView(R.id.finger_delete_tv).setVisibility(View.GONE);
+                } else {
+                    viewHolder.getView(R.id.finger_delete_tv).setVisibility(View.VISIBLE);
+                }
 
             }
         };
