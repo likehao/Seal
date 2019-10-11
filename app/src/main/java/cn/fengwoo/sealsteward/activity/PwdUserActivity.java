@@ -133,6 +133,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
         HttpUtil.sendDataAsync(this, HttpUrl.PWD_USER_LIST, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
                 Utils.log(e.toString());
             }
 
@@ -185,6 +186,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                         }
                     });
                 }
+
             }
         });
     }

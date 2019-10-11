@@ -259,7 +259,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         //设置banner控件为圆角
         ViewStyleSetter viewStyleSetter = new ViewStyleSetter(banner);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            viewStyleSetter.setRound(30);//圆角弧度
+            viewStyleSetter.setRound(20);//圆角弧度
         }
     }
 
@@ -268,6 +268,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         needSeal_rl.setOnClickListener(this);
         useSealApply_rl.setOnClickListener(this);
         wait_me_apply_rl.setOnClickListener(this);
+        
         add_ppl.setOnClickListener(this);
         approval_record_rl.setOnClickListener(this);
         tv_check_record.setOnClickListener(this);
@@ -1238,12 +1239,15 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         EventBus.getDefault().post(new MessageEvent("ble_reset", "success"));
                                     }
                                     else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 01")){
+                                        Log.e("TAG","第一次录制成功!!!!!!!!!!!!!!!!!!!");
                                         EventBus.getDefault().post(new MessageEvent("first_fingerprint", "success"));
                                     }
                                     else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 02")){
+                                        Log.e("TAG","第二次录制成功!!!!!!!!!!!!!!!!!!!");
                                         EventBus.getDefault().post(new MessageEvent("second_fingerprint", "success"));
                                     }
                                     else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 03")){
+                                        Log.e("TAG","第三次录制成功!!!!!!!!!!!!!!!!!!!");
                                         EventBus.getDefault().post(new MessageEvent("third_fingerprint", "success"));
                                     }
                                     else if (Utils.bytesToHexString(bytes).startsWith("FF 07 AA 04")){

@@ -38,6 +38,7 @@ import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -61,9 +62,10 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     @BindView(R.id.finger_lv)
     ListView listView;
     private CommonAdapter commonAdapter;
-    private ArrayList<PwdUserListItem> list;
+    private List<PwdUserListItem> list;
     private PwdUserListItem deleteItem;
     private boolean isOnlyRead = false;
+    private LoadingView loadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +78,16 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
+        loadingView = new LoadingView(this);
         list = new ArrayList<>();
         title_tv.setText("指纹用户");
         set_back_ll.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
-        add_ll.setVisibility(View.VISIBLE);
+        if (!Utils.hasThePermission(this, Constants.permission10)) {
+            add_ll.setVisibility(View.GONE);
+        }else {
+            add_ll.setVisibility(View.VISIBLE);
+        }
         add_ll.setOnClickListener(this);
     }
 
@@ -91,10 +98,6 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.add_ll:
-                if (!Utils.hasThePermission(this, Constants.permission10)) {
-                    showToast("缺少以下权限：添加脱机用户");
-                    return;
-                }
                 Intent intent = new Intent();
                 intent.setClass(this, AddRecordFingerPrintActivity.class);
                 startActivityForResult(intent, 123);
@@ -107,17 +110,20 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
      * 获取指纹用户
      */
     private void getFingerUser() {
+        loadingView.show();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("sealId", EasySP.init(this).getString("currentSealId"));
         hashMap.put("userType", "2");
         HttpUtil.sendDataAsync(this, HttpUrl.PWD_USER_LIST, 1, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingView.cancel();
                 Utils.log(e.toString());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                loadingView.cancel();
                 String result = response.body().string();
                 Utils.log(result);
                 Gson gson = new Gson();
@@ -127,8 +133,34 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            no_record.setVisibility(View.GONE);
+                            //添加数据到list
+                            list = responseInfo.getData();
+                            // items 处理
+                            boolean isAdmin = EasySP.init(FingerprintUserActivity.this).getBoolean("isAdmin");
+                            Utils.log("isAdmin:" + isAdmin);
+                            if (!isAdmin) {
+                                // 如果没有admin权限，过滤items
+                                for (PwdUserListItem pwdUserListItem : list) {
+                                    if (CommonUtil.getUserData(FingerprintUserActivity.this).getId().equals(pwdUserListItem.getUserId())) {
+                                        list.clear();
+                                        list.add(pwdUserListItem);
+                                        break;
+                                    }
+                                }
+                            }
+
                             setFingerData();
+                            if (commonAdapter != null){
+                                commonAdapter.notifyDataSetChanged();
+                                no_record.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            no_record.setVisibility(View.VISIBLE);
                         }
                     });
                 }
@@ -203,7 +235,6 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
 
             }
         };
-        commonAdapter.notifyDataSetChanged();
         listView.setAdapter(commonAdapter);
     }
 
@@ -232,7 +263,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                         Toast.makeText(FingerprintUserActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                         list.remove(pwdUserListItem);
 
-//                        getFingerUser();
+                        getFingerUser();
                         commonAdapter.notifyDataSetChanged();
                     }
                 });
