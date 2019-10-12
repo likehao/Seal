@@ -345,7 +345,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.realmName_sure_tv:     //服务器地址确定按钮
                 getServiceConfig();
-//                getServiceAddress();
                 break;
         }
     }
@@ -378,12 +377,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
-     * 检测是否服务器地址dialog
+     * 检测是否显示服务器地址dialog
      */
     private void showDia(String str) {
         final CommonDialog commonDialog = new CommonDialog(this, "是否设置服务器地址？", "不设置则默认使用深圳白鹤区块链科技有限公司的服务器地址,稍后您可以点击右上角按钮设置", str);
         commonDialog.cancel.setText("设置");
         commonDialog.showDialog();
+        //设置
         commonDialog.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -391,6 +391,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 showRealmNameDialog();
             }
         });
+        //登录
         commonDialog.setClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -421,11 +422,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         realmNameDialog.showDialog();
         if (saveIp != null) {
             realmNameDialog.service_ip.setText(saveIp);
-            //如果不是我们自己的服务器就显示
-//            if (!saveAddStr.equals("http://www.baiheyz.com:8080")) {
-//                String ipStr = saveAddStr.split("//")[1];
-//                realmNameDialog.service_ip.setText(ipStr);
-//            }
         }
         if (savePOrt != null) {
             realmNameDialog.port_number.setText(savePOrt);
@@ -439,13 +435,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         realmNameDialog.service_ip.setSelection(realmNameDialog.service_ip.getText().toString().trim().length());  //将光标移至文字末尾
         realmNameDialog.port_number.setSelection(realmNameDialog.port_number.getText().toString().trim().length());
 
-//        //取消dialog的监听事件
-//        realmNameDialog.dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//            @Override
-//            public void onCancel(DialogInterface dialog) {
-//                addStr = realmNameDialog.address.getText().toString().trim();
-//            }
-//        });
     }
 
     /**
@@ -455,18 +444,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         agreement = realmNameDialog.agreement.getText().toString().trim();  //http/htpps
         saveAgreement = agreement;
 
-//        ip = realmNameDialog.service_ip.getText().toString().trim();     // ip
-//        saveIp = ip;
-//        if (ip.length() == 0) {
-//            saveIp = null;
-//        }
-
-//        port_num = realmNameDialog.port_number.getText().toString().trim();  //端口号
-//        savePOrt = port_num;
-//        if (port_num.length() == 0) {
-//            savePOrt = null;
-//        }
-
         //拼接服务器地址,判断是否有端口
         if (port_num.length() != 0) {
             addressUrl = String.format("%s%s%s%s", agreement, "://", ip, ":" + port_num);
@@ -474,6 +451,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             addressUrl = String.format("%s%s%s", agreement, "://", ip);
         }
         Log.e("TAG", "服务器地址addressUrl:" + addressUrl);
+
+        EasySP.init(LoginActivity.this).putString("addStr", addressUrl);
 
         realmNameDialog.dialog.dismiss();
 
@@ -501,6 +480,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         } else {
             serviceConfig = ip;
         }
+
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("serverAddress", serviceConfig);
         HttpUtil.sendDataAsync(this, HttpUrl.SERVICECONFIG, 1, hashMap, null, new Callback() {
@@ -644,10 +624,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onFailure(Call call, IOException e) {
                 loadingView.cancel();
+                Log.e("TAG", "登录失败。。。。。。。");
                 Looper.prepare();
                 showToast("error:" + e);
                 Looper.loop();
-                Log.e("TAG", "登录失败。。。。。。。");
             }
 
             @SuppressLint("ApplySharedPref")

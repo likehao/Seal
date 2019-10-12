@@ -38,7 +38,7 @@ public class HttpUtil {
     private static OkHttpClient okHttpClient;//okHttpClient 实例
     private Handler okHttpHandler;
     private static String addStr;
-    private static String URL2;
+    private static String URL2,URL1;
     public static String BASE_URL;    //拼接地址
 
     /**
@@ -73,10 +73,15 @@ public class HttpUtil {
      */
     public static <T> void sendDataAsync(Activity activity, String url, Integer type, Map<String, String> params, T data, Callback callback) {
         addStr = EasySP.init(MyApp.getAppContext()).getString("addStr").trim();  //接收正式服务器地址
-//        addStr = "http://192.168.1.117";   //调试环境
+        URL1 = "http://www.baiheyz.com:8080";
         URL2 = "/bhsealappservice/";
-//        BASE_URL = addStr;    //本地地址
-        BASE_URL = String.format("%s%s", addStr, URL2);    //拼接地址
+
+        if (addStr.length() == 0){
+            BASE_URL = String.format("%s%s", URL1, URL2);
+        }else {
+            BASE_URL = String.format("%s%s", addStr, URL2);    //拼接地址
+        }
+
         //初始化OkHttpClient
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)//设置超时时间

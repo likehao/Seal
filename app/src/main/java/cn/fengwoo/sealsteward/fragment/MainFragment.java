@@ -268,7 +268,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         needSeal_rl.setOnClickListener(this);
         useSealApply_rl.setOnClickListener(this);
         wait_me_apply_rl.setOnClickListener(this);
-        
         add_ppl.setOnClickListener(this);
         approval_record_rl.setOnClickListener(this);
         tv_check_record.setOnClickListener(this);

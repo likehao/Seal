@@ -283,7 +283,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) throws ParseException {
+    public void onMessageEvent(MessageEvent event){
         if (event.msgType.equals("delete_fingerprint")) {
             deleteFingerprint(deleteItem);      //删除指纹
         }
