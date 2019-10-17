@@ -30,7 +30,9 @@ import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.MyApp;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
+/**
+ * 指纹登录
+ */
 public class FingerPrintActivity extends Base2Activity {
 
     @BindView(R.id.tv_switch_login)

@@ -448,7 +448,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String appkey = EasySP.init(this).getString("appkey");
-        OkGo.<String>get(HttpUrl.URL + HttpUrl.DEVICE_ACCESS)
+        OkGo.<String>get(HttpUrl.URL_SDK + HttpUrl.DEVICE_ACCESS)
                 .params("appKey", appkey.length() == 0 ? Constants.key : appkey)
                 .params("mac", scanResultsList.get(position).getBleDevice().getMacAddress())
                 .execute(new StringCallback() {

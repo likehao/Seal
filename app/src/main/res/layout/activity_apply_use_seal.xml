@@ -82,6 +82,7 @@
                     android:gravity="end"
                     android:hint="@string/please_input_time"
                     android:inputType="number"
+                    android:maxLength="4"
                     android:textSize="12sp" />
 
                 <ImageView

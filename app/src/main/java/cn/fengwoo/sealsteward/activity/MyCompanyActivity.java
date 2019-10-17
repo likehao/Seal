@@ -144,6 +144,8 @@ public class MyCompanyActivity extends BaseActivity implements View.OnClickListe
                                     data.setCompanyId(arrayList.get(0).getId());
                                     CommonUtil.setUserData(MyCompanyActivity.this, data);
                                 }
+                                //请求个人信息更新权限
+                                getUserInfoData(CommonUtil.getUserData(MyCompanyActivity.this).getId());
                             }
                             company_list_lv.setAdapter(companyListAdapter);
                             companyListAdapter.notifyDataSetChanged(); //刷新数据

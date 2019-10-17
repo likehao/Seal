@@ -108,6 +108,8 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("result", result);
                 startActivity(intent);
                 finish();
+            } else {
+                showToast("扫描的结果为:"+ result);
             }
 
         }
@@ -115,7 +117,6 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onAnalyzeFailed() {
             Utils.log("result:" + "fail");
-
             Intent resultIntent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_FAILED);
@@ -188,6 +189,8 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener {
                             intent.putExtra("result", result);
                             startActivity(intent);
                             finish();
+                        }else {
+                            showToast("扫描的结果为:"+ result);
                         }
                     }
 
