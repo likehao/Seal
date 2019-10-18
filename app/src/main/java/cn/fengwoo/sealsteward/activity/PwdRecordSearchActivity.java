@@ -334,7 +334,7 @@ public class PwdRecordSearchActivity extends BaseActivity implements View.OnClic
                 if (responseInfoP.getData() != null && responseInfoP.getCode() == 0) {
                     for (OfflineRecordData app : responseInfoP.getData()) {
                         String stampTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));
-                        pList.add(new SeeRecordBean(app.getFlowNumber(), app.getSealName(), app.getUserName(), stampTime));
+                        pList.add(new SeeRecordBean(app.getFlowNumber(), app.getSealName(), app.getUserName(), stampTime,app.getStampType()));
                     }
                     //请求数据
                     runOnUiThread(new Runnable() {

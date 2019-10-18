@@ -119,7 +119,6 @@ public class Utils {
         return targetBytes;
     }
 
-
     /**
      * byte转字符串
      */

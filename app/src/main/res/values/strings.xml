@@ -101,6 +101,7 @@
     <string name="clear">清除</string>
     <string name="complete">完成</string>
     <string name="sealTime">盖章时间</string>
+    <string name="seal_way">盖章方式</string>
     <string name="seal_address">盖章地址</string>
     <string name="seal_people">盖章人</string>
     <string name="Flow_number">流&#160;&#160;水&#160;&#160;号</string>

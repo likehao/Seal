@@ -480,7 +480,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         } else {
             serviceConfig = ip;
         }
-
+        EasySP.init(LoginActivity.this).putString("addStr", addressUrl).clear();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("serverAddress", serviceConfig);
         HttpUtil.sendDataAsync(this, HttpUrl.SERVICECONFIG, 1, hashMap, null, new Callback() {

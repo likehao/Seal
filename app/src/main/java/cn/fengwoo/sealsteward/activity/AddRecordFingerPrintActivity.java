@@ -175,65 +175,17 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
      * 提交录入指纹
      */
     private void submit() {
-        AddPwdUserUpload addPwdUserUpload = new AddPwdUserUpload();
+        intent = new Intent(AddRecordFingerPrintActivity.this, RecordFingerprintActivity.class);
         try {
-            addPwdUserUpload.setExpireTime(DateUtils.dateToStamp(failTime.getText().toString()));
+            intent.putExtra("expireTime",DateUtils.dateToStamp(failTime.getText().toString()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        addPwdUserUpload.setStampCount(Integer.valueOf(useTime.getText().toString()));
-        addPwdUserUpload.setUserId(userId);
-        addPwdUserUpload.setUserType(2);
-        addPwdUserUpload.setSealId(EasySP.init(this).getString("currentSealId"));
-
-        HttpUtil.sendDataAsync(AddRecordFingerPrintActivity.this, HttpUrl.ADD_PWD_USER, 2, null, addPwdUserUpload, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Looper.prepare();
-                showToast(e + "");
-                Looper.loop();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Gson gson = new Gson();
-                responseInfo = gson.fromJson(result, new TypeToken<ResponseInfo<AddPwdUserUploadReturn>>() {
-                }.getType());
-                if (responseInfo.getCode() == 0 && responseInfo.getData() != null) {
-                    String count = useTime.getText().toString().trim();  //使用次数
-                    try {
-                        startFingerByte = CommonUtil.recordFingerprint(Integer.parseInt(count), DateUtils.dateToStamp(format)); //                                                                                                                                                                                                                                                                                                                                                                                                               次数和失效时间
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    byte[] bytes = new DataProtocol(CommonUtil.RECORDING, startFingerByte).getBytes();
-//                    String str = Utils.bytesToHexString(bytes); //发送的指令
-
-                    ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
-                            .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, bytes))
-                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    characteristicValue -> {
-                                        Utils.log("指纹fingerprint");
-                                        // Characteristic value confirmed.
-                                    },
-                                    throwable -> {
-                                        Utils.log("指纹error");
-                                        // Handle an error here.
-                                    }
-                            ));
-                    intent = new Intent(AddRecordFingerPrintActivity.this, RecordFingerprintActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else {
-                    Looper.prepare();
-                    showToast(responseInfo.getMessage());
-                    Looper.loop();
-                }
-
-            }
-        });
+        intent.putExtra("stampCount",Integer.valueOf(useTime.getText().toString()));
+        intent.putExtra("userId",userId);
+        intent.putExtra("format",format);
+        startActivityForResult(intent,RecordFingerprintActivity.SUCCESS_CODE_FINGERPRINT);
+        finish();
     }
 
     /**
@@ -349,6 +301,8 @@ public class AddRecordFingerPrintActivity extends BaseActivity implements View.O
             userId = data.getStringExtra("id");
             userName = data.getStringExtra("name");
             finger_user.setText(userName);
+        }else if (requestCode == RecordFingerprintActivity.SUCCESS_CODE_FINGERPRINT){
+            setResult(RecordFingerprintActivity.SUCCESS_CODE_FINGERPRINT);
         }
     }
 

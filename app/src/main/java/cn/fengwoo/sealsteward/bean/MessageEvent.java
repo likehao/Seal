@@ -5,11 +5,14 @@ package cn.fengwoo.sealsteward.bean;
  */
 public class MessageEvent {
     public String msgType,msg;
-
+    public byte[] bytes;
     public MessageEvent(String msgType, String msg) {
         this.msgType = msgType;
         this.msg = msg;
     }
-
+    public MessageEvent(String msgType,byte[] bytes) {
+        this.msgType = msgType;
+        this.bytes = bytes;
+    }
 
 }

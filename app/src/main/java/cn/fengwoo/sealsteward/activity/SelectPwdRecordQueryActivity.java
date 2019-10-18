@@ -174,7 +174,7 @@ public class SelectPwdRecordQueryActivity extends BaseActivity implements View.O
                 if (responseInfo.getData() != null && responseInfo.getCode() == 0) {
                     for (OfflineRecordData app : responseInfo.getData()) {
                         String stampTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));
-                        list.add(new SeeRecordBean(app.getFlowNumber(),app.getSealName(),app.getUserName(),stampTime));
+                        list.add(new SeeRecordBean(app.getFlowNumber(),app.getSealName(),app.getUserName(),stampTime,app.getStampType()));
                     }
                     //请求数据
                     runOnUiThread(new Runnable() {

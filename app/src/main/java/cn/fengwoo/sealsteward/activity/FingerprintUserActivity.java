@@ -2,6 +2,7 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,6 +39,7 @@ import cn.fengwoo.sealsteward.utils.DateUtils;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
+import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.MyApp;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -85,7 +87,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
         set_back_ll.setOnClickListener(this);
         if (!Utils.hasThePermission(this, Constants.permission10)) {
             add_ll.setVisibility(View.GONE);
-        }else {
+        } else {
             add_ll.setVisibility(View.VISIBLE);
         }
         add_ll.setOnClickListener(this);
@@ -100,7 +102,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
             case R.id.add_ll:
                 Intent intent = new Intent();
                 intent.setClass(this, AddRecordFingerPrintActivity.class);
-                startActivityForResult(intent, 123);
+                startActivityForResult(intent, RecordFingerprintActivity.SUCCESS_CODE_FINGERPRINT);
                 break;
 
         }
@@ -150,13 +152,13 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                             }
 
                             setFingerData();
-                            if (commonAdapter != null){
+                            if (commonAdapter != null) {
                                 commonAdapter.notifyDataSetChanged();
                                 no_record.setVisibility(View.GONE);
                             }
                         }
                     });
-                }else {
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -176,9 +178,9 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
         commonAdapter = new CommonAdapter<PwdUserListItem>(FingerprintUserActivity.this, list, R.layout.finger_item) {
             @Override
             public void convert(ViewHolder viewHolder, PwdUserListItem pwdUserListItem, int position) {
-                viewHolder.setText(R.id.finger_time_tv, pwdUserListItem.getStampCount()+"");
+                viewHolder.setText(R.id.finger_time_tv, pwdUserListItem.getStampCount() + "");
                 viewHolder.setText(R.id.finger_failTime_tv, DateUtils.getDateString(pwdUserListItem.getExpireTime()));
-                viewHolder.setText(R.id.finger_people_tv,  pwdUserListItem.getUserName());
+                viewHolder.setText(R.id.finger_people_tv, pwdUserListItem.getUserName());
                 //编辑指纹
                 viewHolder.setOnClickListener(R.id.finger_edit_tv, new View.OnClickListener() {
                     @Override
@@ -196,22 +198,30 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                 viewHolder.setOnClickListener(R.id.finger_delete_tv, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission12)) {
-                            return;
-                        }
-                        deleteItem = pwdUserListItem;
-                        byte[] fingerCode = new byte[pwdUserListItem.getFingerprintCode()];
-                        ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
-                                .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.DELETEFINGER, fingerCode).getBytes()))
-                                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(
-                                        characteristicValue -> {
-                                            // Characteristic value confirmed.
-                                        },
-                                        throwable -> {
-                                            // Handle an error here.
-                                        }
-                                ));
+                        CommonDialog commonDialog = new CommonDialog(FingerprintUserActivity.this, "提示", "确认删除该指纹？", "确认");
+                        commonDialog.showDialog();
+                        commonDialog.setClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                commonDialog.dialog.dismiss();
+                                if (!Utils.hasThePermission(FingerprintUserActivity.this, Constants.permission12)) {
+                                    return;
+                                }
+                                deleteItem = pwdUserListItem;
+                                byte[] fingerCode = new byte[pwdUserListItem.getFingerprintCode()];
+                                ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
+                                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.DELETEFINGER, fingerCode).getBytes()))
+                                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(
+                                                characteristicValue -> {
+                                                    // Characteristic value confirmed.
+                                                },
+                                                throwable -> {
+                                                    // Handle an error here.
+                                                }
+                                        ));
+                            }
+                        });
                     }
                 });
 //                if (isOnlyRead) {
@@ -241,12 +251,12 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     /**
      * 删除指纹请求
      */
-    private void deleteFingerprint(PwdUserListItem pwdUserListItem){
+    private void deleteFingerprint(PwdUserListItem pwdUserListItem) {
         Utils.log("delete指纹");
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userId", pwdUserListItem.getUserId());
         hashMap.put("sealId", pwdUserListItem.getSealId());
-        hashMap.put("fingerprintCode", pwdUserListItem.getFingerprintCode()+"");
+        hashMap.put("fingerprintCode", pwdUserListItem.getFingerprintCode() + "");
         HttpUtil.sendDataAsync(FingerprintUserActivity.this, HttpUrl.DELETE_PWD_USER, 4, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -270,6 +280,21 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
             }
         });
     }
+
+    /**
+     * 添加成功刷新数据
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RecordFingerprintActivity.SUCCESS_CODE_FINGERPRINT){
+            getFingerUser();
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -283,7 +308,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event){
+    public void onMessageEvent(MessageEvent event) {
         if (event.msgType.equals("delete_fingerprint")) {
             deleteFingerprint(deleteItem);      //删除指纹
         }

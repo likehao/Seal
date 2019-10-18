@@ -9,6 +9,7 @@ public class SeeRecordBean implements Serializable {
     private String sealName;     //印章名称
     private String sealTime;  //盖章时间
     private String sealAddress;  //盖章地址
+    private Integer stampType;  //盖章方式
 
     public SeeRecordBean(String serialNumber, String sealTime, String sealAddress) {
         this.SerialNumber = serialNumber;
@@ -16,11 +17,12 @@ public class SeeRecordBean implements Serializable {
         this.sealAddress = sealAddress;
     }
 
-    public SeeRecordBean(String serialNumber, String sealName, String sealPerson, String sealTime) {
+    public SeeRecordBean(String serialNumber, String sealName, String sealPerson, String sealTime,Integer stampType) {
         this.SerialNumber = serialNumber;
         this.sealName = sealName;
         this.sealPerson = sealPerson;
         this.sealTime = sealTime;
+        this.stampType = stampType;
     }
 
     public String getSerialNumber() {
@@ -62,6 +64,14 @@ public class SeeRecordBean implements Serializable {
 
     public void setSealAddress(String sealAddress) {
         this.sealAddress = sealAddress;
+    }
+
+    public Integer getStampType() {
+        return stampType;
+    }
+
+    public void setStampType(Integer stampType) {
+        this.stampType = stampType;
     }
 
 }

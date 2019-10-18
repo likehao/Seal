@@ -48,6 +48,7 @@ public class PwdRecordAdapter extends BaseAdapter {
             viewHolder.sealName = view.findViewById(R.id.pwdRecord_sealName_tv);
             viewHolder.sealPeople = view.findViewById(R.id.pwdRecord_sealPerson_tv);
             viewHolder.sealTime = view.findViewById(R.id.pwdRecord_sealTime_tv);
+            viewHolder.sealWay = view.findViewById(R.id.sealWay_tv);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -57,6 +58,12 @@ public class PwdRecordAdapter extends BaseAdapter {
         viewHolder.sealName.setText(recordData.get(position).getSealName());
         viewHolder.sealPeople.setText(recordData.get(position).getSealPerson());
         viewHolder.sealTime.setText(recordData.get(position).getSealTime());
+        int sealWay = recordData.get(position).getStampType();
+        if (sealWay == 2){
+            viewHolder.sealWay.setText("密码盖章");
+        }else if (sealWay == 3){
+            viewHolder.sealWay.setText("指纹盖章");
+        }
 
         return view;
 
@@ -67,5 +74,6 @@ public class PwdRecordAdapter extends BaseAdapter {
         private TextView sealName;        //印章名字
         private TextView sealPeople;      //印章人
         private TextView sealTime;        //盖章时间
+        private TextView sealWay;        //盖章方式
     }
 }

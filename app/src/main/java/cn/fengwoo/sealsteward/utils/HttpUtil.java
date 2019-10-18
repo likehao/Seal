@@ -79,7 +79,7 @@ public class HttpUtil {
         if (addStr.length() == 0){
             BASE_URL = String.format("%s%s", URL1, URL2);
         }else {
-            BASE_URL = String.format("%s%s", addStr, URL2);    //拼接地址
+            BASE_URL = String.format("%s", addStr);    //拼接地址
         }
 
         //初始化OkHttpClient

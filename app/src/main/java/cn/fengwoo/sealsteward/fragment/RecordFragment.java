@@ -203,7 +203,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//        param.Param(applyUser, endTime, sealId, 2,startTime);  // type 1.APP盖章   2.密码盖章
+//        param.Param(applyUser, endTime, sealId, 2,startTime);  // type 1.APP盖章   2.密码盖章  3.指纹盖章
         param.Param(null, null, null, 2, null);  // type 1.APP盖章   2.密码盖章
         stampRecordData.setParam(param);
 
@@ -222,7 +222,7 @@ public class RecordFragment extends Fragment implements AdapterView.OnItemClickL
                 if (responseInfoP.getData() != null && responseInfoP.getCode() == 0) {
                     for (OfflineRecordData app : responseInfoP.getData()) {
                         String stampTime = DateUtils.getDateString(Long.parseLong(app.getStampTime()));
-                        pList.add(new SeeRecordBean(app.getFlowNumber(), app.getSealName(), app.getUserName(), stampTime));
+                        pList.add(new SeeRecordBean(app.getFlowNumber(), app.getSealName(), app.getUserName(), stampTime,app.getStampType()));
                     }
                     //请求数据
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
