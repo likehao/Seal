@@ -20,7 +20,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -208,7 +207,9 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
                                     return;
                                 }
                                 deleteItem = pwdUserListItem;
-                                byte[] fingerCode = new byte[pwdUserListItem.getFingerprintCode()];
+
+                                byte b = (byte)pwdUserListItem.getFingerprintCode().intValue();
+                                byte[] fingerCode = new byte[]{b};
                                 ((MyApp) getApplication()).getDisposableList().add(((MyApp) getApplication()).getConnectionObservable()
                                         .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.DELETEFINGER, fingerCode).getBytes()))
                                         .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -256,7 +257,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userId", pwdUserListItem.getUserId());
         hashMap.put("sealId", pwdUserListItem.getSealId());
-        hashMap.put("fingerprintCode", pwdUserListItem.getFingerprintCode() + "");
+        hashMap.put("userNumber", pwdUserListItem.getUserNumber() + "");
         HttpUtil.sendDataAsync(FingerprintUserActivity.this, HttpUrl.DELETE_PWD_USER, 4, hashMap, null, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -282,7 +283,7 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     }
 
     /**
-     * 添加成功刷新数据
+     * 刷新数据
      * @param requestCode
      * @param resultCode
      * @param data
@@ -290,7 +291,12 @@ public class FingerprintUserActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //添加成功更新
         if (requestCode == RecordFingerprintActivity.SUCCESS_CODE_FINGERPRINT){
+            getFingerUser();
+        }
+        if (requestCode == 123 && resultCode == RESULT_OK){
+            //编辑更新
             getFingerUser();
         }
     }
