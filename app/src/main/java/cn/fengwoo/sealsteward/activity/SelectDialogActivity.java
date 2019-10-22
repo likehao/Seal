@@ -2,7 +2,6 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -68,15 +67,4 @@ public class SelectDialogActivity extends Activity {
                 break;
         }
     }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-//            // 按下BACK，同时没有重复
-//            return true;
-////            Log.d(TAG, "onKeyDown()");
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
 }

@@ -320,7 +320,7 @@ public class UploadFileActivity extends BaseActivity implements View.OnClickList
             edit_tv.setVisibility(View.VISIBLE);
         }
 
-        ll_tab.setVisibility(View.GONE);
+//        ll_tab.setVisibility(View.GONE);
 
         //如果是扫描记录二维码进入则不显示上传照片和提交
         int scan = intent.getIntExtra("scan",0);

@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,9 @@ import com.cjt2325.cameralibrary.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hjq.toast.ToastUtils;
+import com.imuxuan.floatingview.FloatingMagnetView;
+import com.imuxuan.floatingview.FloatingView;
+import com.imuxuan.floatingview.MagnetViewListener;
 import com.polidea.rxandroidble2.RxBleConnection;
 import com.squareup.picasso.Picasso;
 import com.sw.style.ViewStyleSetter;
@@ -202,6 +206,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private float firmwareVersion;
     private Long lastTime;
     private Vibrator vibrator;
+    private boolean startSeal = false;
 
 //    private boolean hasDfu = false;
 
@@ -262,6 +267,26 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
             viewStyleSetter.setRound(20);//圆角弧度
         }
     }
+
+
+    //悬浮窗点击事件
+    private MagnetViewListener magnetViewListener = new MagnetViewListener() {
+        @Override
+        public void onRemove(FloatingMagnetView magnetView) {
+
+        }
+
+        @Override
+        public void onClick(FloatingMagnetView magnetView) {
+            if (startSeal){
+                showToast("印章已启动,请勿重复启动");
+            }else {
+                Intent intent = new Intent(getActivity(),ApplyCauseActivity.class);
+                startActivity(intent);
+            }
+        }
+    };
+
 
     private void setListener() {
         sealDevice_rl.setOnClickListener(this);
@@ -564,6 +589,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //        NetUtil.registerNetConnChangedReceiver(getActivity());
 //        NetUtil.addNetConnChangedListener(netConnChangedListener);
         NetStateChangeReceiver.registerObserver(this);
+        FloatingView.get().attach(getActivity());
     }
 
     @Override
@@ -576,6 +602,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         banner.stopAutoPlay();
 //        NetUtil.unregisterNetConnChangedReceiver(getActivity());
 //        NetUtil.removeNetConnChangedListener(netConnChangedListener);
+        FloatingView.get().detach(getActivity());
     }
 
     @Override
@@ -586,6 +613,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        //销毁悬浮窗
+        FloatingView.get().remove();
     }
 
     /**
@@ -724,8 +753,23 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 String applicationConnect = data.getStringExtra("applicationConnect");
                 //显示印模
                 String sealPrint = data.getStringExtra("sealPrint");
-                Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
 
+                //显示悬浮窗
+                FloatingView.get().add();
+
+                //获取屏幕宽度
+                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                int width = displayMetrics.widthPixels;
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(width-170,900,0,0);
+//        layoutParams.gravity = 200;
+                //设置悬浮窗
+                FloatingView.get()
+                        .layoutParams(layoutParams)
+                        .icon(R.drawable.suspension_button)
+                        .listener(magnetViewListener);
+
+                Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
                 if (bitmap == null) {
                     HttpDownloader.downloadImage(getActivity(), 3, sealPrint, new DownloadImageCallback() {
                         @Override
@@ -1211,6 +1255,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         byte[] restTime = DataTrans.subByte(bytes, 4, 4);
                                         startNumber = DataTrans.bytesToInt(restTime, 0);
                                         Utils.log("startNumber" + startNumber);
+                                        startSeal = true;
+
                                     } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A7 ")) {
                                         int pressTime = bytes[3];
                                         Utils.log(pressTime + "");
@@ -1508,6 +1554,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 
     }
 
+    /**
+     * 断开连接恢复显示
+     */
     private void initWhenDisconnectBle() {
         currentStampTimes = 0;
 //        tv_times_done.setText("0");
@@ -1520,6 +1569,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //        tv_stamp_reason.setText("暂无用印申请事由");
 //        tv_expired_time.setText("暂无");
         tv_address.setText("暂无定位信息");
+        FloatingView.get().add().remove();
     }
 
     @Override
