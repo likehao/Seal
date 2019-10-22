@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.baidu.mapapi.SDKInitializer;
+import com.suke.widget.SwitchButton;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -62,6 +64,9 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
     private String sealNumber;
     private String useRange;
     private LoadingView loadingView;
+    @BindView(R.id.approval_switchBt)
+    SwitchButton approval_switchBt;  //审批流开关
+    private static final boolean APPROVALSWITCHBT = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,7 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
         title_tv.setText("添加印章");
         set_back_ll.setOnClickListener(this);
         loadingView = new LoadingView(this);
+        approval_switchBt.setChecked(APPROVALSWITCHBT);
     }
 
     private void initData() {
@@ -189,6 +195,7 @@ public class AddSealActivity extends BaseActivity implements View.OnClickListene
                                 intent.putExtra("sealNo", sealNumber);
                                 intent.putExtra("scope", useRange);
                                 intent.putExtra("orgStructrueId", departmentId);
+                                intent.putExtra("enableApprove",approval_switchBt.isChecked());
                                 startActivity(intent);
                                 finish();
                             }

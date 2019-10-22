@@ -492,6 +492,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                realmNameDialog.dialog.dismiss();
                 String result = response.body().string();
                 Gson gson = new Gson();
                 ResponseInfo<ServiceConfigData> responseInfo = gson.fromJson(result,new TypeToken<ResponseInfo<ServiceConfigData>>(){}
@@ -501,7 +502,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     EasySP.init(LoginActivity.this).putString("appkey",appKey);
                     getServiceAddress();
                 }else {
-                    realmNameDialog.dialog.dismiss();
+                    Looper.prepare();
+                    showToast(responseInfo.getMessage());
+                    Looper.loop();
                 }
 
             }

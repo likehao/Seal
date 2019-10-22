@@ -102,6 +102,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
     private static final int REQUEST_CODE_CHOOSE = 1;
     private String croppedPicPath;
     private File resultFile;
+    private boolean enableApprove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         sealNoString = getIntent().getStringExtra("sealNo");
         scopeString = getIntent().getStringExtra("scope");
         orgStructrueIdString = getIntent().getStringExtra("orgStructrueId");
+        enableApprove = getIntent().getBooleanExtra("enableApprove",false);
 
 
         File file = new File(Environment.getExternalStorageDirectory(), "/temp/" + System.currentTimeMillis() + ".jpeg");
@@ -326,6 +328,7 @@ public class AddSealSecStepActivity extends BaseActivity implements View.OnClick
         addSealData.setScope(scopeString);
         addSealData.setSealNo(sealNoString);
         addSealData.setSealPrint(sealPringString);
+        addSealData.setEnableApprove(enableApprove);
 
         HttpUtil.sendDataAsync(AddSealSecStepActivity.this, HttpUrl.ADD_SEAL, 2, null, addSealData, new Callback() {
             @Override

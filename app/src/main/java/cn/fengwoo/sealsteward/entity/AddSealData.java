@@ -18,6 +18,15 @@ public class AddSealData {
     private String orgStructrueId;
     private String sealPrint;
 
+    private Boolean enableApprove;
+
+    public Boolean getEnableApprove() {
+        return enableApprove;
+    }
+
+    public void setEnableApprove(Boolean enableApprove) {
+        this.enableApprove = enableApprove;
+    }
 
     public String getSealPrint() {
         return sealPrint;

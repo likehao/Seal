@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.ResponseInfo;
-import cn.fengwoo.sealsteward.entity.SealInfoData;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.HttpUrl;
 import cn.fengwoo.sealsteward.utils.HttpUtil;
@@ -60,18 +59,7 @@ public class ScanToLoginActivity extends BaseActivity  {
     private void initView() {
         set_back_ll.setVisibility(View.VISIBLE);
         title_tv.setText("扫码登录");
-//        set_back_ll.setOnClickListener(this);
     }
-
-//    @Override
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.set_back_ll:
-//                finish();
-//                break;
-//        }
-//    }
-
 
     @OnClick({R.id.set_back_ll, R.id.btn_login, R.id.btn_cancel})
     public void onViewClicked(View view) {

@@ -194,6 +194,53 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:text="是否需要审批"
+                    android:textColor="@color/black" />
+
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/approval_switchBt"
+                    style="@style/set_power_bt" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="15dp"
+                android:background="@color/line" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="需要审批：默认设置当前公司所属者为审批人"
+                    android:textSize="11sp"
+                    android:textColor="@color/approval_red"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="无需审批：此印章的申请单将不需要审批，申请完后即可盖章"
+                    android:textSize="11sp"
+                    android:textColor="@color/approval_red"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:background="@color/white"
                 android:visibility="gone">
 

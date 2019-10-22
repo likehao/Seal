@@ -239,6 +239,11 @@
                     android:text="审批流程"
                     android:textColor="@color/black" />
 
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/open_approval_sb"
+                    style="@style/set_power_bt"
+                    android:layout_marginEnd="30dp"/>
+
                 <View style="@style/right_arrow" />
 
             </RelativeLayout>

@@ -36,6 +36,16 @@ public class SealInfoData {
     private SealEnclosureBean sealEnclosure;
     private List<SealApproveFlowListBean> sealApproveFlowList;
 
+    public Boolean getEnableApprove() {
+        return enableApprove;
+    }
+
+    public void setEnableApprove(Boolean enableApprove) {
+        this.enableApprove = enableApprove;
+    }
+
+    private Boolean enableApprove;
+
     private String macName;  //额外添加的一个
 
     private Boolean hasExpired;

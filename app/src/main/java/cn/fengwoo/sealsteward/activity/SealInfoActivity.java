@@ -133,6 +133,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
     private String sealPrint = "";
     private static final int REQUEST_CODE_CHOOSE = 1;
 
+    @BindView(R.id.open_approval_sb)
+    SwitchButton open_approval_sb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +155,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         edit_tv.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
         sealPrint_cir.setOnClickListener(this);
+
         setUneditable();
     }
 
@@ -185,6 +189,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         rlPic.setEnabled(true);
     }
 
+    /**
+     * 获取印章详情
+     */
     private void getSealInfo(boolean isEditable) {
         showLoadingView();
         HashMap<String, String> hashMap = new HashMap<>();
@@ -252,6 +259,8 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             // 两个开关状态
                             sbLimit.setChecked(responseInfo.getData().isEnableEnclosure());
                             sbTransDepartment.setChecked(responseInfo.getData().isCrossDepartmentApply());
+                            open_approval_sb.setChecked(responseInfo.getData().getEnableApprove()); //审批流开关
+                            open_approval_sb.setEnabled(false);
 //                            if (isEditable) {
 //                                setEditable();
 //                            } else {
@@ -318,9 +327,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 //                break;
             case R.id.rl_examine:
                 if (!Utils.hasThePermission(this, Constants.permission14)) {
+                    showToast("暂无审批流权限");
                     return;
                 }
-
                 intent = new Intent(this, ApprovalFlowActivity.class);
                 intent.putExtra("sealId", responseInfo.getData().getId());
                 intent.putExtra("sealName", responseInfo.getData().getName());
@@ -348,13 +357,16 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
             case R.id.edit_tv:
                 if (!Utils.hasThePermission(this, Constants.permission2)) {
+                    showToast("暂无编辑印章信息权限");
                     return;
                 }
                 if (edit_tv.getText().equals("编辑")) {
                     edit_tv.setText("保存");
+                    open_approval_sb.setEnabled(true);
                     setEditable();
                 } else {
                     edit_tv.setText("编辑");
+                    open_approval_sb.setEnabled(false);
                     setUneditable();
                     // 上传数据，更新信息
                     updateInfo();
@@ -363,6 +375,9 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    /**
+     * 更新印章信息
+     */
     private void updateInfo() {
         showLoadingView();
         SealInfoUpdateData sealInfoUpdateData = new SealInfoUpdateData();
@@ -378,6 +393,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         sealInfoUpdateData.setServiceTime(responseInfo.getData().getServiceTime());
         sealInfoUpdateData.setCrossDepartmentApply(sbTransDepartment.isChecked());
         sealInfoUpdateData.setEnableEnclosure(sbLimit.isChecked());
+        sealInfoUpdateData.setEnableApprove(open_approval_sb.isChecked());
 
         HttpUtil.sendDataAsync(SealInfoActivity.this, HttpUrl.SEAL_UPDATE_INFO, 5, null, sealInfoUpdateData, new Callback() {
             @Override
@@ -484,6 +500,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 
     /**
      * 更新印模图片
+     *
      * @param file
      */
     private void uploadPic(File file) {

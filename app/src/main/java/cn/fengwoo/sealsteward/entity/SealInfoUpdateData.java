@@ -26,6 +26,15 @@ public class SealInfoUpdateData {
     private long serviceTime;
     private boolean crossDepartmentApply;
     private boolean enableEnclosure;
+    private boolean enableApprove;
+
+    public boolean isEnableApprove() {
+        return enableApprove;
+    }
+
+    public void setEnableApprove(boolean enableApprove) {
+        this.enableApprove = enableApprove;
+    }
 
     public String getDataProtocolVersion() {
         return dataProtocolVersion;
