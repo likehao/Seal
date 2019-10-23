@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -105,6 +106,9 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
         set_back_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 断开蓝牙
+                ((MyApp) getApplication()).setConnectionObservable(null);
+                ((MyApp) getApplication()).removeAllDisposable();
                 finish();
             }
         });
@@ -382,5 +386,17 @@ public class ApplyCauseActivity extends BaseActivity implements AdapterView.OnIt
 //                }
 //            }
 //        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            // 断开蓝牙
+            ((MyApp) ApplyCauseActivity.this.getApplication()).removeAllDisposable();
+            ((MyApp) getApplication()).setConnectionObservable(null);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

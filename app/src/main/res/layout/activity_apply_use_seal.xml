@@ -153,7 +153,7 @@
                     android:text="@string/file_type"
                     android:textColor="@color/black" />
 
-                <TextView
+                <EditText
                     android:id="@+id/file_type_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,6 +161,7 @@
                     android:layout_toStartOf="@+id/iv5"
                     android:hint="@string/please_select_file_type"
                     android:gravity="end"
+                    android:background="@null"
                     android:textSize="12sp" />
 
                 <ImageView

@@ -90,7 +90,7 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.file_type_rl)  //文件类型
             RelativeLayout file_type_rl;
     @BindView(R.id.file_type_tv)
-    TextView file_type;
+    EditText file_type;
     String type, sign;
     ResponseInfo<SealInfoData> responseInfo;
 

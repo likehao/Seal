@@ -13,6 +13,9 @@ import butterknife.OnClick;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.utils.Utils;
 
+/**
+ * 选择拍照方式
+ */
 public class SelectDialogActivity extends Activity {
 
     @BindView(R.id.btn_manual)

@@ -536,7 +536,7 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
                     saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + SystemUtils.dp2px(context, 44), screenWidth, screenWidth);
                 } else {
                     //正方形 animHeight(动画高度)
-                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4 / 3);
+                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 5 / 3);
                 }
 
                 String img_path = commonPath +

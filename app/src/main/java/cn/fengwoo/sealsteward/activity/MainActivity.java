@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.imuxuan.floatingview.FloatingView;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.white.easysp.EasySP;
 
@@ -317,6 +318,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 welcome.setVisibility(View.VISIBLE);
                 edit_tv.setVisibility(View.GONE);
                 changeView(0);
+                mainFragment.openFloatingView(2);
                 break;
             case R.id.record_page:
 //                title_tv.setText("记录");
@@ -333,6 +335,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 welcome.setVisibility(View.GONE);
                 edit_tv.setVisibility(View.GONE);
                 changeView(1);
+                FloatingView.get().remove();   //销毁悬浮窗
                 break;
             case R.id.message_page:
                 title_tv.setText("消息");
@@ -357,6 +360,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 welcome.setVisibility(View.GONE);
                 edit_tv.setVisibility(View.GONE);
                 changeView(3);
+                FloatingView.get().remove();
                 break;
             case R.id.application_page:
                 ll_record.setVisibility(View.GONE);
@@ -370,6 +374,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 welcome.setVisibility(View.GONE);
                 edit_tv.setVisibility(View.GONE);
                 changeView(4);
+                FloatingView.get().remove();
                 break;
             case R.id.statistics:
                 ll_record.setVisibility(View.GONE);
@@ -393,6 +398,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                    }
                 }
                 changeView(7);
+                FloatingView.get().remove();
                 break;
             case R.id.record_more_iv:
                 //盖章记录更多popuwindow

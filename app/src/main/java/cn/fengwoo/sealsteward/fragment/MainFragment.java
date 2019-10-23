@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -282,7 +283,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 showToast("印章已启动,请勿重复启动");
             }else {
                 Intent intent = new Intent(getActivity(),ApplyCauseActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Constants.TO_WANT_SEAL);
             }
         }
     };
@@ -755,19 +756,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 String sealPrint = data.getStringExtra("sealPrint");
 
                 //显示悬浮窗
-                FloatingView.get().add();
-
-                //获取屏幕宽度
-                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-                int width = displayMetrics.widthPixels;
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(width-170,900,0,0);
-//        layoutParams.gravity = 200;
-                //设置悬浮窗
-                FloatingView.get()
-                        .layoutParams(layoutParams)
-                        .icon(R.drawable.suspension_button)
-                        .listener(magnetViewListener);
+                openFloatingView(1);
 
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
                 if (bitmap == null) {
@@ -927,6 +916,37 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         }
     }
 
+    /**
+     * 悬浮窗
+     */
+    public void openFloatingView(int code){
+        //显示悬浮窗
+//        FloatingView.get().add();     //暂时取消悬浮窗功能
+        //获取屏幕宽度
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int width = displayMetrics.widthPixels;
+        //区别MainActivity和MainFragment的显示
+        if (code == 1){
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(width-170,900,0,0);
+            //        layoutParams.gravity = 200;
+            //设置悬浮窗
+            FloatingView.get()
+                    .layoutParams(layoutParams)
+                    .icon(R.drawable.seal_hover_button)
+                    .listener(magnetViewListener);
+        }else if (code == 2){
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(width-170,900,0,0);
+            //        layoutParams.gravity = 200;
+            //设置悬浮窗
+            FloatingView.get()
+                    .layoutParams(layoutParams)
+                    .icon(R.drawable.seal_hover_button)
+                    .listener(magnetViewListener);
+        }
+
+    }
     private void uploadStampRecord(int stampNumber, String timeStamp) {
         StampUploadRecordData stampUploadRecordData = new StampUploadRecordData();
         stampUploadRecordData.setAddress(currentAddress); //
@@ -1569,7 +1589,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
 //        tv_stamp_reason.setText("暂无用印申请事由");
 //        tv_expired_time.setText("暂无");
         tv_address.setText("暂无定位信息");
-        FloatingView.get().add().remove();
+        FloatingView.get().remove();
+        startSeal = false;
     }
 
     @Override

@@ -2,7 +2,6 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -419,10 +418,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
             }
         }
         return enableEnclosure;
-    }
-
-    //扫描到蓝牙添加到列表中
-    private void addBluetooth(BluetoothDevice device) {
     }
 
     @Override
