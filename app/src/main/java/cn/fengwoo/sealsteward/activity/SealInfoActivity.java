@@ -75,7 +75,7 @@ import top.zibin.luban.OnCompressListener;
 /**
  * 印章详情
  */
-public class SealInfoActivity extends BaseActivity implements View.OnClickListener {
+public class SealInfoActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.title_tv)
     TextView title_tv;
     @BindView(R.id.edit_tv)
@@ -155,7 +155,6 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
         edit_tv.setVisibility(View.VISIBLE);
         set_back_ll.setOnClickListener(this);
         sealPrint_cir.setOnClickListener(this);
-
         setUneditable();
     }
 
@@ -173,7 +172,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 //        rlSetLimit.setClickable(false);
         sbLimit.setEnabled(false);
 //        rl_pwd_user.setEnabled(false);
-        sbTransDepartment.setEnabled(false);
+//        sbTransDepartment.setEnabled(false);
         rlPic.setEnabled(false);
     }
 
@@ -185,7 +184,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
 //        rlSetLimit.setClickable(true);
         rl_pwd_user.setEnabled(true);
         sbLimit.setEnabled(true);
-        sbTransDepartment.setEnabled(true);
+//        sbTransDepartment.setEnabled(true);
         rlPic.setEnabled(true);
     }
 
@@ -259,6 +258,7 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                             // 两个开关状态
                             sbLimit.setChecked(responseInfo.getData().isEnableEnclosure());
                             sbTransDepartment.setChecked(responseInfo.getData().isCrossDepartmentApply());
+                            sbTransDepartment.setEnabled(false);
                             open_approval_sb.setChecked(responseInfo.getData().getEnableApprove()); //审批流开关
                             open_approval_sb.setEnabled(false);
 //                            if (isEditable) {
@@ -362,11 +362,15 @@ public class SealInfoActivity extends BaseActivity implements View.OnClickListen
                 }
                 if (edit_tv.getText().equals("编辑")) {
                     edit_tv.setText("保存");
-                    open_approval_sb.setEnabled(true);
+                    if (Utils.hasThePermission(this, Constants.permission14)) {
+                        open_approval_sb.setEnabled(true);
+                    }
+                    sbTransDepartment.setEnabled(true);
                     setEditable();
                 } else {
                     edit_tv.setText("编辑");
                     open_approval_sb.setEnabled(false);
+                    sbTransDepartment.setEnabled(false);
                     setUneditable();
                     // 上传数据，更新信息
                     updateInfo();

@@ -756,7 +756,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 String sealPrint = data.getStringExtra("sealPrint");
 
                 //显示悬浮窗
-                openFloatingView(1);
+//                openFloatingView(1);
 
                 Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(sealPrint);
                 if (bitmap == null) {

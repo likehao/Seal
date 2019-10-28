@@ -169,7 +169,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
     private void selectRecord() {
         String type = select_sealType_tv.getText().toString();
         String cause = select_cause_et.getText().toString();
-        if (type.equals("密码盖章")) {
+        if (type.equals("脱机盖章")) {
             intent = new Intent(this, SelectPwdRecordActivity.class);
             intent.putExtra("end", end);
             intent.putExtra("begin", begin);
@@ -204,7 +204,7 @@ public class SelectSealRecodeActivity extends BaseActivity implements View.OnCli
             list.add("一个月");
         } else {
             list.add("手机盖章");
-            list.add("密码盖章");
+            list.add("脱机盖章");
         }
         SinglePicker<String> picker = new SinglePicker<String>(this, list);
         picker.setCanceledOnTouchOutside(true);

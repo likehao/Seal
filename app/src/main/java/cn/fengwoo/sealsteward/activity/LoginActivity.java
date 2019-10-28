@@ -49,6 +49,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +71,8 @@ import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.LoadingView;
 import cn.fengwoo.sealsteward.view.RealmNameDialog;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import cn.qqtheme.framework.picker.SinglePicker;
 import cn.qqtheme.framework.widget.WheelView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -121,6 +124,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private String addStr, addressUrl, ip, agreement, port_num,serviceConfig;
     private RealmNameDialog realmNameDialog;
     private String saveAddStr, saveIp, savePOrt, saveAgreement;
+    private static final int JPUSHTAG = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -645,6 +649,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (loginResponseInfo.getData() != null && loginResponseInfo.getCode() == 0) {
                     Log.e("TAG", "登录请求成功。。。。。。。");
 
+                    //设置jpush别名
+                    JPushInterface.setAlias(LoginActivity.this,JPUSHTAG,phone);
                     // save data
                     EasySP.init(LoginActivity.this).putString("l_tel", phone);
                     EasySP.init(LoginActivity.this).putString("l_pwd", password);

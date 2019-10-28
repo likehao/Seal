@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import cn.fengwoo.sealsteward.R;
 import cn.fengwoo.sealsteward.entity.LoginData;
 import cn.fengwoo.sealsteward.utils.Base2Activity;
+import cn.jpush.android.api.JPushInterface;
 
 public class HomeActivity extends Base2Activity {
 
@@ -20,6 +21,9 @@ public class HomeActivity extends Base2Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);  //初始化JPush
 
         setSwipeBackEnable(false);// 禁止撤滑返回
         home_iv = (ImageView) findViewById(R.id.home_iv);

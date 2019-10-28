@@ -90,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="密码盖章"
+                    android:text="脱机盖章"
                     android:textSize="15sp" />
             </LinearLayout>
 

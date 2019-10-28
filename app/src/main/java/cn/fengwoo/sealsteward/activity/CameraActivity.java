@@ -1,6 +1,7 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -181,6 +182,7 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
 //        homecamera_bottom_relative.setLayoutParams(bottomParam);
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             int what = msg.what;
@@ -518,7 +520,9 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         }
     }
 
-
+    /**
+     * 拍照
+     */
     private void captrue() {
         mCamera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
@@ -536,7 +540,7 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
                     saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + SystemUtils.dp2px(context, 44), screenWidth, screenWidth);
                 } else {
                     //正方形 animHeight(动画高度)
-                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 5 / 3);
+                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4 / 3);
                 }
 
                 String img_path = commonPath +

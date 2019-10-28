@@ -75,7 +75,7 @@ public class SelectPwdRecordQueryActivity extends BaseActivity implements View.O
     }
 
     private void initView() {
-        titleTv.setText("密码盖章");
+        titleTv.setText("脱机盖章");
         setBackLl.setVisibility(View.VISIBLE);
         setBackLl.setOnClickListener(this);
 

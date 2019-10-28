@@ -239,7 +239,7 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
                 });
 
                 // delete
-                viewHolder.setOnClickListener(R.id.btn_delete, new View.OnClickListener() {
+                viewHolder.setOnClickListener(R.id.btn_delete_pwd, new View.OnClickListener() {
                     @SuppressLint("CheckResult")
                     @Override
                     public void onClick(View v) {
@@ -284,14 +284,14 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
                 if (isOnlyRead) {
                     viewHolder.getView(R.id.btn_edit).setVisibility(View.GONE);
-                    viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
+                    viewHolder.getView(R.id.btn_delete_pwd).setVisibility(View.GONE);
                 }
 
 //                boolean isAdmin = EasySP.init(PwdUserActivity.this).getBoolean("isAdmin");
 //                Utils.log("isAdmin:" + isAdmin);
 //                if (!isAdmin) {
 //                    // 如果没有admin权限，hide delete button
-//                    viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
+//                    viewHolder.getView(R.id.btn_delete_pwd).setVisibility(View.GONE);
 //                }
 
                 // edit
@@ -303,9 +303,9 @@ public class PwdUserActivity extends BaseActivity implements View.OnClickListene
 
                 // delete
                 if (!Utils.hasThePermission(PwdUserActivity.this, Constants.permission12)) {
-                    viewHolder.getView(R.id.btn_delete).setVisibility(View.GONE);
+                    viewHolder.getView(R.id.btn_delete_pwd).setVisibility(View.GONE);
                 } else {
-                    viewHolder.getView(R.id.btn_delete).setVisibility(View.VISIBLE);
+                    viewHolder.getView(R.id.btn_delete_pwd).setVisibility(View.VISIBLE);
                 }
 
 

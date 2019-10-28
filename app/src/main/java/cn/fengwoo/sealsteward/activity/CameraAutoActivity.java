@@ -1,7 +1,6 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,7 +13,6 @@ import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -47,10 +45,6 @@ import cn.fengwoo.sealsteward.utils.CameraUtil;
 import cn.fengwoo.sealsteward.utils.SystemUtils;
 import cn.fengwoo.sealsteward.utils.ToastFactory;
 import cn.fengwoo.sealsteward.utils.Utils;
-import cn.fengwoo.sealsteward.view.MyApp;
-import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
-
-import static com.mob.tools.utils.DeviceHelper.getApplication;
 
 public class CameraAutoActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
     private Camera mCamera;
@@ -555,7 +549,7 @@ public class CameraAutoActivity extends BaseActivity implements SurfaceHolder.Ca
                     saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + SystemUtils.dp2px(context, 44), screenWidth, screenWidth);
                 } else {
                     //正方形 animHeight(动画高度)
-                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 5 / 3);
+                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4 / 3);
                 }
 
                 String img_path = commonPath +

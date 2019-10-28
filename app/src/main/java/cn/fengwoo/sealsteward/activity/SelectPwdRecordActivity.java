@@ -69,7 +69,7 @@ public class SelectPwdRecordActivity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
-        titleTv.setText("密码盖章");
+        titleTv.setText("脱机盖章");
         setBackLl.setVisibility(View.VISIBLE);
         setBackLl.setOnClickListener(this);
 
