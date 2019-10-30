@@ -2,7 +2,6 @@ package cn.fengwoo.sealsteward.activity;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -13,11 +12,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,14 +24,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.bumptech.glide.Glide;
 import com.maning.imagebrowserlibrary.ImageEngine;
 import com.maning.imagebrowserlibrary.MNImageBrowser;
 import com.maning.imagebrowserlibrary.listeners.OnClickListener;
 import com.maning.imagebrowserlibrary.model.ImageBrowserConfig;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +40,6 @@ import cn.fengwoo.sealsteward.utils.AppConstant;
 import cn.fengwoo.sealsteward.utils.BaseActivity;
 import cn.fengwoo.sealsteward.utils.BitmapUtils;
 import cn.fengwoo.sealsteward.utils.CameraUtil;
-import cn.fengwoo.sealsteward.utils.HttpDownloader;
 import cn.fengwoo.sealsteward.utils.SystemUtils;
 import cn.fengwoo.sealsteward.utils.ToastFactory;
 import cn.fengwoo.sealsteward.utils.Utils;
@@ -531,17 +526,21 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
                 //将data 转换为位图 或者你也可以直接保存为文件使用 FileOutputStream
                 //这里我相信大部分都有其他用处把 比如加个水印 后续再讲解
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                int i = bitmap.getWidth();
+                Log.e("bitmap宽","bitmap.getWidth()为：" + i);
                 Bitmap saveBitmap = CameraUtil.getInstance().setTakePicktrueOrientation(mCameraId, bitmap);
 
-                saveBitmap = Bitmap.createScaledBitmap(saveBitmap, screenWidth, picHeight, true);
-
-                if (index == 1) {
-                    //正方形 animHeight(动画高度)
-                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + SystemUtils.dp2px(context, 44), screenWidth, screenWidth);
-                } else {
-                    //正方形 animHeight(动画高度)
-                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4 / 3);
-                }
+//               //按一定的比例创建一个新的位图。src用来构建子集的源位图   dstWidth新位图期望的宽度   dstHeight新位图期望的高度
+//                saveBitmap = Bitmap.createScaledBitmap(saveBitmap, screenWidth, picHeight, true);
+//
+//                if (index == 1) {
+//                    //正方形 animHeight(动画高度)
+//                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + SystemUtils.dp2px(context, 44), screenWidth, screenWidth);
+//                } else {
+//                    //正方形 animHeight(动画高度) 必须满足条件：x+width<=bitmap.width()
+////                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4 / 3);
+//                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenHeight);
+//                }
 
                 String img_path = commonPath +
                         System.currentTimeMillis() + ".jpg";
@@ -597,10 +596,10 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         }
 
         //这里第三个参数为最小尺寸 getPropPreviewSize方法会对从最小尺寸开始升序排列 取出所有支持尺寸的最小尺寸
-        Camera.Size previewSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPreviewSizes(), 800);
+        Camera.Size previewSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPreviewSizes(), 1000);
         parameters.setPreviewSize(previewSize.width, previewSize.height);
 
-        Camera.Size pictrueSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPictureSizes(), 800);
+        Camera.Size pictrueSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPictureSizes(), 1000);
         parameters.setPictureSize(pictrueSize.width, pictrueSize.height);
 
         camera.setParameters(parameters);

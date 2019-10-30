@@ -1,6 +1,7 @@
 package cn.fengwoo.sealsteward.activity;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -185,6 +186,7 @@ public class CameraAutoActivity extends BaseActivity implements SurfaceHolder.Ca
 //        homecamera_bottom_relative.setLayoutParams(bottomParam);
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             int what = msg.what;
@@ -542,15 +544,15 @@ public class CameraAutoActivity extends BaseActivity implements SurfaceHolder.Ca
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                 Bitmap saveBitmap = CameraUtil.getInstance().setTakePicktrueOrientation(mCameraId, bitmap);
 
-                saveBitmap = Bitmap.createScaledBitmap(saveBitmap, screenWidth, picHeight, true);
-
-                if (index == 1) {
-                    //正方形 animHeight(动画高度)
-                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + SystemUtils.dp2px(context, 44), screenWidth, screenWidth);
-                } else {
-                    //正方形 animHeight(动画高度)
-                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4 / 3);
-                }
+//                saveBitmap = Bitmap.createScaledBitmap(saveBitmap, screenWidth, picHeight, true);
+//
+//                if (index == 1) {
+//                    //正方形 animHeight(动画高度)
+//                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, animHeight + SystemUtils.dp2px(context, 44), screenWidth, screenWidth);
+//                } else {
+//                    //正方形 animHeight(动画高度)
+//                    saveBitmap = Bitmap.createBitmap(saveBitmap, 0, 0, screenWidth, screenWidth * 4 / 3);
+//                }
 
                 String img_path = commonPath +
                         System.currentTimeMillis() + ".jpg";
@@ -606,10 +608,10 @@ public class CameraAutoActivity extends BaseActivity implements SurfaceHolder.Ca
         }
 
         //这里第三个参数为最小尺寸 getPropPreviewSize方法会对从最小尺寸开始升序排列 取出所有支持尺寸的最小尺寸
-        Camera.Size previewSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPreviewSizes(), 800);
+        Camera.Size previewSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPreviewSizes(), 1000);
         parameters.setPreviewSize(previewSize.width, previewSize.height);
 
-        Camera.Size pictrueSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPictureSizes(), 800);
+        Camera.Size pictrueSize = CameraUtil.getInstance().getPropSizeForHeight(parameters.getSupportedPictureSizes(), 1000);
         parameters.setPictureSize(pictrueSize.width, pictrueSize.height);
 
         camera.setParameters(parameters);

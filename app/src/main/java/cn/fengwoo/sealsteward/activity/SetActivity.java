@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -121,15 +122,16 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
      */
     private void unsubscribeDialog(){
         ArrayList list = new ArrayList<String>();
-        list.add("确定注销账户？");
+        list.add("注销");
         OptionBottomDialog optionBottomDialog = new OptionBottomDialog(this,list);
         optionBottomDialog.setItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0){
                     optionBottomDialog.dismiss();
-                    commonDialog = new CommonDialog(SetActivity.this,"警告","确定注销账户？注销后无法再登录,请谨慎操作！","确定");
+                    commonDialog = new CommonDialog(SetActivity.this,"警告","您将注销您的账户，注销后无法再登录, 请谨慎操作！","确定");
                     commonDialog.showDialog();
+                    commonDialog.title.setTextColor(ContextCompat.getColor(SetActivity.this,R.color.red));
                     commonDialog.setClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

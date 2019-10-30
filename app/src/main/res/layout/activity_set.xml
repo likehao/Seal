@@ -127,7 +127,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="15dp"
             android:text="@string/unsubscribe"
-            android:textColor="@color/black" />
+            android:textColor="@color/red" />
 
     </RelativeLayout>
 
