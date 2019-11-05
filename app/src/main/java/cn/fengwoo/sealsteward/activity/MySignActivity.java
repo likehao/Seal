@@ -110,18 +110,18 @@ public class MySignActivity extends BaseActivity implements View.OnClickListener
         Bitmap bitmap = HttpDownloader.getBitmapFromSDCard(autoGraph);
         if (bitmap == null) {
             //下载签名
-            HttpDownloader.downloadImage(MySignActivity.this, 2, autoGraph, new DownloadImageCallback() {
+            HttpDownloader.downloadImage(MySignActivity.this, 2, autoGraph, "",new DownloadImageCallback() {
                 @Override
                 public void onResult(final String fileName) {
                     if (fileName != null) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                String sealPrintPath = "file://" + HttpDownloader.path + fileName;
-                                Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
                                 add_sign_ll.setVisibility(View.GONE);
                                 delete_write_ll.setVisibility(View.VISIBLE);
                                 sign_iv.setVisibility(View.VISIBLE);
+                                String sealPrintPath = "file://" + HttpDownloader.path + fileName;
+                                Picasso.with(MySignActivity.this).load(sealPrintPath).into(sign_iv);
                             }
                         });
                     } else {

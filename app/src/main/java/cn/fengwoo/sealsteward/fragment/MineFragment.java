@@ -61,6 +61,7 @@ import cn.fengwoo.sealsteward.utils.HttpUtil;
 import cn.fengwoo.sealsteward.utils.Utils;
 import cn.fengwoo.sealsteward.view.CommonDialog;
 import cn.fengwoo.sealsteward.view.MyApp;
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -441,6 +442,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                         }.getType());
                         if (responseInfo.getCode() == 0) {
                             if (responseInfo.getData()) {
+                                JPushInterface.clearLocalNotifications(getActivity());  //清除通知
                                 intent = new Intent(getActivity(), LoginActivity.class);
                                 String ip = EasySP.init(getActivity()).getString("ip");
                                 String port_num = EasySP.init(getActivity()).getString("port_num");

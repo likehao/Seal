@@ -121,7 +121,7 @@ public class AddAutographActivity extends AppCompatActivity implements View.OnCl
                     Log.e("ATG", "发送图片至服务器成功..........");
                     String imgName = responseInfo.getData().getFileName();//图片名称
                     //下载图片并保存
-                    HttpDownloader.downloadImage(AddAutographActivity.this, 2, imgName, new DownloadImageCallback() {
+                    HttpDownloader.downloadImage(AddAutographActivity.this, 2, imgName,"", new DownloadImageCallback() {
                         @Override
                         public void onResult(String fileName) {
                             finish();
