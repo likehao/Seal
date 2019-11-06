@@ -1483,6 +1483,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                     if (strReturned.equals("o1")) {
                                         sendIllegalToServer();
                                     }
+                                }else if (strReturned.equals("K1")){
+                                    showToast("修改成功");
+                                }else if (strReturned.equals("K0")){
+                                    showToast("修改失败");
                                 }
                             },
                             throwable -> {

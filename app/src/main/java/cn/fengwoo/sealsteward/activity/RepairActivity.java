@@ -53,7 +53,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 关于
+ * 印章列表
  */
 public class RepairActivity extends BaseActivity {
     @BindView(R.id.title_tv)
@@ -78,8 +78,8 @@ public class RepairActivity extends BaseActivity {
     private PublishSubject<Boolean> disconnectTriggerSubject = PublishSubject.create();
 
     private boolean isAddNewSeal = false;
-
     private Intent intent;
+    private String sealConnect;
 
 
     @Override
@@ -93,6 +93,7 @@ public class RepairActivity extends BaseActivity {
     }
 
     private void initData() {
+        sealConnect = getIntent().getStringExtra("应用模块连上就finish");
         rxBleClient = RxBleClient.create(this);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         sealLv.setAdapter(arrayAdapter);
@@ -203,10 +204,26 @@ public class RepairActivity extends BaseActivity {
                                startActivity(intent);
                                finish();
                            } else {
-                               Intent intent = new Intent();
-                               intent.putExtra("bleName", sealData.getName());
-                               setResult(Constants.TO_NEARBY_DEVICE, intent);
-                               finish();
+                               //应用模块功能连上后直接finish
+                               if (sealConnect != null && sealConnect.equals("应用模块连上就finish")) {
+                                   Intent intent = new Intent();
+                                   intent.putExtra("bleName", getNameFromList(macAddress));
+                                   intent.putExtra("sealPrint", getSealPrint(macAddress));
+                                   intent.putExtra("applicationConnect", "applicationConnect");
+                                   setResult(Constants.TO_NEARBY_DEVICE, intent);
+                                   finish();
+                               } else {
+
+                                   Intent intent = new Intent();
+                                   intent.putExtra("bleName", getNameFromList(macAddress));
+                                   intent.putExtra("sealPrint", getSealPrint(macAddress));
+                                   setResult(Constants.TO_NEARBY_DEVICE, intent);
+                                   finish();
+                               }
+//                               Intent intent = new Intent();
+//                               intent.putExtra("bleName", sealData.getName());
+//                               setResult(Constants.TO_NEARBY_DEVICE, intent);
+//                               finish();
                            }
                        },
                        throwable -> {
@@ -217,7 +234,33 @@ public class RepairActivity extends BaseActivity {
        ((MyApp) getApplication()).getDisposableList().add(connectDisposable);
     }
 
+    private String getNameFromList(String thisMac) {
+        String name = "";
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(thisMac)) {
+                name = sealData.getName();
+                break;
+            }
+        }
+        return name;
+    }
 
+    /**
+     * 遍历MAC拿到印模传回带到首页工作台
+     *
+     * @param mac
+     * @return
+     */
+    private String getSealPrint(String mac) {
+        String sealPrint = "";
+        for (SealData sealData : responseInfo.getData()) {
+            if (sealData.getMac().equals(mac)) {
+                sealPrint = sealData.getSealPrint();
+                break;
+            }
+        }
+        return sealPrint;
+    }
 
     private void getSealList() {
         loadingView.show();

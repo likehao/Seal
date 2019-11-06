@@ -436,7 +436,9 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 if (scanSubscription != null) {
                     scanSubscription.dispose();
                 }
-                startActivityForResult(new Intent(this, RepairActivity.class), Constants.TO_NEARBY_DEVICE);
+                intent = new Intent(this,RepairActivity.class);
+                intent.putExtra("应用模块连上就finish", "应用模块连上就finish");
+                startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
                 break;
         }
     }
@@ -587,7 +589,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                 startActivity(intent);
                                 finish();
                             } else {
-
                                 //应用模块功能连上后直接finish
                                 if (sealConnect != null && sealConnect.equals("应用模块连上就finish")) {
                                     Intent intent = new Intent();
@@ -597,7 +598,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                                     setResult(Constants.TO_NEARBY_DEVICE, intent);
                                     finish();
                                 } else {
-
                                     Intent intent = new Intent();
                                     intent.putExtra("bleName", getNameFromList(macAddress));
                                     intent.putExtra("sealPrint", getSealPrint(macAddress));
@@ -683,16 +683,18 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.TO_NEARBY_DEVICE && resultCode == Constants.TO_NEARBY_DEVICE) {
             String bleName = data.getStringExtra("bleName");
+            String applicationConnect = data.getStringExtra("applicationConnect");
+            String sealPrint = data.getStringExtra("sealPrint");
             Intent intent = new Intent();
             intent.putExtra("bleName", bleName);
+            intent.putExtra("applicationConnect", applicationConnect);
+            intent.putExtra("sealPrint", sealPrint);
             setResult(Constants.TO_NEARBY_DEVICE, intent);
             finish();
         }
     }
 
-    /**
-     *
-     */
+
     private void showServiceTip1(SealData sealData, int position) {
         cancelLoadingView();
 
@@ -725,9 +727,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
-    /**
-     *
-     */
+
     private void showServiceTip2(SealData sealData, int position) {
         cancelLoadingView();
 
