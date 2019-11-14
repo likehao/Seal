@@ -24,6 +24,15 @@ public class StampUploadRecordData {
     private String stampTime;
     private String stampUser;
     private String startNo;
+    private String startTime;
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 
     public String getAddress() {
         return address;

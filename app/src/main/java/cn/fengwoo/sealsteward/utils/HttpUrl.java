@@ -466,4 +466,8 @@ public class HttpUrl{
      * 即将过期印章列表
      */
     public static final String NEAROVERTIMESEALLIST = "seal/nearlyexpiredseallist";
+    /**
+     * 启动
+     */
+    public static final String START = "stamp/start";
 }

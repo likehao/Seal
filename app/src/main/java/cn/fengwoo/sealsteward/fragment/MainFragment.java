@@ -66,7 +66,9 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -947,6 +949,35 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         }
 
     }
+
+    /**
+     * 启动
+     */
+    private void startPost(String startTime){
+        StampUploadRecordData stampUploadRecordData = new StampUploadRecordData();
+        stampUploadRecordData.setSealId(EasySP.init(getActivity()).getString("currentSealId"));  //印章ID
+        stampUploadRecordData.setApplyId(EasySP.init(getActivity()).getString("currentApplyId")); //申请单据ID
+        stampUploadRecordData.setStampUser(CommonUtil.getUserData(getActivity()).getId());   //盖章人ID
+        stampUploadRecordData.setStartTime(startTime);   //启动时间
+        stampUploadRecordData.setStartNo(String.valueOf(startNumber)); //启动序号
+        stampUploadRecordData.setLatitude(currentLocation.getLatitude());
+        stampUploadRecordData.setLongitude(currentLocation.getLongitude());
+        stampUploadRecordData.setAddress(currentAddress);
+        HttpUtil.sendDataAsync(getActivity(), HttpUrl.START, 2, null, stampUploadRecordData, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Looper.prepare();
+                showToast(e + "");
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                //{"code":0,"message":"成功","data":true,"count":0}
+            }
+        });
+    }
     private void uploadStampRecord(int stampNumber, String timeStamp) {
         StampUploadRecordData stampUploadRecordData = new StampUploadRecordData();
         stampUploadRecordData.setAddress(currentAddress); //
@@ -1276,6 +1307,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         startNumber = DataTrans.bytesToInt(restTime, 0);
                                         Utils.log("startNumber" + startNumber);
                                         startSeal = true;
+                                        //获取当前时间
+                                        Date time = new Date(System.currentTimeMillis());
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        String startTime = dateFormat.format(time);
+                                        //时间转时间戳
+                                        String nowTime = DateUtils.dateToStamp2(startTime);
+                                        startPost(nowTime);
 
                                     } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 A7 ")) {
                                         int pressTime = bytes[3];

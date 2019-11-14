@@ -193,8 +193,8 @@ public class ApplyUseSealActivity extends BaseActivity implements View.OnClickLi
 
     private void useSealApply() {
         int mCount = Integer.valueOf(applyCount);
-        if (mCount > 1000) {
-            showToast("申请次数不能大于1000");
+        if (mCount > 5000) {
+            showToast("申请次数不能大于5000");
             return;
         }
         if (mCount == 0) {
