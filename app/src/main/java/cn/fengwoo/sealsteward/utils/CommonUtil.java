@@ -127,8 +127,10 @@ public class CommonUtil {
 
     public static final byte WRITE_VOICE = (byte) 0xB5;
     public static final byte READ_VOICE = (byte) 0xB6;
-
-
+    /**
+     * 设置印章名称
+     */
+    public static final byte SET_SEAL_NAME = (byte) 0xB7;
     /**
      * 添加按键密码和权限
      */

@@ -124,7 +124,6 @@ import top.zibin.luban.OnCompressListener;
 
 import static com.mob.tools.utils.DeviceHelper.getApplication;
 
-//import cn.fengwoo.sealsteward.utils.NetUtil;
 
 public class MainFragment extends Fragment implements View.OnClickListener, NetStateChangeObserver {
 
@@ -786,7 +785,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
 
                 tv_ble_name.setText(bleName);
-
+                // 同步印章名称
+                syncSealName(bleName);
 //                // 开启定位
 //                permissions();
 
@@ -1083,6 +1083,35 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
         Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 同步印章名称
+     */
+    private void syncSealName(String bleName) {
+        if(bleName != null && !bleName.equals("") && !bleName.contains("BHQKL") && !bleName.contains("baihe")){
+            // 判断印章名称长度，最大支持24个汉字
+            if(bleName.length() > 24){
+                bleName = bleName.substring(0,24);
+            }
+            try{
+                byte[] nameData = bleName.getBytes("GB2312");
+                ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
+                        .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SET_SEAL_NAME, nameData).getBytes()))
+                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                characteristicValue -> {
+                                    // Characteristic value confirmed.
+                                    Utils.log("设置印章名称->" + Utils.bytesToHexString(characteristicValue));
+                                },
+                                throwable -> {
+                                    // Handle an error here.
+                                }
+                        ));
+            } catch (Exception ex){
+
+            }
+        }
+    }
+
     private void readRecord() {
         byte[] targetNumber = new byte[]{1}; // 一条
         ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
@@ -1231,7 +1260,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         firmwareVersion = (float) bytes[4] + ((float) bytes[5] / 100);
                                         Utils.log("firmwareVersion:" + firmwareVersion);
                                         checkDfu(firmwareVersion);
-
                                         // 每隔1min定时获取电量
                                         rxTimerUtil = new RxTimerUtil();
                                         rxTimerUtil.interval(60000, new RxTimerUtil.IRxNext() {
@@ -1762,14 +1790,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                     }
                 });
     }
-
-//    private NetUtil.NetConnChangedListener netConnChangedListener = new NetUtil.NetConnChangedListener() {
-//        @Override
-//        public void onNetConnChanged(NetUtil.ConnectStatus connectStatus) {
-//            Utils.log("connectStatus:" + connectStatus.toString());
-//        }
-//    };
-
 
     /**
      * 超出围栏报警
