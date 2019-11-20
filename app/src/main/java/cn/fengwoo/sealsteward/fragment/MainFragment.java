@@ -1089,11 +1089,12 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private void syncSealName(String bleName) {
         if(bleName != null && !bleName.equals("") && !bleName.contains("BHQKL") && !bleName.contains("baihe")){
             // 判断印章名称长度，最大支持24个汉字
-            if(bleName.length() > 24){
-                bleName = bleName.substring(0,24);
+            String name = bleName;
+            if(name.length() > 24){
+                name = name.substring(0,24);
             }
             try{
-                byte[] nameData = bleName.getBytes("GB2312");
+                byte[] nameData = name.getBytes("GB2312");
                 ((MyApp) getActivity().getApplication()).getDisposableList().add(((MyApp) getActivity().getApplication()).getConnectionObservable()
                         .flatMapSingle(rxBleConnection -> rxBleConnection.writeCharacteristic(Constants.WRITE_UUID, new DataProtocol(CommonUtil.SET_SEAL_NAME, nameData).getBytes()))
                         .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
