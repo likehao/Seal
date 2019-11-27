@@ -209,6 +209,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
     private Long lastTime;
     private Vibrator vibrator;
     private boolean startSeal = false;
+    private String bleName;
 
 //    private boolean hasDfu = false;
 
@@ -750,7 +751,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
 
                 // 显示ble设备名字
-                String bleName = data.getStringExtra("bleName");
+                bleName = data.getStringExtra("bleName");
                 //应用模块点击选择的印章之后传递过来
                 String applicationConnect = data.getStringExtra("applicationConnect");
                 //显示印模
@@ -785,8 +786,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
 
                 tv_ble_name.setText(bleName);
-                // 同步印章名称
-                syncSealName(bleName);
 //                // 开启定位
 //                permissions();
 
@@ -1101,6 +1100,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                         .subscribe(
                                 characteristicValue -> {
                                     // Characteristic value confirmed.
+//                                    String result = Utils.bytesToHexString(characteristicValue);
                                     Utils.log("设置印章名称->" + Utils.bytesToHexString(characteristicValue));
                                 },
                                 throwable -> {
@@ -1294,6 +1294,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                                         if (unuploadedQuantity != 0) {
                                             readRecord();
                                         }
+                                        // 同步印章名称
+                                        syncSealName(bleName);
 
                                     } else if (Utils.bytesToHexString(bytes).startsWith("FF 01 AF")) {
                                         String batteryString = Utils.bytesToHexString(bytes).substring(9, 11);

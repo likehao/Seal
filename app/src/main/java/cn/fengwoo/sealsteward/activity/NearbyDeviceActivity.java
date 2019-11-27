@@ -437,7 +437,7 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                     scanSubscription.dispose();
                 }
                 intent = new Intent(this,RepairActivity.class);
-                intent.putExtra("应用模块连上就finish", "应用模块连上就finish");
+                intent.putExtra("应用模块连上就finish", sealConnect);
                 startActivityForResult(intent, Constants.TO_NEARBY_DEVICE);
                 break;
         }

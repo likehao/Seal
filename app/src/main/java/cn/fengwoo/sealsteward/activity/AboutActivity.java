@@ -20,7 +20,6 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.set_back_ll)LinearLayout set_back_ll;
     @BindView(R.id.versionName_tv)  //当前版本
     TextView version_Name_tv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

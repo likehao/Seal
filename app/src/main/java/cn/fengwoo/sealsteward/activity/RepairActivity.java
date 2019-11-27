@@ -68,9 +68,6 @@ public class RepairActivity extends BaseActivity {
     private ArrayAdapter<String> arrayAdapter = null;
     private ArrayList<String> arrayList = new ArrayList<String>();
     private List<SealData> sealDataList = new ArrayList<>();
-
-
-
     private RxBleClient rxBleClient;
     private Disposable scanSubscription;
     private Disposable connectDisposable;
@@ -213,7 +210,6 @@ public class RepairActivity extends BaseActivity {
                                    setResult(Constants.TO_NEARBY_DEVICE, intent);
                                    finish();
                                } else {
-
                                    Intent intent = new Intent();
                                    intent.putExtra("bleName", getNameFromList(macAddress));
                                    intent.putExtra("sealPrint", getSealPrint(macAddress));
