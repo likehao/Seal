@@ -1762,8 +1762,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, NetS
                 }
             }
         };
+        //设置逆地理编码检索监听器
         geoCoder.setOnGetGeoCodeResultListener(listener);
+        //发起逆地理编码检索
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
+        //释放
         geoCoder.destroy();
     }
 

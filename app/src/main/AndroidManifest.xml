@@ -312,7 +312,7 @@
         <activity android:name=".activity.FingerprintUserActivity" />
         <activity android:name=".activity.AddRecordFingerPrintActivity" />
         <activity android:name=".activity.RecordFingerprintActivity" />
-        <activity android:name=".activity.WaitRechargeActivity"></activity>
+        <activity android:name=".activity.WaitRechargeActivity"/>
     </application>
 
 </manifest>

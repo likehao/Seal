@@ -448,6 +448,7 @@ public class DfuActivity extends BaseActivity {
                         }
                     }
                 },150000);
+
                 break;
             case R.id.set_back_ll:
                 finish();

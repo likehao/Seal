@@ -197,7 +197,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
         // ble 设备扫描
         scanSubscription = rxBleClient.scanBleDevices(
                 new ScanSettings.Builder()
-//                        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
                         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -644,7 +643,6 @@ public class NearbyDeviceActivity extends BaseActivity implements View.OnClickLi
                 .takeUntil(disconnectTriggerSubject)
                 .compose(ReplayingShare.instance());
     }
-
 
     /**
      * 确认是否删除

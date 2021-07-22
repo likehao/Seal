@@ -141,4 +141,5 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
             }
         });
     }
+
 }

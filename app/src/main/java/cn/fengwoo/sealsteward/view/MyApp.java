@@ -47,10 +47,11 @@ public class MyApp extends MultiDexApplication{
     public Disposable connectDisposable;
     public List<Disposable> disposableList;
     public RxBleDevice rxBleDevice;
+    public static Context context;
+
     public RxBleDevice getRxBleDevice() {
         return rxBleDevice;
     }
-    public static Context context;
 
     public void setRxBleDevice(RxBleDevice rxBleDevice) {
         this.rxBleDevice = rxBleDevice;
